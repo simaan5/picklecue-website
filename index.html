@@ -509,51 +509,69 @@
         }
 
         .welcome-greeting {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .welcome-name {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
         }
 
-        .welcome-avatar {
-            width: 44px;
-            height: 44px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
+        .welcome-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .welcome-icon {
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            opacity: 0.9;
+        }
+
+        .welcome-icon svg {
+            width: 36px;
+            height: 36px;
+            fill: currentColor;
         }
 
         .welcome-actions {
-            display: flex;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
 
         .action-btn {
-            flex: 1;
-            background: rgba(255,255,255,0.15);
-            padding: 12px 10px;
-            border-radius: 14px;
+            background: rgba(255,255,255,0.18);
+            padding: 14px 10px;
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
 
         .action-btn:hover {
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.28);
+            transform: scale(1.02);
         }
 
         .action-icon {
-            display: block;
-            font-size: 1.3rem;
-            margin-bottom: 6px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
         }
 
         /* Weather Widget */
@@ -646,9 +664,53 @@
         }
 
         .game-players {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .player-avatars {
+            display: flex;
+        }
+
+        .player-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--emerald-light), var(--emerald));
+            border: 2px solid white;
+            margin-left: -8px;
+        }
+
+        .player-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .players-text {
             font-size: 0.8rem;
             color: var(--emerald);
             font-weight: 500;
+        }
+
+        .game-detail {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .game-detail svg {
+            flex-shrink: 0;
+        }
+
+        .weather-icon {
+            display: flex;
+            align-items: center;
+        }
+
+        .weather-icon svg {
+            width: 24px;
+            height: 24px;
         }
 
         /* Courts Scroll */
@@ -661,17 +723,53 @@
 
         .court-chip {
             background: white;
-            padding: 12px 16px;
+            padding: 12px 14px;
             border-radius: 14px;
             display: flex;
-            align-items: center;
-            gap: 10px;
-            white-space: nowrap;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            min-width: 110px;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             transition: all 0.2s;
+        }
+
+        .court-chip-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .court-chip-badge.outdoor {
+            background: rgba(5, 150, 105, 0.12);
+            color: var(--emerald);
+        }
+
+        .court-chip-badge.indoor {
+            background: rgba(59, 130, 246, 0.12);
+            color: #3B82F6;
+        }
+
+        .court-chip-name {
             font-size: 0.85rem;
+            font-weight: 600;
             color: var(--midnight);
+        }
+
+        .court-chip-rating {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .court-chip-rating svg {
+            width: 12px;
+            height: 12px;
         }
 
         .court-chip:hover {
@@ -1818,29 +1916,35 @@
                         <div class="welcome-card">
                             <div class="welcome-header">
                                 <div class="welcome-text">
-                                    <div class="welcome-greeting">Good morning</div>
-                                    <div class="welcome-name">Andrew</div>
+                                    <div class="welcome-greeting">Good morning, Andrew!</div>
+                                    <div class="welcome-subtitle">Ready to play?</div>
                                 </div>
-                                <div class="welcome-avatar">👤</div>
+                                <div class="welcome-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9 3.5 3.5 0 0 1 12 12.5 3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 20v-1c0-2.67 5.33-4 8-4h.2c.5 1.1 1.4 2 2.5 2.6V20H5m17.8-5.4l-.1-.1c-.2-.2-.6-.2-.8 0l-3.6 3.6-1.7-1.7c-.2-.2-.6-.2-.8 0l-.1.1c-.2.2-.2.6 0 .8l2.2 2.2c.2.2.6.2.8 0l4.1-4.1c.2-.2.2-.6 0-.8z"/></svg>
+                                </div>
                             </div>
                             <div class="welcome-actions">
                                 <div class="action-btn" onclick="showScreen('play')">
-                                    <span class="action-icon">🎮</span>
+                                    <span class="action-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></span>
                                     <span>New Game</span>
                                 </div>
+                                <div class="action-btn" onclick="showScreen('play')">
+                                    <span class="action-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></span>
+                                    <span>Find Game</span>
+                                </div>
                                 <div class="action-btn" onclick="showScreen('courts')">
-                                    <span class="action-icon">📍</span>
-                                    <span>Find Court</span>
+                                    <span class="action-icon"><svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg></span>
+                                    <span>Courts</span>
                                 </div>
                                 <div class="action-btn">
-                                    <span class="action-icon">📝</span>
+                                    <span class="action-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></span>
                                     <span>Log Match</span>
                                 </div>
                             </div>
                         </div>
                         <!-- Weather Widget -->
                         <div class="weather-widget">
-                            <span>☀️</span>
+                            <span class="weather-icon"><svg viewBox="0 0 24 24" fill="#F59E0B" width="24" height="24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg></span>
                             <span class="weather-temp">72°F</span>
                             <span class="weather-text">Perfect pickleball weather!</span>
                         </div>
@@ -1855,10 +1959,17 @@
                                 <span class="skill-badge">3.5+</span>
                             </div>
                             <div class="game-details">
-                                <span>📍 Central Park</span>
-                                <span>🕐 Today 5:00 PM</span>
+                                <span class="game-detail"><svg viewBox="0 0 24 24" fill="var(--emerald)" width="14" height="14"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg> Central Park</span>
+                                <span class="game-detail"><svg viewBox="0 0 24 24" fill="var(--text-muted)" width="14" height="14"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg> Today 5:00 PM</span>
                             </div>
-                            <div class="game-players">3/4 players joined</div>
+                            <div class="game-players">
+                                <div class="player-avatars">
+                                    <span class="player-avatar"></span>
+                                    <span class="player-avatar"></span>
+                                    <span class="player-avatar"></span>
+                                </div>
+                                <span class="players-text">3/4 players</span>
+                            </div>
                         </div>
                         <!-- Favorite Courts -->
                         <div class="section-header">
@@ -1867,12 +1978,14 @@
                         </div>
                         <div class="courts-scroll">
                             <div class="court-chip" onclick="showScreen('courts')">
-                                <span>🏟️</span>
-                                <span>Central Park</span>
+                                <span class="court-chip-badge outdoor">Outdoor</span>
+                                <span class="court-chip-name">Central Park</span>
+                                <span class="court-chip-rating"><svg viewBox="0 0 24 24" fill="#F59E0B" width="12" height="12"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> 4.8</span>
                             </div>
                             <div class="court-chip" onclick="showScreen('courts')">
-                                <span>🎾</span>
-                                <span>YMCA</span>
+                                <span class="court-chip-badge indoor">Indoor</span>
+                                <span class="court-chip-name">YMCA</span>
+                                <span class="court-chip-rating"><svg viewBox="0 0 24 24" fill="#F59E0B" width="12" height="12"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> 4.6</span>
                             </div>
                         </div>
                         <div class="tab-bar">
@@ -1929,16 +2042,16 @@
                         </div>
                         <!-- Court Preview Card -->
                         <div class="court-preview">
-                            <div class="court-preview-image">🏟️</div>
+                            <div class="court-preview-image"><svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
                             <div class="court-preview-info">
                                 <div class="court-preview-name">Central Park Courts</div>
                                 <div class="court-preview-details">
-                                    <span>⭐ 4.8</span>
-                                    <span>🎾 8 courts</span>
-                                    <span>0.5 mi</span>
+                                    <span class="court-stat"><svg viewBox="0 0 24 24" fill="#F59E0B" width="14" height="14"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> 4.8</span>
+                                    <span class="court-stat">8 courts</span>
+                                    <span class="court-stat">0.5 mi</span>
                                 </div>
                             </div>
-                            <div class="court-preview-arrow">→</div>
+                            <div class="court-preview-arrow"><svg viewBox="0 0 24 24" fill="var(--emerald)" width="20" height="20"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div>
                         </div>
                         <div class="tab-bar">
                             <div class="tab-item" onclick="showScreen('home')">
