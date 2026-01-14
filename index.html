@@ -1758,20 +1758,6 @@
             margin-top: 1rem;
         }
 
-        @media (max-width: 480px) {
-            .email-form {
-                flex-direction: column;
-            }
-
-            .stats-grid {
-                gap: 2rem;
-            }
-
-            .stat-number {
-                font-size: 2.25rem;
-            }
-        }
-
         /* Tips/Blog Section */
         .tips-section {
             position: relative;
@@ -1886,18 +1872,6 @@
             flex-direction: column;
         }
 
-        @media (max-width: 768px) {
-            .footer-content {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .social-links {
-                justify-content: center;
-            }
-        }
-
         /* Footer */
         footer {
             position: relative;
@@ -1944,16 +1918,45 @@
             color: var(--white);
         }
 
-        /* Responsive */
+        /* ============================================
+           RESPONSIVE DESIGN - All Device Sizes
+           ============================================ */
+
+        /* Large Desktop (1400px+) - Default styles above */
+
+        /* Desktop (1024px - 1399px) */
+        @media (max-width: 1399px) {
+            .hero {
+                padding: 7rem 3rem 4rem;
+                gap: 3rem;
+            }
+
+            .features, .cta-section {
+                padding: 5rem 3rem;
+            }
+
+            footer {
+                padding: 2.5rem 3rem;
+            }
+        }
+
+        /* Tablet Landscape (769px - 1024px) */
         @media (max-width: 1024px) {
             .hero {
                 flex-direction: column;
-                padding: 7rem 2rem 4rem;
+                padding: 7rem 2rem 3rem;
                 text-align: center;
+                min-height: auto;
             }
 
             .hero-content {
                 max-width: 100%;
+                order: 1;
+            }
+
+            .hero-demo {
+                order: 2;
+                margin-top: 2rem;
             }
 
             h1 {
@@ -1964,38 +1967,787 @@
                 justify-content: center;
             }
 
-            .features, .cta-section, footer {
-                padding-left: 2rem;
-                padding-right: 2rem;
+            .features, .cta-section {
+                padding: 4rem 2rem;
             }
-        }
 
-        @media (max-width: 640px) {
-            h1 {
+            footer {
+                padding: 2rem;
+            }
+
+            .features-header h2 {
                 font-size: 2.25rem;
             }
 
+            .iphone-frame {
+                width: 320px;
+                height: 660px;
+            }
+
+            .stats-grid {
+                gap: 3rem;
+            }
+
+            .cta-box {
+                padding: 3rem 2rem;
+            }
+        }
+
+        /* Tablet Portrait (641px - 768px) */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
             .hero-description {
-                font-size: 1rem;
+                font-size: 1.05rem;
             }
 
             .iphone-frame {
                 width: 300px;
                 height: 620px;
+                border-radius: 50px;
+                padding: 12px;
             }
 
-            .features-header h2, .cta-box h2 {
+            .iphone-frame::before {
+                width: 100px;
+                height: 30px;
+            }
+
+            .iphone-screen {
+                border-radius: 38px;
+            }
+
+            .features, .cta-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .features-header {
+                margin-bottom: 2.5rem;
+            }
+
+            .features-header h2 {
                 font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.25rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .cta-box {
+                padding: 2.5rem 1.5rem;
+                border-radius: 24px;
+            }
+
+            .cta-box h2 {
+                font-size: 1.75rem;
+            }
+
+            .stats-grid {
+                flex-wrap: wrap;
+                gap: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
             }
 
             footer {
                 flex-direction: column;
                 gap: 1.5rem;
                 text-align: center;
+                padding: 2rem 1.5rem;
             }
 
-            .nav-links {
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .tips-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Large Phone (481px - 640px) */
+        @media (max-width: 640px) {
+            nav {
+                padding: 0.875rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+            }
+
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .nav-download-btn {
+                padding: 0.4rem 1rem !important;
+                font-size: 0.85rem !important;
+            }
+
+            .hero {
+                padding: 5.5rem 1rem 2rem;
+                gap: 2rem;
+            }
+
+            .hero-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero-description {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+                line-height: 1.6;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: center;
+            }
+
+            .app-store-btn, .secondary-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .iphone-frame {
+                width: 280px;
+                height: 580px;
+                border-radius: 45px;
+                padding: 10px;
+            }
+
+            .iphone-frame::before {
+                width: 90px;
+                height: 28px;
+            }
+
+            .iphone-screen {
+                border-radius: 35px;
+            }
+
+            /* Demo screen adjustments */
+            .app-header {
+                padding: 6px 12px 10px;
+            }
+
+            .profile-avatar {
+                width: 32px;
+                height: 32px;
+            }
+
+            .app-title {
+                font-size: 1.2rem;
+            }
+
+            .header-icon-btn {
+                width: 32px;
+                height: 32px;
+            }
+
+            .welcome-card {
+                margin: 8px 10px;
+                padding: 14px;
+            }
+
+            .welcome-greeting {
+                font-size: 1.05rem;
+            }
+
+            .welcome-subtitle {
+                font-size: 0.75rem;
+            }
+
+            .action-btn {
+                padding: 10px 8px;
+                font-size: 0.7rem;
+            }
+
+            .action-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .tab-bar {
+                padding: 8px 4px 20px;
+            }
+
+            .tab-item {
+                font-size: 0.6rem;
+            }
+
+            .tab-item svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* Features section */
+            .features, .cta-section {
+                padding: 2.5rem 1rem;
+            }
+
+            .features-header {
+                margin-bottom: 2rem;
+            }
+
+            .features-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .features-header p {
+                font-size: 0.95rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .feature-card {
+                padding: 1.25rem;
+            }
+
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .feature-card p {
+                font-size: 0.9rem;
+            }
+
+            /* CTA section */
+            .cta-box {
+                padding: 2rem 1.25rem;
+                border-radius: 20px;
+            }
+
+            .cta-box h2 {
+                font-size: 1.5rem;
+            }
+
+            .cta-box p {
+                font-size: 1rem;
+            }
+
+            /* Stats */
+            .social-proof {
+                padding: 2.5rem 1rem;
+            }
+
+            .stats-grid {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2.25rem;
+            }
+
+            .stat-label {
+                font-size: 0.85rem;
+            }
+
+            /* Tips section */
+            .tips-section {
+                padding: 2.5rem 1rem;
+            }
+
+            .tips-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .tip-card {
+                padding: 1.25rem;
+            }
+
+            /* Footer */
+            footer {
+                padding: 1.5rem 1rem;
+            }
+
+            .footer-logo {
+                font-size: 1.1rem;
+            }
+
+            .footer-links {
+                gap: 0.75rem;
+            }
+
+            .footer-links a {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Small Phone (320px - 480px) */
+        @media (max-width: 480px) {
+            nav {
+                padding: 0.75rem 0.75rem;
+            }
+
+            .logo {
+                font-size: 1rem;
+                gap: 0.35rem;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .nav-download-btn {
+                padding: 0.35rem 0.75rem !important;
+                font-size: 0.8rem !important;
+            }
+
+            .hero {
+                padding: 5rem 0.75rem 1.5rem;
+            }
+
+            .hero-badge {
+                font-size: 0.75rem;
+                padding: 0.35rem 0.7rem;
+                margin-bottom: 1rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+                line-height: 1.15;
+            }
+
+            .hero-description {
+                font-size: 0.9rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .app-store-btn svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .app-store-btn {
+                padding: 0.65rem 1.25rem;
+                font-size: 0.9rem;
+            }
+
+            .secondary-btn {
+                padding: 0.65rem 1.25rem;
+                font-size: 0.9rem;
+            }
+
+            /* Phone mockup - smallest size */
+            .iphone-frame {
+                width: 260px;
+                height: 540px;
+                border-radius: 42px;
+                padding: 8px;
+            }
+
+            .iphone-frame::before {
+                width: 80px;
+                height: 24px;
+            }
+
+            .iphone-screen {
+                border-radius: 34px;
+            }
+
+            /* Demo screen - smallest adjustments */
+            .status-bar {
+                padding: 8px 16px 6px;
+                font-size: 0.65rem;
+            }
+
+            .app-header {
+                padding: 4px 10px 8px;
+            }
+
+            .profile-avatar {
+                width: 28px;
+                height: 28px;
+                margin-right: 8px;
+            }
+
+            .app-title {
+                font-size: 1.05rem;
+            }
+
+            .header-icon-btn {
+                width: 28px;
+                height: 28px;
+            }
+
+            .header-icons {
+                gap: 6px;
+            }
+
+            .welcome-card {
+                margin: 6px 8px;
+                padding: 12px;
+                border-radius: 16px;
+            }
+
+            .welcome-header {
+                margin-bottom: 12px;
+            }
+
+            .welcome-greeting {
+                font-size: 0.95rem;
+            }
+
+            .welcome-subtitle {
+                font-size: 0.7rem;
+            }
+
+            .welcome-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .welcome-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .welcome-actions {
+                gap: 6px;
+            }
+
+            .action-btn {
+                padding: 8px 6px;
+                font-size: 0.65rem;
+                border-radius: 10px;
+                gap: 4px;
+            }
+
+            .action-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            /* Weather widget */
+            .weather-widget-full {
+                margin: 0 8px 8px;
+                padding: 12px;
+            }
+
+            .weather-temp-large {
+                font-size: 1.4rem;
+            }
+
+            /* Tab bar */
+            .tab-bar {
+                padding: 6px 2px 16px;
+                gap: 0;
+            }
+
+            .tab-item {
+                font-size: 0.55rem;
+                gap: 2px;
+            }
+
+            .tab-item svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            /* Courts screen */
+            .courts-header {
+                padding: 6px 10px;
+            }
+
+            .courts-filter-btn, .courts-add-btn {
+                width: 32px;
+                height: 32px;
+            }
+
+            .courts-title {
+                font-size: 1.1rem;
+            }
+
+            .courts-search {
+                padding: 0 10px 8px;
+            }
+
+            .search-bar {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+
+            .court-preview {
+                margin: 10px;
+                padding: 10px;
+                border-radius: 14px;
+            }
+
+            .court-preview-image {
+                width: 44px;
+                height: 44px;
+            }
+
+            .court-preview-name {
+                font-size: 0.85rem;
+            }
+
+            /* Play screen */
+            .screen-header-simple {
+                padding: 10px 12px;
+            }
+
+            .screen-title {
+                font-size: 1.2rem;
+            }
+
+            .partner-banner {
+                margin: 0 10px 10px;
+                padding: 10px;
+            }
+
+            .filter-tabs {
+                padding: 0 10px 10px;
+                gap: 6px;
+            }
+
+            .filter-tab {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+
+            .games-list {
+                padding: 0 10px;
+            }
+
+            .game-card-full {
+                padding: 12px;
+                border-radius: 14px;
+            }
+
+            /* Leagues screen */
+            .leagues-list {
+                padding: 0 10px;
+            }
+
+            .league-card {
+                padding: 12px;
+                border-radius: 14px;
+                gap: 10px;
+            }
+
+            .league-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.4rem;
+            }
+
+            /* Learn screen */
+            .skill-progress {
+                margin: 0 10px 10px;
+                padding: 12px;
+            }
+
+            .drills-list {
+                padding: 0 10px;
+            }
+
+            .drill-card {
+                padding: 10px 12px;
+                border-radius: 12px;
+            }
+
+            /* Features section */
+            .features, .cta-section {
+                padding: 2rem 0.75rem;
+            }
+
+            .features-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .features-header p {
+                font-size: 0.9rem;
+            }
+
+            .feature-card {
+                padding: 1rem;
+                border-radius: 18px;
+            }
+
+            .feature-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.25rem;
+                border-radius: 12px;
+            }
+
+            .feature-card h3 {
+                font-size: 1rem;
+            }
+
+            .feature-card p {
+                font-size: 0.85rem;
+            }
+
+            /* CTA */
+            .cta-box {
+                padding: 1.5rem 1rem;
+                border-radius: 16px;
+            }
+
+            .cta-box h2 {
+                font-size: 1.35rem;
+            }
+
+            .cta-box p {
+                font-size: 0.9rem;
+            }
+
+            /* Stats */
+            .social-proof {
+                padding: 2rem 0.75rem;
+            }
+
+            .email-form {
+                flex-direction: column;
+            }
+        }
+
+        /* Extra small phones (under 320px) */
+        @media (max-width: 320px) {
+            .hero {
+                padding: 4.5rem 0.5rem 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .iphone-frame {
+                width: 240px;
+                height: 500px;
+                border-radius: 38px;
+                padding: 6px;
+            }
+
+            .iphone-screen {
+                border-radius: 32px;
+            }
+
+            .welcome-greeting {
+                font-size: 0.85rem;
+            }
+
+            .action-btn {
+                padding: 6px 4px;
+                font-size: 0.6rem;
+            }
+        }
+
+        /* Landscape orientation on phones */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero {
+                flex-direction: row;
+                min-height: auto;
+                padding: 5rem 2rem 2rem;
+            }
+
+            .hero-content {
+                flex: 1;
+                text-align: left;
+            }
+
+            .hero-demo {
+                flex: 0 0 auto;
+            }
+
+            .hero-cta {
+                justify-content: flex-start;
+            }
+
+            .iphone-frame {
+                width: 200px;
+                height: 420px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* High DPI / Retina adjustments */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .iphone-frame {
+                box-shadow:
+                    0 50px 100px rgba(0, 0, 0, 0.4),
+                    0 0 0 0.5px rgba(255, 255, 255, 0.1),
+                    inset 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .hero-demo, .tab-bar, nav {
                 display: none;
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 2rem;
+            }
+
+            body {
+                background: white;
+                color: black;
             }
         }
     </style>
