@@ -55,6 +55,97 @@
         .legal-content a {
             color: var(--primary);
         }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .footer-logo img {
+            border-radius: 6px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .social-icon {
+            color: rgba(255, 255, 255, 0.5);
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-icon:hover {
+            color: var(--primary);
+        }
+
+        .social-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -189,7 +280,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer>
         <a href="index.html" class="footer-logo">
             <img src="images/app-icon-120.png" alt="PickleCue" style="width:24px;height:24px;border-radius:6px;">
             <span>PickleCue</span>
