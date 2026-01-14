@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support & FAQ - PickleCue</title>
+    <meta name="description" content="Get help with PickleCue. Find answers to common questions and contact support.">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .support-hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--background) 0%, var(--background-light) 100%);
+        }
+        .support-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .support-hero p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        .support-search {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .support-search input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            padding-right: 3rem;
+            border-radius: 9999px;
+            border: 1px solid var(--border);
+            background: var(--background);
+            color: var(--text);
+            font-size: 1rem;
+        }
+        .support-search input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .support-search button {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .support-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+        .contact-card {
+            background: var(--background-light);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .contact-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        .contact-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+        .contact-card h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        .contact-card p {
+            color: var(--text-muted);
+            font-size: 0.9375rem;
+            margin-bottom: 1rem;
+        }
+        .contact-card a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        .faq-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+        }
+        .faq-category {
+            margin-bottom: 3rem;
+        }
+        .faq-category h3 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+        .faq-question {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            background: var(--background-light);
+            border: none;
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .faq-question:hover {
+            background: var(--background);
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: transform 0.2s;
+        }
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: var(--background);
+        }
+        .faq-item.active .faq-answer {
+            padding: 1.25rem 1.5rem;
+            max-height: 500px;
+        }
+        .faq-answer p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+        }
+        .faq-answer p:last-child {
+            margin-bottom: 0;
+        }
+        .faq-answer a {
+            color: var(--primary);
+        }
+        .faq-answer ul {
+            color: var(--text-muted);
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+        }
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .contact-cards {
+                grid-template-columns: 1fr;
+            }
+            .support-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🏓</span>
+                <span>PickleCue</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#demo">Demo</a></li>
+                <li><a href="support.html">Support</a></li>
+            </ul>
+            <a href="index.html#download" class="nav-cta">Download</a>
+            <button class="nav-toggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Support Hero -->
+    <section class="support-hero">
+        <h1>How can we help?</h1>
+        <p>Search our FAQ or contact us directly. We're here to help you get the most out of PickleCue.</p>
+        <div class="support-search">
+            <input type="text" placeholder="Search for answers..." id="faq-search">
+            <button type="button">🔍</button>
+        </div>
+    </section>
+
+    <!-- Support Content -->
+    <main class="support-content">
+        <!-- Contact Cards -->
+        <div class="contact-cards">
+            <div class="contact-card">
+                <div class="contact-icon">📧</div>
+                <h3>Email Support</h3>
+                <p>Get help with account issues, bugs, or general questions.</p>
+                <a href="mailto:support@picklecue.com">support@picklecue.com</a>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">💬</div>
+                <h3>In-App Feedback</h3>
+                <p>Send feedback directly from the app.</p>
+                <span style="color: var(--text-muted);">Settings → Help & Support</span>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">🐛</div>
+                <h3>Report a Bug</h3>
+                <p>Found something broken? Let us know.</p>
+                <a href="mailto:bugs@picklecue.com">bugs@picklecue.com</a>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+
+            <!-- Getting Started -->
+            <div class="faq-category">
+                <h3>Getting Started</h3>
+
+                <div class="faq-item">
+                    <button class="faq-question">How do I create an account?</button>
+                    <div class="faq-answer">
+                        <p>Creating an account is easy! When you first open PickleCue, you can:</p>
+                        <ul>
+                            <li><strong>Sign in with Apple</strong> (recommended) - Fast and secure, one-tap sign in</li>
+                            <li><strong>Sign up with email</strong> - Enter your email and create a password</li>
+                        </ul>
+                        <p>After signing up, you'll complete a quick profile setup to add your name, skill level, and preferences.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">How do I set my skill level?</button>
+                    <div class="faq-answer">
+                        <p>PickleCue uses a skill rating system from 2.0 to 5.0+ based on the standard pickleball rating scale. During profile setup:</p>
+                        <ul>
+                            <li><strong>2.0-2.5</strong> - Beginner: Learning basic rules and strokes</li>
+                            <li><strong>3.0-3.5</strong> - Intermediate: Consistent serves, developing strategy</li>
+                            <li><strong>4.0-4.5</strong> - Advanced: Strong all-around game, competitive play</li>
+                            <li><strong>5.0+</strong> - Expert: Tournament-level player</li>
+                        </ul>
+                        <p>If you have a DUPR rating, you can link it in your profile settings for verified skill level.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">Is PickleCue free to use?</button>
+                    <div class="faq-answer">
+                        <p>Yes! PickleCue is free to download and use. Core features including court discovery, joining games, and finding partners are all free.</p>
+                        <p>We may offer optional premium features in the future, but the main functionality will always be free.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finding Courts -->
+            <div class="faq-category">
+                <h3>Finding Courts</h3>
+
+                <div class="faq-item">
+                    <button class="faq-question">How do I find courts near me?</button>
+                    <div class="faq-answer">
+                        <p>Tap the <strong>Courts</strong> tab to see a map of courts in your area. You can:</p>
+                        <ul>
+                            <li>Pan and zoom the map to explore different areas</li>
+                            <li>Tap court pins to see details, photos, and ratings</li>
+                            <li>Use the search bar to find courts by name or location</li>
+                            <li>Filter by indoor/outdoor, free/paid, and amenities</li>
+                        </ul>
+                        <p>Make sure location services are enabled for the best experience.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">How do I report a court's status?</button>
+                    <div class="faq-answer">
+                        <p>Help the community by reporting real-time court conditions! When you're at a court:</p>
+                        <ul>
+                            <li>Open the court detail page</li>
+                            <li>Tap "Check In" to mark yourself as present</li>
+                            <li>Select the current status: Empty, Few Players, Busy, or Closed</li>
+                        </ul>
+                        <p>Your report helps other players know what to expect before they arrive.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">Can I add a new court?</button>
+                    <div class="faq-answer">
+                        <p>Yes! If you know of a court that isn't in our database:</p>
+                        <ul>
+                            <li>Go to the Courts tab</li>
+                            <li>Tap the + button or "Add Court"</li>
+                            <li>Enter the court name, location, and details</li>
+                            <li>Add photos if possible</li>
+                        </ul>
+                        <p>Submitted courts are reviewed before being published to ensure accuracy.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Games & Events -->
+            <div class="faq-category">
+                <h3>Games & Events</h3>
+
+                <div class="faq-item">
+                    <button class="faq-question">How do I create a game?</button>
+                    <div class="faq-answer">
+                        <p>Creating a game is simple:</p>
+                        <ul>
+                            <li>Go to the <strong>Play</strong> tab</li>
+                            <li>Tap the + button to create a new game</li>
+                            <li>Select a court from the map or search</li>
+                            <li>Set the date, time, and duration</li>
+                            <li>Choose game type (singles, doubles, open play)</li>
+                            <li>Set skill level requirements</li>
+                            <li>Add a description and publish!</li>
+                        </ul>
+                        <p>Players matching your criteria can then RSVP to your game.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">How do I join a game?</button>
+                    <div class="faq-answer">
+                        <p>Browse available games in the Play tab. You can:</p>
+                        <ul>
+                            <li>View games on the map or in list view</li>
+                            <li>Filter by skill level, date, or game type</li>
+                            <li>Tap a game to see details</li>
+                            <li>Tap "Join" to RSVP</li>
+                        </ul>
+                        <p>If a game is full, you can join the waitlist and be notified if a spot opens.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">What happens if I need to cancel?</button>
+                    <div class="faq-answer">
+                        <p>We understand plans change. To cancel:</p>
+                        <ul>
+                            <li>Open the game in My Games</li>
+                            <li>Tap "Leave Game" or "Cancel" (if you're the host)</li>
+                        </ul>
+                        <p><strong>Please cancel early when possible.</strong> Late cancellations or no-shows affect your Trust Score and make it harder for others to plan. If a game is cancelled, all participants are notified automatically.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account & Profile -->
+            <div class="faq-category">
+                <h3>Account & Profile</h3>
+
+                <div class="faq-item">
+                    <button class="faq-question">How do I edit my profile?</button>
+                    <div class="faq-answer">
+                        <p>Go to the <strong>Profile</strong> tab and tap "Edit Profile" to update:</p>
+                        <ul>
+                            <li>Profile photo</li>
+                            <li>Display name</li>
+                            <li>Skill level</li>
+                            <li>Playing preferences</li>
+                            <li>Bio</li>
+                        </ul>
+                        <p>Keep your profile up to date to get better game and partner recommendations!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">What is Trust Score?</button>
+                    <div class="faq-answer">
+                        <p>Trust Score is a measure of your reliability as a player. It's affected by:</p>
+                        <ul>
+                            <li><strong>Showing up</strong> - Attending games you've committed to</li>
+                            <li><strong>Cancellation timing</strong> - Canceling early is better than late</li>
+                            <li><strong>Player feedback</strong> - Reviews from other players</li>
+                            <li><strong>Verified account</strong> - Linking DUPR or other verification</li>
+                        </ul>
+                        <p>A higher Trust Score helps you get accepted into games and builds your reputation.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">How do I delete my account?</button>
+                    <div class="faq-answer">
+                        <p>We're sorry to see you go! To delete your account:</p>
+                        <ul>
+                            <li>Go to <strong>Settings</strong></li>
+                            <li>Tap <strong>Account</strong></li>
+                            <li>Tap <strong>Delete Account</strong></li>
+                            <li>Confirm deletion</li>
+                        </ul>
+                        <p><strong>Warning:</strong> Account deletion is permanent. All your data, game history, and profile will be removed and cannot be recovered.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="faq-category">
+                <h3>Troubleshooting</h3>
+
+                <div class="faq-item">
+                    <button class="faq-question">The app isn't showing my location</button>
+                    <div class="faq-answer">
+                        <p>If PickleCue can't access your location:</p>
+                        <ul>
+                            <li>Go to your iPhone's <strong>Settings</strong> → <strong>PickleCue</strong> → <strong>Location</strong></li>
+                            <li>Select "While Using the App"</li>
+                            <li>Ensure Location Services are enabled globally in Settings → Privacy → Location Services</li>
+                        </ul>
+                        <p>You can still use the app without location by searching for courts manually.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">I'm not receiving notifications</button>
+                    <div class="faq-answer">
+                        <p>To ensure you receive game reminders and updates:</p>
+                        <ul>
+                            <li>Go to <strong>Settings</strong> → <strong>PickleCue</strong> → <strong>Notifications</strong></li>
+                            <li>Enable "Allow Notifications"</li>
+                            <li>In the app, go to Settings → Notifications and customize your preferences</li>
+                        </ul>
+                        <p>Make sure Do Not Disturb isn't blocking notifications.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">I forgot my password</button>
+                    <div class="faq-answer">
+                        <p>If you signed up with email:</p>
+                        <ul>
+                            <li>On the login screen, tap "Forgot Password"</li>
+                            <li>Enter your email address</li>
+                            <li>Check your email for a reset link</li>
+                            <li>Follow the link to create a new password</li>
+                        </ul>
+                        <p>If you used Sign in with Apple, you can sign in using your Apple ID - no password needed!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">Something else isn't working</button>
+                    <div class="faq-answer">
+                        <p>Try these general troubleshooting steps:</p>
+                        <ul>
+                            <li><strong>Update the app</strong> - Check the App Store for updates</li>
+                            <li><strong>Restart the app</strong> - Force quit and reopen</li>
+                            <li><strong>Check your connection</strong> - PickleCue requires internet</li>
+                            <li><strong>Restart your device</strong> - Sometimes a fresh start helps</li>
+                        </ul>
+                        <p>If the problem persists, <a href="mailto:support@picklecue.com">contact support</a> with details about the issue and your device model.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <a href="index.html" class="footer-logo">
+                <span>🏓</span>
+                <span>PickleCue</span>
+            </a>
+            <ul class="footer-links">
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="mailto:hello@picklecue.com">Contact</a></li>
+            </ul>
+            <p class="footer-copyright">&copy; 2026 PickleCue. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const isActive = item.classList.contains('active');
+
+                // Close all other items
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // FAQ Search
+        const searchInput = document.getElementById('faq-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    const matches = question.includes(query) || answer.includes(query);
+                    item.style.display = matches ? 'block' : 'none';
+                });
+
+                // Show/hide categories based on visible items
+                document.querySelectorAll('.faq-category').forEach(category => {
+                    const visibleItems = category.querySelectorAll('.faq-item[style="display: block"], .faq-item:not([style])');
+                    category.style.display = visibleItems.length > 0 ? 'block' : 'none';
+                });
+            });
+        }
+    </script>
+</body>
+</html>

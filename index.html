@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PickleCue - Find Courts. Find Players. Play.</title>
+    <meta name="description" content="The #1 pickleball app to find courts, join games, track matches, and connect with local players. Download free on iOS.">
+    <meta name="keywords" content="pickleball, pickleball app, find pickleball courts, pickleball players, pickleball games">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="PickleCue - The #1 Pickleball App">
+    <meta property="og:description" content="Find courts, join games, track matches, and connect with local players.">
+    <meta property="og:image" content="https://picklecue.com/images/og-image.png">
+    <meta property="og:url" content="https://picklecue.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PickleCue - The #1 Pickleball App">
+    <meta name="twitter:description" content="Find courts, join games, track matches, and connect with local players.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <span class="logo-icon">🏓</span>
+                <span class="logo-text">PickleCue</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#demo">Demo</a>
+                <a href="support.html">Support</a>
+                <a href="#download" class="nav-cta">Download</a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Find Courts.<br>
+                    Find Players.<br>
+                    <span class="highlight">Play.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    The ultimate pickleball companion. Discover nearby courts, join local games,
+                    track your matches, and connect with players at your skill level.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#download" class="btn btn-primary">
+                        <svg class="apple-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                        Download for iOS
+                    </a>
+                    <a href="#demo" class="btn btn-secondary">See Demo</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">26K+</span>
+                        <span class="stat-label">Courts</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">Free</span>
+                        <span class="stat-label">To Use</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.9</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-phone">
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="carousel" id="heroCarousel">
+                            <div class="carousel-track">
+                                <!-- Screenshots will be inserted here -->
+                                <div class="carousel-slide active">
+                                    <div class="placeholder-screen home">
+                                        <div class="screen-header">
+                                            <span>Good morning! 👋</span>
+                                        </div>
+                                        <div class="screen-card">
+                                            <div class="card-icon">🗺️</div>
+                                            <div class="card-text">Find Courts Near You</div>
+                                        </div>
+                                        <div class="screen-card">
+                                            <div class="card-icon">🎮</div>
+                                            <div class="card-text">3 Games Today</div>
+                                        </div>
+                                        <div class="screen-card weather">
+                                            <div class="card-icon">☀️</div>
+                                            <div class="card-text">Perfect for Pickleball</div>
+                                        </div>
+                                        <div class="screen-nav">
+                                            <span class="nav-item active">🏠</span>
+                                            <span class="nav-item">🗺️</span>
+                                            <span class="nav-item">➕</span>
+                                            <span class="nav-item">💬</span>
+                                            <span class="nav-item">👤</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div class="placeholder-screen courts">
+                                        <div class="screen-header">
+                                            <span>Courts Near You</span>
+                                        </div>
+                                        <div class="screen-map">
+                                            <div class="map-pin" style="top: 30%; left: 40%;">📍</div>
+                                            <div class="map-pin" style="top: 50%; left: 60%;">📍</div>
+                                            <div class="map-pin" style="top: 70%; left: 35%;">📍</div>
+                                        </div>
+                                        <div class="court-card">
+                                            <strong>Willowbrook Park</strong>
+                                            <span>6 courts • 0.8 mi</span>
+                                        </div>
+                                        <div class="screen-nav">
+                                            <span class="nav-item">🏠</span>
+                                            <span class="nav-item active">🗺️</span>
+                                            <span class="nav-item">➕</span>
+                                            <span class="nav-item">💬</span>
+                                            <span class="nav-item">👤</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div class="placeholder-screen games">
+                                        <div class="screen-header">
+                                            <span>Open Games</span>
+                                        </div>
+                                        <div class="game-card">
+                                            <div class="game-time">Today 6:00 PM</div>
+                                            <div class="game-title">Doubles at Central Park</div>
+                                            <div class="game-info">3.5-4.0 • 2 spots left</div>
+                                            <button class="game-btn">Join Game</button>
+                                        </div>
+                                        <div class="game-card">
+                                            <div class="game-time">Tomorrow 9:00 AM</div>
+                                            <div class="game-title">Morning Rally</div>
+                                            <div class="game-info">All levels • 4 spots left</div>
+                                            <button class="game-btn">Join Game</button>
+                                        </div>
+                                        <div class="screen-nav">
+                                            <span class="nav-item">🏠</span>
+                                            <span class="nav-item">🗺️</span>
+                                            <span class="nav-item active">➕</span>
+                                            <span class="nav-item">💬</span>
+                                            <span class="nav-item">👤</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div class="placeholder-screen chat">
+                                        <div class="screen-header">
+                                            <span>Messages</span>
+                                        </div>
+                                        <div class="chat-item">
+                                            <div class="chat-avatar">👤</div>
+                                            <div class="chat-content">
+                                                <div class="chat-name">Willowbrook Community</div>
+                                                <div class="chat-preview">Anyone want to play at 4?</div>
+                                            </div>
+                                            <div class="chat-badge">3</div>
+                                        </div>
+                                        <div class="chat-item">
+                                            <div class="chat-avatar">👤</div>
+                                            <div class="chat-content">
+                                                <div class="chat-name">Sarah M.</div>
+                                                <div class="chat-preview">Great game yesterday!</div>
+                                            </div>
+                                        </div>
+                                        <div class="screen-nav">
+                                            <span class="nav-item">🏠</span>
+                                            <span class="nav-item">🗺️</span>
+                                            <span class="nav-item">➕</span>
+                                            <span class="nav-item active">💬</span>
+                                            <span class="nav-item">👤</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div class="placeholder-screen profile">
+                                        <div class="profile-header">
+                                            <div class="profile-avatar">👤</div>
+                                            <div class="profile-name">Your Profile</div>
+                                            <div class="profile-rating">⭐ 4.0 Rating</div>
+                                        </div>
+                                        <div class="stats-row">
+                                            <div class="stat-box">
+                                                <div class="stat-num">47</div>
+                                                <div class="stat-lbl">Games</div>
+                                            </div>
+                                            <div class="stat-box">
+                                                <div class="stat-num">32</div>
+                                                <div class="stat-lbl">Wins</div>
+                                            </div>
+                                            <div class="stat-box">
+                                                <div class="stat-num">68%</div>
+                                                <div class="stat-lbl">Win Rate</div>
+                                            </div>
+                                        </div>
+                                        <div class="screen-nav">
+                                            <span class="nav-item">🏠</span>
+                                            <span class="nav-item">🗺️</span>
+                                            <span class="nav-item">➕</span>
+                                            <span class="nav-item">💬</span>
+                                            <span class="nav-item active">👤</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-dots">
+                    <button class="dot active" data-slide="0"></button>
+                    <button class="dot" data-slide="1"></button>
+                    <button class="dot" data-slide="2"></button>
+                    <button class="dot" data-slide="3"></button>
+                    <button class="dot" data-slide="4"></button>
+                </div>
+                <div class="carousel-labels">
+                    <span class="label active">Home</span>
+                    <span class="label">Courts</span>
+                    <span class="label">Games</span>
+                    <span class="label">Chat</span>
+                    <span class="label">Profile</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Everything You Need to Play</h2>
+            <p class="section-subtitle">From finding courts to tracking your progress, PickleCue has you covered.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Find Courts</h3>
+                    <p>Discover 26,000+ pickleball courts across the US with real-time availability and player reviews.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3>Join Games</h3>
+                    <p>Browse open games filtered by skill level, time, and location. RSVP with one tap.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Track Stats</h3>
+                    <p>Log your matches, track wins/losses, and watch your rating improve over time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Connect</h3>
+                    <p>Message players directly, join court communities, and build your pickleball network.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Leagues</h3>
+                    <p>Join local leagues and tournaments. Compete in round-robin or elimination formats.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Learn</h3>
+                    <p>Improve your game with drills, tips, and skill progression tracking.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo-section" id="demo">
+        <div class="container">
+            <h2 class="section-title">See It In Action</h2>
+            <p class="section-subtitle">Swipe through the app or click the tabs below to explore.</p>
+
+            <div class="demo-container">
+                <div class="demo-phone">
+                    <div class="phone-frame large">
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen">
+                            <div class="carousel" id="demoCarousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide active">
+                                        <div class="placeholder-screen home large">
+                                            <div class="screen-header">
+                                                <span>Good morning! 👋</span>
+                                            </div>
+                                            <div class="screen-card">
+                                                <div class="card-icon">🗺️</div>
+                                                <div class="card-text">Find Courts Near You</div>
+                                                <div class="card-arrow">→</div>
+                                            </div>
+                                            <div class="screen-card">
+                                                <div class="card-icon">🎮</div>
+                                                <div class="card-text">3 Games Today</div>
+                                                <div class="card-arrow">→</div>
+                                            </div>
+                                            <div class="screen-card weather">
+                                                <div class="card-icon">☀️</div>
+                                                <div class="card-text">72°F - Perfect for Pickleball</div>
+                                            </div>
+                                            <div class="screen-card">
+                                                <div class="card-icon">⭐</div>
+                                                <div class="card-text">Your Rating: 4.0</div>
+                                            </div>
+                                            <div class="screen-nav">
+                                                <span class="nav-item active">🏠</span>
+                                                <span class="nav-item">🗺️</span>
+                                                <span class="nav-item add">➕</span>
+                                                <span class="nav-item">💬</span>
+                                                <span class="nav-item">👤</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide">
+                                        <div class="placeholder-screen courts large">
+                                            <div class="screen-header">
+                                                <span>Courts Near You</span>
+                                                <span class="filter-btn">Filter</span>
+                                            </div>
+                                            <div class="screen-map large">
+                                                <div class="map-pin" style="top: 25%; left: 45%;">📍</div>
+                                                <div class="map-pin" style="top: 40%; left: 65%;">📍</div>
+                                                <div class="map-pin" style="top: 55%; left: 30%;">📍</div>
+                                                <div class="map-pin you" style="top: 45%; left: 50%;">🔵</div>
+                                            </div>
+                                            <div class="court-card large">
+                                                <div class="court-info">
+                                                    <strong>Willowbrook Park</strong>
+                                                    <span>6 courts • 0.8 mi • Open now</span>
+                                                    <div class="court-tags">
+                                                        <span class="tag">Lighted</span>
+                                                        <span class="tag">Free</span>
+                                                    </div>
+                                                </div>
+                                                <button class="directions-btn">📍</button>
+                                            </div>
+                                            <div class="screen-nav">
+                                                <span class="nav-item">🏠</span>
+                                                <span class="nav-item active">🗺️</span>
+                                                <span class="nav-item add">➕</span>
+                                                <span class="nav-item">💬</span>
+                                                <span class="nav-item">👤</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide">
+                                        <div class="placeholder-screen games large">
+                                            <div class="screen-header">
+                                                <span>Open Games</span>
+                                                <span class="filter-btn">+ Create</span>
+                                            </div>
+                                            <div class="game-card large">
+                                                <div class="game-time">Today 6:00 PM</div>
+                                                <div class="game-title">Competitive Doubles</div>
+                                                <div class="game-location">📍 Central Park Courts</div>
+                                                <div class="game-info">3.5-4.0 skill • 2/4 players</div>
+                                                <div class="game-players">
+                                                    <span class="player-dot"></span>
+                                                    <span class="player-dot"></span>
+                                                    <span class="player-dot empty"></span>
+                                                    <span class="player-dot empty"></span>
+                                                </div>
+                                                <button class="game-btn large">Join Game</button>
+                                            </div>
+                                            <div class="game-card large">
+                                                <div class="game-time">Tomorrow 9:00 AM</div>
+                                                <div class="game-title">Morning Social Rally</div>
+                                                <div class="game-location">📍 Riverside Recreation</div>
+                                                <div class="game-info">All levels welcome • 5/8 players</div>
+                                                <button class="game-btn large secondary">View Details</button>
+                                            </div>
+                                            <div class="screen-nav">
+                                                <span class="nav-item">🏠</span>
+                                                <span class="nav-item">🗺️</span>
+                                                <span class="nav-item active add">➕</span>
+                                                <span class="nav-item">💬</span>
+                                                <span class="nav-item">👤</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide">
+                                        <div class="placeholder-screen chat large">
+                                            <div class="screen-header">
+                                                <span>Messages</span>
+                                            </div>
+                                            <div class="chat-item large">
+                                                <div class="chat-avatar">🏓</div>
+                                                <div class="chat-content">
+                                                    <div class="chat-name">Willowbrook Community</div>
+                                                    <div class="chat-preview">Mike: Anyone want to play at 4pm?</div>
+                                                    <div class="chat-time">2m ago</div>
+                                                </div>
+                                                <div class="chat-badge">3</div>
+                                            </div>
+                                            <div class="chat-item large">
+                                                <div class="chat-avatar">👤</div>
+                                                <div class="chat-content">
+                                                    <div class="chat-name">Sarah M.</div>
+                                                    <div class="chat-preview">Great game yesterday! Rematch?</div>
+                                                    <div class="chat-time">1h ago</div>
+                                                </div>
+                                            </div>
+                                            <div class="chat-item large">
+                                                <div class="chat-avatar">👥</div>
+                                                <div class="chat-content">
+                                                    <div class="chat-name">Tuesday Night Crew</div>
+                                                    <div class="chat-preview">See everyone at 7!</div>
+                                                    <div class="chat-time">3h ago</div>
+                                                </div>
+                                            </div>
+                                            <div class="screen-nav">
+                                                <span class="nav-item">🏠</span>
+                                                <span class="nav-item">🗺️</span>
+                                                <span class="nav-item add">➕</span>
+                                                <span class="nav-item active">💬</span>
+                                                <span class="nav-item">👤</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide">
+                                        <div class="placeholder-screen profile large">
+                                            <div class="profile-header large">
+                                                <div class="profile-avatar large">👤</div>
+                                                <div class="profile-name">Alex Johnson</div>
+                                                <div class="profile-rating">⭐ 4.0 DUPR Rating</div>
+                                            </div>
+                                            <div class="stats-row large">
+                                                <div class="stat-box">
+                                                    <div class="stat-num">47</div>
+                                                    <div class="stat-lbl">Games</div>
+                                                </div>
+                                                <div class="stat-box">
+                                                    <div class="stat-num">32</div>
+                                                    <div class="stat-lbl">Wins</div>
+                                                </div>
+                                                <div class="stat-box">
+                                                    <div class="stat-num">68%</div>
+                                                    <div class="stat-lbl">Win Rate</div>
+                                                </div>
+                                            </div>
+                                            <div class="profile-section">
+                                                <div class="section-title-sm">Recent Matches</div>
+                                                <div class="match-row win">
+                                                    <span>vs Mike T.</span>
+                                                    <span class="score">11-7, 11-9</span>
+                                                    <span class="result">W</span>
+                                                </div>
+                                                <div class="match-row loss">
+                                                    <span>vs Sarah M.</span>
+                                                    <span class="score">9-11, 8-11</span>
+                                                    <span class="result">L</span>
+                                                </div>
+                                            </div>
+                                            <div class="screen-nav">
+                                                <span class="nav-item">🏠</span>
+                                                <span class="nav-item">🗺️</span>
+                                                <span class="nav-item add">➕</span>
+                                                <span class="nav-item">💬</span>
+                                                <span class="nav-item active">👤</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-tabs">
+                    <button class="demo-tab active" data-slide="0">
+                        <span class="tab-icon">🏠</span>
+                        <span class="tab-label">Home</span>
+                    </button>
+                    <button class="demo-tab" data-slide="1">
+                        <span class="tab-icon">🗺️</span>
+                        <span class="tab-label">Courts</span>
+                    </button>
+                    <button class="demo-tab" data-slide="2">
+                        <span class="tab-icon">🎮</span>
+                        <span class="tab-label">Games</span>
+                    </button>
+                    <button class="demo-tab" data-slide="3">
+                        <span class="tab-icon">💬</span>
+                        <span class="tab-label">Chat</span>
+                    </button>
+                    <button class="demo-tab" data-slide="4">
+                        <span class="tab-icon">👤</span>
+                        <span class="tab-label">Profile</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download" id="download">
+        <div class="container">
+            <div class="download-content">
+                <h2>Ready to Play?</h2>
+                <p>Download PickleCue free and join thousands of pickleball players in your area.</p>
+                <a href="https://apps.apple.com/app/picklecue" class="app-store-badge">
+                    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store">
+                </a>
+                <p class="download-note">Requires iOS 17.0 or later. Free to download.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-icon">🏓</span>
+                        <span class="logo-text">PickleCue</span>
+                    </div>
+                    <p>The #1 app for pickleball players. Find courts, join games, and track your progress.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="#demo">Demo</a>
+                    <a href="#download">Download</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <a href="support.html">Help Center</a>
+                    <a href="support.html#faq">FAQ</a>
+                    <a href="mailto:support@picklecue.com">Contact Us</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PickleCue. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Twitter">𝕏</a>
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="Facebook">📘</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
