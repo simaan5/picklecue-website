@@ -486,6 +486,48 @@
             align-items: center;
         }
 
+        /* App Header (like actual app) */
+        .app-header {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px 12px;
+            background: var(--off-white);
+        }
+
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--emerald-light), var(--emerald));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .app-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--midnight);
+            flex-grow: 1;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(5, 150, 105, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         /* Screen: Home */
         .screen-home {
             background: var(--off-white);
@@ -594,6 +636,105 @@
 
         .weather-text {
             opacity: 0.6;
+        }
+
+        /* Full Weather Widget (matches app) */
+        .weather-widget-full {
+            background: white;
+            margin: 10px 14px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .weather-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--midnight);
+            margin-bottom: 4px;
+        }
+
+        .weather-conditions-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--midnight);
+            margin-bottom: 8px;
+        }
+
+        .weather-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .weather-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .weather-temp-large {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--midnight);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .weather-desc {
+            font-size: 0.85rem;
+            color: var(--midnight);
+        }
+
+        .weather-feels {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .weather-right {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-end;
+        }
+
+        .weather-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .weather-play-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(5, 150, 105, 0.08);
+            padding: 10px 12px;
+            border-radius: 10px;
+        }
+
+        .play-status-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .play-status-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--emerald);
+        }
+
+        .play-status-desc {
+            font-size: 0.65rem;
+            color: var(--text-muted);
         }
 
         /* Section Headers */
@@ -1912,6 +2053,21 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
                             </div>
                         </div>
+                        <!-- App Header -->
+                        <div class="app-header">
+                            <div class="profile-avatar">
+                                <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                            <div class="app-title">PickleCue</div>
+                            <div class="header-icons">
+                                <div class="header-icon-btn">
+                                    <svg viewBox="0 0 24 24" fill="var(--emerald)" width="20" height="20"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                                </div>
+                                <div class="header-icon-btn">
+                                    <svg viewBox="0 0 24 24" fill="var(--emerald)" width="20" height="20"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Welcome Card -->
                         <div class="welcome-card">
                             <div class="welcome-header">
@@ -1943,10 +2099,34 @@
                             </div>
                         </div>
                         <!-- Weather Widget -->
-                        <div class="weather-widget">
-                            <span class="weather-icon"><svg viewBox="0 0 24 24" fill="#F59E0B" width="24" height="24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg></span>
-                            <span class="weather-temp">72°F</span>
-                            <span class="weather-text">Perfect pickleball weather!</span>
+                        <div class="weather-widget-full">
+                            <div class="weather-location">
+                                <svg viewBox="0 0 24 24" fill="var(--emerald)" width="14" height="14"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+                                <span>San Francisco, CA</span>
+                            </div>
+                            <div class="weather-conditions-label">
+                                <svg viewBox="0 0 24 24" fill="var(--text-muted)" width="14" height="14"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                                <span>Current Conditions</span>
+                            </div>
+                            <div class="weather-main">
+                                <div class="weather-left">
+                                    <div class="weather-temp-large">57°F<svg viewBox="0 0 24 24" fill="#F59E0B" width="24" height="24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg></div>
+                                    <div class="weather-desc">Sunny</div>
+                                    <div class="weather-feels">Feels like 55°F</div>
+                                </div>
+                                <div class="weather-right">
+                                    <div class="weather-stat"><svg viewBox="0 0 24 24" fill="var(--text-muted)" width="12" height="12"><path d="M14.5 17c0 1.65-1.35 3-3 3s-3-1.35-3-3c0-1.18.7-2.21 1.71-2.71L10.5 4.5h3l.29 9.79c1.01.5 1.71 1.53 1.71 2.71z"/></svg> 5 mph</div>
+                                    <div class="weather-stat"><svg viewBox="0 0 24 24" fill="var(--text-muted)" width="12" height="12"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z"/></svg> 75%</div>
+                                    <div class="weather-stat"><svg viewBox="0 0 24 24" fill="var(--text-muted)" width="12" height="12"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/></svg> UV 2</div>
+                                </div>
+                            </div>
+                            <div class="weather-play-status">
+                                <svg viewBox="0 0 24 24" fill="var(--emerald)" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                <div class="play-status-text">
+                                    <span class="play-status-title">Good to Play</span>
+                                    <span class="play-status-desc">Great conditions for pickleball</span>
+                                </div>
+                            </div>
                         </div>
                         <!-- Games Near You -->
                         <div class="section-header">
@@ -1994,20 +2174,20 @@
                                 <span>Home</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('courts')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v20h2V2H6zm10 0v20h2V2h-2zM2 7v10h2V7H2zm18 0v10h2V7h-2z"/></svg>
                                 <span>Courts</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 3C7.36 3 4 6.36 4 10.5c0 1.71.58 3.29 1.54 4.56L3.71 16.88c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.83-1.83C8.21 17.42 9.79 18 11.5 18c4.14 0 7.5-3.36 7.5-7.5S15.64 3 11.5 3zm0 13C8.46 16 6 13.54 6 10.5S8.46 5 11.5 5 17 7.46 17 10.5 14.54 16 11.5 16zM20.29 16.88l-1.83-1.83c.46-.7.81-1.47 1.03-2.29.06-.23.1-.47.14-.71l2.22 2.22c.39.39.39 1.02 0 1.41-.39.39-1.02.39-1.41 0l-.15-.15v1.35z"/></svg>
                                 <span>Play</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('leagues')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
                                 <span>Leagues</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('learn')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-                                <span>Learn</span>
+                            <div class="tab-item">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+                                <span>More</span>
                             </div>
                         </div>
                     </div>
@@ -2059,20 +2239,20 @@
                                 <span>Home</span>
                             </div>
                             <div class="tab-item active" onclick="showScreen('courts')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v20h2V2H6zm10 0v20h2V2h-2zM2 7v10h2V7H2zm18 0v10h2V7h-2z"/></svg>
                                 <span>Courts</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 3C7.36 3 4 6.36 4 10.5c0 1.71.58 3.29 1.54 4.56L3.71 16.88c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.83-1.83C8.21 17.42 9.79 18 11.5 18c4.14 0 7.5-3.36 7.5-7.5S15.64 3 11.5 3zm0 13C8.46 16 6 13.54 6 10.5S8.46 5 11.5 5 17 7.46 17 10.5 14.54 16 11.5 16zM20.29 16.88l-1.83-1.83c.46-.7.81-1.47 1.03-2.29.06-.23.1-.47.14-.71l2.22 2.22c.39.39.39 1.02 0 1.41-.39.39-1.02.39-1.41 0l-.15-.15v1.35z"/></svg>
                                 <span>Play</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('leagues')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
                                 <span>Leagues</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('learn')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-                                <span>Learn</span>
+                            <div class="tab-item">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+                                <span>More</span>
                             </div>
                         </div>
                     </div>
@@ -2152,20 +2332,20 @@
                                 <span>Home</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('courts')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v20h2V2H6zm10 0v20h2V2h-2zM2 7v10h2V7H2zm18 0v10h2V7h-2z"/></svg>
                                 <span>Courts</span>
                             </div>
                             <div class="tab-item active" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 3C7.36 3 4 6.36 4 10.5c0 1.71.58 3.29 1.54 4.56L3.71 16.88c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.83-1.83C8.21 17.42 9.79 18 11.5 18c4.14 0 7.5-3.36 7.5-7.5S15.64 3 11.5 3zm0 13C8.46 16 6 13.54 6 10.5S8.46 5 11.5 5 17 7.46 17 10.5 14.54 16 11.5 16zM20.29 16.88l-1.83-1.83c.46-.7.81-1.47 1.03-2.29.06-.23.1-.47.14-.71l2.22 2.22c.39.39.39 1.02 0 1.41-.39.39-1.02.39-1.41 0l-.15-.15v1.35z"/></svg>
                                 <span>Play</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('leagues')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
                                 <span>Leagues</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('learn')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-                                <span>Learn</span>
+                            <div class="tab-item">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+                                <span>More</span>
                             </div>
                         </div>
                     </div>
@@ -2221,20 +2401,20 @@
                                 <span>Home</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('courts')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v20h2V2H6zm10 0v20h2V2h-2zM2 7v10h2V7H2zm18 0v10h2V7h-2z"/></svg>
                                 <span>Courts</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 3C7.36 3 4 6.36 4 10.5c0 1.71.58 3.29 1.54 4.56L3.71 16.88c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.83-1.83C8.21 17.42 9.79 18 11.5 18c4.14 0 7.5-3.36 7.5-7.5S15.64 3 11.5 3zm0 13C8.46 16 6 13.54 6 10.5S8.46 5 11.5 5 17 7.46 17 10.5 14.54 16 11.5 16zM20.29 16.88l-1.83-1.83c.46-.7.81-1.47 1.03-2.29.06-.23.1-.47.14-.71l2.22 2.22c.39.39.39 1.02 0 1.41-.39.39-1.02.39-1.41 0l-.15-.15v1.35z"/></svg>
                                 <span>Play</span>
                             </div>
                             <div class="tab-item active" onclick="showScreen('leagues')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
                                 <span>Leagues</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('learn')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-                                <span>Learn</span>
+                            <div class="tab-item">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+                                <span>More</span>
                             </div>
                         </div>
                     </div>
@@ -2302,20 +2482,20 @@
                                 <span>Home</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('courts')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v20h2V2H6zm10 0v20h2V2h-2zM2 7v10h2V7H2zm18 0v10h2V7h-2z"/></svg>
                                 <span>Courts</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 3C7.36 3 4 6.36 4 10.5c0 1.71.58 3.29 1.54 4.56L3.71 16.88c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.83-1.83C8.21 17.42 9.79 18 11.5 18c4.14 0 7.5-3.36 7.5-7.5S15.64 3 11.5 3zm0 13C8.46 16 6 13.54 6 10.5S8.46 5 11.5 5 17 7.46 17 10.5 14.54 16 11.5 16zM20.29 16.88l-1.83-1.83c.46-.7.81-1.47 1.03-2.29.06-.23.1-.47.14-.71l2.22 2.22c.39.39.39 1.02 0 1.41-.39.39-1.02.39-1.41 0l-.15-.15v1.35z"/></svg>
                                 <span>Play</span>
                             </div>
                             <div class="tab-item" onclick="showScreen('leagues')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
                                 <span>Leagues</span>
                             </div>
-                            <div class="tab-item active" onclick="showScreen('learn')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-                                <span>Learn</span>
+                            <div class="tab-item active">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+                                <span>More</span>
                             </div>
                         </div>
                     </div>
