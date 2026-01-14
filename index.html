@@ -1790,21 +1790,24 @@
             margin: 0 auto;
         }
 
-        .tip-card {
+        .tips-grid .tip-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             padding: 1.5rem;
             transition: all 0.3s ease;
+            display: block !important;
+            flex-direction: unset;
+            align-items: unset;
         }
 
-        .tip-card:hover {
+        .tips-grid .tip-card:hover {
             background: rgba(255, 255, 255, 0.05);
             transform: translateY(-2px);
         }
 
-        .tip-card .tip-category {
-            display: inline-block;
+        .tips-grid .tip-card .tip-category {
+            display: block;
             font-size: 0.75rem;
             font-weight: 600;
             color: var(--emerald);
@@ -1813,14 +1816,15 @@
             margin-bottom: 0.75rem;
         }
 
-        .tip-card h4 {
+        .tips-grid .tip-card h4 {
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
             line-height: 1.4;
+            color: var(--white);
         }
 
-        .tip-card p {
+        .tips-grid .tip-card p {
             font-size: 0.9rem;
             color: var(--cloud);
             opacity: 0.7;
