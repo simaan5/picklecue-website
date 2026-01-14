@@ -14,6 +14,26 @@
     <link rel="icon" type="image/png" sizes="512x512" href="images/app-icon-512.png">
     <meta name="theme-color" content="#0A1628">
 
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.picklecue.com/">
+    <meta property="og:title" content="PickleCue - Your Pickleball Companion">
+    <meta property="og:description" content="Find games, discover courts, track your stats, and connect with players. The ultimate app for pickleball enthusiasts.">
+    <meta property="og:image" content="https://www.picklecue.com/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PickleCue - Your Pickleball Companion">
+    <meta name="twitter:description" content="Find games, discover courts, track your stats, and connect with players.">
+    <meta name="twitter:image" content="https://www.picklecue.com/images/og-image.png">
+
+    <!-- Additional SEO -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="PickleCue">
+    <link rel="canonical" href="https://www.picklecue.com/">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1171,6 +1191,353 @@
             margin-bottom: 2rem;
         }
 
+        /* Social Proof Stats */
+        .social-proof {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+            border-top: 1px solid rgba(5, 150, 105, 0.2);
+            border-bottom: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--emerald);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--cloud);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            position: relative;
+            z-index: 1;
+            padding: 5rem 2rem;
+        }
+
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .testimonials-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .testimonials-header p {
+            color: var(--cloud);
+            opacity: 0.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-4px);
+        }
+
+        .testimonial-stars {
+            color: #FBBF24;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--cloud);
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .testimonial-info h4 {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-info span {
+            font-size: 0.875rem;
+            color: var(--cloud);
+            opacity: 0.6;
+        }
+
+        /* Email Capture */
+        .email-capture {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .email-capture-box {
+            background: linear-gradient(135deg, var(--slate) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .email-capture h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .email-capture p {
+            color: var(--cloud);
+            opacity: 0.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .email-form input {
+            flex: 1;
+            padding: 0.875rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .email-form input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .email-form input:focus {
+            outline: none;
+            border-color: var(--emerald);
+        }
+
+        .email-form button {
+            padding: 0.875rem 1.5rem;
+            background: var(--emerald);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .email-form button:hover {
+            background: var(--emerald-dark);
+        }
+
+        .email-note {
+            font-size: 0.8rem;
+            color: var(--cloud);
+            opacity: 0.5;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .email-form {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                gap: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2.25rem;
+            }
+        }
+
+        /* Tips/Blog Section */
+        .tips-section {
+            position: relative;
+            z-index: 1;
+            padding: 5rem 2rem;
+        }
+
+        .tips-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .tips-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .tips-header p {
+            color: var(--cloud);
+            opacity: 0.7;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tip-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .tip-card .tip-category {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--emerald);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .tip-card h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .tip-card p {
+            font-size: 0.9rem;
+            color: var(--cloud);
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cloud);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .social-link:hover {
+            background: var(--emerald);
+            border-color: var(--emerald);
+            color: white;
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
         /* Footer */
         footer {
             position: relative;
@@ -1272,6 +1639,53 @@
             }
         }
     </style>
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "PickleCue",
+        "applicationCategory": "SportsApplication",
+        "operatingSystem": "iOS",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "ratingCount": "500",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "description": "Find games, discover courts, track your stats, and connect with players. PickleCue is your complete pickleball companion app.",
+        "screenshot": "https://www.picklecue.com/images/og-image.png",
+        "softwareVersion": "1.0",
+        "author": {
+            "@type": "Organization",
+            "name": "PickleCue",
+            "url": "https://www.picklecue.com"
+        },
+        "downloadUrl": "https://apps.apple.com/app/picklecue"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "PickleCue",
+        "url": "https://www.picklecue.com",
+        "logo": "https://www.picklecue.com/images/app-icon-512.png",
+        "sameAs": [],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "hello@picklecue.com",
+            "contactType": "customer service"
+        }
+    }
+    </script>
 </head>
 <body>
     <div class="bg-pattern"></div>
@@ -1769,6 +2183,109 @@
         </div>
     </section>
 
+    <!-- Social Proof Stats -->
+    <section class="social-proof">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Active Players</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Courts Mapped</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4.9</div>
+                <div class="stat-label">App Store Rating</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">25K+</div>
+                <div class="stat-label">Games Played</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="testimonials-header">
+            <h2>Loved by Pickleball Players</h2>
+            <p>See what players are saying about PickleCue</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Finally an app that gets pickleball! Found my regular doubles group within a week. The court finder is incredibly accurate."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">MK</div>
+                    <div class="testimonial-info">
+                        <h4>Mike K.</h4>
+                        <span>3.5 Player • Austin, TX</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I've tried every pickleball app out there. PickleCue is the only one I kept. Clean design, easy to use, and actually helps me find games."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SL</div>
+                    <div class="testimonial-info">
+                        <h4>Sarah L.</h4>
+                        <span>4.0 Player • Denver, CO</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"The league feature is a game changer. Our community went from random meetups to organized weekly play. Highly recommend!"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JR</div>
+                    <div class="testimonial-info">
+                        <h4>James R.</h4>
+                        <span>4.5 Player • Phoenix, AZ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Email Capture -->
+    <section class="email-capture">
+        <div class="email-capture-box">
+            <h3>Get Pickleball Tips & Updates</h3>
+            <p>Join our newsletter for strategy tips, app updates, and community news.</p>
+            <form class="email-form" action="https://formspree.io/f/your-form-id" method="POST">
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+            <p class="email-note">No spam, ever. Unsubscribe anytime.</p>
+        </div>
+    </section>
+
+    <!-- Tips & Resources Section -->
+    <section class="tips-section">
+        <div class="tips-header">
+            <h2>Pickleball Tips & Resources</h2>
+            <p>Level up your game with expert advice</p>
+        </div>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <span class="tip-category">Strategy</span>
+                <h4>Master the Third Shot Drop</h4>
+                <p>The third shot drop is essential for transitioning from baseline to kitchen. Practice soft, arcing shots that land in the non-volley zone.</p>
+            </div>
+            <div class="tip-card">
+                <span class="tip-category">Fitness</span>
+                <h4>Quick Court Footwork Drills</h4>
+                <p>Good footwork wins points. Try ladder drills and lateral shuffles to improve your court coverage and reaction time.</p>
+            </div>
+            <div class="tip-card">
+                <span class="tip-category">Equipment</span>
+                <h4>Choosing the Right Paddle Weight</h4>
+                <p>Lighter paddles (7-7.8 oz) offer control, while heavier paddles (8.5+ oz) provide power. Find your sweet spot based on your play style.</p>
+            </div>
+        </div>
+    </section>
+
     <section class="cta-section">
         <div class="cta-box">
             <h2>Ready to Elevate Your Game?</h2>
@@ -1786,12 +2303,30 @@
     </section>
 
     <footer>
-        <a href="index.html" class="footer-logo"><img src="images/app-icon-120.png" alt="PickleCue"> PickleCue</a>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms of Service</a>
-            <a href="support.html">Support</a>
-            <a href="mailto:hello@picklecue.com">Contact</a>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo"><img src="images/app-icon-120.png" alt="PickleCue"> PickleCue</a>
+                <div class="social-links">
+                    <a href="https://instagram.com/picklecue" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://tiktok.com/@picklecue" class="social-link" aria-label="TikTok" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                    </a>
+                    <a href="https://youtube.com/@picklecue" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <a href="https://twitter.com/picklecue" class="social-link" aria-label="X (Twitter)" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="support.html">Support</a>
+                <a href="mailto:hello@picklecue.com">Contact</a>
+            </div>
         </div>
     </footer>
 

@@ -299,3 +299,50 @@ function initScrollAnimations() {
 
 // Initialize scroll animations after page load
 window.addEventListener('load', initScrollAnimations);
+
+// Auto-cycle through app screens in hero section
+function initScreenCycler() {
+    const screens = document.querySelectorAll('.app-screen');
+    if (screens.length <= 1) return;
+
+    let currentScreen = 0;
+    const totalScreens = screens.length;
+
+    function showScreen(index) {
+        screens.forEach((screen, i) => {
+            screen.classList.toggle('active', i === index);
+            screen.style.opacity = i === index ? '1' : '0';
+            screen.style.transform = i === index ? 'translateX(0)' : 'translateX(20px)';
+        });
+    }
+
+    function nextScreen() {
+        currentScreen = (currentScreen + 1) % totalScreens;
+        showScreen(currentScreen);
+    }
+
+    // Add CSS transitions to screens
+    screens.forEach(screen => {
+        screen.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        screen.style.position = 'absolute';
+        screen.style.top = '0';
+        screen.style.left = '0';
+        screen.style.width = '100%';
+        screen.style.height = '100%';
+    });
+
+    // Make container relative
+    const container = screens[0].parentElement;
+    if (container) {
+        container.style.position = 'relative';
+    }
+
+    // Initialize first screen
+    showScreen(0);
+
+    // Auto-cycle every 3 seconds
+    setInterval(nextScreen, 3000);
+}
+
+// Initialize screen cycler
+document.addEventListener('DOMContentLoaded', initScreenCycler);
