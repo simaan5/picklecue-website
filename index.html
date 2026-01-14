@@ -10,17 +10,18 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --court-green: #2D8B4E;
-            --court-green-light: #3AA864;
-            --court-green-dark: #1E6B3A;
+            --emerald: #059669;
+            --emerald-light: #6EE7B7;
+            --emerald-dark: #047857;
             --ball-yellow: #F7E359;
             --ball-yellow-dark: #E5CF2A;
             --midnight: #0A1628;
             --slate: #1E293B;
             --cloud: #F1F5F9;
             --white: #FFFFFF;
+            --off-white: #F9FAFB;
             --accent-coral: #FF6B6B;
-            --accent-blue: #4ECDC4;
+            --accent-blue: #3B82F6;
         }
 
         * {
@@ -47,7 +48,7 @@
             z-index: 0;
             opacity: 0.03;
             background-image:
-                radial-gradient(circle at 25% 25%, var(--court-green) 2px, transparent 2px),
+                radial-gradient(circle at 25% 25%, var(--emerald) 2px, transparent 2px),
                 radial-gradient(circle at 75% 75%, var(--ball-yellow) 1px, transparent 1px);
             background-size: 60px 60px;
         }
@@ -114,7 +115,7 @@
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--court-green) 0%, var(--court-green-light) 100%);
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -167,7 +168,7 @@
             padding: 0.5rem 1rem;
             border-radius: 100px;
             font-size: 0.85rem;
-            color: var(--court-green-light);
+            color: var(--emerald-light);
             margin-bottom: 1.5rem;
             animation: fadeInUp 0.6s ease-out;
         }
@@ -176,7 +177,7 @@
             content: '';
             width: 8px;
             height: 8px;
-            background: var(--court-green-light);
+            background: var(--emerald-light);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
@@ -271,8 +272,8 @@
         }
 
         .secondary-btn:hover {
-            border-color: var(--court-green-light);
-            color: var(--court-green-light);
+            border-color: var(--emerald-light);
+            color: var(--emerald-light);
         }
 
         @keyframes fadeInUp {
@@ -372,63 +373,194 @@
 
         /* Screen: Home */
         .screen-home {
-            background: linear-gradient(180deg, var(--court-green-dark) 0%, var(--midnight) 40%);
+            background: var(--off-white);
+            overflow-y: auto;
         }
 
-        .home-header {
-            padding: 16px 20px;
+        /* Welcome Card */
+        .welcome-card {
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-dark) 100%);
+            margin: 8px 12px;
+            padding: 16px;
+            border-radius: 20px;
+            color: white;
         }
 
-        .home-greeting {
-            font-size: 0.85rem;
-            opacity: 0.8;
+        .welcome-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
         }
 
-        .home-title {
+        .welcome-greeting {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .welcome-name {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
         }
 
-        .home-card {
-            background: rgba(255, 255, 255, 0.08);
-            margin: 12px 16px;
-            padding: 16px;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .home-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: scale(1.02);
-        }
-
-        .home-card:active {
-            transform: scale(0.98);
-        }
-
-        .card-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--court-green) 0%, var(--court-green-light) 100%);
-            border-radius: 12px;
+        .welcome-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
             font-size: 1.25rem;
         }
 
-        .card-title {
-            font-weight: 600;
-            font-size: 1rem;
+        .welcome-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.15);
+            padding: 10px 8px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.7rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .action-icon {
+            display: block;
+            font-size: 1.1rem;
             margin-bottom: 4px;
         }
 
-        .card-subtitle {
-            font-size: 0.8rem;
+        /* Weather Widget */
+        .weather-widget {
+            background: white;
+            margin: 8px 12px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--midnight);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .weather-temp {
+            font-weight: 600;
+        }
+
+        .weather-text {
             opacity: 0.6;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px 8px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--midnight);
+        }
+
+        .section-action {
+            font-size: 0.75rem;
+            color: var(--emerald);
+            cursor: pointer;
+        }
+
+        /* Game Card (Home) */
+        .game-card {
+            background: white;
+            margin: 0 12px 8px;
+            padding: 12px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .game-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .game-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .game-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--midnight);
+        }
+
+        .skill-badge {
+            background: var(--emerald);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .game-details {
+            display: flex;
+            gap: 12px;
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .game-players {
+            font-size: 0.7rem;
+            color: var(--emerald);
+            font-weight: 500;
+        }
+
+        /* Courts Scroll */
+        .courts-scroll {
+            display: flex;
+            gap: 8px;
+            padding: 0 12px 12px;
+            overflow-x: auto;
+        }
+
+        .court-chip {
+            background: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            font-size: 0.75rem;
+            color: var(--midnight);
+        }
+
+        .court-chip:hover {
+            transform: translateY(-2px);
         }
 
         /* Tab Bar */
@@ -475,198 +607,433 @@
         }
 
         .tab-item.active svg {
-            color: var(--court-green-light);
+            color: var(--emerald-light);
         }
 
         .tab-item.active span {
-            color: var(--court-green-light);
+            color: var(--emerald-light);
         }
 
-        /* Screen: Play */
-        .screen-play {
-            background: var(--midnight);
-        }
-
-        .screen-header {
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .back-btn {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .screen-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .play-options {
-            padding: 8px 16px;
-        }
-
-        .play-option {
-            background: linear-gradient(135deg, rgba(45, 139, 78, 0.2) 0%, rgba(45, 139, 78, 0.05) 100%);
-            border: 1px solid rgba(45, 139, 78, 0.3);
-            margin-bottom: 12px;
-            padding: 16px;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .play-option:hover {
-            border-color: var(--court-green-light);
-            transform: translateX(4px);
-        }
-
-        .play-option-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .play-option-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .play-option-badge {
-            background: var(--court-green);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 600;
-        }
-
-        .play-option-desc {
-            font-size: 0.8rem;
-            opacity: 0.6;
-            line-height: 1.4;
-        }
-
-        /* Screen: Courts */
+        /* Screen: Courts (Map View) */
         .screen-courts {
-            background: var(--midnight);
+            background: var(--off-white);
         }
 
-        .court-list {
-            padding: 8px 16px;
+        .search-bar-container {
+            display: flex;
+            gap: 8px;
+            padding: 8px 12px;
+        }
+
+        .search-bar {
             flex: 1;
-            overflow-y: auto;
+            background: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .court-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .court-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: scale(1.02);
-        }
-
-        .court-image {
-            height: 80px;
-            background: linear-gradient(135deg, var(--court-green) 0%, var(--court-green-dark) 100%);
+        .filter-btn {
+            background: white;
+            padding: 10px 12px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            color: var(--midnight);
         }
 
-        .court-info {
+        .map-view {
+            flex: 1;
+            margin: 0 12px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            position: relative;
+        }
+
+        .map-marker {
+            position: absolute;
+            font-size: 1.25rem;
+            transform: translate(-50%, -100%);
+            cursor: pointer;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            transition: transform 0.2s;
+        }
+
+        .map-marker.active {
+            font-size: 1.5rem;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+        }
+
+        .court-preview {
+            background: white;
+            margin: 12px;
             padding: 12px;
-        }
-
-        .court-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-        }
-
-        .court-details {
-            display: flex;
-            gap: 12px;
-            font-size: 0.75rem;
-            opacity: 0.6;
-        }
-
-        .court-detail {
+            border-radius: 16px;
             display: flex;
             align-items: center;
-            gap: 4px;
-        }
-
-        /* Screen: Stats */
-        .screen-stats {
-            background: var(--midnight);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 12px;
-            padding: 8px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 16px;
-            border-radius: 16px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--court-green-light);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            opacity: 0.6;
-            margin-top: 4px;
-        }
-
-        .stat-card.large {
-            grid-column: span 2;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            text-align: left;
-        }
-
-        .stat-card.large .stat-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--ball-yellow) 0%, var(--ball-yellow-dark) 100%);
-            border-radius: 16px;
+        .court-preview-image {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-dark) 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+        }
+
+        .court-preview-info {
+            flex: 1;
+        }
+
+        .court-preview-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--midnight);
+        }
+
+        .court-preview-details {
+            display: flex;
+            gap: 10px;
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .court-preview-arrow {
+            font-size: 1.25rem;
+            color: var(--emerald);
+        }
+
+        /* Screen: Play */
+        .screen-play {
+            background: var(--off-white);
+            overflow-y: auto;
+        }
+
+        .screen-header-simple {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+        }
+
+        .screen-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--midnight);
+        }
+
+        .create-btn {
+            background: var(--emerald);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .partner-banner {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #2563eb 100%);
+            margin: 0 12px 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .partner-banner-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .partner-banner-text {
+            flex: 1;
+        }
+
+        .partner-banner-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .partner-banner-desc {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .partner-banner-arrow {
+            font-size: 1.25rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 6px;
+            padding: 0 12px 12px;
+        }
+
+        .filter-tab {
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tab.active {
+            background: var(--emerald);
+            color: white;
+        }
+
+        .games-list {
+            padding: 0 12px;
+        }
+
+        .game-card-full {
+            background: white;
+            padding: 14px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .game-meta {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .game-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .player-avatars {
+            display: flex;
+            gap: -4px;
+        }
+
+        .avatar {
+            width: 24px;
+            height: 24px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            margin-left: -4px;
+        }
+
+        .avatar:first-child {
+            margin-left: 0;
+        }
+
+        .spots-left {
+            font-size: 0.7rem;
+            color: var(--emerald);
+            font-weight: 500;
+        }
+
+        /* Screen: Leagues */
+        .screen-leagues {
+            background: var(--off-white);
+            overflow-y: auto;
+        }
+
+        .leagues-list {
+            padding: 0 12px;
+        }
+
+        .league-card {
+            background: white;
+            padding: 14px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        .league-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .league-info {
+            flex: 1;
+        }
+
+        .league-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--midnight);
+        }
+
+        .league-details {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .league-status {
+            font-size: 0.7rem;
+            color: var(--emerald);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        /* Screen: Learn */
+        .screen-learn {
+            background: var(--off-white);
+            overflow-y: auto;
+        }
+
+        .skill-progress {
+            background: white;
+            margin: 0 12px 12px;
+            padding: 14px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .skill-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .skill-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--emerald);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--emerald) 0%, var(--emerald-light) 100%);
+            border-radius: 4px;
+        }
+
+        .drills-list {
+            padding: 0 12px;
+        }
+
+        .drill-card {
+            background: white;
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        .drill-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .drill-info {
+            flex: 1;
+        }
+
+        .drill-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--midnight);
+        }
+
+        .drill-duration {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .tip-card {
+            background: white;
+            margin: 0 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .tip-icon {
+            font-size: 1.1rem;
+        }
+
+        .tip-text {
+            font-size: 0.75rem;
+            color: #666;
+            line-height: 1.4;
         }
 
         /* Features Section */
@@ -720,7 +1087,7 @@
         .feature-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, var(--court-green) 0%, var(--court-green-light) 100%);
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -925,41 +1292,152 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
                             </div>
                         </div>
-                        <div class="home-header">
-                            <div class="home-greeting">Good morning 👋</div>
-                            <div class="home-title">Ready to Play?</div>
+                        <!-- Welcome Card -->
+                        <div class="welcome-card">
+                            <div class="welcome-header">
+                                <div class="welcome-text">
+                                    <div class="welcome-greeting">Good morning</div>
+                                    <div class="welcome-name">Andrew</div>
+                                </div>
+                                <div class="welcome-avatar">👤</div>
+                            </div>
+                            <div class="welcome-actions">
+                                <div class="action-btn" onclick="showScreen('play')">
+                                    <span class="action-icon">🎮</span>
+                                    <span>New Game</span>
+                                </div>
+                                <div class="action-btn" onclick="showScreen('courts')">
+                                    <span class="action-icon">📍</span>
+                                    <span>Find Court</span>
+                                </div>
+                                <div class="action-btn">
+                                    <span class="action-icon">📝</span>
+                                    <span>Log Match</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="home-card" onclick="showScreen('play')">
-                            <div class="card-icon">🏸</div>
-                            <div class="card-title">Find a Game</div>
-                            <div class="card-subtitle">Join nearby matches or create your own</div>
+                        <!-- Weather Widget -->
+                        <div class="weather-widget">
+                            <span>☀️</span>
+                            <span class="weather-temp">72°F</span>
+                            <span class="weather-text">Perfect pickleball weather!</span>
                         </div>
-                        <div class="home-card" onclick="showScreen('courts')">
-                            <div class="card-icon">📍</div>
-                            <div class="card-title">Discover Courts</div>
-                            <div class="card-subtitle">Explore 12 courts near you</div>
+                        <!-- Games Near You -->
+                        <div class="section-header">
+                            <span class="section-title">Games Near You</span>
+                            <span class="section-action" onclick="showScreen('play')">See All</span>
                         </div>
-                        <div class="home-card" onclick="showScreen('stats')">
-                            <div class="card-icon">📊</div>
-                            <div class="card-title">Your Stats</div>
-                            <div class="card-subtitle">Track progress & view history</div>
+                        <div class="game-card" onclick="showScreen('play')">
+                            <div class="game-card-header">
+                                <span class="game-title">Open Doubles</span>
+                                <span class="skill-badge">3.5+</span>
+                            </div>
+                            <div class="game-details">
+                                <span>📍 Central Park</span>
+                                <span>🕐 Today 5:00 PM</span>
+                            </div>
+                            <div class="game-players">3/4 players joined</div>
+                        </div>
+                        <!-- Favorite Courts -->
+                        <div class="section-header">
+                            <span class="section-title">Favorite Courts</span>
+                            <span class="section-action" onclick="showScreen('courts')">See All</span>
+                        </div>
+                        <div class="courts-scroll">
+                            <div class="court-chip" onclick="showScreen('courts')">
+                                <span>🏟️</span>
+                                <span>Central Park</span>
+                            </div>
+                            <div class="court-chip" onclick="showScreen('courts')">
+                                <span>🎾</span>
+                                <span>YMCA</span>
+                            </div>
                         </div>
                         <div class="tab-bar">
                             <div class="tab-item active" onclick="showScreen('home')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                                 <span>Home</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                <span>Play</span>
-                            </div>
                             <div class="tab-item" onclick="showScreen('courts')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                                 <span>Courts</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('stats')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-                                <span>Stats</span>
+                            <div class="tab-item" onclick="showScreen('play')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <span>Play</span>
+                            </div>
+                            <div class="tab-item" onclick="showScreen('leagues')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+                                <span>Leagues</span>
+                            </div>
+                            <div class="tab-item" onclick="showScreen('learn')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+                                <span>Learn</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Courts Screen (Map View) -->
+                    <div class="app-screen screen-courts" id="screen-courts">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <div class="status-bar-icons">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.46 3 3.34 4.78.29 7.67c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l10.79 10.79c.39.39 1.03.39 1.42 0l10.79-10.79c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71C20.66 4.78 16.54 3 12 3z"/></svg>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                            </div>
+                        </div>
+                        <!-- Search Bar -->
+                        <div class="search-bar-container">
+                            <div class="search-bar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                                <span>Search courts...</span>
+                            </div>
+                            <div class="filter-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
+                            </div>
+                        </div>
+                        <!-- Map View -->
+                        <div class="map-view">
+                            <div class="map-placeholder">
+                                <div class="map-marker" style="top: 30%; left: 40%;">📍</div>
+                                <div class="map-marker" style="top: 50%; left: 60%;">📍</div>
+                                <div class="map-marker" style="top: 70%; left: 35%;">📍</div>
+                                <div class="map-marker active" style="top: 45%; left: 50%;">📍</div>
+                            </div>
+                        </div>
+                        <!-- Court Preview Card -->
+                        <div class="court-preview">
+                            <div class="court-preview-image">🏟️</div>
+                            <div class="court-preview-info">
+                                <div class="court-preview-name">Central Park Courts</div>
+                                <div class="court-preview-details">
+                                    <span>⭐ 4.8</span>
+                                    <span>🎾 8 courts</span>
+                                    <span>0.5 mi</span>
+                                </div>
+                            </div>
+                            <div class="court-preview-arrow">→</div>
+                        </div>
+                        <div class="tab-bar">
+                            <div class="tab-item" onclick="showScreen('home')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                                <span>Home</span>
+                            </div>
+                            <div class="tab-item active" onclick="showScreen('courts')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <span>Courts</span>
+                            </div>
+                            <div class="tab-item" onclick="showScreen('play')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <span>Play</span>
+                            </div>
+                            <div class="tab-item" onclick="showScreen('leagues')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+                                <span>Leagues</span>
+                            </div>
+                            <div class="tab-item" onclick="showScreen('learn')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+                                <span>Learn</span>
                             </div>
                         </div>
                     </div>
@@ -973,61 +1451,92 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
                             </div>
                         </div>
-                        <div class="screen-header">
-                            <div class="back-btn" onclick="showScreen('home')">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                            </div>
-                            <div class="screen-title">Find a Game</div>
+                        <div class="screen-header-simple">
+                            <div class="screen-title">Play</div>
+                            <div class="create-btn">+ New</div>
                         </div>
-                        <div class="play-options">
-                            <div class="play-option">
-                                <div class="play-option-header">
-                                    <span class="play-option-title">Quick Match</span>
-                                    <span class="play-option-badge">Popular</span>
-                                </div>
-                                <div class="play-option-desc">Get matched with players near you based on your skill level</div>
+                        <!-- Partner Finder Banner -->
+                        <div class="partner-banner">
+                            <div class="partner-banner-icon">👥</div>
+                            <div class="partner-banner-text">
+                                <div class="partner-banner-title">Find a Partner</div>
+                                <div class="partner-banner-desc">Match with players at your level</div>
                             </div>
-                            <div class="play-option">
-                                <div class="play-option-header">
-                                    <span class="play-option-title">Open Games</span>
+                            <div class="partner-banner-arrow">→</div>
+                        </div>
+                        <!-- Filter Tabs -->
+                        <div class="filter-tabs">
+                            <div class="filter-tab active">Upcoming</div>
+                            <div class="filter-tab">My Games</div>
+                            <div class="filter-tab">Nearby</div>
+                        </div>
+                        <!-- Game Cards -->
+                        <div class="games-list">
+                            <div class="game-card-full">
+                                <div class="game-card-header">
+                                    <span class="game-title">Open Doubles</span>
+                                    <span class="skill-badge">3.5+</span>
                                 </div>
-                                <div class="play-option-desc">Browse and join games looking for players</div>
+                                <div class="game-meta">
+                                    <span>📍 Central Park Courts</span>
+                                </div>
+                                <div class="game-meta">
+                                    <span>🕐 Today, 5:00 PM</span>
+                                </div>
+                                <div class="game-footer">
+                                    <div class="player-avatars">
+                                        <span class="avatar">👤</span>
+                                        <span class="avatar">👤</span>
+                                        <span class="avatar">👤</span>
+                                    </div>
+                                    <span class="spots-left">1 spot left</span>
+                                </div>
                             </div>
-                            <div class="play-option">
-                                <div class="play-option-header">
-                                    <span class="play-option-title">Create Game</span>
+                            <div class="game-card-full">
+                                <div class="game-card-header">
+                                    <span class="game-title">Morning Singles</span>
+                                    <span class="skill-badge">4.0</span>
                                 </div>
-                                <div class="play-option-desc">Host your own game and invite players to join</div>
-                            </div>
-                            <div class="play-option">
-                                <div class="play-option-header">
-                                    <span class="play-option-title">Leagues</span>
+                                <div class="game-meta">
+                                    <span>📍 YMCA Sports Complex</span>
                                 </div>
-                                <div class="play-option-desc">Join competitive leagues in your area</div>
+                                <div class="game-meta">
+                                    <span>🕐 Tomorrow, 7:00 AM</span>
+                                </div>
+                                <div class="game-footer">
+                                    <div class="player-avatars">
+                                        <span class="avatar">👤</span>
+                                    </div>
+                                    <span class="spots-left">1 spot left</span>
+                                </div>
                             </div>
                         </div>
                         <div class="tab-bar">
                             <div class="tab-item" onclick="showScreen('home')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                                 <span>Home</span>
+                            </div>
+                            <div class="tab-item" onclick="showScreen('courts')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <span>Courts</span>
                             </div>
                             <div class="tab-item active" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
                                 <span>Play</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('courts')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                <span>Courts</span>
+                            <div class="tab-item" onclick="showScreen('leagues')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+                                <span>Leagues</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('stats')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-                                <span>Stats</span>
+                            <div class="tab-item" onclick="showScreen('learn')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+                                <span>Learn</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Courts Screen -->
-                    <div class="app-screen screen-courts" id="screen-courts">
+                    <!-- Leagues Screen -->
+                    <div class="app-screen screen-leagues" id="screen-leagues">
                         <div class="status-bar">
                             <span>9:41</span>
                             <div class="status-bar-icons">
@@ -1035,44 +1544,39 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
                             </div>
                         </div>
-                        <div class="screen-header">
-                            <div class="back-btn" onclick="showScreen('home')">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                            </div>
-                            <div class="screen-title">Nearby Courts</div>
+                        <div class="screen-header-simple">
+                            <div class="screen-title">Leagues</div>
                         </div>
-                        <div class="court-list">
-                            <div class="court-item">
-                                <div class="court-image">🏟️</div>
-                                <div class="court-info">
-                                    <div class="court-name">Central Park Courts</div>
-                                    <div class="court-details">
-                                        <span class="court-detail">📍 0.5 mi</span>
-                                        <span class="court-detail">🎾 8 courts</span>
-                                        <span class="court-detail">⭐ 4.8</span>
-                                    </div>
+                        <!-- Filter Tabs -->
+                        <div class="filter-tabs">
+                            <div class="filter-tab active">Active</div>
+                            <div class="filter-tab">Upcoming</div>
+                            <div class="filter-tab">Past</div>
+                        </div>
+                        <!-- League Cards -->
+                        <div class="leagues-list">
+                            <div class="league-card">
+                                <div class="league-icon">🏆</div>
+                                <div class="league-info">
+                                    <div class="league-name">Summer Doubles League</div>
+                                    <div class="league-details">16 teams • Round Robin</div>
+                                    <div class="league-status">Week 4 of 8</div>
                                 </div>
                             </div>
-                            <div class="court-item">
-                                <div class="court-image">🏸</div>
-                                <div class="court-info">
-                                    <div class="court-name">Riverside Recreation</div>
-                                    <div class="court-details">
-                                        <span class="court-detail">📍 1.2 mi</span>
-                                        <span class="court-detail">🎾 4 courts</span>
-                                        <span class="court-detail">⭐ 4.6</span>
-                                    </div>
+                            <div class="league-card">
+                                <div class="league-icon">🥇</div>
+                                <div class="league-info">
+                                    <div class="league-name">3.5 Ladder Challenge</div>
+                                    <div class="league-details">32 players • Ladder</div>
+                                    <div class="league-status">Rank: #8</div>
                                 </div>
                             </div>
-                            <div class="court-item">
-                                <div class="court-image">🎯</div>
-                                <div class="court-info">
-                                    <div class="court-name">YMCA Sports Complex</div>
-                                    <div class="court-details">
-                                        <span class="court-detail">📍 2.1 mi</span>
-                                        <span class="court-detail">🎾 12 courts</span>
-                                        <span class="court-detail">⭐ 4.9</span>
-                                    </div>
+                            <div class="league-card">
+                                <div class="league-icon">🎯</div>
+                                <div class="league-info">
+                                    <div class="league-name">Mixed Doubles Open</div>
+                                    <div class="league-details">8 teams • Bracket</div>
+                                    <div class="league-status">Registration Open</div>
                                 </div>
                             </div>
                         </div>
@@ -1081,23 +1585,27 @@
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                                 <span>Home</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                <span>Play</span>
-                            </div>
-                            <div class="tab-item active" onclick="showScreen('courts')">
+                            <div class="tab-item" onclick="showScreen('courts')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                                 <span>Courts</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('stats')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-                                <span>Stats</span>
+                            <div class="tab-item" onclick="showScreen('play')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <span>Play</span>
+                            </div>
+                            <div class="tab-item active" onclick="showScreen('leagues')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+                                <span>Leagues</span>
+                            </div>
+                            <div class="tab-item" onclick="showScreen('learn')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+                                <span>Learn</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Stats Screen -->
-                    <div class="app-screen screen-stats" id="screen-stats">
+                    <!-- Learn Screen -->
+                    <div class="app-screen screen-learn" id="screen-learn">
                         <div class="status-bar">
                             <span>9:41</span>
                             <div class="status-bar-icons">
@@ -1105,53 +1613,74 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
                             </div>
                         </div>
-                        <div class="screen-header">
-                            <div class="back-btn" onclick="showScreen('home')">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                            </div>
-                            <div class="screen-title">Your Stats</div>
+                        <div class="screen-header-simple">
+                            <div class="screen-title">Learn</div>
                         </div>
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-value">47</div>
-                                <div class="stat-label">Games Played</div>
+                        <!-- Skill Progress -->
+                        <div class="skill-progress">
+                            <div class="skill-header">
+                                <span class="skill-label">Your Skill Level</span>
+                                <span class="skill-value">3.5</span>
                             </div>
-                            <div class="stat-card">
-                                <div class="stat-value">68%</div>
-                                <div class="stat-label">Win Rate</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
                             </div>
-                            <div class="stat-card">
-                                <div class="stat-value">3.8</div>
-                                <div class="stat-label">Skill Rating</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value">12</div>
-                                <div class="stat-label">Win Streak</div>
-                            </div>
-                            <div class="stat-card large">
-                                <div class="stat-icon">🏆</div>
-                                <div>
-                                    <div class="stat-value" style="font-size: 1.25rem;">Rising Star</div>
-                                    <div class="stat-label">Current Achievement</div>
+                        </div>
+                        <!-- Drills Section -->
+                        <div class="section-header">
+                            <span class="section-title">Drills</span>
+                        </div>
+                        <div class="drills-list">
+                            <div class="drill-card">
+                                <div class="drill-icon">🎯</div>
+                                <div class="drill-info">
+                                    <div class="drill-name">Dink Consistency</div>
+                                    <div class="drill-duration">10 min</div>
                                 </div>
                             </div>
+                            <div class="drill-card">
+                                <div class="drill-icon">💨</div>
+                                <div class="drill-info">
+                                    <div class="drill-name">Third Shot Drop</div>
+                                    <div class="drill-duration">15 min</div>
+                                </div>
+                            </div>
+                            <div class="drill-card">
+                                <div class="drill-icon">⚡</div>
+                                <div class="drill-info">
+                                    <div class="drill-name">Serve & Return</div>
+                                    <div class="drill-duration">12 min</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Tips Section -->
+                        <div class="section-header">
+                            <span class="section-title">Quick Tips</span>
+                        </div>
+                        <div class="tip-card">
+                            <span class="tip-icon">💡</span>
+                            <span class="tip-text">Keep your paddle up and ready at the kitchen line</span>
                         </div>
                         <div class="tab-bar">
                             <div class="tab-item" onclick="showScreen('home')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                                 <span>Home</span>
                             </div>
-                            <div class="tab-item" onclick="showScreen('play')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                <span>Play</span>
-                            </div>
                             <div class="tab-item" onclick="showScreen('courts')">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                                 <span>Courts</span>
                             </div>
-                            <div class="tab-item active" onclick="showScreen('stats')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-                                <span>Stats</span>
+                            <div class="tab-item" onclick="showScreen('play')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2V4c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm10 16H7v-2h10v2zm4 0h-2V8H5v12H3V8h18v12z"/></svg>
+                                <span>Play</span>
+                            </div>
+                            <div class="tab-item" onclick="showScreen('leagues')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+                                <span>Leagues</span>
+                            </div>
+                            <div class="tab-item active" onclick="showScreen('learn')">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+                                <span>Learn</span>
                             </div>
                         </div>
                     </div>
@@ -1235,7 +1764,9 @@
             const current = document.getElementById('screen-' + currentScreen);
             const next = document.getElementById('screen-' + screenId);
 
-            const screens = ['home', 'play', 'courts', 'stats'];
+            if (!next) return;
+
+            const screens = ['home', 'courts', 'play', 'leagues', 'learn'];
             const currentIndex = screens.indexOf(currentScreen);
             const nextIndex = screens.indexOf(screenId);
             const goingForward = nextIndex > currentIndex || (currentScreen === 'home' && screenId !== 'home');
@@ -1251,6 +1782,7 @@
                 next.classList.add('active');
             }
 
+            // Update tab bar active states
             document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
 
             setTimeout(() => {
