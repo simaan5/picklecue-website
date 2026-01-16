@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opening PickleCue...</title>
+    <meta name="apple-itunes-app" content="app-id=YOUR_APP_ID">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1B4332 0%, #2D5A45 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #1B4332;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .status {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #22C55E;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .fallback {
+            display: none;
+            margin-top: 20px;
+        }
+        .fallback.show {
+            display: block;
+        }
+        .fallback p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .btn {
+            display: inline-block;
+            background: #22C55E;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #1ea34d;
+        }
+        .btn-secondary {
+            background: #1B4332;
+        }
+        .btn-secondary:hover {
+            background: #2D5A45;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#1B4332"/>
+            <circle cx="50" cy="50" r="35" fill="none" stroke="#22C55E" stroke-width="3"/>
+            <circle cx="50" cy="50" r="25" fill="none" stroke="#22C55E" stroke-width="2"/>
+            <circle cx="50" cy="50" r="15" fill="none" stroke="#22C55E" stroke-width="2"/>
+            <circle cx="50" cy="50" r="5" fill="#22C55E"/>
+        </svg>
+
+        <h1>PickleCue</h1>
+        <p class="status" id="status">Opening bracket in app...</p>
+
+        <div class="spinner" id="spinner"></div>
+
+        <div class="fallback" id="fallback">
+            <p>If the app didn't open automatically, tap the button below:</p>
+            <a href="#" class="btn" id="openAppBtn">Open in PickleCue</a>
+            <br><br>
+            <p>Don't have the app yet?</p>
+            <a href="https://apps.apple.com/app/picklecue" class="btn btn-secondary">Download PickleCue</a>
+        </div>
+    </div>
+
+    <script>
+        // Get bracket ID from URL path
+        // URL format: https://www.picklecue.com/bracket/?id=UUID
+        // or: https://www.picklecue.com/bracket/UUID
+        function getBracketId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const idParam = urlParams.get('id');
+            if (idParam) return idParam;
+
+            // Try path-based format
+            const pathParts = window.location.pathname.split('/').filter(p => p);
+            if (pathParts.length >= 2 && pathParts[0] === 'bracket') {
+                return pathParts[1];
+            }
+            return null;
+        }
+
+        const bracketId = getBracketId();
+        const appUrl = bracketId ? `picklecue://bracket/${bracketId}` : 'picklecue://';
+
+        // Set the button href
+        document.getElementById('openAppBtn').href = appUrl;
+
+        // Try to open the app immediately
+        if (bracketId) {
+            // Use an iframe for smoother redirect (doesn't show error if app not installed)
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = appUrl;
+            document.body.appendChild(iframe);
+
+            // Also try direct location change after small delay
+            setTimeout(() => {
+                window.location.href = appUrl;
+            }, 100);
+
+            // Show fallback after a delay (app didn't open)
+            setTimeout(() => {
+                document.getElementById('spinner').style.display = 'none';
+                document.getElementById('status').textContent = 'Tap below to open the bracket';
+                document.getElementById('fallback').classList.add('show');
+            }, 2500);
+        } else {
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('status').textContent = 'No bracket ID found';
+            document.getElementById('fallback').classList.add('show');
+        }
+    </script>
+</body>
+</html>
