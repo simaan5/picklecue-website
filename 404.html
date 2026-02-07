@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PickleCue - Tournament Invite</title>
+    <meta name="description" content="You've been invited to a tournament on PickleCue.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #F8FAFC;
+            background: #0F172A;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: #1E293B;
+            border-radius: 24px;
+            padding: 48px 32px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #22C55E, #16A34A);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 24px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #F8FAFC;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #94A3B8;
+            margin-bottom: 32px;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .mode-invite {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ADE80;
+        }
+
+        .mode-spectate {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60A5FA;
+        }
+
+        .open-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #22C55E, #16A34A);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .open-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .download-link {
+            display: block;
+            margin-top: 16px;
+            color: #22C55E;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .download-link:hover {
+            text-decoration: underline;
+        }
+
+        .privacy-note {
+            margin-top: 24px;
+            font-size: 0.75rem;
+            color: #64748B;
+        }
+
+        footer {
+            margin-top: 32px;
+            color: #64748B;
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: #94A3B8;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">&#127955;</div>
+        <h1 id="heading">Tournament Invite</h1>
+        <p class="subtitle" id="subtitle">You've been invited to a tournament on PickleCue</p>
+        <div id="badge-container"></div>
+        <a id="open-btn" class="open-btn" href="#">Open in PickleCue</a>
+        <a class="download-link" href="https://apps.apple.com/app/picklecue/id0000000000">
+            Don't have the app? Download PickleCue
+        </a>
+        <p class="privacy-note">Open the app to view tournament details and join.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 PickleCue &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+    </footer>
+
+    <script>
+        (function() {
+            var path = window.location.pathname;
+            var params = new URLSearchParams(window.location.search);
+            var mode = params.get('mode') || 'invite';
+
+            var match = path.match(/^\/t\/([0-9a-f-]{36})$/i);
+
+            if (match) {
+                var heading = document.getElementById('heading');
+                var subtitle = document.getElementById('subtitle');
+                var badgeContainer = document.getElementById('badge-container');
+                var openBtn = document.getElementById('open-btn');
+
+                if (mode === 'spectate') {
+                    heading.textContent = 'Watch a Tournament';
+                    subtitle.textContent = "You've been invited to spectate a tournament on PickleCue";
+                    badgeContainer.innerHTML = '<span class="mode-badge mode-spectate">Spectator Access</span>';
+                } else {
+                    heading.textContent = 'Tournament Invite';
+                    subtitle.textContent = "You've been invited to join a tournament on PickleCue";
+                    badgeContainer.innerHTML = '<span class="mode-badge mode-invite">Player Invite</span>';
+                }
+
+                openBtn.href = window.location.href;
+            }
+        })();
+    </script>
+</body>
+</html>
