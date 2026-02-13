@@ -188,6 +188,10 @@
 
     // ─── Init ───
     document.addEventListener('DOMContentLoaded', function () {
+        // Detect if embedded in iframe
+        if (window.self !== window.top) {
+            document.documentElement.classList.add('embedded');
+        }
         // Tab bar clicks
         document.querySelectorAll('.tab-item').forEach(function (tab) {
             tab.addEventListener('click', function () {

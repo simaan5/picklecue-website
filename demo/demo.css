@@ -1357,6 +1357,13 @@ html, body {
     .iphone-screen { border-radius: 0; }
 }
 
+/* ─── Embedded in iframe ─── */
+html.embedded body { background: transparent; }
+html.embedded .demo-back { display: none; }
+html.embedded .demo-label { display: none; }
+html.embedded .demo-page { padding: 0; }
+html.embedded .iphone-frame { box-shadow: none; }
+
 /* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
     .screen, .detail-screen {
