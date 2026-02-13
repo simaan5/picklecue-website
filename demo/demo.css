@@ -24,12 +24,12 @@
     /* Page background */
     --page-bg: #0A1628;
 
-    /* Demo frame */
-    --frame-w: 375px;
-    --frame-h: 812px;
-    --radius: 44px;
+    /* Demo frame — iPhone 17 Pro Max (430×932 pt) */
+    --frame-w: 430px;
+    --frame-h: 932px;
+    --radius: 55px;
     --tab-h: 83px;
-    --status-h: 54px;
+    --status-h: 59px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -103,14 +103,14 @@ html, body {
     position: relative;
 }
 
-/* Dynamic Island */
+/* Dynamic Island — iPhone 17 Pro Max */
 .dynamic-island {
     position: absolute;
-    top: 10px;
+    top: 11px;
     left: 50%;
     transform: translateX(-50%);
-    width: 126px;
-    height: 36px;
+    width: 162px;
+    height: 37px;
     background: #000;
     border-radius: 20px;
     z-index: 50;
@@ -1329,10 +1329,17 @@ html, body {
 }
 
 /* ─── Responsive ─── */
+@media (max-height: 960px) {
+    .iphone-frame {
+        --frame-h: 820px;
+        --radius: 48px;
+    }
+}
+
 @media (max-height: 860px) {
     .iphone-frame {
         --frame-h: 720px;
-        --radius: 38px;
+        --radius: 42px;
     }
 }
 
