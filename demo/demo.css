@@ -1358,11 +1358,15 @@ html, body {
 }
 
 /* ─── Embedded in iframe ─── */
-html.embedded body { background: transparent; }
+html.embedded body { background: transparent; overflow: hidden; }
 html.embedded .demo-back { display: none; }
 html.embedded .demo-label { display: none; }
-html.embedded .demo-page { padding: 0; }
-html.embedded .iphone-frame { box-shadow: none; }
+html.embedded .demo-page { padding: 0; display: flex; align-items: flex-start; justify-content: center; }
+html.embedded .iphone-frame {
+    box-shadow: none;
+    transform: scale(0.773);
+    transform-origin: top center;
+}
 
 /* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
