@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://apps.apple.com">
-    <link rel="dns-prefetch" href="https://formspree.io">
+    <!-- <link rel="dns-prefetch" href="https://formspree.io"> TODO: Re-enable when newsletter form is active -->
 
     <!-- Critical Font Preload -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@300;400;500;600;700;800&display=swap" as="style">
@@ -1511,7 +1511,7 @@
     </nav>
 
     <main id="main-content" role="main">
-    <section class="hero">
+    <section class="hero" id="download">
         <div class="hero-content">
             <div class="hero-badge">Now Available on iOS</div>
             <h1>Your Complete <span>Pickleball</span> Companion</h1>
@@ -1645,17 +1645,12 @@
         </div>
     </section>
 
-    <!-- Email Capture -->
+    <!-- Email Capture — TODO: Replace with real Formspree ID after creating form at formspree.io -->
     <section class="email-capture">
         <div class="email-capture-box">
             <h3>Get Pickleball Tips & Updates</h3>
             <p>Join our newsletter for strategy tips, app updates, and community news.</p>
-            <form class="email-form" action="https://formspree.io/f/your-form-id" method="POST" aria-label="Newsletter signup form">
-                <label for="newsletter-email" class="visually-hidden">Email address</label>
-                <input type="email" id="newsletter-email" name="email" placeholder="Enter your email" required aria-required="true" autocomplete="email">
-                <button type="submit" aria-label="Subscribe to newsletter">Subscribe</button>
-            </form>
-            <p class="email-note">No spam, ever. Unsubscribe anytime.</p>
+            <p class="email-note">Newsletter coming soon! Follow us for updates.</p>
         </div>
     </section>
 
