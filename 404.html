@@ -3,180 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PickleCue - Tournament Invite</title>
-    <meta name="description" content="You've been invited to a tournament on PickleCue.">
+    <title>Page Not Found - PickleCue</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#0A1628">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        * {
+        :root {
+            --emerald: #059669;
+            --emerald-light: #6EE7B7;
+            --emerald-dark: #047857;
+            --midnight: #0A1628;
+            --white: #FFFFFF;
+            --cloud: #F1F5F9;
+            --muted: #94A3B8;
+        }
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            line-height: 1.6;
-            color: #F8FAFC;
-            background: #0F172A;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            background: var(--midnight);
+            color: var(--cloud);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px 20px 0;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--white);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+        .nav-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+        .nav-back {
+            display: inline-block;
+            padding: 8px 18px;
+            background: var(--emerald-dark);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .nav-back:hover {
+            background: var(--emerald);
+        }
+        .error-content {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-        }
-
-        .card {
-            background: #1E293B;
-            border-radius: 24px;
-            padding: 48px 32px;
-            max-width: 420px;
-            width: 100%;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.08);
+            padding: 40px 20px;
         }
-
-        .logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #22C55E, #16A34A);
-            border-radius: 20px;
+        .error-code {
+            font-family: 'Outfit', sans-serif;
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--emerald);
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+        .error-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--emerald-light);
+            margin-bottom: 12px;
+        }
+        .error-message {
+            color: var(--muted);
+            font-size: 1.05rem;
+            max-width: 420px;
+            margin-bottom: 40px;
+        }
+        .error-actions {
             display: flex;
-            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
             justify-content: center;
-            font-size: 40px;
-            margin: 0 auto 24px;
         }
-
-        h1 {
-            font-size: 1.5rem;
-            color: #F8FAFC;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            color: #94A3B8;
-            margin-bottom: 32px;
-        }
-
-        .mode-badge {
+        .btn {
             display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-        }
-
-        .mode-invite {
-            background: rgba(34, 197, 94, 0.15);
-            color: #4ADE80;
-        }
-
-        .mode-spectate {
-            background: rgba(59, 130, 246, 0.15);
-            color: #60A5FA;
-        }
-
-        .open-btn {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #22C55E, #16A34A);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
             text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background 0.2s, transform 0.15s;
         }
-
-        .open-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
         }
-
-        .download-link {
-            display: block;
-            margin-top: 16px;
-            color: #22C55E;
-            font-size: 0.9rem;
-            text-decoration: none;
+        .btn-primary {
+            background: var(--emerald);
+            color: var(--white);
         }
-
-        .download-link:hover {
-            text-decoration: underline;
+        .btn-primary:hover {
+            background: var(--emerald-light);
+            color: var(--midnight);
         }
-
-        .privacy-note {
-            margin-top: 24px;
-            font-size: 0.75rem;
-            color: #64748B;
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--cloud);
         }
-
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+        }
         footer {
-            margin-top: 32px;
-            color: #64748B;
-            font-size: 0.8rem;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
         }
-
-        footer a {
-            color: #94A3B8;
+        .footer-links {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--muted);
             text-decoration: none;
+            transition: color 0.2s;
         }
-
-        footer a:hover {
-            text-decoration: underline;
+        .footer-links a:hover {
+            color: var(--emerald-light);
+        }
+        @media (max-width: 480px) {
+            .error-code { font-size: 5rem; }
+            .error-title { font-size: 1.4rem; }
+            nav { padding: 16px 16px 0; }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="logo">&#127955;</div>
-        <h1 id="heading">Tournament Invite</h1>
-        <p class="subtitle" id="subtitle">You've been invited to a tournament on PickleCue</p>
-        <div id="badge-container"></div>
-        <a id="open-btn" class="open-btn" href="#">Open in PickleCue</a>
-        <a class="download-link" href="https://picklecue.com/#download">
-            Don't have the app? Download PickleCue
+    <nav>
+        <a href="/" class="nav-logo">
+            <img src="images/app-icon-120.png" alt="PickleCue" width="36" height="36">
+            PickleCue
         </a>
-        <p class="privacy-note">Open the app to view tournament details and join.</p>
+        <a href="/" class="nav-back">Back to Home</a>
+    </nav>
+
+    <div class="error-content">
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page not found</h1>
+        <p class="error-message">The page you're looking for doesn't exist or has been moved.</p>
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">Go Home</a>
+            <a href="support.html" class="btn btn-secondary">Get Support</a>
+        </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 PickleCue &middot; <a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a></p>
+        <p>&copy; 2026 PickleCue. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="support.html">Support</a>
+        </div>
     </footer>
-
-    <script>
-        (function() {
-            var path = window.location.pathname;
-            var params = new URLSearchParams(window.location.search);
-            var mode = params.get('mode') || 'invite';
-
-            var match = path.match(/^\/t\/([0-9a-f-]{36})$/i);
-
-            if (match) {
-                var heading = document.getElementById('heading');
-                var subtitle = document.getElementById('subtitle');
-                var badgeContainer = document.getElementById('badge-container');
-                var openBtn = document.getElementById('open-btn');
-
-                if (mode === 'spectate') {
-                    heading.textContent = 'Watch a Tournament';
-                    subtitle.textContent = "You've been invited to spectate a tournament on PickleCue";
-                    badgeContainer.innerHTML = '<span class="mode-badge mode-spectate">Spectator Access</span>';
-                } else {
-                    heading.textContent = 'Tournament Invite';
-                    subtitle.textContent = "You've been invited to join a tournament on PickleCue";
-                    badgeContainer.innerHTML = '<span class="mode-badge mode-invite">Player Invite</span>';
-                }
-
-                openBtn.href = window.location.href;
-            }
-        })();
-    </script>
 </body>
 </html>
