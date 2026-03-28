@@ -4,391 +4,261 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service - PickleCue</title>
-    <meta name="description" content="PickleCue Terms of Service - Rules and guidelines for using our app.">
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
     <meta name="theme-color" content="#0A1628">
-
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        .legal-content {
-            padding: 8rem 2rem 4rem;
-            max-width: 800px;
-            margin: 0 auto;
+        :root {
+            --emerald: #059669;
+            --emerald-light: #6EE7B7;
+            --emerald-dark: #047857;
+            --midnight: #0A1628;
+            --white: #FFFFFF;
+            --cloud: #F1F5F9;
+            --muted: #94A3B8;
         }
-        .legal-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .legal-date {
-            color: var(--text-muted);
-            margin-bottom: 3rem;
-        }
-        .legal-content h2 {
-            font-size: 1.5rem;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        .legal-content h3 {
-            font-size: 1.125rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .legal-content p {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            line-height: 1.8;
-        }
-        .legal-content ul, .legal-content ol {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            padding-left: 1.5rem;
-        }
-        .legal-content li {
-            margin-bottom: 0.5rem;
-            line-height: 1.6;
-        }
-        .legal-content a {
-            color: var(--primary);
-        }
-
-        /* Footer */
-        footer {
-            position: relative;
-            z-index: 1;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.5rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .footer-logo img {
-            border-radius: 6px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .social-icon {
-            color: rgba(255, 255, 255, 0.5);
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .social-icon:hover {
-            color: var(--primary);
-        }
-
-        .social-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .footer-copyright {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.8rem;
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
-            border: none;
+            box-sizing: border-box;
         }
-
-        @media (max-width: 768px) {
-            footer {
-                flex-direction: column;
-                text-align: center;
-                padding: 1.5rem;
-            }
-
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            background: var(--midnight);
+            color: var(--cloud);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 20px 0;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--white);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+        .nav-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+        .nav-back {
+            display: inline-block;
+            padding: 8px 18px;
+            background: var(--emerald-dark);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .nav-back:hover {
+            background: var(--emerald);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--emerald-dark);
+        }
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--emerald-light);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .updated {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--emerald-light);
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        h3 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--emerald);
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        p, li {
+            margin-bottom: 15px;
+            color: var(--cloud);
+        }
+        ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        a {
+            color: var(--emerald-light);
+            text-decoration: none;
+        }
+        a:hover {
+            color: var(--emerald);
+        }
+        strong {
+            color: var(--white);
+        }
+        em {
+            color: var(--muted);
+        }
+        footer {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+        .footer-links {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: var(--emerald-light);
+        }
+        @media (max-width: 480px) {
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.2rem; }
+            nav { padding: 16px 16px 0; }
+            .container { padding: 30px 16px; }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <span class="logo-icon"><img src="images/app-icon-120.png" alt="PickleCue" style="width:32px;height:32px;border-radius:8px;"></span>
-                <span>PickleCue</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="/#features">Features</a></li>
-                <li><a href="/#demo">Demo</a></li>
-                <li><a href="support.html">Support</a></li>
-            </ul>
-            <a href="/#download" class="nav-cta">Download</a>
-            <button class="nav-toggle">☰</button>
-        </div>
+    <nav>
+        <a href="/" class="nav-logo">
+            <img src="images/app-icon-120.png" alt="PickleCue" width="36" height="36">
+            PickleCue
+        </a>
+        <a href="/" class="nav-back">Back to Home</a>
     </nav>
 
-    <!-- Terms of Service Content -->
-    <main class="legal-content">
-        <h1>Terms of Service</h1>
-        <p class="legal-date">Last Updated: January 2026</p>
+    <div class="container">
+        <header>
+            <h1>Terms of Service</h1>
+            <p class="updated">Last Updated: March 27, 2026</p>
+        </header>
 
-        <p>Welcome to PickleCue! These Terms of Service ("Terms") govern your use of the PickleCue mobile application ("App") and related services provided by PickleCue ("we," "our," or "us"). By using our App, you agree to these Terms. If you don't agree, please don't use the App.</p>
+        <main>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By downloading, installing, or using the PickleCue mobile application ("App"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the App.</p>
+            <p>We may update these Terms from time to time. Continued use of the App after changes are posted constitutes acceptance of the updated Terms.</p>
 
-        <h2>1. Acceptance of Terms</h2>
-        <p>By downloading, installing, or using PickleCue, you confirm that:</p>
-        <ul>
-            <li>You are at least 13 years old</li>
-            <li>You have the legal capacity to enter into this agreement</li>
-            <li>You will comply with these Terms and all applicable laws</li>
-        </ul>
-        <p>If you are using the App on behalf of an organization, you represent that you have authority to bind that organization to these Terms.</p>
+            <h2>2. Use of the App</h2>
+            <ul>
+                <li>You must create an account to use most features of PickleCue.</li>
+                <li>You must be at least <strong>13 years of age</strong> to create an account.</li>
+                <li>You agree to provide <strong>accurate and truthful information</strong> when creating your account and maintaining your profile.</li>
+                <li>Each person may maintain only <strong>one account</strong>. Creating multiple accounts to evade blocks, bans, or other restrictions is prohibited.</li>
+                <li>You are responsible for maintaining the security of your account credentials.</li>
+            </ul>
 
-        <h2>2. Account Registration</h2>
-        <p>To use certain features of PickleCue, you must create an account. When you do:</p>
-        <ul>
-            <li>Provide accurate and complete information</li>
-            <li>Keep your account credentials secure</li>
-            <li>Notify us immediately of any unauthorized access</li>
-            <li>Accept responsibility for all activities under your account</li>
-        </ul>
-        <p>We may suspend or terminate accounts that violate these Terms or engage in fraudulent activity.</p>
+            <h2>3. User Content</h2>
+            <p>You retain ownership of content you create and share through PickleCue, including messages, reviews, game descriptions, and profile information ("User Content").</p>
+            <p>By posting User Content, you grant PickleCue a <strong>non-exclusive, worldwide, royalty-free license</strong> to display, distribute, and use your content within the App and related services for the purpose of operating and improving the platform.</p>
+            <p>We reserve the right to <strong>moderate, review, and remove</strong> any User Content that violates these Terms or our Community Guidelines, at our sole discretion and without prior notice.</p>
 
-        <h2>3. Use of the Service</h2>
+            <h2>4. Prohibited Conduct</h2>
+            <p>You agree not to:</p>
+            <ul>
+                <li><strong>Harass, bully, threaten, or intimidate</strong> other users</li>
+                <li><strong>Impersonate</strong> another person or misrepresent your identity</li>
+                <li><strong>Spam</strong> other users with unsolicited messages, invitations, or promotions</li>
+                <li><strong>Reverse engineer, decompile, or disassemble</strong> any part of the App</li>
+                <li>Use the App for any <strong>illegal activity</strong> or to facilitate illegal conduct</li>
+                <li>Attempt to <strong>circumvent safety features</strong> including blocks, mutes, or account restrictions</li>
+                <li>Upload or transmit malware, viruses, or other harmful code</li>
+                <li>Scrape, crawl, or collect data from the App through automated means</li>
+            </ul>
 
-        <h3>3.1 Permitted Uses</h3>
-        <p>PickleCue is designed to help you:</p>
-        <ul>
-            <li>Find pickleball courts in your area</li>
-            <li>Create and join pickup games</li>
-            <li>Connect with other players</li>
-            <li>Track your playing history and statistics</li>
-            <li>Join leagues and tournaments</li>
-            <li>Improve your skills through drills and tips</li>
-        </ul>
+            <h2>5. Subscriptions &amp; Payments</h2>
+            <p>PickleCue offers optional premium subscriptions ("PickleCue Pro") with additional features.</p>
+            <ul>
+                <li>Subscriptions are processed through <strong>Apple's App Store</strong> using StoreKit 2. All billing and payment processing is handled by Apple.</li>
+                <li>Subscriptions automatically renew at the end of each billing period unless you cancel before the renewal date.</li>
+                <li>You can <strong>cancel your subscription at any time</strong> through your Apple ID settings. Cancellation takes effect at the end of the current billing period.</li>
+                <li>Refunds are managed by <strong>Apple</strong> in accordance with their refund policies. To request a refund, visit <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a>.</li>
+                <li>We do not store or process any payment information directly.</li>
+            </ul>
 
-        <h3>3.2 Prohibited Uses</h3>
-        <p>You agree NOT to:</p>
-        <ul>
-            <li>Use the App for any illegal purpose</li>
-            <li>Harass, threaten, or abuse other users</li>
-            <li>Post false, misleading, or defamatory content</li>
-            <li>Impersonate another person or entity</li>
-            <li>Spam or send unsolicited promotional content</li>
-            <li>Collect or harvest user data without consent</li>
-            <li>Attempt to gain unauthorized access to our systems</li>
-            <li>Interfere with the proper functioning of the App</li>
-            <li>Use automated tools to access the service (bots, scrapers)</li>
-            <li>Post content that is sexually explicit, violent, or promotes hate</li>
-            <li>Violate any third-party rights (intellectual property, privacy)</li>
-        </ul>
+            <h2>6. Intellectual Property</h2>
+            <p>The PickleCue name, logo, design, and underlying code are the intellectual property of PickleCue and are protected by applicable copyright and trademark laws.</p>
+            <p>Court location data is sourced in part from <strong>OpenStreetMap</strong> contributors and is used under the <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener">Open Data Commons Open Database License (ODbL)</a>. OpenStreetMap contributors.</p>
+            <p><strong>DUPR</strong> is a registered trademark of Dream Up Partners, LLC. PickleCue's DUPR integration is provided through their official API and does not imply endorsement or affiliation.</p>
 
-        <h2>4. User Content</h2>
+            <h2>7. Privacy</h2>
+            <p>Your use of PickleCue is also governed by our <a href="privacy.html">Privacy Policy</a>, which describes how we collect, use, and protect your personal information. By using the App, you consent to the practices described in our Privacy Policy.</p>
 
-        <h3>4.1 Your Content</h3>
-        <p>You retain ownership of content you post (reviews, photos, messages). By posting content, you grant us a non-exclusive, worldwide, royalty-free license to use, display, and distribute your content in connection with the service.</p>
+            <h2>8. Account Termination</h2>
+            <p>We reserve the right to <strong>suspend or terminate your account</strong> at any time if you violate these Terms, engage in prohibited conduct, or if we determine that your use poses a risk to other users or the platform.</p>
+            <p>You may <strong>delete your account at any time</strong> from the Settings screen within the App. Upon deletion, your profile and associated data will be removed in accordance with our Privacy Policy.</p>
 
-        <h3>4.2 Content Guidelines</h3>
-        <p>All user content must:</p>
-        <ul>
-            <li>Be accurate and truthful (especially court reviews)</li>
-            <li>Respect the privacy of others</li>
-            <li>Not infringe on intellectual property rights</li>
-            <li>Comply with our Community Guidelines</li>
-        </ul>
+            <h2>9. Disclaimer of Warranties</h2>
+            <p>PickleCue is provided on an <strong>"as is" and "as available"</strong> basis without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+            <p>We do not guarantee that the App will be uninterrupted, error-free, or free of harmful components. We do not warrant the accuracy or completeness of court data, user-generated content, or any other information provided through the App.</p>
 
-        <h3>4.3 Content Moderation</h3>
-        <p>We reserve the right to remove any content that violates these Terms or is otherwise objectionable. We may also suspend or ban users who repeatedly post inappropriate content.</p>
+            <h2>10. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by applicable law, PickleCue and its officers, directors, employees, and agents shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the App, including but not limited to loss of data, personal injury, or property damage.</p>
+            <p>In no event shall our total liability exceed the amount you paid to us in the twelve (12) months preceding the event giving rise to the claim.</p>
 
-        <h2>5. Court Information</h2>
-        <p>PickleCue provides information about pickleball court locations gathered from public sources and user submissions. We make reasonable efforts to ensure accuracy, but:</p>
-        <ul>
-            <li>Court availability, hours, and fees may change</li>
-            <li>Verify information directly with the court/facility</li>
-            <li>We are not responsible for inaccurate court information</li>
-            <li>Some courts may be on private property - respect access rules</li>
-        </ul>
+            <h2>11. Changes to Terms</h2>
+            <p>We may revise these Terms at any time by posting the updated version within the App or on our website. The "Last Updated" date at the top of this page indicates when the most recent changes were made. Your continued use of the App after any changes constitutes your acceptance of the revised Terms.</p>
 
-        <h2>6. Games and Meetups</h2>
-        <p>PickleCue facilitates connections between players but does not supervise games or events. By participating in games organized through the App:</p>
-        <ul>
-            <li>You acknowledge inherent risks in physical activity</li>
-            <li>You are responsible for your own safety and well-being</li>
-            <li>You agree to behave respectfully toward other players</li>
-            <li>You release PickleCue from liability for injuries or disputes</li>
-        </ul>
-        <p>If you organize a game, you are responsible for ensuring the venue is appropriate and any necessary permissions are obtained.</p>
+            <h2>12. Contact Us</h2>
+            <p>If you have questions about these Terms, please contact us:</p>
+            <ul>
+                <li><strong>Legal inquiries:</strong> <a href="mailto:legal@picklecue.com">legal@picklecue.com</a></li>
+                <li><strong>General support:</strong> <a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
+            </ul>
+        </main>
+    </div>
 
-        <h2>7. Trust Score and Ratings</h2>
-        <p>PickleCue uses a Trust Score system to encourage reliable behavior. Your Trust Score may be affected by:</p>
-        <ul>
-            <li>Showing up to games you've committed to</li>
-            <li>Canceling in advance vs. no-showing</li>
-            <li>Feedback from other players</li>
-            <li>Verified account status</li>
-        </ul>
-        <p>Attempting to manipulate ratings (fake reviews, coordinated voting) is prohibited and may result in account suspension.</p>
-
-        <h2>8. Premium Features and Payments</h2>
-        <p>Some features may require payment. If you purchase premium features:</p>
-        <ul>
-            <li>Payments are processed through Apple's App Store</li>
-            <li>All purchases are subject to Apple's terms and refund policies</li>
-            <li>Subscription renewals occur automatically unless cancelled</li>
-            <li>Prices may change with reasonable notice</li>
-        </ul>
-        <p>We are not responsible for payment processing issues handled by Apple.</p>
-
-        <h2>9. Intellectual Property</h2>
-        <p>PickleCue, including its design, features, and content (excluding user content), is owned by us and protected by copyright, trademark, and other laws. You may not:</p>
-        <ul>
-            <li>Copy, modify, or distribute the App or its content</li>
-            <li>Reverse engineer or decompile the App</li>
-            <li>Use our trademarks without permission</li>
-            <li>Create derivative works based on our App</li>
-        </ul>
-
-        <h2>10. Privacy</h2>
-        <p>Your privacy is important to us. Our collection and use of personal information is governed by our <a href="privacy.html">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
-
-        <h2>11. Disclaimers</h2>
-        <p><strong>THE APP IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND.</strong> We disclaim all warranties, express or implied, including:</p>
-        <ul>
-            <li>Merchantability and fitness for a particular purpose</li>
-            <li>Accuracy, reliability, or completeness of content</li>
-            <li>Uninterrupted or error-free operation</li>
-            <li>Security of data transmission</li>
-        </ul>
-        <p>We do not guarantee that you will find playing partners, that courts will be available, or that games will occur as scheduled.</p>
-
-        <h2>12. Limitation of Liability</h2>
-        <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, PICKLECUE SHALL NOT BE LIABLE FOR:</p>
-        <ul>
-            <li>Indirect, incidental, special, or consequential damages</li>
-            <li>Loss of profits, data, or goodwill</li>
-            <li>Personal injury resulting from your use of the App</li>
-            <li>Actions or content of other users</li>
-            <li>Third-party services or links</li>
-        </ul>
-        <p>Our total liability shall not exceed the amount you paid us in the twelve months preceding any claim, or $100, whichever is greater.</p>
-
-        <h2>13. Indemnification</h2>
-        <p>You agree to indemnify and hold harmless PickleCue and its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including legal fees) arising from:</p>
-        <ul>
-            <li>Your use of the App</li>
-            <li>Your violation of these Terms</li>
-            <li>Your content or conduct</li>
-            <li>Your participation in games or events</li>
-        </ul>
-
-        <h2>14. Dispute Resolution</h2>
-        <p>Any disputes arising from these Terms or your use of the App shall be:</p>
-        <ul>
-            <li>Governed by the laws of the State of California</li>
-            <li>Resolved through binding arbitration (not class action)</li>
-            <li>Conducted in accordance with AAA Commercial Arbitration Rules</li>
-        </ul>
-        <p>You waive your right to participate in class actions against us. Small claims court actions are permitted.</p>
-
-        <h2>15. Termination</h2>
-        <p>You may stop using PickleCue and delete your account at any time. We may suspend or terminate your access if you:</p>
-        <ul>
-            <li>Violate these Terms</li>
-            <li>Engage in fraudulent or illegal activity</li>
-            <li>Abuse or harass other users</li>
-            <li>Fail to pay for premium services</li>
-        </ul>
-        <p>Upon termination, your right to use the App ceases immediately. Sections that should survive termination (disclaimers, limitation of liability, etc.) will remain in effect.</p>
-
-        <h2>16. Changes to Terms</h2>
-        <p>We may modify these Terms at any time. We will notify you of material changes through the App or by email. Continued use after changes constitutes acceptance. If you disagree with changes, stop using the App and delete your account.</p>
-
-        <h2>17. General Provisions</h2>
-        <ul>
-            <li><strong>Entire Agreement:</strong> These Terms constitute the entire agreement between you and PickleCue.</li>
-            <li><strong>Severability:</strong> If any provision is found unenforceable, the remaining provisions continue in effect.</li>
-            <li><strong>Waiver:</strong> Failure to enforce any right does not waive future enforcement.</li>
-            <li><strong>Assignment:</strong> We may assign our rights; you may not assign yours without consent.</li>
-            <li><strong>Notices:</strong> We may send notices via email or in-app notifications.</li>
-        </ul>
-
-        <h2>18. Contact Us</h2>
-        <p>For questions about these Terms, please contact us:</p>
-        <ul>
-            <li>Email: <a href="mailto:legal@picklecue.com">legal@picklecue.com</a></li>
-            <li>Support: <a href="/support.html">picklecue.com/support</a></li>
-        </ul>
-
-        <p style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">By using PickleCue, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
-    </main>
-
-    <!-- Footer -->
     <footer>
-        <a href="/" class="footer-logo">
-            <img src="images/app-icon-120.png" alt="PickleCue" style="width:24px;height:24px;border-radius:6px;">
-            <span>PickleCue</span>
-        </a>
+        <p>&copy; 2026 PickleCue. All rights reserved.</p>
         <div class="footer-links">
             <a href="privacy.html">Privacy Policy</a>
             <a href="terms.html">Terms of Service</a>
             <a href="support.html">Support</a>
-            <a href="mailto:support@picklecue.com">Contact</a>
         </div>
-        <div class="footer-social">
-            <a href="https://instagram.com/picklecueapp" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            <a href="https://tiktok.com/@picklecue" class="social-icon" aria-label="TikTok" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
-            </a>
-            <a href="https://youtube.com/@picklecue" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </a>
-            <a href="https://x.com/PickleCueApp" class="social-icon" aria-label="X (Twitter)" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-        </div>
-        <p class="footer-copyright">&copy; 2026 PickleCue. All rights reserved.</p>
     </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
