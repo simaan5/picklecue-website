@@ -4,16 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - PickleCue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0A1628">
     <style>
+        :root {
+            --emerald: #059669;
+            --emerald-light: #6EE7B7;
+            --emerald-dark: #047857;
+            --midnight: #0A1628;
+            --slate: #1E293B;
+            --white: #FFFFFF;
+            --cloud: #F1F5F9;
+            --muted: #94A3B8;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.8;
-            color: #333;
+            background: var(--midnight);
+            color: var(--cloud);
+            min-height: 100vh;
+        }
+        .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
@@ -22,59 +40,72 @@
             text-align: center;
             margin-bottom: 40px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #1B4332;
+            border-bottom: 2px solid var(--emerald-dark);
         }
         .logo {
             font-size: 40px;
             margin-bottom: 10px;
         }
         h1 {
-            color: #1B4332;
+            font-family: 'Outfit', sans-serif;
+            color: var(--emerald-light);
             font-size: 2rem;
         }
         .updated {
-            color: #666;
+            color: var(--muted);
             font-size: 0.9rem;
             margin-top: 10px;
         }
         h2 {
-            color: #1B4332;
+            font-family: 'Outfit', sans-serif;
+            color: var(--emerald-light);
             margin-top: 40px;
             margin-bottom: 15px;
             font-size: 1.4rem;
         }
         h3 {
-            color: #2D6A4F;
+            color: var(--emerald);
             margin-top: 25px;
             margin-bottom: 10px;
             font-size: 1.1rem;
         }
         p, li {
             margin-bottom: 15px;
-            color: #444;
+            color: var(--cloud);
         }
         ul {
             margin-left: 25px;
             margin-bottom: 20px;
         }
         a {
-            color: #1B4332;
+            color: var(--emerald-light);
+        }
+        a:hover {
+            color: var(--emerald);
+        }
+        strong {
+            color: var(--white);
+        }
+        em {
+            color: var(--muted);
         }
         .back-link {
             display: inline-block;
             margin-top: 40px;
             padding: 10px 20px;
-            background: #1B4332;
-            color: white;
+            background: var(--emerald-dark);
+            color: var(--white);
             text-decoration: none;
             border-radius: 8px;
+            font-weight: 500;
         }
         .back-link:hover {
-            background: #2D6A4F;
+            background: var(--emerald);
         }
     </style>
 </head>
 <body>
+<div class="container">
     <header>
         <div class="logo">🏓</div>
         <h1>Privacy Policy</h1>
@@ -227,5 +258,6 @@
 
         <a href="/" class="back-link">&larr; Back to PickleCue</a>
     </main>
+</div>
 </body>
 </html>
