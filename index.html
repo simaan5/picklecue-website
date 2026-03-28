@@ -3,1438 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PickleCue - Your Pickleball Companion</title>
-    <meta name="description" content="Find games, discover courts, track your stats, and connect with players. PickleCue is everything you need to level up your pickleball game.">
+    <title>PickleCue - Your Complete Pickleball Companion</title>
 
-    <!-- Preconnect for Performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://apps.apple.com">
-    <!-- <link rel="dns-prefetch" href="https://formspree.io"> TODO: Re-enable when newsletter form is active -->
+    <!-- SEO -->
+    <meta name="description" content="PickleCue is the ultimate pickleball companion app. Find courts, join games, track stats, and connect with players near you. Available on iOS.">
+    <meta name="keywords" content="pickleball, pickleball app, find pickleball courts, pickleball games, pickleball stats, pickleball leagues, pickleball tournaments">
+    <meta name="author" content="PickleCue">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.picklecue.com/">
 
-    <!-- Critical Font Preload -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@300;400;500;600;700;800&display=swap" as="style">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="images/app-icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="images/app-icon-512.png">
-    <meta name="theme-color" content="#0A1628">
-
-    <!-- Open Graph / Social Media -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.picklecue.com/">
-    <meta property="og:title" content="PickleCue - Your Pickleball Companion">
-    <meta property="og:description" content="Find games, discover courts, track your stats, and connect with players. The ultimate app for pickleball enthusiasts.">
+    <meta property="og:title" content="PickleCue - Your Complete Pickleball Companion">
+    <meta property="og:description" content="Find courts, join games, track stats, and connect with pickleball players near you. Available on iOS.">
     <meta property="og:image" content="https://www.picklecue.com/images/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="PickleCue">
+    <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="PickleCue - Your Pickleball Companion">
-    <meta name="twitter:description" content="Find games, discover courts, track your stats, and connect with players.">
+    <meta name="twitter:site" content="@PickleCueApp">
+    <meta name="twitter:title" content="PickleCue - Your Complete Pickleball Companion">
+    <meta name="twitter:description" content="Find courts, join games, track stats, and connect with pickleball players near you.">
     <meta name="twitter:image" content="https://www.picklecue.com/images/og-image.png">
 
-    <!-- Additional SEO -->
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="PickleCue">
-    <link rel="canonical" href="https://www.picklecue.com/">
-    <style>
-        :root {
-            --emerald: #059669;
-            --emerald-light: #6EE7B7;
-            --emerald-dark: #047857;
-            --ball-yellow: #F7E359;
-            --ball-yellow-dark: #E5CF2A;
-            --midnight: #0A1628;
-            --slate: #1E293B;
-            --cloud: #F1F5F9;
-            --white: #FFFFFF;
-            --off-white: #F9FAFB;
-            --accent-coral: #FF6B6B;
-            --accent-blue: #3B82F6;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--midnight);
-            color: var(--white);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* Skip Link for Accessibility */
-        .skip-link {
-            position: absolute;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--emerald);
-            color: var(--white);
-            padding: 0.75rem 1.5rem;
-            border-radius: 0 0 8px 8px;
-            z-index: 10000;
-            font-weight: 600;
-            text-decoration: none;
-            transition: top 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .skip-link:focus {
-            top: 0;
-            opacity: 1;
-            pointer-events: auto;
-            outline: 3px solid var(--ball-yellow);
-            outline-offset: 2px;
-        }
-
-        /* Enhanced Focus Styles for Keyboard Navigation */
-        a:focus-visible,
-        button:focus-visible,
-        input:focus-visible,
-        select:focus-visible,
-        textarea:focus-visible {
-            outline: 3px solid var(--emerald-light);
-            outline-offset: 3px;
-            border-radius: 4px;
-        }
-
-        /* Reduce motion for users who prefer it */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Visually Hidden - for screen readers only */
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Background Pattern */
-        .bg-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.03;
-            background-image:
-                radial-gradient(circle at 25% 25%, var(--emerald) 2px, transparent 2px),
-                radial-gradient(circle at 75% 75%, var(--ball-yellow) 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-
-        /* Gradient Orbs */
-        .gradient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(45, 139, 78, 0.3) 0%, transparent 70%);
-            top: -200px;
-            right: -100px;
-        }
-
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(247, 227, 89, 0.15) 0%, transparent 70%);
-            bottom: -100px;
-            left: -100px;
-        }
-
-        .orb-3 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(78, 205, 196, 0.2) 0%, transparent 70%);
-            top: 50%;
-            left: 20%;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to bottom, rgba(10, 22, 40, 0.95) 0%, transparent 100%);
-            backdrop-filter: blur(10px);
-        }
-
-        .logo {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 1.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            color: var(--white);
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .logo-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--cloud);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--ball-yellow);
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 8rem 4rem 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            gap: 4rem;
-        }
-
-        .hero-content {
-            flex: 1;
-            max-width: 560px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(45, 139, 78, 0.15);
-            border: 1px solid rgba(45, 139, 78, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            color: var(--emerald-light);
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .hero-badge::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--emerald-light);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 0.6s ease-out 0.1s backwards;
-        }
-
-        h1 span {
-            background: linear-gradient(135deg, var(--ball-yellow) 0%, var(--ball-yellow-dark) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-description {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.7;
-            margin-bottom: 2.5rem;
-            animation: fadeInUp 0.6s ease-out 0.2s backwards;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.6s ease-out 0.3s backwards;
-        }
-
-        .app-store-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: var(--white);
-            color: var(--midnight);
-            padding: 0.875rem 1.75rem;
-            border-radius: 14px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border: 2px solid var(--white);
-        }
-
-        .app-store-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
-        }
-
-        /* Nav download button - more visible */
-        .nav-download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--emerald) !important;
-            color: var(--white) !important;
-            border: 2px solid var(--emerald) !important;
-            padding: 0.5rem 1.25rem !important;
-            font-size: 0.9rem !important;
-            font-weight: 600;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .nav-download-btn:hover {
-            background: var(--emerald-dark) !important;
-            border-color: var(--emerald-dark) !important;
-        }
-
-        .app-store-btn svg {
-            width: 28px;
-            height: 28px;
-        }
-
-        .app-store-btn .btn-text {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            line-height: 1.2;
-        }
-
-        .app-store-btn .btn-text small {
-            font-size: 0.65rem;
-            font-weight: 400;
-            opacity: 0.7;
-        }
-
-        .secondary-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: transparent;
-            color: var(--white);
-            padding: 0.875rem 1.75rem;
-            border-radius: 14px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .secondary-btn:hover {
-            border-color: var(--emerald-light);
-            color: var(--emerald-light);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* iPhone Demo */
-        .hero-demo {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: fadeInUp 0.8s ease-out 0.4s backwards;
-        }
-
-        /* Features Section */
-        .features {
-            position: relative;
-            z-index: 1;
-            padding: 6rem 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .features-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .features-header h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.75rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .features-header p {
-            font-size: 1.15rem;
-            opacity: 0.7;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 900px) {
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 2rem;
-            border-radius: 24px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(45, 139, 78, 0.3);
-            transform: translateY(-4px);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .feature-card h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-card p {
-            font-size: 0.95rem;
-            opacity: 0.6;
-            line-height: 1.6;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            position: relative;
-            z-index: 1;
-            padding: 6rem 4rem;
-            text-align: center;
-        }
-
-        .cta-box {
-            background: linear-gradient(135deg, rgba(45, 139, 78, 0.2) 0%, rgba(45, 139, 78, 0.05) 100%);
-            border: 1px solid rgba(45, 139, 78, 0.3);
-            border-radius: 32px;
-            padding: 4rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .cta-box h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .cta-box p {
-            font-size: 1.15rem;
-            opacity: 0.7;
-            margin-bottom: 2rem;
-        }
-
-        /* Social Proof Stats */
-        .social-proof {
-            position: relative;
-            z-index: 1;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
-            border-top: 1px solid rgba(5, 150, 105, 0.2);
-            border-bottom: 1px solid rgba(5, 150, 105, 0.2);
-        }
-
-        .stats-grid {
-            display: flex;
-            justify-content: center;
-            gap: 4rem;
-            max-width: 900px;
-            margin: 0 auto;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-family: 'Outfit', sans-serif;
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--emerald);
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            color: var(--cloud);
-            opacity: 0.8;
-            margin-top: 0.5rem;
-        }
-
-        /* Testimonials */
-        .testimonials {
-            position: relative;
-            z-index: 1;
-            padding: 5rem 2rem;
-        }
-
-        .testimonials-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .testimonials-header h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .testimonials-header p {
-            color: var(--cloud);
-            opacity: 0.7;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-
-        .testimonial-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateY(-4px);
-        }
-
-        .testimonial-stars {
-            color: #FBBF24;
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-        }
-
-        .testimonial-text {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: var(--cloud);
-            margin-bottom: 1.5rem;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .testimonial-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .testimonial-info h4 {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .testimonial-info span {
-            font-size: 0.875rem;
-            color: var(--cloud);
-            opacity: 0.6;
-        }
-
-        /* Email Capture */
-        .email-capture {
-            position: relative;
-            z-index: 1;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        .email-capture-box {
-            background: linear-gradient(135deg, var(--slate) 0%, rgba(30, 41, 59, 0.8) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 3rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .email-capture h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-        }
-
-        .email-capture p {
-            color: var(--cloud);
-            opacity: 0.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .email-form {
-            display: flex;
-            gap: 0.75rem;
-            max-width: 450px;
-            margin: 0 auto;
-        }
-
-        .email-form input {
-            flex: 1;
-            padding: 0.875rem 1.25rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--white);
-            font-size: 1rem;
-        }
-
-        .email-form input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .email-form input:focus {
-            outline: none;
-            border-color: var(--emerald);
-        }
-
-        .email-form button {
-            padding: 0.875rem 1.5rem;
-            background: var(--emerald);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .email-form button:hover {
-            background: var(--emerald-dark);
-        }
-
-        .email-note {
-            font-size: 0.8rem;
-            color: var(--cloud);
-            opacity: 0.5;
-            margin-top: 1rem;
-        }
-
-        /* Tips/Blog Section */
-        .tips-section {
-            position: relative;
-            z-index: 1;
-            padding: 5rem 2rem;
-        }
-
-        .tips-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .tips-header h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .tips-header p {
-            color: var(--cloud);
-            opacity: 0.7;
-        }
-
-        .tips-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .tips-grid .tip-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            display: block !important;
-            flex-direction: unset;
-            align-items: unset;
-        }
-
-        .tips-grid .tip-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .tips-grid .tip-card .tip-category {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--emerald);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.75rem;
-        }
-
-        .tips-grid .tip-card h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            line-height: 1.4;
-            color: var(--white);
-        }
-
-        .tips-grid .tip-card p {
-            font-size: 0.9rem;
-            color: var(--cloud);
-            opacity: 0.7;
-            line-height: 1.5;
-        }
-
-        /* Footer */
-        footer {
-            position: relative;
-            z-index: 1;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.5rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--white);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .footer-logo img {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--white);
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .social-icon {
-            color: rgba(255, 255, 255, 0.5);
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .social-icon:hover {
-            color: var(--emerald-light);
-        }
-
-        .social-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .footer-copyright {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.8rem;
-            margin: 0;
-            padding: 0;
-            border: none;
-        }
-
-        /* ============================================
-           RESPONSIVE DESIGN - All Device Sizes
-           ============================================ */
-
-        /* Large Desktop (1400px+) - Default styles above */
-
-        /* Desktop (1024px - 1399px) */
-        @media (max-width: 1399px) {
-            .hero {
-                padding: 7rem 3rem 4rem;
-                gap: 3rem;
-            }
-
-            .features, .cta-section {
-                padding: 5rem 3rem;
-            }
-
-            footer {
-                padding: 2.5rem 3rem;
-            }
-        }
-
-        /* Tablet Landscape (769px - 1024px) */
-        @media (max-width: 1024px) {
-            .hero {
-                flex-direction: column;
-                padding: 7rem 2rem 3rem;
-                text-align: center;
-                min-height: auto;
-            }
-
-            .hero-content {
-                max-width: 100%;
-                order: 1;
-            }
-
-            .hero-demo {
-                order: 2;
-                margin-top: 2rem;
-            }
-
-            h1 {
-                font-size: 3rem;
-            }
-
-            .hero-cta {
-                justify-content: center;
-            }
-
-            .features, .cta-section {
-                padding: 4rem 2rem;
-            }
-
-            footer {
-                padding: 2rem;
-            }
-
-            .features-header h2 {
-                font-size: 2.25rem;
-            }
-
-
-            .stats-grid {
-                gap: 3rem;
-            }
-
-            .cta-box {
-                padding: 3rem 2rem;
-            }
-        }
-
-        /* Tablet Portrait (641px - 768px) */
-        @media (max-width: 768px) {
-            nav {
-                padding: 1rem 1.5rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding: 6rem 1.5rem 2rem;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-description {
-                font-size: 1.05rem;
-            }
-
-
-
-
-            .features, .cta-section {
-                padding: 3rem 1.5rem;
-            }
-
-            .features-header {
-                margin-bottom: 2.5rem;
-            }
-
-            .features-header h2 {
-                font-size: 2rem;
-            }
-
-            .feature-card {
-                padding: 1.5rem;
-            }
-
-            .cta-box {
-                padding: 2.5rem 1.5rem;
-                border-radius: 24px;
-            }
-
-            .cta-box h2 {
-                font-size: 1.75rem;
-            }
-
-            .stats-grid {
-                flex-wrap: wrap;
-                gap: 2rem;
-            }
-
-            .stat-number {
-                font-size: 2.5rem;
-            }
-
-            footer {
-                flex-direction: column;
-                gap: 1.5rem;
-                text-align: center;
-                padding: 2rem 1.5rem;
-            }
-
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
-
-            .tips-section {
-                padding: 3rem 1.5rem;
-            }
-
-            .tips-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Large Phone (481px - 640px) */
-        @media (max-width: 640px) {
-            nav {
-                padding: 0.875rem 1rem;
-            }
-
-            .logo {
-                font-size: 1.1rem;
-            }
-
-            .logo-icon {
-                width: 36px;
-                height: 36px;
-            }
-
-            .nav-download-btn {
-                padding: 0.4rem 1rem !important;
-                font-size: 0.85rem !important;
-            }
-
-            .hero {
-                padding: 5.5rem 1rem 2rem;
-                gap: 2rem;
-            }
-
-            .hero-badge {
-                font-size: 0.8rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-                margin-bottom: 1rem;
-            }
-
-            .hero-description {
-                font-size: 0.95rem;
-                margin-bottom: 1.5rem;
-                line-height: 1.6;
-            }
-
-            .hero-cta {
-                flex-direction: column;
-                gap: 0.75rem;
-                align-items: center;
-            }
-
-            .app-store-btn, .secondary-btn {
-                width: 100%;
-                max-width: 280px;
-                justify-content: center;
-                padding: 0.75rem 1.5rem;
-            }
-
-
-
-
-            /* Demo screen adjustments */
-
-
-
-
-
-
-
-
-
-
-
-
-            /* Features section */
-            .features, .cta-section {
-                padding: 2.5rem 1rem;
-            }
-
-            .features-header {
-                margin-bottom: 2rem;
-            }
-
-            .features-header h2 {
-                font-size: 1.75rem;
-            }
-
-            .features-header p {
-                font-size: 0.95rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .feature-card {
-                padding: 1.25rem;
-            }
-
-            .feature-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
-            }
-
-            .feature-card h3 {
-                font-size: 1.1rem;
-            }
-
-            .feature-card p {
-                font-size: 0.9rem;
-            }
-
-            /* CTA section */
-            .cta-box {
-                padding: 2rem 1.25rem;
-                border-radius: 20px;
-            }
-
-            .cta-box h2 {
-                font-size: 1.5rem;
-            }
-
-            .cta-box p {
-                font-size: 1rem;
-            }
-
-            /* Stats */
-            .social-proof {
-                padding: 2.5rem 1rem;
-            }
-
-            .stats-grid {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            .stat-number {
-                font-size: 2.25rem;
-            }
-
-            .stat-label {
-                font-size: 0.85rem;
-            }
-
-            /* Tips section */
-            .tips-section {
-                padding: 2.5rem 1rem;
-            }
-
-            .tips-header h2 {
-                font-size: 1.75rem;
-            }
-
-
-            /* Footer */
-            footer {
-                padding: 1.5rem 1rem;
-            }
-
-            .footer-logo {
-                font-size: 1.1rem;
-            }
-
-            .footer-links {
-                gap: 0.75rem;
-            }
-
-            .footer-links a {
-                font-size: 0.85rem;
-            }
-        }
-
-        /* Small Phone (320px - 480px) */
-        @media (max-width: 480px) {
-            nav {
-                padding: 0.75rem 0.75rem;
-            }
-
-            .logo {
-                font-size: 1rem;
-                gap: 0.35rem;
-            }
-
-            .logo-icon {
-                width: 32px;
-                height: 32px;
-            }
-
-            .nav-download-btn {
-                padding: 0.35rem 0.75rem !important;
-                font-size: 0.8rem !important;
-            }
-
-            .hero {
-                padding: 5rem 0.75rem 1.5rem;
-            }
-
-            .hero-badge {
-                font-size: 0.75rem;
-                padding: 0.35rem 0.7rem;
-                margin-bottom: 1rem;
-            }
-
-            h1 {
-                font-size: 1.75rem;
-                line-height: 1.15;
-            }
-
-            .hero-description {
-                font-size: 0.9rem;
-                margin-bottom: 1.25rem;
-            }
-
-            .app-store-btn svg {
-                width: 24px;
-                height: 24px;
-            }
-
-            .app-store-btn {
-                padding: 0.65rem 1.25rem;
-                font-size: 0.9rem;
-            }
-
-            .secondary-btn {
-                padding: 0.65rem 1.25rem;
-                font-size: 0.9rem;
-            }
-
-            /* Phone mockup - smallest size */
-
-
-
-            /* Demo screen - smallest adjustments */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            /* Weather widget */
-
-
-            /* Tab bar */
-
-
-
-            /* Courts screen */
-
-
-
-
-
-
-
-
-            /* Play screen */
-
-
-
-
-
-
-
-            /* Leagues screen */
-
-
-
-            /* Learn screen */
-
-
-
-            /* Features section */
-            .features, .cta-section {
-                padding: 2rem 0.75rem;
-            }
-
-            .features-header h2 {
-                font-size: 1.5rem;
-            }
-
-            .features-header p {
-                font-size: 0.9rem;
-            }
-
-            .feature-card {
-                padding: 1rem;
-                border-radius: 18px;
-            }
-
-            .feature-icon {
-                width: 44px;
-                height: 44px;
-                font-size: 1.25rem;
-                border-radius: 12px;
-            }
-
-            .feature-card h3 {
-                font-size: 1rem;
-            }
-
-            .feature-card p {
-                font-size: 0.85rem;
-            }
-
-            /* CTA */
-            .cta-box {
-                padding: 1.5rem 1rem;
-                border-radius: 16px;
-            }
-
-            .cta-box h2 {
-                font-size: 1.35rem;
-            }
-
-            .cta-box p {
-                font-size: 0.9rem;
-            }
-
-            /* Stats */
-            .social-proof {
-                padding: 2rem 0.75rem;
-            }
-
-            .email-form {
-                flex-direction: column;
-            }
-        }
-
-        /* Extra small phones (under 320px) */
-        @media (max-width: 320px) {
-            .hero {
-                padding: 4.5rem 0.5rem 1rem;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-
-
-
-        }
-
-        /* Landscape orientation on phones */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .hero {
-                flex-direction: row;
-                min-height: auto;
-                padding: 5rem 2rem 2rem;
-            }
-
-            .hero-content {
-                flex: 1;
-                text-align: left;
-            }
-
-            .hero-demo {
-                flex: 0 0 auto;
-            }
-
-            .hero-cta {
-                justify-content: flex-start;
-            }
-
-
-            h1 {
-                font-size: 1.75rem;
-            }
-        }
-
-        /* High DPI / Retina adjustments */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-        }
-
-        /* Print styles */
-        @media print {
-            .hero-demo, .tab-bar, nav {
-                display: none;
-            }
-
-            .hero {
-                min-height: auto;
-                padding: 2rem;
-            }
-
-            body {
-                background: white;
-                color: black;
-            }
-        }
-    </style>
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0A1628">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
@@ -1442,8 +50,13 @@
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "PickleCue",
-        "applicationCategory": "SportsApplication",
         "operatingSystem": "iOS",
+        "applicationCategory": "SportsApplication",
+        "description": "The ultimate pickleball companion app. Find courts, join games, track stats, and connect with players.",
+        "url": "https://www.picklecue.com/",
+        "downloadUrl": "https://apps.apple.com/app/picklecue",
+        "screenshot": "https://www.picklecue.com/images/og-image.png",
+        "softwareVersion": "1.0",
         "offers": {
             "@type": "Offer",
             "price": "0",
@@ -1451,20 +64,9 @@
         },
         "aggregateRating": {
             "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "ratingCount": "500",
-            "bestRating": "5",
-            "worstRating": "1"
-        },
-        "description": "Find games, discover courts, track your stats, and connect with players. PickleCue is your complete pickleball companion app.",
-        "screenshot": "https://www.picklecue.com/images/og-image.png",
-        "softwareVersion": "1.0",
-        "author": {
-            "@type": "Organization",
-            "name": "PickleCue",
-            "url": "https://www.picklecue.com"
-        },
-        "downloadUrl": "https://apps.apple.com/app/picklecue"
+            "ratingValue": "5",
+            "ratingCount": "1"
+        }
     }
     </script>
     <script type="application/ld+json">
@@ -1472,257 +74,910 @@
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "PickleCue",
-        "url": "https://www.picklecue.com",
+        "url": "https://www.picklecue.com/",
         "logo": "https://www.picklecue.com/images/app-icon-512.png",
-        "sameAs": [],
+        "sameAs": [
+            "https://www.instagram.com/picklecueapp",
+            "https://www.tiktok.com/@picklecue",
+            "https://www.youtube.com/@picklecue",
+            "https://x.com/PickleCueApp"
+        ],
         "contactPoint": {
             "@type": "ContactPoint",
             "email": "support@picklecue.com",
-            "contactType": "customer service"
+            "contactType": "customer support"
         }
     }
     </script>
+
+    <style>
+        /* ============================================
+           Reset & Base
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #C8D6E5;
+            background: #0A1628;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.2;
+            color: #F0F4F8;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ============================================
+           Skip Link (Accessibility)
+           ============================================ */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 16px;
+            z-index: 10000;
+            padding: 12px 24px;
+            background: #059669;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: top 0.2s;
+        }
+
+        .skip-link:focus {
+            top: 16px;
+        }
+
+        /* ============================================
+           Focus Visible
+           ============================================ */
+        :focus-visible {
+            outline: 2px solid #6EE7B7;
+            outline-offset: 4px;
+        }
+
+        /* ============================================
+           Background Orb
+           ============================================ */
+        .bg-orb {
+            position: fixed;
+            top: -20%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(5, 150, 105, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============================================
+           Layout
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================
+           Nav
+           ============================================ */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 22, 40, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #F0F4F8;
+        }
+
+        .nav-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #8B9DC3;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #F0F4F8;
+        }
+
+        .nav-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #059669;
+            color: #fff;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .nav-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(5, 150, 105, 0.3);
+            color: #fff;
+        }
+
+        .nav-download svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* ============================================
+           Hero
+           ============================================ */
+        .hero {
+            padding: 100px 0 120px;
+        }
+
+        .hero-inner {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(5, 150, 105, 0.12);
+            border: 1px solid rgba(5, 150, 105, 0.25);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #6EE7B7;
+            margin-bottom: 28px;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-badge::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: #6EE7B7;
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            margin-bottom: 24px;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, #F7E359 0%, #FBBF24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #8B9DC3;
+            margin-bottom: 40px;
+            max-width: 520px;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-appstore {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            background: #fff;
+            color: #0A1628;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 14px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-appstore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.12);
+            color: #0A1628;
+        }
+
+        .btn-appstore svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .btn-demo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #C8D6E5;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 14px;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .btn-demo:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+            color: #F0F4F8;
+        }
+
+        .hero-demo {
+            flex-shrink: 0;
+        }
+
+        .demo-wrapper {
+            position: relative;
+            width: 370px;
+        }
+
+        .demo-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 40px;
+            background: linear-gradient(160deg, rgba(5, 150, 105, 0.3), rgba(110, 231, 183, 0.1), transparent);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .demo-wrapper iframe {
+            position: relative;
+            z-index: 1;
+            border-radius: 38px;
+            display: block;
+        }
+
+        /* ============================================
+           Features
+           ============================================ */
+        .features {
+            padding: 120px 0;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 72px;
+        }
+
+        .features-header h2 {
+            margin-bottom: 16px;
+        }
+
+        .features-header p {
+            font-size: 1.1rem;
+            color: #8B9DC3;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 36px 32px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(5, 150, 105, 0.25);
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(110, 231, 183, 0.08));
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #8B9DC3;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        /* ============================================
+           CTA
+           ============================================ */
+        .cta {
+            padding: 100px 0 120px;
+        }
+
+        .cta-card {
+            text-align: center;
+            padding: 72px 48px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            border: 1px solid transparent;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+                linear-gradient(160deg, rgba(5, 150, 105, 0.4), rgba(110, 231, 183, 0.15), transparent 60%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .cta-card h2 {
+            margin-bottom: 16px;
+        }
+
+        .cta-card p {
+            font-size: 1.1rem;
+            color: #8B9DC3;
+            margin-bottom: 36px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ============================================
+           Footer
+           ============================================ */
+        .footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 48px 0 40px;
+        }
+
+        .footer-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #F0F4F8;
+        }
+
+        .footer-brand img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-nav a {
+            font-size: 0.9rem;
+            color: #8B9DC3;
+            transition: color 0.2s;
+        }
+
+        .footer-nav a:hover {
+            color: #6EE7B7;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #8B9DC3;
+            transition: color 0.2s, border-color 0.2s, background 0.2s;
+        }
+
+        .footer-social a:hover {
+            color: #6EE7B7;
+            border-color: rgba(5, 150, 105, 0.3);
+            background: rgba(5, 150, 105, 0.08);
+        }
+
+        .footer-social svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 24px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #546A8B;
+        }
+
+        /* ============================================
+           Responsive: Tablet Landscape (1024px)
+           ============================================ */
+        @media (max-width: 1024px) {
+            h1 {
+                font-size: 2.75rem;
+            }
+
+            h2 {
+                font-size: 1.875rem;
+            }
+
+            .hero-inner {
+                gap: 48px;
+            }
+
+            .demo-wrapper {
+                width: 320px;
+            }
+
+            .demo-wrapper iframe {
+                width: 320px !important;
+                height: 620px !important;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ============================================
+           Responsive: Tablet Portrait (768px)
+           ============================================ */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            .nav-links a:not(.nav-download) {
+                display: none;
+            }
+
+            .nav-links {
+                gap: 0;
+            }
+
+            .hero {
+                padding: 72px 0 80px;
+            }
+
+            .hero-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-demo {
+                display: none;
+            }
+
+            .features {
+                padding: 80px 0;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta {
+                padding: 80px 0;
+            }
+
+            .cta-card {
+                padding: 56px 32px;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+            }
+        }
+
+        /* ============================================
+           Responsive: Phone (640px)
+           ============================================ */
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .hero-badge {
+                font-size: 0.75rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-appstore,
+            .btn-demo {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .feature-card {
+                padding: 28px 24px;
+            }
+
+            .cta-card {
+                padding: 48px 24px;
+            }
+        }
+
+        /* ============================================
+           Responsive: Small Phone (480px)
+           ============================================ */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+
+            .footer-nav {
+                gap: 16px;
+            }
+        }
+
+        /* ============================================
+           Reduced Motion
+           ============================================ */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+
+        /* ============================================
+           Print
+           ============================================ */
+        @media print {
+            body {
+                background: #fff;
+                color: #1a1a1a;
+            }
+
+            .nav,
+            .hero-demo,
+            .bg-orb,
+            .btn-demo,
+            .footer-social {
+                display: none !important;
+            }
+
+            h1, h2, h3 {
+                color: #1a1a1a;
+            }
+
+            .hero {
+                padding: 40px 0;
+            }
+
+            .feature-card {
+                background: #f5f5f5;
+                border: 1px solid #ddd;
+                backdrop-filter: none;
+            }
+
+            .feature-card p,
+            .hero-subtitle,
+            .features-header p,
+            .cta-card p {
+                color: #444;
+            }
+
+            .footer {
+                border-top: 1px solid #ddd;
+            }
+
+            .footer-bottom {
+                color: #666;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Skip to Content Link for Accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <!-- Skip Link -->
+    <a href="#main" class="skip-link">Skip to main content</a>
 
-    <div class="bg-pattern" aria-hidden="true"></div>
-    <div class="gradient-orb orb-1" aria-hidden="true"></div>
-    <div class="gradient-orb orb-2" aria-hidden="true"></div>
-    <div class="gradient-orb orb-3" aria-hidden="true"></div>
+    <!-- Background Orb -->
+    <div class="bg-orb" aria-hidden="true"></div>
 
-    <nav role="navigation" aria-label="Main navigation">
-        <a href="/" class="logo" aria-label="PickleCue Home">
-            <div class="logo-icon"><img src="images/app-icon-120.png" alt="PickleCue logo"></div>
-            PickleCue
-        </a>
-        <div class="nav-links" role="menubar">
-            <a href="#features" role="menuitem">Features</a>
-            <a href="#demo" role="menuitem">Demo</a>
-            <a href="support.html" role="menuitem">Support</a>
-            <a href="https://apps.apple.com/app/picklecue" class="nav-download-btn" role="menuitem" aria-label="Download PickleCue on the App Store">
-                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px;">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                Download
+    <!-- Nav -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="container nav-inner">
+            <a href="/" class="nav-logo" aria-label="PickleCue home">
+                <img src="images/app-icon-120.png" alt="" width="36" height="36">
+                PickleCue
             </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#demo">Demo</a>
+                <a href="support.html">Support</a>
+                <a href="https://apps.apple.com/app/picklecue" class="nav-download" aria-label="Download PickleCue on the App Store">
+                    <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
+                    Download
+                </a>
+            </div>
         </div>
     </nav>
 
-    <main id="main-content" role="main">
-    <section class="hero" id="download">
-        <div class="hero-content">
-            <div class="hero-badge">Now Available on iOS</div>
-            <h1>Your Complete <span>Pickleball</span> Companion</h1>
-            <p class="hero-description">Find games, discover courts, track your stats, and connect with players. PickleCue is everything you need to level up your pickleball game.</p>
-            <div class="hero-cta">
-                <a href="https://apps.apple.com/app/picklecue" class="app-store-btn" aria-label="Download PickleCue on the App Store">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                    </svg>
-                    <div class="btn-text">
-                        <small>Download on the</small>
-                        App Store
+    <!-- Main Content -->
+    <main id="main">
+
+        <!-- Hero -->
+        <section class="hero" id="demo" aria-label="Hero">
+            <div class="container hero-inner">
+                <div class="hero-content">
+                    <div class="hero-badge" aria-label="Now Available on iOS">Now Available on iOS</div>
+                    <h1>Your Complete <span class="gradient-text">Pickleball</span> Companion</h1>
+                    <p class="hero-subtitle">Find courts, join games, track your stats, and connect with players in your area. Everything you need to play better pickleball, in one app.</p>
+                    <div class="hero-actions">
+                        <a href="https://apps.apple.com/app/picklecue" class="btn-appstore" aria-label="Download on the App Store">
+                            <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
+                            Download on the App Store
+                        </a>
+                        <a href="#demo-frame" class="btn-demo" aria-label="Try the interactive demo">
+                            Try Demo
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
                     </div>
-                </a>
-                <a href="#demo" class="secondary-btn" aria-label="Try the demo">
-                    Try Demo
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
-
-        <div class="hero-demo" id="demo">
-            <iframe src="demo/" title="PickleCue Interactive Demo" loading="eager" allow="fullscreen" style="width:370px;height:720px;border:none;overflow:hidden;background:transparent;"></iframe>
-        </div>
-    </section>
-
-
-    <section class="features" id="features">
-        <div class="features-header">
-            <h2>Everything You Need to Play</h2>
-            <p>PickleCue brings together all the tools serious pickleball players need in one beautifully designed app.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🏸</div>
-                <h3>Find & Join Games</h3>
-                <p>Get matched with players at your skill level or browse open games in your area. Never play alone again.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📍</div>
-                <h3>Discover Courts</h3>
-                <p>Find the best courts near you with real-time availability, ratings, and detailed amenities information.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>Track Your Stats</h3>
-                <p>Log matches, track your progress, and watch your skill rating grow as you improve your game.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🏆</div>
-                <h3>Leagues & Tournaments</h3>
-                <p>Join competitive leagues, participate in tournaments, and climb the leaderboards in your community.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📚</div>
-                <h3>Learn & Improve</h3>
-                <p>Access drills, strategy guides, and video tutorials to take your pickleball skills to the next level.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">👥</div>
-                <h3>Build Your Network</h3>
-                <p>Connect with players, form regular groups, and grow your pickleball community organically.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Social Proof Stats -->
-    <section class="social-proof">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number">10K+</div>
-                <div class="stat-label">Active Players</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">500+</div>
-                <div class="stat-label">Courts Mapped</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">4.9</div>
-                <div class="stat-label">App Store Rating</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">25K+</div>
-                <div class="stat-label">Games Played</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="testimonials-header">
-            <h2>Loved by Pickleball Players</h2>
-            <p>See what players are saying about PickleCue</p>
-        </div>
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"Finally an app that gets pickleball! Found my regular doubles group within a week. The court finder is incredibly accurate."</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">MK</div>
-                    <div class="testimonial-info">
-                        <h4>Mike K.</h4>
-                        <span>3.5 Player • Austin, TX</span>
+                </div>
+                <div class="hero-demo" id="demo-frame" aria-label="Interactive app demo">
+                    <div class="demo-wrapper">
+                        <iframe src="demo/" title="PickleCue Interactive Demo" loading="eager" allow="fullscreen" style="width:370px;height:720px;border:none;overflow:hidden;background:transparent;"></iframe>
                     </div>
                 </div>
             </div>
-            <div class="testimonial-card">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"I've tried every pickleball app out there. PickleCue is the only one I kept. Clean design, easy to use, and actually helps me find games."</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">SL</div>
-                    <div class="testimonial-info">
-                        <h4>Sarah L.</h4>
-                        <span>4.0 Player • Denver, CO</span>
-                    </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features" id="features" aria-label="Features">
+            <div class="container">
+                <div class="features-header">
+                    <h2>Everything You Need to Play</h2>
+                    <p>Six powerful tools to level up your pickleball game, all in one beautifully designed app.</p>
+                </div>
+                <div class="features-grid">
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">🎯</div>
+                        <h3>Find & Join Games</h3>
+                        <p>Create or join pickup games in seconds. Set skill levels, manage RSVPs, and check in when you arrive so everyone knows who's on the court.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">🗺️</div>
+                        <h3>Discover Courts</h3>
+                        <p>Browse 26,000+ pickleball courts across the country with our interactive map. Filter by amenities, read reviews, and get directions.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">📊</div>
+                        <h3>Track Your Stats</h3>
+                        <p>Log your matches and track your progress over time. See your win rate, skill rating, and detailed match history all in one place.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">🏆</div>
+                        <h3>Leagues & Tournaments</h3>
+                        <p>Create leagues, run tournaments with bracket views, track standings, and compete with friends all season long.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">🎓</div>
+                        <h3>Learn & Improve</h3>
+                        <p>Access drills, tips, and training resources curated for every skill level. Identify weaknesses and get personalized improvement paths.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">🤝</div>
+                        <h3>Build Your Network</h3>
+                        <p>Connect with players in your area, chat directly, and find regular playing partners. A growing community that makes pickleball more fun.</p>
+                    </article>
                 </div>
             </div>
-            <div class="testimonial-card">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"The league feature is a game changer. Our community went from random meetups to organized weekly play. Highly recommend!"</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">JR</div>
-                    <div class="testimonial-info">
-                        <h4>James R.</h4>
-                        <span>4.5 Player • Phoenix, AZ</span>
-                    </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta" aria-label="Download call to action">
+            <div class="container">
+                <div class="cta-card">
+                    <h2>Ready to Elevate Your Game?</h2>
+                    <p>Download PickleCue for free and join a community of players who take their pickleball seriously.</p>
+                    <a href="https://apps.apple.com/app/picklecue" class="btn-appstore" aria-label="Download on the App Store">
+                        <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
+                        Download on the App Store
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Email Capture — TODO: Replace with real Formspree ID after creating form at formspree.io -->
-    <section class="email-capture">
-        <div class="email-capture-box">
-            <h3>Get Pickleball Tips & Updates</h3>
-            <p>Join our newsletter for strategy tips, app updates, and community news.</p>
-            <p class="email-note">Newsletter coming soon! Follow us for updates.</p>
-        </div>
-    </section>
-
-    <!-- Tips & Resources Section -->
-    <section class="tips-section">
-        <div class="tips-header">
-            <h2>Pickleball Tips & Resources</h2>
-            <p>Level up your game with expert advice</p>
-        </div>
-        <div class="tips-grid">
-            <div class="tip-card">
-                <span class="tip-category">Strategy</span>
-                <h4>Master the Third Shot Drop</h4>
-                <p>The third shot drop is essential for transitioning from baseline to kitchen. Practice soft, arcing shots that land in the non-volley zone.</p>
-            </div>
-            <div class="tip-card">
-                <span class="tip-category">Fitness</span>
-                <h4>Quick Court Footwork Drills</h4>
-                <p>Good footwork wins points. Try ladder drills and lateral shuffles to improve your court coverage and reaction time.</p>
-            </div>
-            <div class="tip-card">
-                <span class="tip-category">Equipment</span>
-                <h4>Choosing the Right Paddle Weight</h4>
-                <p>Lighter paddles (7-7.8 oz) offer control, while heavier paddles (8.5+ oz) provide power. Find your sweet spot based on your play style.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="cta-section">
-        <div class="cta-box">
-            <h2>Ready to Elevate Your Game?</h2>
-            <p>Download PickleCue today and join thousands of players discovering the best way to play pickleball.</p>
-            <a href="https://apps.apple.com/app/picklecue" class="app-store-btn" aria-label="Download PickleCue on the App Store">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                <div class="btn-text">
-                    <small>Download on the</small>
-                    App Store
-                </div>
-            </a>
-        </div>
-    </section>
     </main>
 
-    <footer role="contentinfo" aria-label="Site footer">
-        <a href="/" class="footer-logo" aria-label="PickleCue Home">
-            <img src="images/app-icon-120.png" alt="PickleCue logo" loading="lazy" width="24" height="24">
-            <span>PickleCue</span>
-        </a>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms of Service</a>
-            <a href="support.html">Support</a>
-            <a href="mailto:support@picklecue.com">Contact</a>
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-top">
+                <a href="/" class="footer-brand" aria-label="PickleCue home">
+                    <img src="images/app-icon-120.png" alt="" width="32" height="32">
+                    PickleCue
+                </a>
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Use</a>
+                    <a href="support.html">Support</a>
+                    <a href="mailto:support@picklecue.com">Contact</a>
+                </nav>
+                <div class="footer-social" aria-label="Social media links">
+                    <a href="https://www.instagram.com/picklecueapp" target="_blank" rel="noopener noreferrer" aria-label="PickleCue on Instagram">
+                        <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@picklecue" target="_blank" rel="noopener noreferrer" aria-label="PickleCue on TikTok">
+                        <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M448 209.9a210.1 210.1 0 01-122.8-39.3v178.8A162.6 162.6 0 11185 188.3v89.9a74.6 74.6 0 1052.2 71.2V0h88a121 121 0 00122.8 121.3z"/></svg>
+                    </a>
+                    <a href="https://www.youtube.com/@picklecue" target="_blank" rel="noopener noreferrer" aria-label="PickleCue on YouTube">
+                        <svg viewBox="0 0 576 512" aria-hidden="true"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg>
+                    </a>
+                    <a href="https://x.com/PickleCueApp" target="_blank" rel="noopener noreferrer" aria-label="PickleCue on X">
+                        <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 PickleCue. All rights reserved.
+            </div>
         </div>
-        <div class="footer-social">
-            <a href="https://instagram.com/picklecueapp" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            <a href="https://tiktok.com/@picklecue" class="social-icon" aria-label="TikTok" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
-            </a>
-            <a href="https://youtube.com/@picklecue" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </a>
-            <a href="https://x.com/PickleCueApp" class="social-icon" aria-label="X (Twitter)" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-        </div>
-        <p class="footer-copyright">&copy; 2026 PickleCue. All rights reserved.</p>
     </footer>
-
 </body>
 </html>
