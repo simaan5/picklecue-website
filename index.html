@@ -184,7 +184,7 @@
             width: 800px;
             height: 800px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(5, 150, 105, 0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(5, 150, 105, 0.15) 0%, transparent 70%);
             pointer-events: none;
             z-index: 0;
         }
@@ -285,13 +285,13 @@
            Hero
            ============================================ */
         .hero {
-            padding: 100px 0 120px;
+            padding: 60px 0 40px;
         }
 
         .hero-inner {
             display: flex;
             align-items: center;
-            gap: 80px;
+            gap: 48px;
         }
 
         .hero-content {
@@ -402,7 +402,7 @@
 
         .demo-wrapper {
             position: relative;
-            width: 370px;
+            width: 300px;
         }
 
         .demo-wrapper::before {
@@ -418,20 +418,22 @@
         .demo-wrapper iframe {
             position: relative;
             z-index: 1;
-            border-radius: 38px;
+            border-radius: 32px;
             display: block;
+            width: 300px !important;
+            height: 580px !important;
         }
 
         /* ============================================
            Features
            ============================================ */
         .features {
-            padding: 120px 0;
+            padding: 60px 0 80px;
         }
 
         .features-header {
             text-align: center;
-            margin-bottom: 72px;
+            margin-bottom: 48px;
         }
 
         .features-header h2 {
@@ -452,30 +454,29 @@
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 36px 32px;
-            transition: transform 0.2s, border-color 0.2s;
+            padding: 32px 28px;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
 
         .feature-card:hover {
             transform: translateY(-4px);
-            border-color: rgba(5, 150, 105, 0.25);
+            border-color: rgba(5, 150, 105, 0.35);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
         }
 
         .feature-icon {
-            width: 52px;
-            height: 52px;
+            width: 56px;
+            height: 56px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(110, 231, 183, 0.08));
-            border: 1px solid rgba(5, 150, 105, 0.2);
-            border-radius: 14px;
+            font-size: 1.75rem;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.25), rgba(110, 231, 183, 0.12));
+            border: 1px solid rgba(5, 150, 105, 0.3);
+            border-radius: 16px;
             margin-bottom: 20px;
         }
 
@@ -493,12 +494,12 @@
            CTA
            ============================================ */
         .cta {
-            padding: 100px 0 120px;
+            padding: 20px 0 80px;
         }
 
         .cta-card {
             text-align: center;
-            padding: 72px 48px;
+            padding: 56px 48px;
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -626,12 +627,12 @@
             }
 
             .demo-wrapper {
-                width: 320px;
+                width: 280px;
             }
 
             .demo-wrapper iframe {
-                width: 320px !important;
-                height: 620px !important;
+                width: 280px !important;
+                height: 540px !important;
             }
 
             .features-grid {
