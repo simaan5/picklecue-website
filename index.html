@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme: dark;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,7 +42,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
@@ -105,35 +105,61 @@
         }
 
         body {
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 1rem;
-            line-height: 1.7;
-            color: #C8D6E5;
+            line-height: 1.6;
+            color: #E2E8F0;
             background: #0A1628;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.2;
-            color: #F0F4F8;
+        /* Background gradient mesh */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(16, 185, 129, 0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse 70% 40% at 50% 90%, rgba(247, 227, 89, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            aria-hidden: true;
         }
 
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-        }
-
-        h2 {
-            font-size: 2.25rem;
-            font-weight: 700;
-        }
-
-        h3 {
-            font-size: 1.15rem;
+        /* ============================================
+           Skip Link
+           ============================================ */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 16px;
+            padding: 8px 16px;
+            background: #10B981;
+            color: #0A1628;
             font-weight: 600;
+            border-radius: 0 0 8px 8px;
+            z-index: 10000;
+            text-decoration: none;
+            transition: top 0.2s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* ============================================
+           Typography
+           ============================================ */
+        h1, h2, h3, h4 {
+            font-family: 'Sora', 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.15;
+            text-wrap: balance;
         }
 
         a {
@@ -141,96 +167,68 @@
             text-decoration: none;
         }
 
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* ============================================
-           Skip Link (Accessibility)
-           ============================================ */
-        .skip-link {
-            position: absolute;
-            top: -100%;
-            left: 16px;
-            z-index: 10000;
-            padding: 12px 24px;
-            background: #059669;
-            color: #fff;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: top 0.2s;
-        }
-
-        .skip-link:focus {
-            top: 16px;
-        }
-
-        /* ============================================
-           Focus Visible
-           ============================================ */
-        :focus-visible {
-            outline: 2px solid #6EE7B7;
-            outline-offset: 4px;
-        }
-
-        /* ============================================
-           Background Orb
-           ============================================ */
-        .bg-orb {
-            position: fixed;
-            top: -20%;
-            right: -10%;
-            width: 800px;
-            height: 800px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(5, 150, 105, 0.15) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
         /* ============================================
            Layout
            ============================================ */
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 24px;
-        }
-
-        section {
             position: relative;
             z-index: 1;
         }
 
         /* ============================================
-           Nav
+           Focus Styles
+           ============================================ */
+        :focus-visible {
+            outline: 2px solid #10B981;
+            outline-offset: 2px;
+        }
+
+        button:focus:not(:focus-visible),
+        a:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        /* ============================================
+           Interactive Elements
+           ============================================ */
+        button, a {
+            touch-action: manipulation;
+        }
+
+        /* ============================================
+           Navigation
            ============================================ */
         .nav {
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            height: 64px;
+            z-index: 1000;
             background: rgba(10, 22, 40, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px) saturate(1.4);
+            -webkit-backdrop-filter: blur(20px) saturate(1.4);
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .nav-inner {
+        .nav .container {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 72px;
+            height: 100%;
         }
 
         .nav-logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Sora', sans-serif;
             font-weight: 700;
-            font-size: 1.25rem;
-            color: #F0F4F8;
+            font-size: 1.15rem;
+            color: #FFFFFF;
         }
 
         .nav-logo img {
@@ -239,56 +237,66 @@
             border-radius: 8px;
         }
 
-        .nav-links {
+        .nav-right {
             display: flex;
             align-items: center;
             gap: 32px;
         }
 
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
         .nav-links a {
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             font-weight: 500;
-            color: #8B9DC3;
+            color: rgba(226, 232, 240, 0.7);
             transition: color 0.2s;
         }
 
         .nav-links a:hover {
-            color: #F0F4F8;
+            color: #FFFFFF;
         }
 
         .nav-download {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: #059669;
-            color: #fff;
-            font-size: 0.875rem;
+            gap: 6px;
+            padding: 8px 18px;
+            background: #10B981;
+            color: #0A1628;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
             font-weight: 600;
-            border-radius: 10px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            text-decoration: none;
         }
 
         .nav-download:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(5, 150, 105, 0.3);
-            color: #fff;
+            background: #34D399;
+            transform: translateY(-1px);
         }
 
         .nav-download svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
+            width: 14px;
+            height: 14px;
         }
 
         /* ============================================
-           Hero
+           Hero Section
            ============================================ */
         .hero {
-            padding: 60px 0 40px;
+            padding: 112px 0 32px;
+            min-height: auto;
         }
 
-        .hero-inner {
+        .hero .container {
             display: flex;
             align-items: center;
             gap: 48px;
@@ -303,146 +311,158 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 6px 16px;
-            background: rgba(5, 150, 105, 0.12);
-            border: 1px solid rgba(5, 150, 105, 0.25);
+            padding: 6px 14px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
             border-radius: 100px;
             font-size: 0.8rem;
             font-weight: 600;
-            color: #6EE7B7;
-            margin-bottom: 28px;
-            letter-spacing: 0.02em;
+            color: #10B981;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease both;
         }
 
-        .hero-badge::before {
-            content: '';
-            display: block;
-            width: 8px;
-            height: 8px;
-            background: #6EE7B7;
+        .hero-badge-dot {
+            width: 7px;
+            height: 7px;
+            background: #10B981;
             border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
         }
 
         .hero h1 {
-            margin-bottom: 24px;
+            font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+            animation: fadeInUp 0.6s ease 0.1s both;
         }
 
-        .hero h1 .gradient-text {
-            background: linear-gradient(135deg, #F7E359 0%, #FBBF24 100%);
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, #F7E359, #FBBF24);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .hero-subtitle {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
+            color: rgba(226, 232, 240, 0.65);
+            max-width: 480px;
+            margin-bottom: 28px;
             line-height: 1.7;
-            color: #8B9DC3;
-            margin-bottom: 40px;
-            max-width: 520px;
+            animation: fadeInUp 0.6s ease 0.2s both;
         }
 
-        .hero-actions {
+        .hero-buttons {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
             flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.3s both;
         }
 
         .btn-appstore {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 28px;
-            background: #fff;
+            gap: 10px;
+            padding: 12px 24px;
+            background: #FFFFFF;
             color: #0A1628;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
             font-weight: 600;
-            border-radius: 14px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s;
+            text-decoration: none;
         }
 
         .btn-appstore:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.12);
-            color: #0A1628;
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
         }
 
         .btn-appstore svg {
-            width: 22px;
-            height: 22px;
+            width: 18px;
+            height: 18px;
         }
 
         .btn-demo {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 14px 28px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #C8D6E5;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
+            gap: 6px;
+            padding: 12px 24px;
+            background: transparent;
+            color: rgba(226, 232, 240, 0.85);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
             font-weight: 500;
-            border-radius: 14px;
-            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+            text-decoration: none;
         }
 
         .btn-demo:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
-            color: #F0F4F8;
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.04);
         }
 
+        /* Demo Frame */
         .hero-demo {
             flex-shrink: 0;
+            animation: fadeIn 0.8s ease 0.5s both;
         }
 
-        .demo-wrapper {
+        .demo-frame {
             position: relative;
             width: 300px;
-        }
-
-        .demo-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 40px;
-            background: linear-gradient(160deg, rgba(5, 150, 105, 0.3), rgba(110, 231, 183, 0.1), transparent);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .demo-wrapper iframe {
-            position: relative;
-            z-index: 1;
+            height: 580px;
             border-radius: 32px;
-            display: block;
-            width: 300px !important;
-            height: 580px !important;
+            overflow: hidden;
+            background: #111827;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.08),
+                0 0 60px rgba(16, 185, 129, 0.12),
+                0 0 120px rgba(16, 185, 129, 0.06),
+                0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .demo-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 32px;
         }
 
         /* ============================================
-           Features
+           Features Section
            ============================================ */
         .features {
-            padding: 60px 0 80px;
+            padding: 64px 0;
         }
 
-        .features-header {
+        .section-header {
             text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
 
-        .features-header h2 {
-            margin-bottom: 16px;
+        .section-header h2 {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
         }
 
-        .features-header p {
-            font-size: 1.1rem;
-            color: #8B9DC3;
+        .section-header p {
+            font-size: 1rem;
+            color: rgba(226, 232, 240, 0.55);
             max-width: 520px;
             margin: 0 auto;
         }
@@ -450,189 +470,245 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 20px;
         }
 
         .feature-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 32px 28px;
-            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            padding: 28px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.2s;
+            animation: fadeInUp 0.5s ease both;
         }
+
+        .feature-card:nth-child(1) { animation-delay: 0.05s; }
+        .feature-card:nth-child(2) { animation-delay: 0.1s; }
+        .feature-card:nth-child(3) { animation-delay: 0.15s; }
+        .feature-card:nth-child(4) { animation-delay: 0.2s; }
+        .feature-card:nth-child(5) { animation-delay: 0.25s; }
+        .feature-card:nth-child(6) { animation-delay: 0.3s; }
 
         .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(5, 150, 105, 0.35);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.06);
+            transform: translateY(-2px);
         }
 
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            background: linear-gradient(135deg, rgba(5, 150, 105, 0.25), rgba(110, 231, 183, 0.12));
-            border: 1px solid rgba(5, 150, 105, 0.3);
-            border-radius: 16px;
-            margin-bottom: 20px;
+        .feature-emoji {
+            font-size: 2rem;
+            margin-bottom: 14px;
+            display: block;
         }
 
         .feature-card h3 {
-            margin-bottom: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 8px;
         }
 
         .feature-card p {
-            color: #8B9DC3;
-            font-size: 0.95rem;
+            font-size: 0.875rem;
+            color: rgba(226, 232, 240, 0.55);
             line-height: 1.65;
         }
 
         /* ============================================
-           CTA
+           CTA Section
            ============================================ */
         .cta {
-            padding: 20px 0 80px;
+            padding: 24px 0 64px;
         }
 
         .cta-card {
+            position: relative;
             text-align: center;
-            padding: 56px 48px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 28px;
+            padding: 56px 32px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid transparent;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
-                linear-gradient(160deg, rgba(5, 150, 105, 0.4), rgba(110, 231, 183, 0.15), transparent 60%);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
+            background-clip: padding-box;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 21px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.25));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
         .cta-card h2 {
-            margin-bottom: 16px;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
         .cta-card p {
-            font-size: 1.1rem;
-            color: #8B9DC3;
-            margin-bottom: 36px;
-            max-width: 480px;
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 1rem;
+            color: rgba(226, 232, 240, 0.55);
+            max-width: 500px;
+            margin: 0 auto 28px;
+            line-height: 1.7;
         }
 
         /* ============================================
            Footer
            ============================================ */
         .footer {
+            padding: 40px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 48px 0 40px;
         }
 
-        .footer-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
             gap: 40px;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
-        .footer-brand {
+        .footer-brand p {
+            font-size: 0.875rem;
+            color: rgba(226, 232, 240, 0.4);
+            margin-top: 10px;
+            max-width: 260px;
+            line-height: 1.6;
+        }
+
+        .footer-logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Sora', sans-serif;
             font-weight: 700;
             font-size: 1.1rem;
-            color: #F0F4F8;
+            color: #FFFFFF;
         }
 
-        .footer-brand img {
+        .footer-logo img {
             width: 32px;
             height: 32px;
-            border-radius: 8px;
+            border-radius: 7px;
         }
 
-        .footer-nav {
+        .footer-links h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(226, 232, 240, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+        }
+
+        .footer-links ul {
+            list-style: none;
             display: flex;
-            gap: 32px;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .footer-nav a {
-            font-size: 0.9rem;
-            color: #8B9DC3;
+        .footer-links a {
+            font-size: 0.875rem;
+            color: rgba(226, 232, 240, 0.6);
             transition: color 0.2s;
         }
 
-        .footer-nav a:hover {
-            color: #6EE7B7;
+        .footer-links a:hover {
+            color: #FFFFFF;
         }
 
-        .footer-social {
+        .footer-social h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(226, 232, 240, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+        }
+
+        .social-icons {
             display: flex;
-            gap: 16px;
+            gap: 10px;
         }
 
-        .footer-social a {
+        .social-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #8B9DC3;
-            transition: color 0.2s, border-color 0.2s, background 0.2s;
+            color: rgba(226, 232, 240, 0.6);
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
         }
 
-        .footer-social a:hover {
-            color: #6EE7B7;
-            border-color: rgba(5, 150, 105, 0.3);
-            background: rgba(5, 150, 105, 0.08);
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
-        .footer-social svg {
-            width: 18px;
-            height: 18px;
+        .social-icon svg {
+            width: 16px;
+            height: 16px;
             fill: currentColor;
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
             padding-top: 24px;
-            text-align: center;
-            font-size: 0.85rem;
-            color: #546A8B;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.8rem;
+            color: rgba(226, 232, 240, 0.3);
         }
 
         /* ============================================
-           Responsive: Tablet Landscape (1024px)
+           Animations
+           ============================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ============================================
+           Responsive: 1024px
            ============================================ */
         @media (max-width: 1024px) {
-            h1 {
-                font-size: 2.75rem;
+            .hero .container {
+                gap: 32px;
             }
 
-            h2 {
-                font-size: 1.875rem;
-            }
-
-            .hero-inner {
-                gap: 48px;
-            }
-
-            .demo-wrapper {
-                width: 280px;
-            }
-
-            .demo-wrapper iframe {
-                width: 280px !important;
-                height: 540px !important;
+            .demo-frame {
+                width: 260px;
+                height: 510px;
             }
 
             .features-grid {
@@ -641,30 +717,10 @@
         }
 
         /* ============================================
-           Responsive: Tablet Portrait (768px)
+           Responsive: 768px
            ============================================ */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            h2 {
-                font-size: 1.75rem;
-            }
-
-            .nav-links a:not(.nav-download) {
-                display: none;
-            }
-
-            .nav-links {
-                gap: 0;
-            }
-
-            .hero {
-                padding: 72px 0 80px;
-            }
-
-            .hero-inner {
+            .hero .container {
                 flex-direction: column;
                 text-align: center;
             }
@@ -674,7 +730,7 @@
                 margin-right: auto;
             }
 
-            .hero-actions {
+            .hero-buttons {
                 justify-content: center;
             }
 
@@ -682,52 +738,46 @@
                 display: none;
             }
 
-            .features {
-                padding: 80px 0;
+            .nav-links {
+                display: none;
             }
 
             .features-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .cta {
-                padding: 80px 0;
-            }
-
-            .cta-card {
-                padding: 56px 32px;
-            }
-
-            .footer-top {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .footer-nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 20px;
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
             }
         }
 
         /* ============================================
-           Responsive: Phone (640px)
+           Responsive: 640px
            ============================================ */
         @media (max-width: 640px) {
-            h1 {
-                font-size: 2rem;
+            .hero {
+                padding-top: 96px;
             }
 
-            .hero-badge {
-                font-size: 0.75rem;
+            .hero h1 {
+                font-size: 1.9rem;
             }
 
-            .hero-subtitle {
-                font-size: 1rem;
+            .features-grid {
+                grid-template-columns: 1fr;
             }
 
-            .hero-actions {
+            .cta-card {
+                padding: 40px 20px;
+            }
+        }
+
+        /* ============================================
+           Responsive: 480px
+           ============================================ */
+        @media (max-width: 480px) {
+            .hero-buttons {
                 flex-direction: column;
                 width: 100%;
             }
@@ -738,241 +788,233 @@
                 justify-content: center;
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .feature-card {
-                padding: 28px 24px;
-            }
-
-            .cta-card {
-                padding: 48px 24px;
-            }
-        }
-
-        /* ============================================
-           Responsive: Small Phone (480px)
-           ============================================ */
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.75rem;
-            }
-
             .container {
                 padding: 0 16px;
             }
-
-            .footer-nav {
-                gap: 16px;
-            }
         }
 
         /* ============================================
-           Reduced Motion
+           Prefers Reduced Motion
            ============================================ */
         @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-delay: 0ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
             html {
                 scroll-behavior: auto;
             }
-
-            *,
-            *::before,
-            *::after {
-                transition-duration: 0.01ms !important;
-                animation-duration: 0.01ms !important;
-            }
         }
 
         /* ============================================
-           Print
+           Print Styles
            ============================================ */
         @media print {
             body {
-                background: #fff;
-                color: #1a1a1a;
+                background: #FFFFFF;
+                color: #000000;
+            }
+
+            body::before {
+                display: none;
             }
 
             .nav,
             .hero-demo,
-            .bg-orb,
-            .btn-demo,
-            .footer-social {
+            .social-icons,
+            .nav-download,
+            .btn-demo {
                 display: none !important;
             }
 
-            h1, h2, h3 {
-                color: #1a1a1a;
-            }
-
             .hero {
-                padding: 40px 0;
+                padding-top: 0;
             }
 
-            .feature-card {
-                background: #f5f5f5;
-                border: 1px solid #ddd;
-                backdrop-filter: none;
+            .hero h1 .highlight {
+                -webkit-text-fill-color: #B8860B;
+                color: #B8860B;
             }
 
-            .feature-card p,
-            .hero-subtitle,
-            .features-header p,
-            .cta-card p {
-                color: #444;
+            .feature-card,
+            .cta-card {
+                border: 1px solid #CCC;
+                background: none;
+                box-shadow: none;
+            }
+
+            a[href]::after {
+                content: " (" attr(href) ")";
+                font-size: 0.8em;
+                color: #666;
             }
 
             .footer {
-                border-top: 1px solid #ddd;
-            }
-
-            .footer-bottom {
-                color: #666;
+                border-top: 1px solid #CCC;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main" class="skip-link">Skip to main content</a>
+    <a href="#main" class="skip-link">Skip to Main Content</a>
 
-    <!-- Background Orb -->
-    <div class="bg-orb" aria-hidden="true"></div>
-
-    <!-- Nav -->
+    <!-- ============================================
+         Navigation
+         ============================================ -->
     <nav class="nav" role="navigation" aria-label="Main navigation">
-        <div class="container nav-inner">
+        <div class="container">
             <a href="/" class="nav-logo" aria-label="PickleCue home">
-                <img src="images/app-icon-120.png" alt="" width="36" height="36">
+                <img src="images/app-icon-120.png" alt="" width="36" height="36" aria-hidden="true">
                 PickleCue
             </a>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#demo">Demo</a>
-                <a href="support.html">Support</a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="demo/">Demo</a></li>
+                    <li><a href="support.html">Support</a></li>
+                </ul>
                 <a href="https://apps.apple.com/app/picklecue" class="nav-download" aria-label="Download PickleCue on the App Store">
-                    <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
+                    <svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
                     Download
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- ============================================
+         Hero Section
+         ============================================ -->
     <main id="main">
-
-        <!-- Hero -->
-        <section class="hero" id="demo" aria-label="Hero">
-            <div class="container hero-inner">
+        <section class="hero" aria-label="Introduction">
+            <div class="container">
                 <div class="hero-content">
-                    <div class="hero-badge" aria-label="Now Available on iOS">Now Available on iOS</div>
-                    <h1>Your Complete <span class="gradient-text">Pickleball</span> Companion</h1>
-                    <p class="hero-subtitle">Find courts, join games, track your stats, and connect with players in your area. Everything you need to play better pickleball, in one app.</p>
-                    <div class="hero-actions">
-                        <a href="https://apps.apple.com/app/picklecue" class="btn-appstore" aria-label="Download on the App Store">
-                            <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
+                    <div class="hero-badge">
+                        <span class="hero-badge-dot" aria-hidden="true"></span>
+                        Now Available on iOS
+                    </div>
+                    <h1>Your Complete <span class="highlight">Pickleball</span> Companion</h1>
+                    <p class="hero-subtitle">Find courts, join games, track your stats, and connect with players in your area. Everything you need to play better pickleball.</p>
+                    <div class="hero-buttons">
+                        <a href="https://apps.apple.com/app/picklecue" class="btn-appstore" aria-label="Download PickleCue on the App Store">
+                            <svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
                             Download on the App Store
                         </a>
-                        <a href="#demo-frame" class="btn-demo" aria-label="Try the interactive demo">
+                        <a href="demo/" class="btn-demo">
                             Try Demo
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <span aria-hidden="true">&rarr;</span>
                         </a>
                     </div>
                 </div>
-                <div class="hero-demo" id="demo-frame" aria-label="Interactive app demo">
-                    <div class="demo-wrapper">
-                        <iframe src="demo/" title="PickleCue Interactive Demo" loading="eager" allow="fullscreen" style="width:370px;height:720px;border:none;overflow:hidden;background:transparent;"></iframe>
+                <div class="hero-demo" aria-label="Interactive app demo">
+                    <div class="demo-frame">
+                        <iframe src="demo/" title="PickleCue Interactive Demo" loading="eager" allow="fullscreen"></iframe>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Features -->
+        <!-- ============================================
+             Features Section
+             ============================================ -->
         <section class="features" id="features" aria-label="Features">
             <div class="container">
-                <div class="features-header">
+                <div class="section-header">
                     <h2>Everything You Need to Play</h2>
-                    <p>Six powerful tools to level up your pickleball game, all in one beautifully designed app.</p>
+                    <p>All the tools to level up your pickleball game, in one app.</p>
                 </div>
                 <div class="features-grid">
-                    <article class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">🎯</div>
-                        <h3>Find & Join Games</h3>
-                        <p>Create or join pickup games in seconds. Set skill levels, manage RSVPs, and check in when you arrive so everyone knows who's on the court.</p>
-                    </article>
-                    <article class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">🗺️</div>
+                    <div class="feature-card">
+                        <span class="feature-emoji" aria-hidden="true">&#x1F3AF;</span>
+                        <h3>Find &amp; Join Games</h3>
+                        <p>Create or join pickup games in seconds. Set skill levels, manage RSVPs, and check in when you arrive.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-emoji" aria-hidden="true">&#x1F5FA;&#xFE0F;</span>
                         <h3>Discover Courts</h3>
-                        <p>Browse 26,000+ pickleball courts across the country with our interactive map. Filter by amenities, read reviews, and get directions.</p>
-                    </article>
-                    <article class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">📊</div>
+                        <p>Browse 26,000+ pickleball courts with our interactive map. Filter by amenities, read reviews, and get directions.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-emoji" aria-hidden="true">&#x1F4CA;</span>
                         <h3>Track Your Stats</h3>
-                        <p>Log your matches and track your progress over time. See your win rate, skill rating, and detailed match history all in one place.</p>
-                    </article>
-                    <article class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">🏆</div>
-                        <h3>Leagues & Tournaments</h3>
-                        <p>Create leagues, run tournaments with bracket views, track standings, and compete with friends all season long.</p>
-                    </article>
-                    <article class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">🎓</div>
-                        <h3>Learn & Improve</h3>
-                        <p>Access drills, tips, and training resources curated for every skill level. Identify weaknesses and get personalized improvement paths.</p>
-                    </article>
-                    <article class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">🤝</div>
+                        <p>Log matches and track your progress. See your win rate, skill rating, and detailed match history.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-emoji" aria-hidden="true">&#x1F3C6;</span>
+                        <h3>Leagues &amp; Tournaments</h3>
+                        <p>Create leagues, run tournaments with bracket views, track standings, and compete all season.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-emoji" aria-hidden="true">&#x1F393;</span>
+                        <h3>Learn &amp; Improve</h3>
+                        <p>Access drills, tips, and training resources curated for every skill level.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-emoji" aria-hidden="true">&#x1F91D;</span>
                         <h3>Build Your Network</h3>
-                        <p>Connect with players in your area, chat directly, and find regular playing partners. A growing community that makes pickleball more fun.</p>
-                    </article>
+                        <p>Connect with players in your area, chat directly, and find regular playing partners.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- CTA -->
+        <!-- ============================================
+             CTA Section
+             ============================================ -->
         <section class="cta" aria-label="Download call to action">
             <div class="container">
                 <div class="cta-card">
                     <h2>Ready to Elevate Your Game?</h2>
                     <p>Download PickleCue for free and join a community of players who take their pickleball seriously.</p>
-                    <a href="https://apps.apple.com/app/picklecue" class="btn-appstore" aria-label="Download on the App Store">
-                        <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
+                    <a href="https://apps.apple.com/app/picklecue" class="btn-appstore" aria-label="Download PickleCue on the App Store">
+                        <svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
                         Download on the App Store
                     </a>
                 </div>
             </div>
         </section>
-
     </main>
 
-    <!-- Footer -->
+    <!-- ============================================
+         Footer
+         ============================================ -->
     <footer class="footer" role="contentinfo">
         <div class="container">
-            <div class="footer-top">
-                <a href="/" class="footer-brand" aria-label="PickleCue home">
-                    <img src="images/app-icon-120.png" alt="" width="32" height="32">
-                    PickleCue
-                </a>
-                <nav class="footer-nav" aria-label="Footer navigation">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Use</a>
-                    <a href="support.html">Support</a>
-                    <a href="mailto:support@picklecue.com">Contact</a>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="images/app-icon-120.png" alt="" width="32" height="32" aria-hidden="true">
+                        PickleCue
+                    </div>
+                    <p>Your complete pickleball companion. Find courts, play games, and connect with your community.</p>
+                </div>
+                <nav class="footer-links" aria-label="Footer navigation">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="support.html">Support</a></li>
+                        <li><a href="mailto:support@picklecue.com">Contact</a></li>
+                    </ul>
                 </nav>
-                <div class="footer-social" aria-label="Social media links">
-                    <a href="https://www.instagram.com/picklecueapp" target="_blank" rel="noopener noreferrer" aria-label="PickleCue on Instagram">
-                        <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-                    </a>
-                    <a href="https://www.tiktok.com/@picklecue" target="_blank" rel="noopener noreferrer" aria-label="PickleCue on TikTok">
-                        <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M448 209.9a210.1 210.1 0 01-122.8-39.3v178.8A162.6 162.6 0 11185 188.3v89.9a74.6 74.6 0 1052.2 71.2V0h88a121 121 0 00122.8 121.3z"/></svg>
-                    </a>
-                    <a href="https://www.youtube.com/@picklecue" target="_blank" rel="noopener noreferrer" aria-label="PickleCue on YouTube">
-                        <svg viewBox="0 0 576 512" aria-hidden="true"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg>
-                    </a>
-                    <a href="https://x.com/PickleCueApp" target="_blank" rel="noopener noreferrer" aria-label="PickleCue on X">
-                        <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
-                    </a>
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/picklecueapp" class="social-icon" aria-label="Follow PickleCue on Instagram" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                        </a>
+                        <a href="https://www.tiktok.com/@picklecue" class="social-icon" aria-label="Follow PickleCue on TikTok" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M448 209.9a210.1 210.1 0 01-122.8-39.3v178.8A162.6 162.6 0 11185 188.3v89.9a74.6 74.6 0 1052.2 71.2V0h88a121 121 0 00122.8 121.3z"/></svg>
+                        </a>
+                        <a href="https://www.youtube.com/@picklecue" class="social-icon" aria-label="Follow PickleCue on YouTube" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 576 512" aria-hidden="true"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg>
+                        </a>
+                        <a href="https://x.com/PickleCueApp" class="social-icon" aria-label="Follow PickleCue on X" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="footer-bottom">
