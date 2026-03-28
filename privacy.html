@@ -4,319 +4,228 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - PickleCue</title>
-    <meta name="description" content="PickleCue Privacy Policy - How we collect, use, and protect your data.">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-    <meta name="theme-color" content="#0A1628">
-
-    <link rel="stylesheet" href="styles.css">
     <style>
-        .legal-content {
-            padding: 8rem 2rem 4rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .legal-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .legal-date {
-            color: var(--text-muted);
-            margin-bottom: 3rem;
-        }
-        .legal-content h2 {
-            font-size: 1.5rem;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        .legal-content h3 {
-            font-size: 1.125rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .legal-content p {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            line-height: 1.8;
-        }
-        .legal-content ul {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            padding-left: 1.5rem;
-        }
-        .legal-content li {
-            margin-bottom: 0.5rem;
-            line-height: 1.6;
-        }
-        .legal-content a {
-            color: var(--primary);
-        }
-
-        /* Footer */
-        footer {
-            position: relative;
-            z-index: 1;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.5rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .footer-logo img {
-            border-radius: 6px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .social-icon {
-            color: rgba(255, 255, 255, 0.5);
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .social-icon:hover {
-            color: var(--primary);
-        }
-
-        .social-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .footer-copyright {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.8rem;
+        * {
             margin: 0;
             padding: 0;
-            border: none;
+            box-sizing: border-box;
         }
-
-        @media (max-width: 768px) {
-            footer {
-                flex-direction: column;
-                text-align: center;
-                padding: 1.5rem;
-            }
-
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #1B4332;
+        }
+        .logo {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #1B4332;
+            font-size: 2rem;
+        }
+        .updated {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        h2 {
+            color: #1B4332;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        h3 {
+            color: #2D6A4F;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        p, li {
+            margin-bottom: 15px;
+            color: #444;
+        }
+        ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        a {
+            color: #1B4332;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 10px 20px;
+            background: #1B4332;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        .back-link:hover {
+            background: #2D6A4F;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <span class="logo-icon"><img src="images/app-icon-120.png" alt="PickleCue" style="width:32px;height:32px;border-radius:8px;"></span>
-                <span>PickleCue</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="/#features">Features</a></li>
-                <li><a href="/#demo">Demo</a></li>
-                <li><a href="support.html">Support</a></li>
-            </ul>
-            <a href="/#download" class="nav-cta">Download</a>
-            <button class="nav-toggle">☰</button>
-        </div>
-    </nav>
-
-    <!-- Privacy Policy Content -->
-    <main class="legal-content">
+    <header>
+        <div class="logo">🏓</div>
         <h1>Privacy Policy</h1>
-        <p class="legal-date">Last Updated: January 2026</p>
+        <p class="updated">Last Updated: March 27, 2026</p>
+    </header>
 
-        <p>PickleCue ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application ("App") and related services.</p>
+    <main>
+        <p>PickleCue ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.</p>
 
-        <h2>1. Information We Collect</h2>
+        <h2>Information We Collect</h2>
 
-        <h3>1.1 Information You Provide</h3>
-        <p>When you use PickleCue, you may provide us with:</p>
+        <h3>Information You Provide</h3>
         <ul>
-            <li><strong>Account Information:</strong> Email address, name, profile photo, and skill level when you create an account</li>
-            <li><strong>Profile Data:</strong> Playing preferences, availability, DUPR rating (if linked), and biography</li>
-            <li><strong>User Content:</strong> Court reviews, photos, game descriptions, and messages to other players</li>
-            <li><strong>Payment Information:</strong> If you make purchases, payment processing is handled by third-party providers (Apple/Stripe)</li>
+            <li><strong>Account Information</strong>: Email address, display name, username, and profile photo or emoji avatar</li>
+            <li><strong>Profile Data</strong>: Skill level, bio, play preferences, and home city you choose to share</li>
+            <li><strong>Game Data</strong>: Games you create, join, or participate in, including RSVPs and waitlists</li>
+            <li><strong>Match History</strong>: Scores, match results, and performance statistics you log</li>
+            <li><strong>Communications</strong>: Messages sent through in-app chat, including direct messages and league chat</li>
+            <li><strong>Social Connections</strong>: Friends you add and interact with</li>
+            <li><strong>Court Reviews</strong>: Ratings, reviews, and comments you submit for pickleball courts</li>
+            <li><strong>Reports</strong>: Information you provide when reporting other users or content</li>
         </ul>
 
-        <h3>1.2 Information Collected Automatically</h3>
+        <h3>Information Collected Automatically</h3>
         <ul>
-            <li><strong>Location Data:</strong> With your permission, we collect your location to show nearby courts and games. You can disable this in your device settings.</li>
-            <li><strong>Device Information:</strong> Device type, operating system, unique device identifiers, and mobile network information</li>
-            <li><strong>Usage Data:</strong> App interactions, features used, screens viewed, and time spent in the app</li>
-            <li><strong>Log Data:</strong> IP address, access times, and crash reports</li>
+            <li><strong>Device Information</strong>: Device type and operating system version</li>
+            <li><strong>Location Data</strong>: With your permission, we collect precise location (latitude and longitude) to show nearby courts, games, leagues, and weather conditions</li>
+            <li><strong>Usage Data</strong>: App interactions, features used, search queries, and session duration</li>
+            <li><strong>Crash and Performance Data</strong>: Error logs, crash reports, and performance metrics to improve stability</li>
         </ul>
 
-        <h3>1.3 Information from Third Parties</h3>
+        <h3>Optional Integrations</h3>
         <ul>
-            <li><strong>Sign in with Apple:</strong> If you use Apple Sign-In, we receive your Apple ID, name (if shared), and email (which may be a private relay address)</li>
-            <li><strong>Court Data:</strong> Public information about pickleball court locations from various sources</li>
+            <li><strong>HealthKit</strong>: If you choose to connect HealthKit, we can read calories, heart rate, steps, and workout data, and write pickleball workout summaries. <strong>HealthKit data is processed entirely on your device and is never transmitted to our servers or any third party.</strong></li>
+            <li><strong>DUPR</strong>: If you choose to link your DUPR account, we facilitate match result exchanges with DUPR for rating calculations. See "Third-Party Services" below.</li>
         </ul>
 
-        <h2>2. How We Use Your Information</h2>
-        <p>We use the information we collect to:</p>
+        <h2>How We Use Your Information</h2>
+        <p>We use collected information to:</p>
         <ul>
-            <li>Provide, maintain, and improve our services</li>
-            <li>Show you nearby courts, games, and players</li>
-            <li>Match you with suitable playing partners based on skill level</li>
-            <li>Send you game reminders and notifications (with your consent)</li>
-            <li>Process transactions and send related information</li>
-            <li>Respond to your comments, questions, and support requests</li>
-            <li>Monitor and analyze usage trends to improve the App</li>
-            <li>Detect, investigate, and prevent fraudulent or illegal activities</li>
-            <li>Personalize your experience and provide content relevant to you</li>
+            <li>Provide and maintain the PickleCue service</li>
+            <li>Match you with nearby players, courts, and games</li>
+            <li>Enable messaging between players</li>
+            <li>Calculate and display match statistics</li>
+            <li>Display weather conditions at courts</li>
+            <li>Process and manage your subscription</li>
+            <li>Send notifications about games and messages</li>
+            <li>Analyze usage patterns to improve the app (only with your consent via App Tracking Transparency)</li>
+            <li>Detect and prevent fraud, abuse, and objectionable content</li>
+            <li>Comply with legal obligations</li>
         </ul>
 
-        <h2>3. How We Share Your Information</h2>
-        <p>We may share your information in the following circumstances:</p>
+        <h2>Third-Party Services</h2>
+        <p>We use the following services to operate PickleCue:</p>
         <ul>
-            <li><strong>With Other Users:</strong> Your profile information (name, photo, skill level) is visible to other users. Game participants can see who else has joined.</li>
-            <li><strong>Service Providers:</strong> We use third-party services for hosting (Supabase), analytics, and push notifications. These providers are contractually obligated to protect your data.</li>
-            <li><strong>Legal Requirements:</strong> We may disclose information if required by law or to protect our rights, privacy, safety, or property.</li>
-            <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets, your information may be transferred.</li>
-        </ul>
-        <p><strong>We do not sell your personal information to third parties.</strong></p>
-
-        <h2>4. Analytics and Tracking</h2>
-        <p>We use analytics tools to understand how users interact with PickleCue and to improve our services:</p>
-        <ul>
-            <li><strong>Mixpanel:</strong> We use Mixpanel to analyze app usage patterns, feature adoption, and user journeys. This helps us identify areas for improvement.</li>
-            <li><strong>Sentry:</strong> We use Sentry to track and diagnose app crashes and errors, helping us maintain a stable experience.</li>
-            <li><strong>Apple Analytics:</strong> We receive aggregated, anonymized data from Apple about app downloads and usage.</li>
-        </ul>
-        <p>These tools collect anonymized or pseudonymized data. You can limit analytics collection through your device's privacy settings.</p>
-
-        <h2>5. Data Storage and Security</h2>
-        <p>Your data is stored securely using Supabase, a cloud database provider with enterprise-grade security. We implement appropriate technical and organizational measures to protect your information, including:</p>
-        <ul>
-            <li>Encryption of data in transit (TLS/SSL) and at rest</li>
-            <li>Row-Level Security (RLS) policies on all database tables</li>
-            <li>Regular security audits and updates</li>
-            <li>Secure authentication with Apple Sign-In</li>
-        </ul>
-        <p>While we strive to protect your information, no method of transmission over the Internet is 100% secure. We cannot guarantee absolute security.</p>
-
-        <h2>6. Your Rights and Choices</h2>
-
-        <h3>6.1 Access and Update</h3>
-        <p>You can access and update your account information through the App's Settings menu.</p>
-
-        <h3>6.2 Location Data</h3>
-        <p>You can disable location services in your device settings. Note that some features (like finding nearby courts) require location access.</p>
-
-        <h3>6.3 Push Notifications</h3>
-        <p>You can manage notification preferences in the App or disable them in your device settings.</p>
-
-        <h3>6.4 Account Deletion</h3>
-        <p>You can delete your account at any time through Settings > Account > Delete Account. This will permanently remove your profile, game history, and associated data. Some information may be retained for legal or legitimate business purposes.</p>
-
-        <h3>6.5 Data Export</h3>
-        <p>You can request a copy of your data by contacting us at <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a>.</p>
-
-        <h2>7. Children's Privacy</h2>
-        <p>PickleCue is not intended for children under 13. We do not knowingly collect personal information from children under 13. If we learn we have collected such information, we will promptly delete it. If you believe a child under 13 has provided us with personal information, please contact us.</p>
-
-        <h2>8. International Users</h2>
-        <p>PickleCue is operated from the United States. If you access the App from outside the US, your information may be transferred to, stored, and processed in the US. By using the App, you consent to such transfers.</p>
-
-        <h2>9. Third-Party Links and Services</h2>
-        <p>The App may contain links to third-party websites or services (e.g., Google Maps for directions). We are not responsible for the privacy practices of these third parties. We encourage you to review their privacy policies.</p>
-
-        <h2>10. Changes to This Policy</h2>
-        <p>We may update this Privacy Policy from time to time. We will notify you of material changes by posting the new policy in the App and updating the "Last Updated" date. Your continued use of the App after changes constitutes acceptance of the updated policy.</p>
-
-        <h2>11. Contact Us</h2>
-        <p>If you have questions or concerns about this Privacy Policy or our data practices, please contact us at:</p>
-        <ul>
-            <li>Email: <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a></li>
-            <li>Support: <a href="/support.html">picklecue.com/support</a></li>
+            <li><strong>Supabase</strong>: Backend database and authentication. Stores user accounts, profiles, games, matches, messaging, and subscription data. Encrypted in transit and at rest with row-level security policies.</li>
+            <li><strong>Mixpanel</strong>: Analytics platform. Receives anonymized usage data linked only to your UUID. No email, name, or personally identifiable information is sent. Only active if you authorize tracking via App Tracking Transparency.</li>
+            <li><strong>Sentry</strong>: Crash reporting. Receives anonymized error data linked only to your UUID. No email, name, or personally identifiable information is sent.</li>
+            <li><strong>DUPR</strong>: If you link your DUPR account, we share match results (player DUPR IDs and scores) for rating updates. Tokens stored server-side only. You can unlink anytime.</li>
+            <li><strong>Apple WeatherKit</strong>: Location coordinates sent for court weather conditions. No user identity included.</li>
+            <li><strong>Apple Push Notification Service</strong>: Device token stored for push notifications. Disable anytime in iOS Settings.</li>
         </ul>
 
-        <h2>12. California Privacy Rights</h2>
-        <p>California residents have additional rights under the California Consumer Privacy Act (CCPA):</p>
+        <h2>Information We Do NOT Collect</h2>
         <ul>
-            <li>Right to know what personal information is collected and how it's used</li>
-            <li>Right to delete personal information</li>
-            <li>Right to opt-out of the sale of personal information (we do not sell your data)</li>
-            <li>Right to non-discrimination for exercising privacy rights</li>
+            <li>We do <strong>NOT</strong> sell your personal data to third parties</li>
+            <li>We do <strong>NOT</strong> use your data for advertising purposes</li>
+            <li>We do <strong>NOT</strong> track you across other apps or websites</li>
+            <li>We do <strong>NOT</strong> share your location with advertisers</li>
+            <li>We do <strong>NOT</strong> transmit HealthKit data off your device</li>
         </ul>
-        <p>To exercise these rights, contact us at <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a>.</p>
+
+        <h2>Data Storage &amp; Security</h2>
+        <p>Your data is stored securely using Supabase, which provides:</p>
+        <ul>
+            <li>Encrypted data transmission (TLS 1.3)</li>
+            <li>Encrypted data at rest (AES-256)</li>
+            <li>Row-level security policies</li>
+            <li>SOC 2 Type II compliance</li>
+        </ul>
+        <p>Authentication is handled through secure tokens. We never store your password directly in the app.</p>
+
+        <h2>Data Sharing</h2>
+        <p>We do not sell your personal information. We may share information with:</p>
+        <ul>
+            <li><strong>Other Users</strong>: Your profile, match history, and reputation are visible to other players based on your privacy settings</li>
+            <li><strong>Service Providers</strong>: The third-party services listed above</li>
+            <li><strong>Legal Requirements</strong>: When required by law or to protect our rights</li>
+            <li><strong>Business Transfers</strong>: If we merge with or are acquired by another company</li>
+        </ul>
+
+        <h2>Your Privacy Controls</h2>
+        <p>In the app's Settings &gt; Privacy, you can:</p>
+        <ul>
+            <li><strong>Set Profile Visibility</strong>: Choose between Everyone, Friends Only, or Private</li>
+            <li>Control who can see your location (exact, city-level, or hidden)</li>
+            <li>Hide your activity status</li>
+            <li>Hide your match history</li>
+            <li>Control search discoverability</li>
+            <li>Block messages from non-friends</li>
+            <li>Block and mute other users</li>
+        </ul>
+        <p>When you enable Private mode, other users see a "This Profile is Private" notice. Your display name and avatar remain visible for identification in games.</p>
+
+        <h2>Location Data</h2>
+        <p>We collect location data only when:</p>
+        <ul>
+            <li>You grant permission in iOS Settings</li>
+            <li>The app is actively in use (not in background)</li>
+        </ul>
+        <p>You can revoke location permission at any time in iOS Settings.</p>
+
+        <h2>Data Retention &amp; Deletion</h2>
+        <p>We retain your data while your account is active. You can delete your account at any time through the app (Settings &gt; Delete Account) or by emailing privacy@picklecue.com.</p>
+        <p>When you delete your account:</p>
+        <ul>
+            <li>Your profile is immediately removed</li>
+            <li>Your match history is anonymized</li>
+            <li>Your messages are deleted</li>
+            <li>Your push notification tokens are deactivated</li>
+            <li>Your data is purged from our systems within 30 days</li>
+        </ul>
+        <p>Analytics data (Mixpanel) is retained for up to 12 months. Crash data (Sentry) is retained for up to 90 days.</p>
+
+        <h2>Children's Privacy</h2>
+        <p>PickleCue is not intended for children under 13. We do not knowingly collect information from children under 13. If you believe a child has provided us with personal information, please contact us.</p>
+
+        <h2>Your Rights</h2>
+        <p>Depending on your location, you may have rights to:</p>
+        <ul>
+            <li>Access your personal data</li>
+            <li>Correct inaccurate data</li>
+            <li>Delete your data</li>
+            <li>Export your data (Pro subscribers can export in CSV or JSON format)</li>
+            <li>Opt out of analytics (deny App Tracking Transparency, or change in iOS Settings &gt; Privacy &amp; Security &gt; Tracking)</li>
+        </ul>
+        <p>We do not sell personal information. California residents have additional rights under CCPA. To exercise these rights, contact us at the email below.</p>
+
+        <h2>Changes to This Policy</h2>
+        <p>We may update this Privacy Policy periodically. We will notify you of material changes through the app or via email.</p>
+
+        <h2>Contact Us</h2>
+        <p>For privacy questions or concerns:</p>
+        <ul>
+            <li><strong>Privacy</strong>: <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a></li>
+            <li><strong>Support</strong>: <a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
+        </ul>
+
+        <p><em>This privacy policy is effective as of March 27, 2026.</em></p>
+
+        <a href="/" class="back-link">&larr; Back to PickleCue</a>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <a href="/" class="footer-logo">
-            <img src="images/app-icon-120.png" alt="PickleCue" style="width:24px;height:24px;border-radius:6px;">
-            <span>PickleCue</span>
-        </a>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms of Service</a>
-            <a href="support.html">Support</a>
-            <a href="mailto:support@picklecue.com">Contact</a>
-        </div>
-        <div class="footer-social">
-            <a href="https://instagram.com/picklecueapp" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            <a href="https://tiktok.com/@picklecue" class="social-icon" aria-label="TikTok" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
-            </a>
-            <a href="https://youtube.com/@picklecue" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </a>
-            <a href="https://x.com/PickleCueApp" class="social-icon" aria-label="X (Twitter)" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-        </div>
-        <p class="footer-copyright">&copy; 2026 PickleCue. All rights reserved.</p>
-    </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
