@@ -926,6 +926,96 @@
             font-variation-settings: "opsz" 48, "SOFT" 30;
         }
         .mobile-menu .btn-pill { margin-top: 32px; align-self: flex-start; }
+
+        /* =====================================================================
+           Waitlist popup (lazy, one-shot)
+           ===================================================================== */
+        .popup-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(12, 15, 18, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s var(--ease);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .popup-backdrop[data-open="true"] {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .popup-card {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            background: var(--paper);
+            border: 1px solid var(--rule-strong);
+            border-radius: 24px;
+            padding: clamp(32px, 5vw, 48px);
+            box-shadow: 0 40px 80px -30px rgba(12,15,18,0.6);
+            transform: translateY(12px) scale(0.98);
+            opacity: 0;
+            transition: transform 0.45s var(--ease), opacity 0.35s var(--ease);
+        }
+        .popup-backdrop[data-open="true"] .popup-card {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        .popup-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--court) 0%, var(--citron) 100%);
+            border-radius: 24px 24px 0 0;
+        }
+        .popup-close {
+            position: absolute;
+            top: 16px; right: 16px;
+            width: 36px; height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--ink-mute);
+            background: transparent;
+            font-family: var(--f-mono);
+            font-size: 18px;
+            line-height: 1;
+            transition: background 0.2s var(--ease), color 0.2s var(--ease);
+        }
+        .popup-close:hover { background: var(--paper-2); color: var(--ink); }
+        .popup-card .kicker { margin-bottom: 18px; }
+        .popup-card h2 {
+            font-family: var(--f-display);
+            font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+            font-weight: 500;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            font-variation-settings: "opsz" 72, "SOFT" 30;
+            margin-bottom: 14px;
+            max-width: 18ch;
+        }
+        .popup-card h2 em {
+            font-style: italic;
+            color: var(--court);
+            font-weight: 400;
+            font-variation-settings: "opsz" 72, "SOFT" 100;
+        }
+        .popup-card p.lede-sm {
+            color: var(--ink-soft);
+            font-size: 15.5px;
+            line-height: 1.55;
+            margin-bottom: 24px;
+            max-width: 40ch;
+        }
+        .popup-card .waitlist-form { max-width: none; }
+        .popup-card .waitlist-note { margin-top: 14px; }
     </style>
 </head>
 <body>
@@ -975,6 +1065,27 @@
             <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
         </a>
     </aside>
+
+    <!-- Waitlist popup (lazy — 10s delay, shown at most once per browser) -->
+    <div class="popup-backdrop" id="waitlistPopup" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-hidden="true">
+        <div class="popup-card">
+            <button type="button" class="popup-close" id="popupClose" aria-label="Close">✕</button>
+            <span class="kicker no-rule">One-time invite</span>
+            <h2 id="popupTitle">First in line, <em>at launch.</em></h2>
+            <p class="lede-sm">PickleCue is coming soon to iOS. Join the waitlist and we&rsquo;ll email you the day it goes live. One email. No spam.</p>
+            <form class="waitlist-form" id="waitlistFormPopup" novalidate aria-label="Join the waitlist (popup)">
+                <label class="kicker" for="waitlist-email-popup" style="position:absolute;left:-9999px;">Email address</label>
+                <input type="email" id="waitlist-email-popup" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgPopup" />
+                <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true" />
+                <button type="submit" class="btn-pill" data-track="cta_click" data-cta="popup_waitlist">
+                    Notify me
+                    <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+                </button>
+            </form>
+            <p class="waitlist-msg" id="waitlistMsgPopup" role="status" aria-live="polite"></p>
+            <p class="waitlist-note">Unsubscribe in one click. Privacy policy applies.</p>
+        </div>
+    </div>
 
     <main id="main">
 
@@ -1352,6 +1463,77 @@
 
             wire('waitlistForm', 'waitlistMsg');
             wire('waitlistFormClose', 'waitlistMsgClose');
+            wire('waitlistFormPopup', 'waitlistMsgPopup');
+        })();
+
+        /* ---- Waitlist popup: show once, after 10s, never again for this browser ---- */
+        (function () {
+            var STORAGE_KEY = 'pc_waitlist_popup_v1';
+            var DELAY_MS    = 10000;
+
+            function seen() {
+                try { return !!localStorage.getItem(STORAGE_KEY); }
+                catch (_) { return false; }
+            }
+            function markSeen(reason) {
+                try { localStorage.setItem(STORAGE_KEY, reason || 'closed'); }
+                catch (_) { /* private mode — popup simply won't persist its dismissal */ }
+            }
+
+            var popup = document.getElementById('waitlistPopup');
+            if (!popup) return;
+            var closeBtn  = document.getElementById('popupClose');
+            var popupForm = document.getElementById('waitlistFormPopup');
+            var popupMsg  = document.getElementById('waitlistMsgPopup');
+            var popupInput = document.getElementById('waitlist-email-popup');
+            var lastFocus = null;
+
+            function open() {
+                if (seen()) return;
+                // Don't interrupt if user is already at a waitlist form
+                if (location.hash === '#waitlist') return;
+                lastFocus = document.activeElement;
+                popup.setAttribute('data-open', 'true');
+                popup.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                window.track('waitlist_popup_shown', {});
+                // Delay focus so the entrance animation isn't jarring
+                setTimeout(function () { popupInput.focus(); }, 350);
+            }
+            function close(reason) {
+                popup.setAttribute('data-open', 'false');
+                popup.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                markSeen(reason || 'closed');
+                if (reason) window.track('waitlist_popup_closed', { reason: reason });
+                if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (_) {} }
+            }
+
+            // Dismiss paths
+            closeBtn.addEventListener('click', function () { close('x'); });
+            popup.addEventListener('click', function (e) {
+                if (e.target === popup) close('backdrop');
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && popup.getAttribute('data-open') === 'true') close('esc');
+            });
+
+            // On successful submit, also mark seen + auto-close after a beat
+            popupForm.addEventListener('submit', function () {
+                var observer = new MutationObserver(function () {
+                    if (popupMsg.classList.contains('is-success')) {
+                        markSeen('signed_up');
+                        setTimeout(function () { close(null); }, 1800);
+                        observer.disconnect();
+                    }
+                });
+                observer.observe(popupMsg, { attributes: true, attributeFilter: ['class'] });
+            });
+
+            // Schedule
+            if (!seen()) {
+                setTimeout(open, DELAY_MS);
+            }
         })();
     </script>
 </body>
