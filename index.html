@@ -1030,14 +1030,31 @@
             text-transform: uppercase;
             color: var(--ink-mute);
         }
-        .colophon-base .setinfo {
-            display: inline-flex; align-items: center; gap: 10px;
+        .made-by {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 0;
+            color: var(--ink-mute);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-family: var(--f-mono);
+            font-size: 11px;
+            transition: color 0.2s var(--ease), opacity 0.2s var(--ease);
+            opacity: 0.9;
         }
-        .colophon-base .setinfo::before {
-            content: "◆";
-            color: var(--citron);
-            font-size: 8px;
+        .made-by:hover { color: var(--ink); opacity: 1; }
+        .made-by img {
+            height: 22px; width: auto;
+            border-radius: 4px;
+            transition: transform 0.2s var(--ease);
         }
+        .made-by:hover img { transform: scale(1.08); }
+        /* On dark mode the logo art is black — invert + soften */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .made-by img { filter: invert(1) brightness(1.05); opacity: 0.9; }
+        }
+        :root[data-theme="dark"] .made-by img { filter: invert(1) brightness(1.05); opacity: 0.9; }
 
         /* =====================================================================
            Responsive — tablet & mobile
@@ -1732,8 +1749,11 @@
             </div>
             <div class="colophon-base">
                 <span>&copy; 2026 PickleCue. All rights reserved.</span>
-                <span class="setinfo">Set in Fraunces, Instrument Sans &amp; JetBrains Mono.</span>
-                <span>Made for pickleball · iOS coming soon</span>
+                <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="made_by_anstelias" aria-label="Made by Anstelias — anstelias.com">
+                    <span>Made by</span>
+                    <img src="images/anstelias-logo.png" alt="Anstelias" width="64" height="22">
+                </a>
+                <span>iOS coming soon</span>
             </div>
         </div>
     </footer>

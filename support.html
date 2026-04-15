@@ -158,8 +158,14 @@
         .social-icon:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
         .social-icon svg { width: 15px; height: 15px; fill: currentColor; }
         .colophon-base { padding-top: 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
-        .colophon-base .setinfo { display: inline-flex; align-items: center; gap: 10px; }
-        .colophon-base .setinfo::before { content: "◆"; color: var(--citron); font-size: 8px; }
+        .made-by { display: inline-flex; align-items: center; gap: 10px; border: 0; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-family: var(--f-mono); font-size: 11px; transition: color 0.2s var(--ease), opacity 0.2s var(--ease); opacity: 0.9; }
+        .made-by:hover { color: var(--ink); opacity: 1; }
+        .made-by img { height: 22px; width: auto; border-radius: 4px; transition: transform 0.2s var(--ease); }
+        .made-by:hover img { transform: scale(1.08); }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .made-by img { filter: invert(1) brightness(1.05); opacity: 0.9; }
+        }
+        :root[data-theme="dark"] .made-by img { filter: invert(1) brightness(1.05); opacity: 0.9; }
 
         /* Theme — system dark auto, [data-theme="dark"] forces dark */
         @media (prefers-color-scheme: dark) {
@@ -369,7 +375,10 @@
             </div>
             <div class="colophon-base">
                 <span>&copy; 2026 PickleCue. All rights reserved.</span>
-                <span class="setinfo">Set in Fraunces, Instrument Sans &amp; JetBrains Mono.</span>
+                <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="made_by_anstelias" aria-label="Made by Anstelias — anstelias.com">
+                    <span>Made by</span>
+                    <img src="images/anstelias-logo.png" alt="Anstelias" width="64" height="22">
+                </a>
                 <span>iOS coming soon</span>
             </div>
         </div>
