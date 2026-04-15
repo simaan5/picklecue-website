@@ -35,7 +35,7 @@
         @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-        body { font-family: var(--f-body); font-size: 17px; line-height: 1.65; color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        body { font-family: var(--f-body); font-size: 17px; line-height: 1.65; color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; overflow-x: hidden;  font-feature-settings: "cv11"; }
         body::before { content: ""; position: fixed; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(12,15,18,0.035) 1px, transparent 0); background-size: 3px 3px; pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
         img, svg { display: block; max-width: 100%; }
         a { color: var(--court); text-decoration: none; border-bottom: 1px solid currentColor; transition: color 0.2s var(--ease); }
