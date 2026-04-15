@@ -1,264 +1,273 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme: light;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Terms of Service - PickleCue</title>
+    <title>Terms of Service · PickleCue</title>
+    <meta name="description" content="The terms that govern your use of the PickleCue iOS app and website.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.picklecue.com/terms.html">
+
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-    <meta name="theme-color" content="#0A1628">
+    <meta name="theme-color" content="#F4F1EA">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
+
     <style>
         :root {
-            --emerald: #10B981;
-            --emerald-light: #34D399;
-            --emerald-dark: #047857;
-            --midnight: #0A1628;
-            --white: #FFFFFF;
-            --cloud: #F1F5F9;
-            --muted: #94A3B8;
+            --paper: #F4F1EA; --paper-2: #EAE5D9;
+            --ink: #0C0F12; --ink-soft: #3D4248; --ink-mute: #6E7278;
+            --rule: rgba(12,15,18,0.12); --rule-strong: rgba(12,15,18,0.28);
+            --court: #2E5E4E; --citron: #C8E04E; --clay: #D3511A;
+            --f-display: 'Fraunces', Georgia, serif;
+            --f-body: 'Instrument Sans', -apple-system, sans-serif;
+            --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+            --page-max: 1240px; --gutter: clamp(20px, 4vw, 44px);
         }
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body { font-family: var(--f-body); font-size: 17px; line-height: 1.65; color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        body::before { content: ""; position: fixed; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(12,15,18,0.035) 1px, transparent 0); background-size: 3px 3px; pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
+        img, svg { display: block; max-width: 100%; }
+        a { color: var(--court); text-decoration: none; border-bottom: 1px solid currentColor; transition: color 0.2s var(--ease); }
+        a:hover { color: var(--ink); }
+        :focus-visible { outline: 2px solid var(--court); outline-offset: 3px; border-radius: 2px; }
+
+        .skip-link { position: absolute; top: -100%; left: 12px; padding: 10px 18px; background: var(--ink); color: var(--paper); font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; z-index: 1000; border-radius: 0 0 8px 8px; transition: top 0.2s var(--ease); border: 0; }
+        .skip-link:focus { top: 0; }
+        .page { position: relative; z-index: 1; max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
+
+        h1, h2, h3 { font-family: var(--f-display); font-weight: 500; color: var(--ink); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; font-variation-settings: "opsz" 72, "SOFT" 30; }
+        .kicker { font-family: var(--f-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); display: inline-flex; align-items: center; gap: 10px; }
+        .kicker::before { content: ""; width: 28px; height: 1px; background: var(--rule-strong); }
+
+        .masthead { position: sticky; top: 0; background: rgba(244,241,234,0.88); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); border-bottom: 1px solid var(--rule); z-index: 100; }
+        .masthead-row { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 24px; }
+        .masthead-logo { display: inline-flex; align-items: baseline; gap: 10px; font-family: var(--f-display); font-size: 1.35rem; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); border: 0; font-variation-settings: "opsz" 36, "SOFT" 30; }
+        .masthead-logo img { width: 30px; height: 30px; border-radius: 6px; align-self: center; }
+        .masthead-nav { display: flex; gap: 32px; list-style: none; }
+        .masthead-nav a { font-size: 14px; color: var(--ink-soft); border: 0; padding: 6px 0; }
+        .masthead-nav a:hover { color: var(--ink); }
+        .btn-pill { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px 10px 20px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; border: 0 !important; border-radius: 100px; min-height: 44px; line-height: 1; transition: background 0.2s var(--ease), transform 0.15s var(--ease); }
+        .btn-pill:hover { background: var(--court); transform: translateY(-1px); color: var(--paper); }
+        .btn-pill svg { width: 12px; height: 12px; }
+
+        .article-head { padding: clamp(56px, 8vw, 120px) 0 clamp(40px, 5vw, 72px); border-bottom: 1px solid var(--rule); }
+        .article-head h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); margin-top: 24px; font-variation-settings: "opsz" 144, "SOFT" 20; max-width: 20ch; }
+        .article-head h1 em { font-style: italic; color: var(--court); font-weight: 400; font-variation-settings: "opsz" 144, "SOFT" 100; }
+        .article-meta { display: flex; gap: 32px; flex-wrap: wrap; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--rule); font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+        .article-meta b { color: var(--ink); font-weight: 500; margin-right: 8px; }
+
+        .article-layout { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); padding: clamp(48px, 6vw, 88px) 0 clamp(64px, 8vw, 112px); }
+        .article-toc { position: sticky; top: 100px; align-self: start; font-family: var(--f-mono); font-size: 12px; }
+        .article-toc h4 { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 18px; }
+        .article-toc ul { list-style: none; display: flex; flex-direction: column; gap: 10px; border-left: 1px solid var(--rule); padding-left: 16px; }
+        .article-toc li a { display: block; font-size: 13px; padding: 3px 0; color: var(--ink-soft); border: 0; font-family: var(--f-body); text-transform: none; line-height: 1.4; }
+        .article-toc li a:hover { color: var(--ink); }
+
+        .article-body { max-width: 72ch; font-size: 17.5px; line-height: 1.7; }
+        .article-body > * + * { margin-top: 1em; }
+        .article-body p strong { color: var(--ink); font-weight: 600; }
+        .article-body h2 { font-size: clamp(1.6rem, 2.6vw, 2.1rem); margin-top: 2.4em; margin-bottom: 0.2em; padding-bottom: 0.5em; border-bottom: 1px solid var(--rule); font-weight: 500; }
+        .article-body h2:first-child { margin-top: 0; }
+        .article-body ul, .article-body ol { padding-left: 1.3em; display: flex; flex-direction: column; gap: 10px; }
+        .article-body li { line-height: 1.65; }
+        .article-body li::marker { color: var(--court); }
+        .article-body .back { display: inline-flex; align-items: center; gap: 10px; margin-top: 3em; font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; border: 0; color: var(--ink); }
+        .article-body .back::before { content: "←"; transition: transform 0.2s var(--ease); }
+        .article-body .back:hover::before { transform: translateX(-4px); }
+
+        .colophon { background: var(--paper); padding: clamp(48px, 7vw, 96px) 0 40px; border-top: 1px solid var(--rule); }
+        .colophon-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 56px; border-bottom: 1px solid var(--rule); }
+        .colophon-brand h3 { font-family: var(--f-display); font-size: 1.5rem; font-weight: 600; margin-bottom: 14px; font-variation-settings: "opsz" 48, "SOFT" 30; }
+        .colophon-brand p { font-size: 14px; color: var(--ink-soft); max-width: 36ch; line-height: 1.55; }
+        .colophon h4 { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 18px; }
+        .colophon ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .colophon li a { font-size: 14.5px; color: var(--ink-soft); border: 0; }
+        .colophon li a:hover { color: var(--ink); }
+        .socials { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+        .social-icon { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--rule-strong); border-radius: 50%; color: var(--ink-soft); transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease); }
+        .social-icon:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+        .social-icon svg { width: 15px; height: 15px; fill: currentColor; }
+        .colophon-base { padding-top: 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+        .colophon-base .setinfo { display: inline-flex; align-items: center; gap: 10px; }
+        .colophon-base .setinfo::before { content: "◆"; color: var(--citron); font-size: 8px; }
+
+        @media (max-width: 960px) {
+            .article-layout { grid-template-columns: 1fr; }
+            .article-toc { position: static; }
+            .colophon-grid { grid-template-columns: 1fr 1fr; }
         }
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 1rem;
-            line-height: 1.8;
-            background: var(--midnight);
-            color: var(--cloud);
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-        }
-        nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px 20px 0;
-        }
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--white);
-            font-family: 'Sora', sans-serif;
-            font-weight: 700;
-            font-size: 1.15rem;
-        }
-        .nav-logo img {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-        }
-        .nav-back {
-            display: inline-block;
-            padding: 8px 18px;
-            background: var(--emerald-dark);
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-        .nav-back:hover {
-            background: var(--emerald);
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--emerald-dark);
-        }
-        h1 {
-            font-family: 'Sora', sans-serif;
-            color: var(--emerald-light);
-            font-size: 2rem;
-            font-weight: 700;
-        }
-        .updated {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin-top: 10px;
-        }
-        h2 {
-            font-family: 'Sora', sans-serif;
-            color: var(--emerald-light);
-            margin-top: 40px;
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-        h3 {
-            font-family: 'Sora', sans-serif;
-            color: var(--emerald);
-            margin-top: 25px;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        p, li {
-            margin-bottom: 15px;
-            color: var(--cloud);
-        }
-        ul {
-            margin-left: 25px;
-            margin-bottom: 20px;
-        }
-        a {
-            color: var(--emerald-light);
-            text-decoration: none;
-        }
-        a:hover {
-            color: var(--emerald);
-        }
-        strong {
-            color: var(--white);
-        }
-        em {
-            color: var(--muted);
-        }
-        footer {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            text-align: center;
-            color: var(--muted);
-            font-size: 0.85rem;
-        }
-        .footer-links {
-            margin-top: 8px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .footer-links a {
-            color: var(--muted);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .footer-links a:hover {
-            color: var(--emerald-light);
-        }
-        @media (max-width: 480px) {
-            h1 { font-size: 1.6rem; }
-            h2 { font-size: 1.2rem; }
-            nav { padding: 16px 16px 0; }
-            .container { padding: 30px 16px; }
+        @media (max-width: 720px) {
+            .masthead-nav { display: none; }
+            .masthead .btn-pill { padding: 10px 14px; font-size: 13px; }
+            .colophon-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 40px; }
         }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="/" class="nav-logo">
-            <img src="images/app-icon-120.png" alt="PickleCue" width="36" height="36">
-            PickleCue
-        </a>
-        <a href="/" class="nav-back">Back to Home</a>
-    </nav>
+    <a href="#main" class="skip-link">Skip to content</a>
 
-    <div class="container">
-        <header>
-            <h1>Terms of Service</h1>
-            <p class="updated">Last Updated: March 27, 2026</p>
-        </header>
+    <header class="masthead" role="banner">
+        <div class="page masthead-row">
+            <a href="/" class="masthead-logo" aria-label="PickleCue home">
+                <img src="images/app-icon-120.png" alt="" width="30" height="30" aria-hidden="true">
+                <span>PickleCue</span>
+            </a>
+            <nav aria-label="Primary">
+                <ul class="masthead-nav">
+                    <li><a href="/#pitch">What it is</a></li>
+                    <li><a href="/#features">Features</a></li>
+                    <li><a href="demo/">Demo</a></li>
+                    <li><a href="support.html">Support</a></li>
+                </ul>
+            </nav>
+            <a href="/#waitlist" class="btn-pill" data-track="cta_click" data-cta="terms_nav_waitlist">
+                Get early access
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+            </a>
+        </div>
+    </header>
 
-        <main>
-            <h2>1. Acceptance of Terms</h2>
-            <p>By downloading, installing, or using the PickleCue mobile application ("App"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the App.</p>
-            <p>We may update these Terms from time to time. Continued use of the App after changes are posted constitutes acceptance of the updated Terms.</p>
+    <main id="main">
+        <section class="article-head">
+            <div class="page">
+                <span class="kicker">Legal · Document 02</span>
+                <h1>Terms of <em>service.</em></h1>
+                <div class="article-meta">
+                    <span><b>Effective</b>March 27, 2026</span>
+                    <span><b>Applies to</b>iOS app &amp; website</span>
+                    <span><b>Contact</b><a href="mailto:legal@picklecue.com">legal@picklecue.com</a></span>
+                </div>
+            </div>
+        </section>
 
-            <h2>2. Use of the App</h2>
-            <ul>
-                <li>You must create an account to use most features of PickleCue.</li>
-                <li>You must be at least <strong>13 years of age</strong> to create an account.</li>
-                <li>You agree to provide <strong>accurate and truthful information</strong> when creating your account and maintaining your profile.</li>
-                <li>Each person may maintain only <strong>one account</strong>. Creating multiple accounts to evade blocks, bans, or other restrictions is prohibited.</li>
-                <li>You are responsible for maintaining the security of your account credentials.</li>
-            </ul>
+        <div class="page article-layout">
+            <nav class="article-toc" aria-label="Table of contents">
+                <h4>Sections</h4>
+                <ul>
+                    <li><a href="#acceptance">1. Acceptance</a></li>
+                    <li><a href="#use">2. Use of the App</a></li>
+                    <li><a href="#content">3. User Content</a></li>
+                    <li><a href="#prohibited">4. Prohibited Conduct</a></li>
+                    <li><a href="#subs">5. Subscriptions</a></li>
+                    <li><a href="#ip">6. Intellectual Property</a></li>
+                    <li><a href="#privacy">7. Privacy</a></li>
+                    <li><a href="#termination">8. Termination</a></li>
+                    <li><a href="#warranty">9. Disclaimer of Warranties</a></li>
+                    <li><a href="#liability">10. Limitation of Liability</a></li>
+                    <li><a href="#changes">11. Changes to Terms</a></li>
+                    <li><a href="#contact">12. Contact</a></li>
+                </ul>
+            </nav>
 
-            <h2>3. User Content</h2>
-            <p>You retain ownership of content you create and share through PickleCue, including messages, reviews, game descriptions, and profile information ("User Content").</p>
-            <p>By posting User Content, you grant PickleCue a <strong>non-exclusive, worldwide, royalty-free license</strong> to display, distribute, and use your content within the App and related services for the purpose of operating and improving the platform.</p>
-            <p>We reserve the right to <strong>moderate, review, and remove</strong> any User Content that violates these Terms or our Community Guidelines, at our sole discretion and without prior notice.</p>
+            <article class="article-body">
+                <h2 id="acceptance">1. Acceptance of Terms</h2>
+                <p>By downloading, installing, or using the PickleCue mobile application (&ldquo;App&rdquo;), you agree to be bound by these Terms of Service (&ldquo;Terms&rdquo;). If you do not agree to these Terms, do not use the App.</p>
+                <p>We may update these Terms from time to time. Continued use of the App after changes are posted constitutes acceptance of the updated Terms.</p>
 
-            <h2>4. Prohibited Conduct</h2>
-            <p>You agree not to:</p>
-            <ul>
-                <li><strong>Harass, bully, threaten, or intimidate</strong> other users</li>
-                <li><strong>Impersonate</strong> another person or misrepresent your identity</li>
-                <li><strong>Spam</strong> other users with unsolicited messages, invitations, or promotions</li>
-                <li><strong>Reverse engineer, decompile, or disassemble</strong> any part of the App</li>
-                <li>Use the App for any <strong>illegal activity</strong> or to facilitate illegal conduct</li>
-                <li>Attempt to <strong>circumvent safety features</strong> including blocks, mutes, or account restrictions</li>
-                <li>Upload or transmit malware, viruses, or other harmful code</li>
-                <li>Scrape, crawl, or collect data from the App through automated means</li>
-            </ul>
+                <h2 id="use">2. Use of the App</h2>
+                <ul>
+                    <li>You must create an account to use most features of PickleCue.</li>
+                    <li>You must be at least <strong>13 years of age</strong> to create an account.</li>
+                    <li>You agree to provide <strong>accurate and truthful information</strong> when creating your account and maintaining your profile.</li>
+                    <li>Each person may maintain only <strong>one account</strong>. Creating multiple accounts to evade blocks, bans, or other restrictions is prohibited.</li>
+                    <li>You are responsible for maintaining the security of your account credentials.</li>
+                </ul>
 
-            <h2>5. Subscriptions &amp; Payments</h2>
-            <p>PickleCue offers optional premium subscriptions ("PickleCue Pro") with additional features.</p>
-            <ul>
-                <li>Subscriptions are processed through <strong>Apple's App Store</strong> using StoreKit 2. All billing and payment processing is handled by Apple.</li>
-                <li>Subscriptions automatically renew at the end of each billing period unless you cancel before the renewal date.</li>
-                <li>You can <strong>cancel your subscription at any time</strong> through your Apple ID settings. Cancellation takes effect at the end of the current billing period.</li>
-                <li>Refunds are managed by <strong>Apple</strong> in accordance with their refund policies. To request a refund, visit <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a>.</li>
-                <li>We do not store or process any payment information directly.</li>
-            </ul>
+                <h2 id="content">3. User Content</h2>
+                <p>You retain ownership of content you create and share through PickleCue, including messages, reviews, game descriptions, and profile information (&ldquo;User Content&rdquo;).</p>
+                <p>By posting User Content, you grant PickleCue a <strong>non-exclusive, worldwide, royalty-free license</strong> to display, distribute, and use your content within the App and related services for the purpose of operating and improving the platform.</p>
+                <p>We reserve the right to <strong>moderate, review, and remove</strong> any User Content that violates these Terms or our Community Guidelines, at our sole discretion and without prior notice.</p>
 
-            <h2>6. Intellectual Property</h2>
-            <p>The PickleCue name, logo, design, and underlying code are the intellectual property of PickleCue and are protected by applicable copyright and trademark laws.</p>
-            <p>Court location data is sourced in part from <strong>OpenStreetMap</strong> contributors and is used under the <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener">Open Data Commons Open Database License (ODbL)</a>. OpenStreetMap contributors.</p>
-            <p><strong>DUPR</strong> is a registered trademark of Dream Up Partners, LLC. PickleCue's DUPR integration is provided through their official API and does not imply endorsement or affiliation.</p>
+                <h2 id="prohibited">4. Prohibited Conduct</h2>
+                <p>You agree not to:</p>
+                <ul>
+                    <li><strong>Harass, bully, threaten, or intimidate</strong> other users.</li>
+                    <li><strong>Impersonate</strong> another person or misrepresent your identity.</li>
+                    <li><strong>Spam</strong> other users with unsolicited messages, invitations, or promotions.</li>
+                    <li><strong>Reverse engineer, decompile, or disassemble</strong> any part of the App.</li>
+                    <li>Use the App for any <strong>illegal activity</strong> or to facilitate illegal conduct.</li>
+                    <li>Attempt to <strong>circumvent safety features</strong> including blocks, mutes, or account restrictions.</li>
+                    <li>Upload or transmit malware, viruses, or other harmful code.</li>
+                    <li>Scrape, crawl, or collect data from the App through automated means.</li>
+                </ul>
 
-            <h2>7. Privacy</h2>
-            <p>Your use of PickleCue is also governed by our <a href="privacy.html">Privacy Policy</a>, which describes how we collect, use, and protect your personal information. By using the App, you consent to the practices described in our Privacy Policy.</p>
+                <h2 id="subs">5. Subscriptions &amp; Payments</h2>
+                <p>PickleCue offers optional premium subscriptions (&ldquo;PickleCue Pro&rdquo;) with additional features.</p>
+                <ul>
+                    <li>Subscriptions are processed through <strong>Apple&rsquo;s App Store</strong> using StoreKit 2. All billing and payment processing is handled by Apple.</li>
+                    <li>Subscriptions automatically renew at the end of each billing period unless you cancel before the renewal date.</li>
+                    <li>You can <strong>cancel your subscription at any time</strong> through your Apple ID settings. Cancellation takes effect at the end of the current billing period.</li>
+                    <li>Refunds are managed by <strong>Apple</strong> in accordance with their refund policies. To request a refund, visit <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a>.</li>
+                    <li>We do not store or process any payment information directly.</li>
+                </ul>
 
-            <h2>8. Account Termination</h2>
-            <p>We reserve the right to <strong>suspend or terminate your account</strong> at any time if you violate these Terms, engage in prohibited conduct, or if we determine that your use poses a risk to other users or the platform.</p>
-            <p>You may <strong>delete your account at any time</strong> from the Settings screen within the App. Upon deletion, your profile and associated data will be removed in accordance with our Privacy Policy.</p>
+                <h2 id="ip">6. Intellectual Property</h2>
+                <p>The PickleCue name, logo, design, and underlying code are the intellectual property of PickleCue and are protected by applicable copyright and trademark laws.</p>
+                <p>Court location data is sourced in part from <strong>OpenStreetMap</strong> contributors and is used under the <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener">Open Data Commons Open Database License (ODbL)</a>.</p>
+                <p><strong>DUPR</strong> is a registered trademark of Dream Up Partners, LLC. PickleCue&rsquo;s DUPR integration is provided through their official API and does not imply endorsement or affiliation.</p>
 
-            <h2>9. Disclaimer of Warranties</h2>
-            <p>PickleCue is provided on an <strong>"as is" and "as available"</strong> basis without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
-            <p>We do not guarantee that the App will be uninterrupted, error-free, or free of harmful components. We do not warrant the accuracy or completeness of court data, user-generated content, or any other information provided through the App.</p>
+                <h2 id="privacy">7. Privacy</h2>
+                <p>Your use of PickleCue is also governed by our <a href="privacy.html">Privacy Policy</a>, which describes how we collect, use, and protect your personal information. By using the App, you consent to the practices described in our Privacy Policy.</p>
 
-            <h2>10. Limitation of Liability</h2>
-            <p>To the maximum extent permitted by applicable law, PickleCue and its officers, directors, employees, and agents shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the App, including but not limited to loss of data, personal injury, or property damage.</p>
-            <p>In no event shall our total liability exceed the amount you paid to us in the twelve (12) months preceding the event giving rise to the claim.</p>
+                <h2 id="termination">8. Account Termination</h2>
+                <p>We reserve the right to <strong>suspend or terminate your account</strong> at any time if you violate these Terms, engage in prohibited conduct, or if we determine that your use poses a risk to other users or the platform.</p>
+                <p>You may <strong>delete your account at any time</strong> from the Settings screen within the App. Upon deletion, your profile and associated data will be removed in accordance with our Privacy Policy.</p>
 
-            <h2>11. Changes to Terms</h2>
-            <p>We may revise these Terms at any time by posting the updated version within the App or on our website. The "Last Updated" date at the top of this page indicates when the most recent changes were made. Your continued use of the App after any changes constitutes your acceptance of the revised Terms.</p>
+                <h2 id="warranty">9. Disclaimer of Warranties</h2>
+                <p>PickleCue is provided on an <strong>&ldquo;as is&rdquo; and &ldquo;as available&rdquo;</strong> basis without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+                <p>We do not guarantee that the App will be uninterrupted, error-free, or free of harmful components. We do not warrant the accuracy or completeness of court data, user-generated content, or any other information provided through the App.</p>
 
-            <h2>12. Contact Us</h2>
-            <p>If you have questions about these Terms, please contact us:</p>
-            <ul>
-                <li><strong>Legal inquiries:</strong> <a href="mailto:legal@picklecue.com">legal@picklecue.com</a></li>
-                <li><strong>General support:</strong> <a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
-            </ul>
-        </main>
-    </div>
+                <h2 id="liability">10. Limitation of Liability</h2>
+                <p>To the maximum extent permitted by applicable law, PickleCue and its officers, directors, employees, and agents shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the App, including but not limited to loss of data, personal injury, or property damage.</p>
+                <p>In no event shall our total liability exceed the amount you paid to us in the twelve (12) months preceding the event giving rise to the claim.</p>
 
-    <footer>
-        <p>&copy; 2026 PickleCue. All rights reserved.</p>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms of Service</a>
-            <a href="support.html">Support</a>
+                <h2 id="changes">11. Changes to Terms</h2>
+                <p>We may revise these Terms at any time by posting the updated version within the App or on our website. The &ldquo;Effective&rdquo; date at the top of this page indicates when the most recent changes were made. Your continued use of the App after any changes constitutes your acceptance of the revised Terms.</p>
+
+                <h2 id="contact">12. Contact</h2>
+                <p>If you have questions about these Terms, please contact us:</p>
+                <ul>
+                    <li><strong>Legal inquiries</strong>: <a href="mailto:legal@picklecue.com">legal@picklecue.com</a></li>
+                    <li><strong>General support</strong>: <a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
+                </ul>
+
+                <a href="/" class="back">Back to PickleCue</a>
+            </article>
+        </div>
+    </main>
+
+    <footer class="colophon" role="contentinfo">
+        <div class="page">
+            <div class="colophon-grid">
+                <div class="colophon-brand">
+                    <h3>PickleCue</h3>
+                    <p>A calm, premium companion for the way pickleball is actually played. Built by players, for players. Coming to iOS.</p>
+                    <h4 style="margin-top: 28px;">Follow</h4>
+                    <div class="socials">
+                        <a href="https://www.instagram.com/picklecueapp" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
+                        <a href="https://www.tiktok.com/@picklecue" class="social-icon" aria-label="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M448 209.9a210.1 210.1 0 01-122.8-39.3v178.8A162.6 162.6 0 11185 188.3v89.9a74.6 74.6 0 1052.2 71.2V0h88a121 121 0 00122.8 121.3z"/></svg></a>
+                        <a href="https://www.youtube.com/@picklecue" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 576 512" aria-hidden="true"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg></a>
+                        <a href="https://x.com/PickleCueApp" class="social-icon" aria-label="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg></a>
+                    </div>
+                </div>
+                <div><h4>The app</h4><ul><li><a href="/#features">Features</a></li><li><a href="demo/">Demo</a></li><li><a href="/#waitlist">Waitlist</a></li></ul></div>
+                <div><h4>Support</h4><ul><li><a href="support.html">Help</a></li><li><a href="mailto:support@picklecue.com">Contact</a></li><li><a href="mailto:feedback@picklecue.com">Feedback</a></li></ul></div>
+                <div><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="mailto:privacy@picklecue.com">Data requests</a></li></ul></div>
+            </div>
+            <div class="colophon-base">
+                <span>&copy; 2026 PickleCue. All rights reserved.</span>
+                <span class="setinfo">Set in Fraunces, Instrument Sans &amp; JetBrains Mono.</span>
+                <span>iOS coming soon</span>
+            </div>
         </div>
     </footer>
 </body>

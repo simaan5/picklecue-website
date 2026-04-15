@@ -1,277 +1,507 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme: light;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Privacy Policy - PickleCue</title>
+    <title>Privacy Policy · PickleCue</title>
+
+    <meta name="description" content="How PickleCue collects, uses, stores, and protects your information across the website waitlist and the iOS app.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.picklecue.com/privacy.html">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#F4F1EA">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
-    <meta name="theme-color" content="#0A1628">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
+
     <style>
         :root {
-            --emerald: #10B981;
-            --emerald-light: #34D399;
-            --emerald-dark: #047857;
-            --midnight: #0A1628;
-            --slate: #1E293B;
-            --white: #FFFFFF;
-            --cloud: #F1F5F9;
-            --muted: #94A3B8;
+            --paper:      #F4F1EA;
+            --paper-2:    #EAE5D9;
+            --ink:        #0C0F12;
+            --ink-soft:   #3D4248;
+            --ink-mute:   #6E7278;
+            --rule:       rgba(12,15,18,0.12);
+            --rule-strong:rgba(12,15,18,0.28);
+            --court:      #2E5E4E;
+            --citron:     #C8E04E;
+            --clay:       #D3511A;
+            --f-display:  'Fraunces', Georgia, serif;
+            --f-body:     'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --f-mono:     'JetBrains Mono', ui-monospace, Menlo, monospace;
+            --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
+            --page-max:   1240px;
+            --gutter:     clamp(20px, 4vw, 44px);
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
         body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.8;
-            background: var(--midnight);
-            color: var(--cloud);
-            min-height: 100vh;
+            font-family: var(--f-body);
+            font-size: 17px; line-height: 1.65;
+            color: var(--ink); background: var(--paper);
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        body::before {
+            content: ""; position: fixed; inset: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(12,15,18,0.035) 1px, transparent 0);
+            background-size: 3px 3px;
+            pointer-events: none; z-index: 0; mix-blend-mode: multiply;
         }
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--emerald-dark);
+        img, svg { display: block; max-width: 100%; }
+        a { color: var(--court); text-decoration: none; border-bottom: 1px solid currentColor; transition: color 0.2s var(--ease); }
+        a:hover { color: var(--ink); }
+        :focus-visible { outline: 2px solid var(--court); outline-offset: 3px; border-radius: 2px; }
+        button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+        .skip-link {
+            position: absolute; top: -100%; left: 12px;
+            padding: 10px 18px; background: var(--ink); color: var(--paper);
+            font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase;
+            z-index: 1000; border-radius: 0 0 8px 8px; transition: top 0.2s var(--ease);
         }
-        .logo {
-            font-size: 40px;
-            margin-bottom: 10px;
+        .skip-link:focus { top: 0; }
+
+        .page { position: relative; z-index: 1; max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
+
+        h1, h2, h3, h4 {
+            font-family: var(--f-display); font-weight: 500; color: var(--ink);
+            line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance;
+            font-variation-settings: "opsz" 72, "SOFT" 30;
         }
-        h1 {
-            font-family: 'Sora', sans-serif;
-            color: var(--emerald-light);
-            font-size: 2rem;
+
+        .kicker {
+            font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+            letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute);
+            display: inline-flex; align-items: center; gap: 10px;
         }
-        .updated {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin-top: 10px;
+        .kicker::before { content: ""; width: 28px; height: 1px; background: var(--rule-strong); }
+
+        /* ================ Masthead ================ */
+        .masthead {
+            position: sticky; top: 0;
+            background: rgba(244, 241, 234, 0.88);
+            backdrop-filter: saturate(1.4) blur(14px);
+            -webkit-backdrop-filter: saturate(1.4) blur(14px);
+            border-bottom: 1px solid var(--rule); z-index: 100;
         }
-        h2 {
-            font-family: 'Sora', sans-serif;
-            color: var(--emerald-light);
+        .masthead-row { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 24px; }
+        .masthead-logo { display: inline-flex; align-items: baseline; gap: 10px; font-family: var(--f-display); font-size: 1.35rem; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); border: 0; font-variation-settings: "opsz" 36, "SOFT" 30; }
+        .masthead-logo:hover { color: var(--ink); }
+        .masthead-logo img { width: 30px; height: 30px; border-radius: 6px; align-self: center; }
+        .masthead-nav { display: flex; gap: 32px; list-style: none; }
+        .masthead-nav a { font-size: 14px; color: var(--ink-soft); border: 0; padding: 6px 0; }
+        .masthead-nav a:hover { color: var(--ink); }
+        .btn-pill {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 10px 18px 10px 20px; background: var(--ink); color: var(--paper);
+            font-size: 14px; font-weight: 500; border: 0 !important; border-radius: 100px;
+            min-height: 44px; line-height: 1; transition: background 0.2s var(--ease), transform 0.15s var(--ease);
+        }
+        .btn-pill:hover { background: var(--court); transform: translateY(-1px); color: var(--paper); }
+        .btn-pill svg { width: 12px; height: 12px; }
+
+        /* ================ Article layout ================ */
+        .article-head {
+            padding: clamp(56px, 8vw, 120px) 0 clamp(40px, 5vw, 72px);
+            border-bottom: 1px solid var(--rule);
+        }
+        .article-head h1 {
+            font-size: clamp(2.4rem, 6vw, 4.4rem);
+            font-weight: 500;
+            margin-top: 24px;
+            letter-spacing: -0.025em;
+            font-variation-settings: "opsz" 144, "SOFT" 20;
+            max-width: 18ch;
+        }
+        .article-head h1 em { font-style: italic; color: var(--court); font-weight: 400; font-variation-settings: "opsz" 144, "SOFT" 100; }
+        .article-meta {
+            display: flex; gap: 32px; flex-wrap: wrap;
             margin-top: 40px;
-            margin-bottom: 15px;
-            font-size: 1.4rem;
+            padding-top: 24px;
+            border-top: 1px solid var(--rule);
+            font-family: var(--f-mono); font-size: 11px;
+            letter-spacing: 0.16em; text-transform: uppercase;
+            color: var(--ink-mute);
         }
-        h3 {
-            color: var(--emerald);
-            margin-top: 25px;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
+        .article-meta b { color: var(--ink); font-weight: 500; margin-right: 8px; }
+
+        .article-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+            gap: clamp(32px, 5vw, 80px);
+            padding: clamp(48px, 6vw, 88px) 0 clamp(64px, 8vw, 112px);
         }
-        p, li {
-            margin-bottom: 15px;
-            color: var(--cloud);
+        .article-toc {
+            position: sticky; top: 100px;
+            align-self: start;
+            font-family: var(--f-mono); font-size: 12px;
+            letter-spacing: 0.04em;
         }
-        ul {
-            margin-left: 25px;
-            margin-bottom: 20px;
+        .article-toc h4 {
+            font-family: var(--f-mono); font-size: 11px;
+            font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--ink-mute); margin-bottom: 18px;
         }
-        a {
-            color: var(--emerald-light);
+        .article-toc ul { list-style: none; display: flex; flex-direction: column; gap: 10px; border-left: 1px solid var(--rule); padding-left: 16px; }
+        .article-toc li a {
+            display: block; font-size: 13px; padding: 3px 0;
+            color: var(--ink-soft); border: 0; letter-spacing: 0;
+            font-family: var(--f-body); text-transform: none;
+            line-height: 1.4;
         }
-        a:hover {
-            color: var(--emerald);
-        }
-        strong {
-            color: var(--white);
-        }
-        em {
-            color: var(--muted);
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 40px;
-            padding: 10px 20px;
-            background: var(--emerald-dark);
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 8px;
+        .article-toc li a:hover { color: var(--ink); }
+
+        .article-body { max-width: 72ch; font-size: 17.5px; line-height: 1.7; }
+        .article-body > * + * { margin-top: 1em; }
+        .article-body p strong { color: var(--ink); font-weight: 600; }
+        .article-body p em { color: var(--ink-mute); font-style: italic; }
+        .article-body h2 {
+            font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+            margin-top: 2.4em; margin-bottom: 0.2em;
+            padding-bottom: 0.5em;
+            border-bottom: 1px solid var(--rule);
             font-weight: 500;
         }
-        .back-link:hover {
-            background: var(--emerald);
+        .article-body h2:first-child { margin-top: 0; }
+        .article-body h3 {
+            font-size: 1.2rem;
+            margin-top: 1.8em; margin-bottom: 0.2em;
+            font-family: var(--f-body); font-weight: 600;
+            letter-spacing: 0; text-transform: none;
+        }
+        .article-body ul, .article-body ol {
+            padding-left: 1.3em;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .article-body li { line-height: 1.65; }
+        .article-body li::marker { color: var(--court); }
+        .article-body .callout {
+            padding: 22px 26px;
+            background: var(--paper-2);
+            border-left: 3px solid var(--court);
+            border-radius: 0 6px 6px 0;
+            font-family: var(--f-display);
+            font-style: italic; font-size: 1.08rem; line-height: 1.55;
+            color: var(--ink);
+            font-variation-settings: "opsz" 24, "SOFT" 100;
+        }
+        .article-body .callout strong { font-style: normal; display: block; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--court); margin-bottom: 8px; font-weight: 500; }
+        .article-body .back {
+            display: inline-flex; align-items: center; gap: 10px;
+            margin-top: 3em;
+            font-family: var(--f-mono); font-size: 12px;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            border: 0; color: var(--ink);
+        }
+        .article-body .back::before { content: "←"; transition: transform 0.2s var(--ease); }
+        .article-body .back:hover::before { transform: translateX(-4px); }
+
+        /* ================ Colophon ================ */
+        .colophon { background: var(--paper); padding: clamp(48px, 7vw, 96px) 0 40px; border-top: 1px solid var(--rule); }
+        .colophon-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 56px; border-bottom: 1px solid var(--rule); }
+        .colophon-brand h3 { font-family: var(--f-display); font-size: 1.5rem; font-weight: 600; margin-bottom: 14px; font-variation-settings: "opsz" 48, "SOFT" 30; }
+        .colophon-brand p { font-size: 14px; color: var(--ink-soft); max-width: 36ch; line-height: 1.55; }
+        .colophon h4 { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 18px; }
+        .colophon ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .colophon li a { font-size: 14.5px; color: var(--ink-soft); border: 0; }
+        .colophon li a:hover { color: var(--ink); }
+        .socials { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+        .social-icon { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--rule-strong); border-radius: 50%; color: var(--ink-soft); transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease); }
+        .social-icon:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+        .social-icon svg { width: 15px; height: 15px; fill: currentColor; }
+        .colophon-base { padding-top: 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+        .colophon-base .setinfo { display: inline-flex; align-items: center; gap: 10px; }
+        .colophon-base .setinfo::before { content: "◆"; color: var(--citron); font-size: 8px; }
+
+        /* ================ Responsive ================ */
+        @media (max-width: 960px) {
+            .article-layout { grid-template-columns: 1fr; }
+            .article-toc { position: static; }
+            .colophon-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 720px) {
+            .masthead-nav { display: none; }
+            .masthead .btn-pill { padding: 10px 14px; font-size: 13px; }
+            .colophon-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 40px; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <div class="logo">🏓</div>
-        <h1>Privacy Policy</h1>
-        <p class="updated">Last Updated: April 15, 2026</p>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <header class="masthead" role="banner">
+        <div class="page masthead-row">
+            <a href="/" class="masthead-logo" aria-label="PickleCue home">
+                <img src="images/app-icon-120.png" alt="" width="30" height="30" aria-hidden="true">
+                <span>PickleCue</span>
+            </a>
+            <nav aria-label="Primary">
+                <ul class="masthead-nav">
+                    <li><a href="/#pitch">What it is</a></li>
+                    <li><a href="/#features">Features</a></li>
+                    <li><a href="demo/">Demo</a></li>
+                    <li><a href="support.html">Support</a></li>
+                </ul>
+            </nav>
+            <a href="/#waitlist" class="btn-pill" data-track="cta_click" data-cta="privacy_nav_waitlist">
+                Get early access
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+            </a>
+        </div>
     </header>
 
-    <main>
-        <p>PickleCue ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website (<a href="https://www.picklecue.com">www.picklecue.com</a>) and mobile application.</p>
+    <main id="main">
+        <section class="article-head">
+            <div class="page">
+                <span class="kicker">Legal · Document 01</span>
+                <h1>Privacy, <em>by design.</em></h1>
+                <div class="article-meta">
+                    <span><b>Effective</b>April 15, 2026</span>
+                    <span><b>Jurisdiction</b>United States · GDPR · CCPA</span>
+                    <span><b>Contact</b><a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a></span>
+                </div>
+            </div>
+        </section>
 
-        <h2>Pre-Launch Website Waitlist</h2>
-        <p>Before PickleCue is available on the App Store, visitors to our website can join a waitlist to be notified at launch. If you submit the waitlist form, we collect and process the following:</p>
-        <ul>
-            <li><strong>Email address</strong> — the only personal data we store. Used solely to send you a one-time launch notification and, at most, one or two pre-launch updates.</li>
-            <li><strong>Source tag</strong> — a static label indicating the signup came from the website (no personalization).</li>
-            <li><strong>Signup timestamp</strong> — when you submitted the form.</li>
-        </ul>
-        <p>We do <strong>not</strong> collect your IP address, browser user-agent string, referrer URL, device fingerprint, cookies, or any advertising identifier in connection with the waitlist form.</p>
-        <p><strong>Storage &amp; access.</strong> Waitlist emails are stored in our Supabase database with row-level security that prevents anyone but authorized staff from reading the list. Transmission is encrypted over TLS 1.3.</p>
-        <p><strong>Retention.</strong> We delete waitlist emails within 90 days after we send you the launch notification, unless you have converted the address into a PickleCue account (in which case it becomes part of your account data and is governed by the rest of this policy).</p>
-        <p><strong>Unsubscribe / deletion.</strong> Every email we send will include an unsubscribe link. You may also request immediate deletion at any time by emailing <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a> — no account or justification required.</p>
-        <p><strong>Sharing.</strong> Waitlist emails are never sold, rented, or shared with advertisers. The only third parties that process these emails are Supabase (storage) and, at launch, the email service we use to send the notification (currently undecided; this policy will be updated with the provider name before any email is sent).</p>
+        <div class="page article-layout">
+            <nav class="article-toc" aria-label="Table of contents">
+                <h4>Sections</h4>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#waitlist">Pre-launch waitlist</a></li>
+                    <li><a href="#collect">What the app collects</a></li>
+                    <li><a href="#use">How we use it</a></li>
+                    <li><a href="#third-parties">Third-party services</a></li>
+                    <li><a href="#not-collect">What we don&rsquo;t do</a></li>
+                    <li><a href="#security">Storage &amp; security</a></li>
+                    <li><a href="#sharing">Data sharing</a></li>
+                    <li><a href="#controls">Your privacy controls</a></li>
+                    <li><a href="#location">Location data</a></li>
+                    <li><a href="#retention">Retention &amp; deletion</a></li>
+                    <li><a href="#children">Children&rsquo;s privacy</a></li>
+                    <li><a href="#rights">Your rights</a></li>
+                    <li><a href="#changes">Changes to this policy</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
 
-        <h2>Information We Collect (Mobile App)</h2>
+            <article class="article-body">
+                <h2 id="overview">Overview</h2>
+                <p>PickleCue (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information across our website (<a href="https://www.picklecue.com">www.picklecue.com</a>) and our iOS mobile application.</p>
+                <div class="callout">
+                    <strong>Plain-English summary</strong>
+                    We collect the minimum we need to run the product. We never sell your data. You can delete your account, and the waitlist, at any time — no questions asked.
+                </div>
 
-        <h3>Information You Provide</h3>
-        <ul>
-            <li><strong>Account Information</strong>: Email address, display name, username, and profile photo or emoji avatar</li>
-            <li><strong>Profile Data</strong>: Skill level, bio, play preferences, and home city you choose to share</li>
-            <li><strong>Game Data</strong>: Games you create, join, or participate in, including RSVPs and waitlists</li>
-            <li><strong>Match History</strong>: Scores, match results, and performance statistics you log</li>
-            <li><strong>Communications</strong>: Messages sent through in-app chat, including direct messages and league chat</li>
-            <li><strong>Social Connections</strong>: Friends you add and interact with</li>
-            <li><strong>Court Reviews</strong>: Ratings, reviews, and comments you submit for pickleball courts</li>
-            <li><strong>Reports</strong>: Information you provide when reporting other users or content</li>
-        </ul>
+                <h2 id="waitlist">Pre-Launch Website Waitlist</h2>
+                <p>Before PickleCue is available on the App Store, visitors to our website can join a waitlist to be notified at launch. If you submit the waitlist form, we collect and process the following:</p>
+                <ul>
+                    <li><strong>Email address</strong> — the only personal data we store. Used solely to send you a one-time launch notification and, at most, one or two pre-launch updates.</li>
+                    <li><strong>Source tag</strong> — a static label indicating the signup came from the website (no personalization).</li>
+                    <li><strong>Signup timestamp</strong> — when you submitted the form.</li>
+                </ul>
+                <p>We do <strong>not</strong> collect your IP address, browser user-agent string, referrer URL, device fingerprint, cookies, or any advertising identifier in connection with the waitlist form.</p>
+                <h3>Storage &amp; access</h3>
+                <p>Waitlist emails are stored in our Supabase database with row-level security that prevents anyone but authorized staff from reading the list. Transmission is encrypted over TLS 1.3.</p>
+                <h3>Retention</h3>
+                <p>We delete waitlist emails within 90 days after we send you the launch notification, unless you have converted the address into a PickleCue account (in which case it becomes part of your account data and is governed by the rest of this policy).</p>
+                <h3>Unsubscribe / deletion</h3>
+                <p>Every email we send will include an unsubscribe link. You may also request immediate deletion at any time by emailing <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a> — no account or justification required.</p>
+                <h3>Sharing</h3>
+                <p>Waitlist emails are never sold, rented, or shared with advertisers. The only third parties that process these emails are Supabase (storage) and, at launch, the email service we use to send the notification (currently undecided; this policy will be updated with the provider name before any email is sent).</p>
 
-        <h3>Information Collected Automatically</h3>
-        <ul>
-            <li><strong>Device Information</strong>: Device type and operating system version</li>
-            <li><strong>Location Data</strong>: With your permission, we collect precise location (latitude and longitude) to show nearby courts, games, leagues, and weather conditions</li>
-            <li><strong>Usage Data</strong>: App interactions, features used, search queries, and session duration</li>
-            <li><strong>Crash and Performance Data</strong>: Error logs, crash reports, and performance metrics to improve stability</li>
-        </ul>
+                <h2 id="collect">Information the App Collects</h2>
+                <h3>Information you provide</h3>
+                <ul>
+                    <li><strong>Account Information</strong>: Email address, display name, username, and profile photo or emoji avatar.</li>
+                    <li><strong>Profile Data</strong>: Skill level, bio, play preferences, and home city you choose to share.</li>
+                    <li><strong>Game Data</strong>: Games you create, join, or participate in, including RSVPs and waitlists.</li>
+                    <li><strong>Match History</strong>: Scores, match results, and performance statistics you log.</li>
+                    <li><strong>Communications</strong>: Messages sent through in-app chat, including direct messages and league chat.</li>
+                    <li><strong>Social Connections</strong>: Friends you add and interact with.</li>
+                    <li><strong>Court Reviews</strong>: Ratings, reviews, and comments you submit for pickleball courts.</li>
+                    <li><strong>Reports</strong>: Information you provide when reporting other users or content.</li>
+                </ul>
+                <h3>Information collected automatically</h3>
+                <ul>
+                    <li><strong>Device Information</strong>: Device type and operating system version.</li>
+                    <li><strong>Location Data</strong>: With your permission, we collect precise location (latitude and longitude) to show nearby courts, games, leagues, and weather conditions.</li>
+                    <li><strong>Usage Data</strong>: App interactions, features used, search queries, and session duration.</li>
+                    <li><strong>Crash and Performance Data</strong>: Error logs, crash reports, and performance metrics to improve stability.</li>
+                </ul>
+                <h3>Optional integrations</h3>
+                <ul>
+                    <li><strong>HealthKit</strong>: If you choose to connect HealthKit, we can read calories, heart rate, steps, and workout data, and write pickleball workout summaries. <strong>HealthKit data is processed entirely on your device and is never transmitted to our servers or any third party.</strong></li>
+                    <li><strong>DUPR</strong>: If you choose to link your DUPR account, we facilitate match result exchanges with DUPR for rating calculations. See &ldquo;Third-Party Services&rdquo; below.</li>
+                </ul>
 
-        <h3>Optional Integrations</h3>
-        <ul>
-            <li><strong>HealthKit</strong>: If you choose to connect HealthKit, we can read calories, heart rate, steps, and workout data, and write pickleball workout summaries. <strong>HealthKit data is processed entirely on your device and is never transmitted to our servers or any third party.</strong></li>
-            <li><strong>DUPR</strong>: If you choose to link your DUPR account, we facilitate match result exchanges with DUPR for rating calculations. See "Third-Party Services" below.</li>
-        </ul>
+                <h2 id="use">How We Use Your Information</h2>
+                <ul>
+                    <li>Provide and maintain the PickleCue service.</li>
+                    <li>Match you with nearby players, courts, and games.</li>
+                    <li>Enable messaging between players.</li>
+                    <li>Calculate and display match statistics.</li>
+                    <li>Display weather conditions at courts.</li>
+                    <li>Process and manage your subscription.</li>
+                    <li>Send notifications about games and messages.</li>
+                    <li>Analyze usage patterns to improve the app (only with your consent via App Tracking Transparency).</li>
+                    <li>Detect and prevent fraud, abuse, and objectionable content.</li>
+                    <li>Comply with legal obligations.</li>
+                </ul>
 
-        <h2>How We Use Your Information</h2>
-        <p>We use collected information to:</p>
-        <ul>
-            <li>Provide and maintain the PickleCue service</li>
-            <li>Match you with nearby players, courts, and games</li>
-            <li>Enable messaging between players</li>
-            <li>Calculate and display match statistics</li>
-            <li>Display weather conditions at courts</li>
-            <li>Process and manage your subscription</li>
-            <li>Send notifications about games and messages</li>
-            <li>Analyze usage patterns to improve the app (only with your consent via App Tracking Transparency)</li>
-            <li>Detect and prevent fraud, abuse, and objectionable content</li>
-            <li>Comply with legal obligations</li>
-        </ul>
+                <h2 id="third-parties">Third-Party Services</h2>
+                <ul>
+                    <li><strong>Supabase</strong>: Backend database and authentication. Stores user accounts, profiles, games, matches, messaging, and subscription data. Encrypted in transit and at rest with row-level security policies.</li>
+                    <li><strong>Mixpanel</strong>: Analytics platform. Receives anonymized usage data linked only to your UUID. No email, name, or personally identifiable information is sent. Only active if you authorize tracking via App Tracking Transparency.</li>
+                    <li><strong>Sentry</strong>: Crash reporting. Receives anonymized error data linked only to your UUID. No email, name, or personally identifiable information is sent.</li>
+                    <li><strong>DUPR</strong>: If you link your DUPR account, we share match results (player DUPR IDs and scores) for rating updates. Tokens stored server-side only. You can unlink anytime.</li>
+                    <li><strong>Apple WeatherKit</strong>: Location coordinates sent for court weather conditions. No user identity included.</li>
+                    <li><strong>Apple Push Notification Service</strong>: Device token stored for push notifications. Disable anytime in iOS Settings.</li>
+                </ul>
 
-        <h2>Third-Party Services</h2>
-        <p>We use the following services to operate PickleCue:</p>
-        <ul>
-            <li><strong>Supabase</strong>: Backend database and authentication. Stores user accounts, profiles, games, matches, messaging, and subscription data. Encrypted in transit and at rest with row-level security policies.</li>
-            <li><strong>Mixpanel</strong>: Analytics platform. Receives anonymized usage data linked only to your UUID. No email, name, or personally identifiable information is sent. Only active if you authorize tracking via App Tracking Transparency.</li>
-            <li><strong>Sentry</strong>: Crash reporting. Receives anonymized error data linked only to your UUID. No email, name, or personally identifiable information is sent.</li>
-            <li><strong>DUPR</strong>: If you link your DUPR account, we share match results (player DUPR IDs and scores) for rating updates. Tokens stored server-side only. You can unlink anytime.</li>
-            <li><strong>Apple WeatherKit</strong>: Location coordinates sent for court weather conditions. No user identity included.</li>
-            <li><strong>Apple Push Notification Service</strong>: Device token stored for push notifications. Disable anytime in iOS Settings.</li>
-        </ul>
+                <h2 id="not-collect">What We Do NOT Do</h2>
+                <ul>
+                    <li>We do <strong>not</strong> sell your personal data to third parties.</li>
+                    <li>We do <strong>not</strong> use your data for advertising purposes.</li>
+                    <li>We do <strong>not</strong> track you across other apps or websites.</li>
+                    <li>We do <strong>not</strong> share your location with advertisers.</li>
+                    <li>We do <strong>not</strong> transmit HealthKit data off your device.</li>
+                </ul>
 
-        <h2>Information We Do NOT Collect</h2>
-        <ul>
-            <li>We do <strong>NOT</strong> sell your personal data to third parties</li>
-            <li>We do <strong>NOT</strong> use your data for advertising purposes</li>
-            <li>We do <strong>NOT</strong> track you across other apps or websites</li>
-            <li>We do <strong>NOT</strong> share your location with advertisers</li>
-            <li>We do <strong>NOT</strong> transmit HealthKit data off your device</li>
-        </ul>
+                <h2 id="security">Storage &amp; Security</h2>
+                <p>Your data is stored securely using Supabase, which provides:</p>
+                <ul>
+                    <li>Encrypted data transmission (TLS 1.3).</li>
+                    <li>Encrypted data at rest (AES-256).</li>
+                    <li>Row-level security policies.</li>
+                    <li>SOC 2 Type II compliance.</li>
+                </ul>
+                <p>Authentication is handled through secure tokens. We never store your password directly in the app.</p>
 
-        <h2>Data Storage &amp; Security</h2>
-        <p>Your data is stored securely using Supabase, which provides:</p>
-        <ul>
-            <li>Encrypted data transmission (TLS 1.3)</li>
-            <li>Encrypted data at rest (AES-256)</li>
-            <li>Row-level security policies</li>
-            <li>SOC 2 Type II compliance</li>
-        </ul>
-        <p>Authentication is handled through secure tokens. We never store your password directly in the app.</p>
+                <h2 id="sharing">Data Sharing</h2>
+                <p>We do not sell your personal information. We may share information with:</p>
+                <ul>
+                    <li><strong>Other Users</strong>: Your profile, match history, and reputation are visible to other players based on your privacy settings.</li>
+                    <li><strong>Service Providers</strong>: The third-party services listed above.</li>
+                    <li><strong>Legal Requirements</strong>: When required by law or to protect our rights.</li>
+                    <li><strong>Business Transfers</strong>: If we merge with or are acquired by another company.</li>
+                </ul>
 
-        <h2>Data Sharing</h2>
-        <p>We do not sell your personal information. We may share information with:</p>
-        <ul>
-            <li><strong>Other Users</strong>: Your profile, match history, and reputation are visible to other players based on your privacy settings</li>
-            <li><strong>Service Providers</strong>: The third-party services listed above</li>
-            <li><strong>Legal Requirements</strong>: When required by law or to protect our rights</li>
-            <li><strong>Business Transfers</strong>: If we merge with or are acquired by another company</li>
-        </ul>
+                <h2 id="controls">Your Privacy Controls</h2>
+                <p>In the app&rsquo;s Settings &gt; Privacy, you can:</p>
+                <ul>
+                    <li><strong>Set Profile Visibility</strong>: Choose between Everyone, Friends Only, or Private.</li>
+                    <li>Control who can see your location (exact, city-level, or hidden).</li>
+                    <li>Hide your activity status.</li>
+                    <li>Hide your match history.</li>
+                    <li>Control search discoverability.</li>
+                    <li>Block messages from non-friends.</li>
+                    <li>Block and mute other users.</li>
+                </ul>
+                <p>When you enable Private mode, other users see a &ldquo;This Profile is Private&rdquo; notice. Your display name and avatar remain visible for identification in games.</p>
 
-        <h2>Your Privacy Controls</h2>
-        <p>In the app's Settings &gt; Privacy, you can:</p>
-        <ul>
-            <li><strong>Set Profile Visibility</strong>: Choose between Everyone, Friends Only, or Private</li>
-            <li>Control who can see your location (exact, city-level, or hidden)</li>
-            <li>Hide your activity status</li>
-            <li>Hide your match history</li>
-            <li>Control search discoverability</li>
-            <li>Block messages from non-friends</li>
-            <li>Block and mute other users</li>
-        </ul>
-        <p>When you enable Private mode, other users see a "This Profile is Private" notice. Your display name and avatar remain visible for identification in games.</p>
+                <h2 id="location">Location Data</h2>
+                <p>We collect location data only when:</p>
+                <ul>
+                    <li>You grant permission in iOS Settings.</li>
+                    <li>The app is actively in use (not in background).</li>
+                </ul>
+                <p>You can revoke location permission at any time in iOS Settings.</p>
 
-        <h2>Location Data</h2>
-        <p>We collect location data only when:</p>
-        <ul>
-            <li>You grant permission in iOS Settings</li>
-            <li>The app is actively in use (not in background)</li>
-        </ul>
-        <p>You can revoke location permission at any time in iOS Settings.</p>
+                <h2 id="retention">Data Retention &amp; Deletion</h2>
+                <p>We retain your data while your account is active. You can delete your account at any time through the app (Settings &gt; Delete Account) or by emailing <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a>.</p>
+                <p>When you delete your account:</p>
+                <ul>
+                    <li>Your profile is immediately removed.</li>
+                    <li>Your match history is anonymized.</li>
+                    <li>Your messages are deleted.</li>
+                    <li>Your push notification tokens are deactivated.</li>
+                    <li>Your data is purged from our systems within 30 days.</li>
+                </ul>
+                <p>Analytics data (Mixpanel) is retained for up to 12 months. Crash data (Sentry) is retained for up to 90 days.</p>
 
-        <h2>Data Retention &amp; Deletion</h2>
-        <p>We retain your data while your account is active. You can delete your account at any time through the app (Settings &gt; Delete Account) or by emailing privacy@picklecue.com.</p>
-        <p>When you delete your account:</p>
-        <ul>
-            <li>Your profile is immediately removed</li>
-            <li>Your match history is anonymized</li>
-            <li>Your messages are deleted</li>
-            <li>Your push notification tokens are deactivated</li>
-            <li>Your data is purged from our systems within 30 days</li>
-        </ul>
-        <p>Analytics data (Mixpanel) is retained for up to 12 months. Crash data (Sentry) is retained for up to 90 days.</p>
+                <h2 id="children">Children&rsquo;s Privacy</h2>
+                <p>PickleCue is not intended for children under 13. We do not knowingly collect information from children under 13. If you believe a child has provided us with personal information, please contact us.</p>
 
-        <h2>Children's Privacy</h2>
-        <p>PickleCue is not intended for children under 13. We do not knowingly collect information from children under 13. If you believe a child has provided us with personal information, please contact us.</p>
+                <h2 id="rights">Your Rights</h2>
+                <p>Depending on your location, you may have rights to:</p>
+                <ul>
+                    <li>Access your personal data.</li>
+                    <li>Correct inaccurate data.</li>
+                    <li>Delete your data.</li>
+                    <li>Export your data (Pro subscribers can export in CSV or JSON format).</li>
+                    <li>Opt out of analytics (deny App Tracking Transparency, or change in iOS Settings &gt; Privacy &amp; Security &gt; Tracking).</li>
+                </ul>
+                <p>We do not sell personal information. California residents have additional rights under CCPA. To exercise these rights, contact us at the email below.</p>
 
-        <h2>Your Rights</h2>
-        <p>Depending on your location, you may have rights to:</p>
-        <ul>
-            <li>Access your personal data</li>
-            <li>Correct inaccurate data</li>
-            <li>Delete your data</li>
-            <li>Export your data (Pro subscribers can export in CSV or JSON format)</li>
-            <li>Opt out of analytics (deny App Tracking Transparency, or change in iOS Settings &gt; Privacy &amp; Security &gt; Tracking)</li>
-        </ul>
-        <p>We do not sell personal information. California residents have additional rights under CCPA. To exercise these rights, contact us at the email below.</p>
+                <h2 id="changes">Changes to This Policy</h2>
+                <p>We may update this Privacy Policy periodically. We will notify you of material changes through the app or via email.</p>
 
-        <h2>Changes to This Policy</h2>
-        <p>We may update this Privacy Policy periodically. We will notify you of material changes through the app or via email.</p>
+                <h2 id="contact">Contact</h2>
+                <ul>
+                    <li><strong>Privacy</strong>: <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a></li>
+                    <li><strong>Support</strong>: <a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
+                </ul>
 
-        <h2>Contact Us</h2>
-        <p>For privacy questions or concerns:</p>
-        <ul>
-            <li><strong>Privacy</strong>: <a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a></li>
-            <li><strong>Support</strong>: <a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
-        </ul>
+                <p><em>This privacy policy is effective as of April 15, 2026.</em></p>
 
-        <p><em>This privacy policy is effective as of April 15, 2026.</em></p>
-
-        <a href="/" class="back-link">&larr; Back to PickleCue</a>
+                <a href="/" class="back">Back to PickleCue</a>
+            </article>
+        </div>
     </main>
-</div>
+
+    <footer class="colophon" role="contentinfo">
+        <div class="page">
+            <div class="colophon-grid">
+                <div class="colophon-brand">
+                    <h3>PickleCue</h3>
+                    <p>A calm, premium companion for the way pickleball is actually played. Built by players, for players. Coming to iOS.</p>
+                    <h4 style="margin-top: 28px;">Follow</h4>
+                    <div class="socials">
+                        <a href="https://www.instagram.com/picklecueapp" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
+                        <a href="https://www.tiktok.com/@picklecue" class="social-icon" aria-label="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M448 209.9a210.1 210.1 0 01-122.8-39.3v178.8A162.6 162.6 0 11185 188.3v89.9a74.6 74.6 0 1052.2 71.2V0h88a121 121 0 00122.8 121.3z"/></svg></a>
+                        <a href="https://www.youtube.com/@picklecue" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 576 512" aria-hidden="true"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg></a>
+                        <a href="https://x.com/PickleCueApp" class="social-icon" aria-label="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg></a>
+                    </div>
+                </div>
+                <div>
+                    <h4>The app</h4>
+                    <ul>
+                        <li><a href="/#features">Features</a></li>
+                        <li><a href="demo/">Demo</a></li>
+                        <li><a href="/#waitlist">Waitlist</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="support.html">Help</a></li>
+                        <li><a href="mailto:support@picklecue.com">Contact</a></li>
+                        <li><a href="mailto:feedback@picklecue.com">Feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy</a></li>
+                        <li><a href="terms.html">Terms</a></li>
+                        <li><a href="mailto:privacy@picklecue.com">Data requests</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="colophon-base">
+                <span>&copy; 2026 PickleCue. All rights reserved.</span>
+                <span class="setinfo">Set in Fraunces, Instrument Sans &amp; JetBrains Mono.</span>
+                <span>iOS coming soon</span>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

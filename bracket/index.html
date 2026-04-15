@@ -1,163 +1,222 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme: light;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Opening PickleCue&hellip;</title>
     <meta name="robots" content="noindex,follow">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <meta name="theme-color" content="#F4F1EA">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --paper: #F4F1EA; --paper-2: #EAE5D9;
+            --ink: #0C0F12; --ink-soft: #3D4248; --ink-mute: #6E7278;
+            --rule: rgba(12,15,18,0.12); --rule-strong: rgba(12,15,18,0.28);
+            --court: #2E5E4E; --citron: #C8E04E;
+            --f-display: 'Fraunces', Georgia, serif;
+            --f-body: 'Instrument Sans', -apple-system, sans-serif;
+            --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
         }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1B4332 0%, #2D5A45 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-family: var(--f-body); color: var(--ink);
+            background: var(--paper);
+            display: flex; align-items: center; justify-content: center;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+            position: relative;
         }
-        .container {
-            background: white;
+        body::before {
+            content: ""; position: fixed; inset: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(12,15,18,0.035) 1px, transparent 0);
+            background-size: 3px 3px;
+            pointer-events: none; z-index: 0; mix-blend-mode: multiply;
+        }
+        body::after {
+            content: ""; position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 80% 20%, rgba(200, 224, 78, 0.15), transparent 60%),
+                radial-gradient(ellipse 60% 50% at 20% 90%, rgba(46, 94, 78, 0.12), transparent 50%);
+            pointer-events: none; z-index: 0;
+        }
+
+        .card {
+            position: relative; z-index: 1;
+            max-width: 480px; width: 100%;
+            background: var(--paper);
+            border: 1px solid var(--rule-strong);
             border-radius: 20px;
-            padding: 40px;
-            max-width: 400px;
+            padding: clamp(28px, 6vw, 48px);
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px -30px rgba(12,15,18,0.3);
         }
-        .logo {
-            width: 80px;
-            height: 80px;
+
+        .kicker {
+            font-family: var(--f-mono); font-size: 11px; font-weight: 500;
+            letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute);
+            display: inline-flex; align-items: center; gap: 8px;
             margin-bottom: 20px;
         }
+        .kicker .dot {
+            width: 8px; height: 8px; border-radius: 50%; background: var(--citron);
+            box-shadow: 0 0 0 3px rgba(200, 224, 78, 0.3);
+            animation: pulse 1.6s var(--ease) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(200,224,78,0.3); }
+            50%      { box-shadow: 0 0 0 7px rgba(200,224,78,0.05); }
+        }
+
         h1 {
-            color: #1B4332;
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-family: var(--f-display);
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 14px;
+            font-variation-settings: "opsz" 72, "SOFT" 30;
         }
+        h1 em { font-style: italic; color: var(--court); font-weight: 400; font-variation-settings: "opsz" 72, "SOFT" 100; }
         .status {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 30px;
+            font-family: var(--f-mono);
+            font-size: 12px; letter-spacing: 0.1em;
+            color: var(--ink-soft);
+            margin-bottom: 28px;
         }
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e0e0e0;
-            border-top-color: #22C55E;
+
+        .loader {
+            position: relative;
+            width: 44px; height: 44px;
+            margin: 8px auto 28px;
+        }
+        .loader::before, .loader::after {
+            content: ""; position: absolute; inset: 0;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .loader::before {
+            border: 1.5px solid var(--rule-strong);
         }
-        .fallback {
-            display: none;
-            margin-top: 20px;
+        .loader::after {
+            border: 1.5px solid transparent;
+            border-top-color: var(--court);
+            animation: spin 0.9s linear infinite;
         }
-        .fallback.show {
-            display: block;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .fallback { display: none; margin-top: 8px; }
+        .fallback.show { display: block; animation: fadeIn 0.4s var(--ease) both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         .fallback p {
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            color: var(--ink-mute);
+            margin-bottom: 16px;
+            line-height: 1.55;
+            font-size: 14.5px;
         }
+
         .btn {
-            display: inline-block;
-            background: #22C55E;
-            color: white;
-            padding: 14px 28px;
-            border-radius: 12px;
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px 22px;
+            border-radius: 100px;
+            font-family: var(--f-body); font-size: 15px; font-weight: 500;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            margin: 5px;
+            min-height: 48px;
+            transition: background 0.2s var(--ease), color 0.2s var(--ease), transform 0.15s var(--ease), border-color 0.2s var(--ease);
         }
-        .btn:hover {
-            background: #1ea34d;
-        }
+        .btn + .btn { margin-top: 10px; }
+        .btn-primary { background: var(--ink); color: var(--paper); }
+        .btn-primary:hover { background: var(--court); transform: translateY(-1px); }
         .btn-secondary {
-            background: #1B4332;
+            background: transparent; color: var(--ink);
+            border: 1px solid var(--rule-strong);
         }
-        .btn-secondary:hover {
-            background: #2D5A45;
+        .btn-secondary:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+        .divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 20px 0 16px;
+            font-family: var(--f-mono); font-size: 10px;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--ink-mute);
         }
+        .divider::before, .divider::after {
+            content: ""; flex: 1; height: 1px; background: var(--rule);
+        }
+
+        .brand {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-family: var(--f-display); font-weight: 600;
+            font-size: 1.1rem; color: var(--ink);
+            margin-bottom: 6px;
+            font-variation-settings: "opsz" 36, "SOFT" 30;
+        }
+        .brand img { width: 28px; height: 28px; border-radius: 6px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="45" fill="#1B4332"/>
-            <circle cx="50" cy="50" r="35" fill="none" stroke="#22C55E" stroke-width="3"/>
-            <circle cx="50" cy="50" r="25" fill="none" stroke="#22C55E" stroke-width="2"/>
-            <circle cx="50" cy="50" r="15" fill="none" stroke="#22C55E" stroke-width="2"/>
-            <circle cx="50" cy="50" r="5" fill="#22C55E"/>
-        </svg>
+    <div class="card" role="status" aria-live="polite">
+        <div class="brand">
+            <img src="/images/app-icon-120.png" alt="" width="28" height="28" aria-hidden="true">
+            PickleCue
+        </div>
+        <span class="kicker"><span class="dot"></span> Opening bracket</span>
+        <h1 id="headline">Taking you to the <em>app</em>&hellip;</h1>
+        <p class="status" id="status">Launching PickleCue on this device</p>
 
-        <h1>PickleCue</h1>
-        <p class="status" id="status">Opening bracket in app...</p>
-
-        <div class="spinner" id="spinner"></div>
+        <div class="loader" id="spinner" aria-hidden="true"></div>
 
         <div class="fallback" id="fallback">
-            <p>If the app didn&rsquo;t open automatically, tap below:</p>
-            <a href="#" class="btn" id="openAppBtn">Open in PickleCue</a>
-            <br><br>
-            <p>Don&rsquo;t have PickleCue yet? It&rsquo;s coming soon to iOS.</p>
+            <div class="divider">If the app didn&rsquo;t open</div>
+            <a href="#" class="btn btn-primary" id="openAppBtn">Open in PickleCue</a>
+            <div class="divider">Don&rsquo;t have the app</div>
+            <p>PickleCue is coming soon to iOS. Join the waitlist and we&rsquo;ll email you at launch.</p>
             <a href="https://www.picklecue.com/#waitlist" class="btn btn-secondary">Join the waitlist</a>
         </div>
     </div>
 
     <script>
-        // Get bracket ID from URL path
-        // URL format: https://www.picklecue.com/bracket/?id=UUID
-        // or: https://www.picklecue.com/bracket/UUID
         function getBracketId() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const idParam = urlParams.get('id');
+            var urlParams = new URLSearchParams(window.location.search);
+            var idParam = urlParams.get('id');
             if (idParam) return idParam;
-
-            // Try path-based format
-            const pathParts = window.location.pathname.split('/').filter(p => p);
-            if (pathParts.length >= 2 && pathParts[0] === 'bracket') {
-                return pathParts[1];
-            }
+            var pathParts = window.location.pathname.split('/').filter(function (p) { return p; });
+            if (pathParts.length >= 2 && pathParts[0] === 'bracket') return pathParts[1];
             return null;
         }
 
-        const bracketId = getBracketId();
-        const appUrl = bracketId ? `picklecue://bracket/${bracketId}` : 'picklecue://';
-
-        // Set the button href
+        var bracketId = getBracketId();
+        var appUrl    = bracketId ? 'picklecue://bracket/' + bracketId : 'picklecue://';
         document.getElementById('openAppBtn').href = appUrl;
 
-        // Try to open the app immediately
         if (bracketId) {
-            // Use an iframe for smoother redirect (doesn't show error if app not installed)
-            const iframe = document.createElement('iframe');
+            var iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             iframe.src = appUrl;
             document.body.appendChild(iframe);
+            setTimeout(function () { window.location.href = appUrl; }, 100);
 
-            // Also try direct location change after small delay
-            setTimeout(() => {
-                window.location.href = appUrl;
-            }, 100);
-
-            // Show fallback after a delay (app didn't open)
-            setTimeout(() => {
+            setTimeout(function () {
                 document.getElementById('spinner').style.display = 'none';
                 document.getElementById('status').textContent = 'Tap below to open the bracket';
                 document.getElementById('fallback').classList.add('show');
             }, 2500);
         } else {
             document.getElementById('spinner').style.display = 'none';
-            document.getElementById('status').textContent = 'No bracket ID found';
+            document.getElementById('headline').innerHTML = 'No bracket <em>found</em>.';
+            document.getElementById('status').textContent = 'The link is missing a bracket ID';
             document.getElementById('fallback').classList.add('show');
         }
     </script>

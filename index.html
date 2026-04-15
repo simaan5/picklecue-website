@@ -1,22 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" style="color-scheme: dark;">
+<html lang="en" style="color-scheme: light;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>PickleCue — The Pickleball Companion App. Coming Soon to iOS.</title>
+    <title>PickleCue — The field manual for modern pickleball. Coming soon to iOS.</title>
 
-    <!-- SEO -->
     <meta name="description" content="PickleCue is the all-in-one pickleball app — find courts, organize games, run leagues and tournaments, and log matches. Join the waitlist for iOS.">
     <meta name="keywords" content="pickleball app, pickleball courts, pickleball games, pickleball tournaments, pickleball leagues, pickleball brackets">
     <meta name="author" content="PickleCue">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.picklecue.com/">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.picklecue.com/">
-    <meta property="og:title" content="PickleCue — The Pickleball Companion App. Coming Soon to iOS.">
+    <meta property="og:title" content="PickleCue — The field manual for modern pickleball.">
     <meta property="og:description" content="Find courts, organize games, run leagues and tournaments, and log matches. Join the waitlist for iOS.">
     <meta property="og:image" content="https://www.picklecue.com/images/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -24,27 +22,23 @@
     <meta property="og:site_name" content="PickleCue">
     <meta property="og:locale" content="en_US">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="PickleCue — The Pickleball Companion App. Coming Soon to iOS.">
+    <meta name="twitter:title" content="PickleCue — The field manual for modern pickleball.">
     <meta name="twitter:description" content="Find courts, organize games, run leagues and tournaments, and log matches.">
     <meta name="twitter:image" content="https://www.picklecue.com/images/og-image.png">
 
-    <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0A1628">
+    <meta name="theme-color" content="#F4F1EA">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
 
-    <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -76,987 +70,1161 @@
     </script>
 
     <style>
-        /* ============================================
-           Reset & Base
-           ============================================ */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* =====================================================================
+           Design tokens — Athletic Editorial system
+           ===================================================================== */
+        :root {
+            --paper:      #F4F1EA;   /* canvas */
+            --paper-2:    #EAE5D9;   /* subtle card fill */
+            --ink:        #0C0F12;   /* primary type */
+            --ink-soft:   #3D4248;   /* secondary type */
+            --ink-mute:   #6E7278;   /* caption / meta */
+            --rule:       rgba(12,15,18,0.12);
+            --rule-strong:rgba(12,15,18,0.28);
+            --court:      #2E5E4E;   /* deep forest — primary brand */
+            --court-deep: #1F4538;
+            --citron:     #C8E04E;   /* high-voltage highlight */
+            --clay:       #D3511A;   /* warm signal (rare) */
+
+            --f-display:  'Fraunces', 'Iowan Old Style', Georgia, serif;
+            --f-body:     'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            --f-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+            --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
+            --page-max:   1240px;
+            --gutter:     clamp(20px, 4vw, 44px);
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #E2E8F0;
-            background: #0A1628;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
-        }
-
-        /* Background gradient mesh */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(16, 185, 129, 0.07) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 50% at 80% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 50%),
-                radial-gradient(ellipse 70% 40% at 50% 90%, rgba(247, 227, 89, 0.03) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-            aria-hidden: true;
-        }
-
-        /* ============================================
-           Skip Link
-           ============================================ */
-        .skip-link {
-            position: absolute;
-            top: -100%;
-            left: 16px;
-            padding: 8px 16px;
-            background: #10B981;
-            color: #0A1628;
-            font-weight: 600;
-            border-radius: 0 0 8px 8px;
-            z-index: 10000;
-            text-decoration: none;
-            transition: top 0.2s;
-        }
-
-        .skip-link:focus {
-            top: 0;
-        }
-
-        /* ============================================
-           Typography
-           ============================================ */
-        h1, h2, h3, h4 {
-            font-family: 'Sora', 'Plus Jakarta Sans', sans-serif;
-            line-height: 1.15;
-            text-wrap: balance;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        /* ============================================
-           Layout
-           ============================================ */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ============================================
-           Focus Styles
-           ============================================ */
-        :focus-visible {
-            outline: 2px solid #10B981;
-            outline-offset: 2px;
-        }
-
-        button:focus:not(:focus-visible),
-        a:focus:not(:focus-visible) {
-            outline: none;
-        }
-
-        /* ============================================
-           Interactive Elements
-           ============================================ */
-        button, a {
-            touch-action: manipulation;
-        }
-
-        /* ============================================
-           Navigation
-           ============================================ */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 64px;
-            z-index: 1000;
-            background: rgba(10, 22, 40, 0.75);
-            backdrop-filter: blur(20px) saturate(1.4);
-            -webkit-backdrop-filter: blur(20px) saturate(1.4);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .nav .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 100%;
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Sora', sans-serif;
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: #FFFFFF;
-        }
-
-        .nav-logo img {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: rgba(226, 232, 240, 0.7);
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: #FFFFFF;
-        }
-
-        .nav-download {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 18px;
-            background: #10B981;
-            color: #0A1628;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-            text-decoration: none;
-        }
-
-        .nav-download:hover {
-            background: #34D399;
-            transform: translateY(-1px);
-        }
-
-        .nav-download svg {
-            width: 14px;
-            height: 14px;
-        }
-
-        /* ============================================
-           Hero Section
-           ============================================ */
-        .hero {
-            padding: 112px 0 32px;
-            min-height: auto;
-        }
-
-        .hero .container {
-            display: flex;
-            align-items: center;
-            gap: 48px;
-        }
-
-        .hero-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #10B981;
-            margin-bottom: 20px;
-            animation: fadeInUp 0.6s ease both;
-        }
-
-        .hero-badge-dot {
-            width: 7px;
-            height: 7px;
-            background: #10B981;
-            border-radius: 50%;
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-            font-weight: 800;
-            color: #FFFFFF;
-            margin-bottom: 16px;
-            letter-spacing: -0.03em;
-            animation: fadeInUp 0.6s ease 0.1s both;
-        }
-
-        .hero h1 .highlight {
-            background: linear-gradient(135deg, #F7E359, #FBBF24);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 1.05rem;
-            color: rgba(226, 232, 240, 0.65);
-            max-width: 480px;
-            margin-bottom: 28px;
-            line-height: 1.7;
-            animation: fadeInUp 0.6s ease 0.2s both;
-        }
-
-        .hero-buttons {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.6s ease 0.3s both;
-        }
-
-        .btn-appstore {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            background: #FFFFFF;
-            color: #0A1628;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.2s;
-            text-decoration: none;
-        }
-
-        .btn-appstore:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-appstore svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .btn-demo {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 12px 24px;
-            background: transparent;
-            color: rgba(226, 232, 240, 0.85);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 500;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            cursor: pointer;
-            transition: border-color 0.2s, color 0.2s, background 0.2s;
-            text-decoration: none;
-        }
-
-        .btn-demo:hover {
-            border-color: rgba(255, 255, 255, 0.25);
-            color: #FFFFFF;
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        /* Demo Frame */
-        .hero-demo {
-            flex-shrink: 0;
-            animation: fadeIn 0.8s ease 0.5s both;
-        }
-
-        .demo-frame {
-            position: relative;
-            width: 300px;
-            height: 580px;
-            border-radius: 32px;
-            overflow: hidden;
-            background: #111827;
-            box-shadow:
-                0 0 0 1px rgba(255, 255, 255, 0.08),
-                0 0 60px rgba(16, 185, 129, 0.12),
-                0 0 120px rgba(16, 185, 129, 0.06),
-                0 20px 60px rgba(0, 0, 0, 0.4);
-        }
-
-        .demo-frame iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 32px;
-        }
-
-        /* ============================================
-           Features Section
-           ============================================ */
-        .features {
-            padding: 64px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .section-header h2 {
-            font-size: clamp(1.6rem, 3vw, 2.2rem);
-            font-weight: 700;
-            color: #FFFFFF;
-            margin-bottom: 10px;
-            letter-spacing: -0.02em;
-        }
-
-        .section-header p {
-            font-size: 1rem;
-            color: rgba(226, 232, 240, 0.55);
-            max-width: 520px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .feature-card {
-            padding: 28px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.2s;
-            animation: fadeInUp 0.5s ease both;
-        }
-
-        .feature-card:nth-child(1) { animation-delay: 0.05s; }
-        .feature-card:nth-child(2) { animation-delay: 0.1s; }
-        .feature-card:nth-child(3) { animation-delay: 0.15s; }
-        .feature-card:nth-child(4) { animation-delay: 0.2s; }
-        .feature-card:nth-child(5) { animation-delay: 0.25s; }
-        .feature-card:nth-child(6) { animation-delay: 0.3s; }
-
-        .feature-card:hover {
-            border-color: rgba(16, 185, 129, 0.3);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.06);
-            transform: translateY(-2px);
-        }
-
-        .feature-emoji {
-            font-size: 2rem;
-            margin-bottom: 14px;
-            display: block;
-        }
-
-        .feature-card h3 {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #FFFFFF;
-            margin-bottom: 8px;
-        }
-
-        .feature-card p {
-            font-size: 0.875rem;
-            color: rgba(226, 232, 240, 0.55);
-            line-height: 1.65;
-        }
-
-        /* ============================================
-           CTA Section
-           ============================================ */
-        .cta {
-            padding: 24px 0 64px;
-        }
-
-        .cta-card {
-            position: relative;
-            text-align: center;
-            padding: 56px 32px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid transparent;
-            background-clip: padding-box;
-            overflow: hidden;
-            animation: fadeInUp 0.6s ease 0.4s both;
-        }
-
-        .cta-card::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: 21px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.25));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-
-        .cta-card h2 {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            font-weight: 700;
-            color: #FFFFFF;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
-        }
-
-        .cta-card p {
-            font-size: 1rem;
-            color: rgba(226, 232, 240, 0.55);
-            max-width: 500px;
-            margin: 0 auto 28px;
-            line-height: 1.7;
-        }
-
-        /* Waitlist form */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-        .waitlist-form {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        .waitlist-form input[type="email"] {
-            flex: 1 1 240px;
-            min-width: 0;
-            padding: 13px 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #FFFFFF;
-            font-family: inherit;
-            font-size: 0.95rem;
-            transition: border-color 0.2s, background 0.2s;
-        }
-        .waitlist-form input[type="email"]::placeholder {
-            color: rgba(226, 232, 240, 0.35);
-        }
-        .waitlist-form input[type="email"]:focus {
-            outline: none;
-            border-color: #10B981;
-            background: rgba(16, 185, 129, 0.06);
-        }
-        .waitlist-form input[type="email"]:invalid:not(:placeholder-shown) {
-            border-color: #EF4444;
-        }
-        .waitlist-form .btn-appstore {
-            padding: 13px 22px;
-            font-size: 0.95rem;
-        }
-        .waitlist-hp {
-            position: absolute !important;
-            left: -9999px !important;
-            width: 1px !important;
-            height: 1px !important;
-            opacity: 0 !important;
-        }
-        .waitlist-msg {
-            flex-basis: 100%;
-            margin: 6px 0 0 !important;
-            font-size: 0.85rem;
-            min-height: 1.2em;
-            text-align: center;
-        }
-        .waitlist-msg.is-error { color: #FCA5A5; }
-        .waitlist-msg.is-success { color: #6EE7B7; }
-
-        /* ============================================
-           Footer
-           ============================================ */
-        .footer {
-            padding: 40px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 32px;
-        }
-
-        .footer-brand p {
-            font-size: 0.875rem;
-            color: rgba(226, 232, 240, 0.4);
-            margin-top: 10px;
-            max-width: 260px;
-            line-height: 1.6;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Sora', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #FFFFFF;
-        }
-
-        .footer-logo img {
-            width: 32px;
-            height: 32px;
-            border-radius: 7px;
-        }
-
-        .footer-links h4 {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: rgba(226, 232, 240, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 14px;
-        }
-
-        .footer-links ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .footer-links a {
-            font-size: 0.875rem;
-            color: rgba(226, 232, 240, 0.6);
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: #FFFFFF;
-        }
-
-        .footer-social h4 {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: rgba(226, 232, 240, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 14px;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .social-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(226, 232, 240, 0.6);
-            transition: background 0.2s, color 0.2s, border-color 0.2s;
-        }
-
-        .social-icon:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #FFFFFF;
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .social-icon svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
-        .footer-bottom {
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            font-size: 0.8rem;
-            color: rgba(226, 232, 240, 0.3);
-        }
-
-        /* ============================================
-           Animations
-           ============================================ */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* ============================================
-           Responsive: 1024px
-           ============================================ */
-        @media (max-width: 1024px) {
-            .hero .container {
-                gap: 32px;
-            }
-
-            .demo-frame {
-                width: 260px;
-                height: 510px;
-            }
-
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* ============================================
-           Responsive: 768px
-           ============================================ */
-        @media (max-width: 768px) {
-            .hero .container {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .hero-subtitle {
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-            .hero-demo {
-                display: none;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 28px;
-            }
-        }
-
-        /* ============================================
-           Responsive: 640px
-           ============================================ */
-        @media (max-width: 640px) {
-            .hero {
-                padding-top: 96px;
-            }
-
-            .hero h1 {
-                font-size: 1.9rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-card {
-                padding: 40px 20px;
-            }
-        }
-
-        /* ============================================
-           Responsive: 480px
-           ============================================ */
-        @media (max-width: 480px) {
-            .hero-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .btn-appstore,
-            .btn-demo {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .container {
-                padding: 0 16px;
-            }
-        }
-
-        /* ============================================
-           Prefers Reduced Motion
-           ============================================ */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
-                animation-delay: 0ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-
-            html {
-                scroll-behavior: auto;
-            }
         }
 
-        /* ============================================
-           Print Styles
-           ============================================ */
-        @media print {
-            body {
-                background: #FFFFFF;
-                color: #000000;
-            }
-
-            body::before {
-                display: none;
-            }
-
-            .nav,
-            .hero-demo,
-            .social-icons,
-            .nav-download,
-            .btn-demo {
-                display: none !important;
-            }
-
-            .hero {
-                padding-top: 0;
-            }
-
-            .hero h1 .highlight {
-                -webkit-text-fill-color: #B8860B;
-                color: #B8860B;
-            }
-
-            .feature-card,
-            .cta-card {
-                border: 1px solid #CCC;
-                background: none;
-                box-shadow: none;
-            }
-
-            a[href]::after {
-                content: " (" attr(href) ")";
-                font-size: 0.8em;
-                color: #666;
-            }
-
-            .footer {
-                border-top: 1px solid #CCC;
-            }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: var(--f-body);
+            font-size: 17px;
+            line-height: 1.55;
+            color: var(--ink);
+            background: var(--paper);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            font-feature-settings: "ss01", "cv11";
         }
+
+        /* Paper-grain texture — subtle, decorative */
+        body::before {
+            content: "";
+            position: fixed; inset: 0;
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(12,15,18,0.035) 1px, transparent 0);
+            background-size: 3px 3px;
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: multiply;
+        }
+
+        img, svg { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; }
+        button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+        :focus-visible { outline: 2px solid var(--court); outline-offset: 3px; border-radius: 2px; }
+
+        .skip-link {
+            position: absolute; top: -100%; left: 12px;
+            padding: 10px 18px;
+            background: var(--ink); color: var(--paper);
+            font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.04em;
+            text-transform: uppercase;
+            z-index: 1000;
+            border-radius: 0 0 8px 8px;
+            transition: top 0.2s var(--ease);
+        }
+        .skip-link:focus { top: 0; }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: var(--page-max);
+            margin: 0 auto;
+            padding: 0 var(--gutter);
+        }
+
+        /* =====================================================================
+           Typography
+           ===================================================================== */
+        h1, h2, h3, h4 {
+            font-family: var(--f-display);
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 1.02;
+            letter-spacing: -0.025em;
+            text-wrap: balance;
+            font-variation-settings: "opsz" 96, "SOFT" 50;
+        }
+        h1 { font-weight: 500; }
+        h2 { font-size: clamp(2rem, 4vw, 3.25rem); font-variation-settings: "opsz" 72, "SOFT" 30; }
+        h3 { font-size: clamp(1.4rem, 2.4vw, 1.8rem); font-variation-settings: "opsz" 36, "SOFT" 20; letter-spacing: -0.02em; }
+
+        .kicker {
+            font-family: var(--f-mono);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .kicker::before {
+            content: "";
+            width: 28px; height: 1px;
+            background: var(--rule-strong);
+        }
+        .kicker.no-rule::before { display: none; }
+
+        .label-mono {
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+
+        .lede {
+            font-family: var(--f-display);
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+            line-height: 1.5;
+            color: var(--ink-soft);
+            font-variation-settings: "opsz" 28, "SOFT" 100;
+            max-width: 40ch;
+        }
+
+        /* =====================================================================
+           Masthead — editorial newspaper header
+           ===================================================================== */
+        .masthead {
+            position: sticky; top: 0;
+            background: rgba(244, 241, 234, 0.88);
+            backdrop-filter: saturate(1.4) blur(14px);
+            -webkit-backdrop-filter: saturate(1.4) blur(14px);
+            border-bottom: 1px solid var(--rule);
+            z-index: 100;
+        }
+        .masthead-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+            gap: 24px;
+        }
+        .masthead-logo {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 10px;
+            font-family: var(--f-display);
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            font-variation-settings: "opsz" 36, "SOFT" 30;
+        }
+        .masthead-logo img {
+            width: 30px; height: 30px;
+            border-radius: 6px;
+            align-self: center;
+        }
+        .masthead-nav {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        .masthead-nav a {
+            font-size: 14px;
+            color: var(--ink-soft);
+            padding: 6px 0;
+            position: relative;
+            transition: color 0.2s var(--ease);
+        }
+        .masthead-nav a:hover { color: var(--ink); }
+        .masthead-nav a::after {
+            content: "";
+            position: absolute; left: 0; right: 0; bottom: 0;
+            height: 1px; background: var(--ink);
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.3s var(--ease);
+        }
+        .masthead-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+        .btn-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px 10px 20px;
+            background: var(--ink);
+            color: var(--paper);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 100px;
+            transition: background 0.2s var(--ease), transform 0.15s var(--ease);
+            min-height: 44px;
+            line-height: 1;
+        }
+        .btn-pill:hover { background: var(--court); transform: translateY(-1px); }
+        .btn-pill svg { width: 12px; height: 12px; }
+
+        .masthead-burger {
+            display: none;
+            width: 44px; height: 44px;
+            align-items: center; justify-content: center;
+        }
+        .masthead-burger span {
+            display: block;
+            width: 20px; height: 1.5px;
+            background: var(--ink);
+            position: relative;
+        }
+        .masthead-burger span::before,
+        .masthead-burger span::after {
+            content: ""; position: absolute; left: 0;
+            width: 20px; height: 1.5px; background: var(--ink);
+            transition: transform 0.2s var(--ease);
+        }
+        .masthead-burger span::before { top: -6px; }
+        .masthead-burger span::after { top: 6px; }
+
+        /* =====================================================================
+           Edition marker — newspaper-style dateline
+           ===================================================================== */
+        .edition {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--rule);
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .edition-issue {
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .edition-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--citron);
+            box-shadow: 0 0 0 3px rgba(200, 224, 78, 0.3);
+            animation: pulse-citron 2.4s var(--ease) infinite;
+        }
+        @keyframes pulse-citron {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(200, 224, 78, 0.3); }
+            50%      { box-shadow: 0 0 0 6px rgba(200, 224, 78, 0.05); }
+        }
+
+        /* =====================================================================
+           Hero
+           ===================================================================== */
+        .hero {
+            padding: clamp(56px, 9vw, 120px) 0 clamp(48px, 7vw, 96px);
+            position: relative;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+            gap: clamp(32px, 5vw, 72px);
+            align-items: end;
+        }
+        .hero-copy { max-width: 640px; }
+        .hero h1 {
+            font-size: clamp(2.8rem, 8vw, 6.25rem);
+            font-weight: 500;
+            margin: 20px 0 28px;
+            font-variation-settings: "opsz" 144, "SOFT" 20;
+        }
+        .hero h1 em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--court);
+            font-variation-settings: "opsz" 144, "SOFT" 100;
+        }
+        .hero h1 .mark {
+            position: relative;
+            display: inline-block;
+            font-style: italic;
+            font-weight: 400;
+        }
+        .hero h1 .mark::before {
+            content: "";
+            position: absolute;
+            inset: 78% -4px 6% -4px;
+            background: var(--citron);
+            z-index: -1;
+            transform: skew(-8deg, -1deg);
+            opacity: 0.85;
+        }
+        .hero-sub {
+            font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+            line-height: 1.6;
+            color: var(--ink-soft);
+            max-width: 52ch;
+            margin-bottom: 36px;
+        }
+
+        /* Waitlist form (primary CTA) */
+        .waitlist-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 8px 8px 8px 20px;
+            background: var(--paper);
+            border: 1px solid var(--rule-strong);
+            border-radius: 100px;
+            max-width: 520px;
+            align-items: center;
+            transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        }
+        .waitlist-form:focus-within {
+            border-color: var(--ink);
+            box-shadow: 0 8px 32px -12px rgba(12,15,18,0.3);
+        }
+        .waitlist-form input[type="email"] {
+            flex: 1 1 200px;
+            min-width: 0;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 16px;
+            color: var(--ink);
+            padding: 12px 0;
+            min-height: 44px;
+        }
+        .waitlist-form input[type="email"]:focus { outline: none; }
+        .waitlist-form input[type="email"]::placeholder { color: var(--ink-mute); }
+        .waitlist-hp {
+            position: absolute !important;
+            left: -9999px !important;
+            width: 1px !important; height: 1px !important;
+            opacity: 0 !important;
+        }
+        .waitlist-form .btn-pill {
+            padding: 12px 22px;
+            background: var(--ink);
+            flex-shrink: 0;
+        }
+        .waitlist-msg {
+            font-family: var(--f-mono);
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            color: var(--ink-mute);
+            margin-top: 14px;
+            min-height: 1.2em;
+            max-width: 520px;
+        }
+        .waitlist-msg.is-error { color: var(--clay); }
+        .waitlist-msg.is-success { color: var(--court); }
+        .waitlist-note {
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            margin-top: 18px;
+        }
+
+        /* Hero device frame */
+        .hero-device {
+            position: relative;
+            aspect-ratio: 9 / 16.2;
+            max-width: 380px;
+            margin-left: auto;
+            background: var(--ink);
+            border-radius: 42px;
+            padding: 10px;
+            box-shadow:
+                0 1px 0 rgba(255,255,255,0.08) inset,
+                0 40px 80px -30px rgba(12,15,18,0.45),
+                0 14px 28px -10px rgba(12,15,18,0.25);
+            transform: rotate(1.2deg);
+            transition: transform 0.5s var(--ease);
+        }
+        .hero-device:hover { transform: rotate(0deg) translateY(-4px); }
+        .hero-device::before {
+            content: "";
+            position: absolute;
+            top: 18px; left: 50%;
+            transform: translateX(-50%);
+            width: 96px; height: 28px;
+            background: var(--ink);
+            border-radius: 16px;
+            z-index: 3;
+        }
+        .hero-device-screen {
+            position: relative;
+            width: 100%; height: 100%;
+            border-radius: 34px;
+            overflow: hidden;
+            background: var(--paper);
+        }
+        .hero-device iframe {
+            width: 100%; height: 100%;
+            border: 0;
+            display: block;
+        }
+        .hero-device-label {
+            position: absolute;
+            left: -12px; bottom: 24px;
+            background: var(--citron);
+            color: var(--ink);
+            font-family: var(--f-mono);
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 6px 10px;
+            border-radius: 2px;
+            transform: rotate(-3deg);
+            font-weight: 500;
+        }
+
+        /* Hero entrance animation */
+        .fade-rise { opacity: 0; transform: translateY(16px); animation: fadeRise 0.8s var(--ease) forwards; }
+        .d-1 { animation-delay: 0.05s; }
+        .d-2 { animation-delay: 0.15s; }
+        .d-3 { animation-delay: 0.25s; }
+        .d-4 { animation-delay: 0.38s; }
+        .d-5 { animation-delay: 0.52s; }
+        @keyframes fadeRise { to { opacity: 1; transform: translateY(0); } }
+
+        /* =====================================================================
+           Stats strip
+           ===================================================================== */
+        .stats {
+            border-top: 1px solid var(--rule);
+            border-bottom: 1px solid var(--rule);
+            padding: 36px 0;
+        }
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        .stat-cell { position: relative; }
+        .stat-cell + .stat-cell { padding-left: 40px; border-left: 1px solid var(--rule); }
+        .stat-num {
+            font-family: var(--f-display);
+            font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            font-variation-settings: "opsz" 96, "SOFT" 20;
+            display: block;
+        }
+        .stat-num em {
+            font-style: italic;
+            color: var(--court);
+            font-weight: 400;
+        }
+        .stat-label {
+            margin-top: 10px;
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            line-height: 1.4;
+            max-width: 22ch;
+        }
+
+        /* =====================================================================
+           Section scaffold
+           ===================================================================== */
+        section.chapter {
+            padding: clamp(64px, 9vw, 128px) 0;
+            border-bottom: 1px solid var(--rule);
+        }
+        .chapter-head {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+            gap: clamp(24px, 4vw, 64px);
+            align-items: end;
+            margin-bottom: clamp(36px, 6vw, 72px);
+        }
+        .chapter-head .kicker { align-self: start; }
+        .chapter-head h2 { max-width: 22ch; }
+
+        /* =====================================================================
+           Pitch (editorial brief)
+           ===================================================================== */
+        .pitch-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+            gap: clamp(32px, 6vw, 96px);
+            align-items: start;
+        }
+        .pitch-lede { font-size: clamp(1.5rem, 2.6vw, 2rem); font-family: var(--f-display); font-weight: 400; font-style: italic; line-height: 1.3; color: var(--ink); font-variation-settings: "opsz" 36, "SOFT" 100; }
+        .pitch-body p { margin-bottom: 1em; color: var(--ink-soft); max-width: 62ch; }
+        .pitch-body p:last-child { margin-bottom: 0; }
+        .pitch-body p strong { color: var(--ink); font-weight: 600; }
+
+        /* =====================================================================
+           Features — editorial catalog
+           ===================================================================== */
+        .catalog {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0;
+            border-top: 1px solid var(--rule-strong);
+        }
+        .catalog-item {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 28px;
+            padding: clamp(28px, 4vw, 48px) 0;
+            border-bottom: 1px solid var(--rule);
+            align-items: start;
+        }
+        .catalog-item:nth-child(odd)  { padding-right: clamp(16px, 3vw, 40px); border-right: 1px solid var(--rule); }
+        .catalog-item:nth-child(even) { padding-left:  clamp(16px, 3vw, 40px); }
+
+        .catalog-num {
+            font-family: var(--f-display);
+            font-size: 3.2rem;
+            font-weight: 400;
+            font-style: italic;
+            line-height: 0.9;
+            color: var(--court);
+            font-variation-settings: "opsz" 72, "SOFT" 100;
+            min-width: 64px;
+        }
+        .catalog-item h3 {
+            font-size: clamp(1.3rem, 2vw, 1.55rem);
+            margin-bottom: 8px;
+            letter-spacing: -0.015em;
+        }
+        .catalog-item p {
+            color: var(--ink-soft);
+            font-size: 15.5px;
+            line-height: 1.6;
+            max-width: 44ch;
+        }
+        .catalog-tags {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            margin-top: 16px;
+        }
+        .catalog-tag {
+            font-family: var(--f-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            padding: 4px 8px;
+            border: 1px solid var(--rule-strong);
+            border-radius: 100px;
+        }
+
+        /* =====================================================================
+           Preview (full-width demo embed)
+           ===================================================================== */
+        .preview-frame {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--rule-strong);
+            background: var(--paper-2);
+            aspect-ratio: 16 / 9;
+            max-height: 760px;
+        }
+        @media (max-width: 700px) { .preview-frame { aspect-ratio: 3 / 5; } }
+        .preview-frame iframe {
+            width: 100%; height: 100%; border: 0;
+        }
+        .preview-caption {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .preview-caption a {
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 8px 2px;
+        }
+        .preview-caption a::after {
+            content: "→";
+            transition: transform 0.2s var(--ease);
+        }
+        .preview-caption a:hover::after { transform: translateX(4px); }
+
+        /* =====================================================================
+           FAQ
+           ===================================================================== */
+        .faq-list { border-top: 1px solid var(--rule-strong); }
+        .faq-item {
+            border-bottom: 1px solid var(--rule);
+            padding: 0;
+        }
+        .faq-q {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 0;
+            width: 100%;
+            text-align: left;
+            font-family: var(--f-display);
+            font-size: clamp(1.15rem, 1.9vw, 1.4rem);
+            font-weight: 500;
+            letter-spacing: -0.015em;
+            color: var(--ink);
+            font-variation-settings: "opsz" 36, "SOFT" 30;
+            min-height: 68px;
+            gap: 24px;
+        }
+        .faq-q::after {
+            content: "";
+            width: 18px; height: 18px;
+            border: 1px solid var(--ink);
+            border-radius: 50%;
+            position: relative;
+            background:
+                linear-gradient(var(--ink), var(--ink)) center / 8px 1px no-repeat,
+                linear-gradient(var(--ink), var(--ink)) center / 1px 8px no-repeat;
+            transition: transform 0.3s var(--ease), background-size 0.3s var(--ease);
+            flex-shrink: 0;
+        }
+        .faq-item[open] .faq-q::after {
+            background: linear-gradient(var(--ink), var(--ink)) center / 8px 1px no-repeat;
+            transform: rotate(180deg);
+        }
+        .faq-q::-webkit-details-marker { display: none; }
+        .faq-a {
+            padding: 4px 0 32px;
+            color: var(--ink-soft);
+            font-size: 16px;
+            line-height: 1.65;
+            max-width: 68ch;
+        }
+        .faq-a p + p { margin-top: 0.8em; }
+        .faq-a a { color: var(--court); border-bottom: 1px solid currentColor; }
+
+        /* =====================================================================
+           Closing CTA
+           ===================================================================== */
+        .closing {
+            background: var(--ink);
+            color: var(--paper);
+            padding: clamp(64px, 10vw, 140px) 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .closing::before {
+            content: "";
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 85% 20%, rgba(200, 224, 78, 0.14), transparent 60%),
+                radial-gradient(ellipse 60% 50% at 15% 95%, rgba(46, 94, 78, 0.45), transparent 50%);
+            pointer-events: none;
+        }
+        .closing .page { position: relative; z-index: 1; }
+        .closing .kicker { color: rgba(244,241,234,0.7); }
+        .closing .kicker::before { background: rgba(244,241,234,0.35); }
+        .closing h2 {
+            color: var(--paper);
+            font-size: clamp(2.4rem, 6vw, 4.4rem);
+            margin: 24px 0 32px;
+            max-width: 16ch;
+            font-variation-settings: "opsz" 144, "SOFT" 20;
+        }
+        .closing h2 em {
+            font-style: italic;
+            color: var(--citron);
+            font-weight: 400;
+            font-variation-settings: "opsz" 144, "SOFT" 100;
+        }
+        .closing .lede { color: rgba(244,241,234,0.75); margin-bottom: 40px; }
+        .closing .waitlist-form {
+            background: rgba(244,241,234,0.06);
+            border-color: rgba(244,241,234,0.2);
+        }
+        .closing .waitlist-form:focus-within {
+            border-color: var(--citron);
+            box-shadow: 0 0 0 4px rgba(200, 224, 78, 0.15);
+        }
+        .closing .waitlist-form input[type="email"] {
+            color: var(--paper);
+        }
+        .closing .waitlist-form input[type="email"]::placeholder {
+            color: rgba(244,241,234,0.5);
+        }
+        .closing .waitlist-form .btn-pill {
+            background: var(--citron);
+            color: var(--ink);
+        }
+        .closing .waitlist-form .btn-pill:hover { background: #D9EF5C; }
+        .closing .waitlist-msg { color: rgba(244,241,234,0.7); }
+        .closing .waitlist-note { color: rgba(244,241,234,0.55); }
+        .closing .waitlist-msg.is-success { color: var(--citron); }
+
+        /* =====================================================================
+           Colophon (footer)
+           ===================================================================== */
+        .colophon {
+            background: var(--paper);
+            padding: clamp(48px, 7vw, 96px) 0 40px;
+            border-top: 1px solid var(--rule);
+        }
+        .colophon-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 56px;
+            border-bottom: 1px solid var(--rule);
+        }
+        .colophon-brand h3 {
+            font-family: var(--f-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            font-variation-settings: "opsz" 48, "SOFT" 30;
+        }
+        .colophon-brand p {
+            font-size: 14px;
+            color: var(--ink-soft);
+            max-width: 36ch;
+            line-height: 1.55;
+        }
+        .colophon h4 {
+            font-family: var(--f-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+            margin-bottom: 18px;
+        }
+        .colophon ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .colophon li a {
+            font-size: 14.5px;
+            color: var(--ink-soft);
+            transition: color 0.2s var(--ease);
+        }
+        .colophon li a:hover { color: var(--ink); }
+        .socials { display: flex; gap: 8px; flex-wrap: wrap; }
+        .social-icon {
+            width: 40px; height: 40px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border: 1px solid var(--rule-strong);
+            border-radius: 50%;
+            color: var(--ink-soft);
+            transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+        }
+        .social-icon:hover {
+            background: var(--ink);
+            color: var(--paper);
+            border-color: var(--ink);
+        }
+        .social-icon svg { width: 15px; height: 15px; fill: currentColor; }
+
+        .colophon-base {
+            padding-top: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+        .colophon-base .setinfo {
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .colophon-base .setinfo::before {
+            content: "◆";
+            color: var(--citron);
+            font-size: 8px;
+        }
+
+        /* =====================================================================
+           Responsive — tablet & mobile
+           ===================================================================== */
+        @media (max-width: 960px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 56px; }
+            .hero-device { transform: none; margin: 0 auto; max-width: 320px; }
+            .chapter-head { grid-template-columns: 1fr; }
+            .pitch-grid { grid-template-columns: 1fr; }
+            .colophon-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 720px) {
+            .masthead-nav { display: none; }
+            .masthead-burger { display: inline-flex; }
+            .masthead .btn-pill { display: none; }
+            .edition-issue span.hide-sm { display: none; }
+            .stats-row { grid-template-columns: 1fr; gap: 28px; }
+            .stat-cell + .stat-cell { padding-left: 0; padding-top: 28px; border-left: 0; border-top: 1px solid var(--rule); }
+            .catalog { grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
+            .catalog-item,
+            .catalog-item:nth-child(odd),
+            .catalog-item:nth-child(even) {
+                padding-left: 0; padding-right: 0;
+                border-right: 0;
+            }
+            .colophon-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 40px; }
+            .waitlist-form { border-radius: 20px; padding: 12px; flex-direction: column; align-items: stretch; }
+            .waitlist-form input[type="email"] { padding: 10px 14px; }
+            .waitlist-form .btn-pill { width: 100%; justify-content: center; padding: 14px; }
+            .hero h1 .mark::before { inset: 82% -2px 4% -2px; }
+        }
+
+        /* =====================================================================
+           Mobile menu (shown via :target)
+           ===================================================================== */
+        .mobile-menu {
+            position: fixed; inset: 0;
+            background: var(--paper);
+            z-index: 200;
+            padding: 80px 24px 40px;
+            transform: translateY(-100%);
+            transition: transform 0.35s var(--ease);
+            display: flex;
+            flex-direction: column;
+        }
+        .mobile-menu:target { transform: translateY(0); }
+        .mobile-menu-close {
+            position: absolute; top: 20px; right: 20px;
+            width: 44px; height: 44px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+        }
+        .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: 24px; border-top: 1px solid var(--rule); }
+        .mobile-menu li { border-bottom: 1px solid var(--rule); }
+        .mobile-menu li a {
+            display: block;
+            padding: 22px 4px;
+            font-family: var(--f-display);
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            font-variation-settings: "opsz" 48, "SOFT" 30;
+        }
+        .mobile-menu .btn-pill { margin-top: 32px; align-self: flex-start; }
     </style>
 </head>
 <body>
-    <a href="#main" class="skip-link">Skip to Main Content</a>
+    <a href="#main" class="skip-link">Skip to content</a>
 
-    <!-- ============================================
-         Navigation
-         ============================================ -->
-    <nav class="nav" role="navigation" aria-label="Main navigation">
-        <div class="container">
-            <a href="/" class="nav-logo" aria-label="PickleCue home">
-                <img src="images/app-icon-120.png" alt="" width="36" height="36" aria-hidden="true">
-                PickleCue
+    <header class="masthead" role="banner">
+        <div class="page masthead-row">
+            <a href="/" class="masthead-logo" aria-label="PickleCue home">
+                <img src="images/app-icon-120.png" alt="" width="30" height="30" aria-hidden="true">
+                <span>PickleCue</span>
             </a>
-            <div class="nav-right">
-                <ul class="nav-links">
+            <nav aria-label="Primary">
+                <ul class="masthead-nav">
+                    <li><a href="#pitch">What it is</a></li>
                     <li><a href="#features">Features</a></li>
                     <li><a href="demo/">Demo</a></li>
                     <li><a href="support.html">Support</a></li>
                 </ul>
-                <a href="#waitlist" class="nav-download" data-track="cta_click" data-cta="nav_waitlist" aria-label="Join the PickleCue waitlist">
-                    Get Early Access
-                </a>
-            </div>
+            </nav>
+            <a href="#waitlist" class="btn-pill" data-track="cta_click" data-cta="nav_waitlist">
+                Get early access
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+            </a>
+            <a href="#menu" class="masthead-burger" aria-label="Open menu" role="button"><span></span></a>
         </div>
-    </nav>
+        <div class="page edition" aria-hidden="true">
+            <span class="edition-issue">
+                <span class="edition-dot"></span>
+                <span>Vol. 01 · 2026</span>
+                <span class="hide-sm">· The pickleball companion</span>
+            </span>
+            <span>iOS edition · Coming soon</span>
+        </div>
+    </header>
 
-    <!-- ============================================
-         Hero Section
-         ============================================ -->
+    <aside class="mobile-menu" id="menu" aria-label="Mobile navigation">
+        <a href="#" class="mobile-menu-close" aria-label="Close menu">Close ✕</a>
+        <ul>
+            <li><a href="#pitch">What it is</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="demo/">Demo</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="privacy.html">Privacy</a></li>
+        </ul>
+        <a href="#waitlist" class="btn-pill" data-track="cta_click" data-cta="mobile_waitlist">
+            Get early access
+            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+        </a>
+    </aside>
+
     <main id="main">
+
+        <!-- ================ Hero ================ -->
         <section class="hero" aria-label="Introduction">
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-badge">
-                        <span class="hero-badge-dot" aria-hidden="true"></span>
-                        Coming soon to iOS
-                    </div>
-                    <h1>The <span class="highlight">pickleball</span> app that does it all.</h1>
-                    <p class="hero-subtitle">Find courts, organize games, run leagues and tournaments, log matches, and connect with players near you — all in one place.</p>
-                    <div class="hero-buttons">
-                        <a href="#waitlist" class="btn-appstore" data-track="cta_click" data-cta="hero_waitlist" aria-label="Join the PickleCue waitlist">
-                            Join the waitlist
-                            <span aria-hidden="true">&rarr;</span>
-                        </a>
-                        <a href="demo/" class="btn-demo" data-track="cta_click" data-cta="hero_demo">
-                            Try the demo
-                            <span aria-hidden="true">&rarr;</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="hero-demo" aria-label="Interactive app demo">
-                    <div class="demo-frame">
-                        <iframe src="demo/" title="PickleCue Interactive Demo" loading="lazy" allow="fullscreen"></iframe>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================
-             Features Section
-             ============================================ -->
-        <section class="features" id="features" aria-label="Features">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Everything You Need to Play</h2>
-                    <p>All the tools to level up your pickleball game, in one app.</p>
-                </div>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <span class="feature-emoji" aria-hidden="true">&#x1F3AF;</span>
-                        <h3>Find &amp; Join Games</h3>
-                        <p>Create or join pickup games in seconds. Set skill levels, manage RSVPs, and check in when you arrive.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-emoji" aria-hidden="true">&#x1F5FA;&#xFE0F;</span>
-                        <h3>Discover Courts</h3>
-                        <p>Browse 26,000+ pickleball courts with our interactive map. Filter by amenities, read reviews, and get directions.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-emoji" aria-hidden="true">&#x1F4CA;</span>
-                        <h3>Track Your Stats</h3>
-                        <p>Log matches and track your progress. See your win rate, skill rating, and detailed match history.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-emoji" aria-hidden="true">&#x1F3C6;</span>
-                        <h3>Leagues &amp; Tournaments</h3>
-                        <p>Create leagues, run tournaments with bracket views, track standings, and compete all season.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-emoji" aria-hidden="true">&#x1F393;</span>
-                        <h3>Learn &amp; Improve</h3>
-                        <p>Access drills, tips, and training resources curated for every skill level.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="feature-emoji" aria-hidden="true">&#x1F91D;</span>
-                        <h3>Build Your Network</h3>
-                        <p>Connect with players in your area, chat directly, and find regular playing partners.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================
-             Waitlist Section
-             ============================================ -->
-        <section class="cta" id="waitlist" aria-label="Join the waitlist">
-            <div class="container">
-                <div class="cta-card">
-                    <h2>Be first in line at launch.</h2>
-                    <p>Join the waitlist and we&rsquo;ll email you the moment PickleCue is live on the App Store. No spam, one email.</p>
-                    <form class="waitlist-form" id="waitlistForm" novalidate>
-                        <label class="sr-only" for="waitlist-email">Email address</label>
-                        <input type="email" id="waitlist-email" name="email" placeholder="you@example.com" required autocomplete="email" inputmode="email" />
-                        <!-- honeypot (hidden from humans) -->
+            <div class="page hero-grid">
+                <div class="hero-copy">
+                    <span class="kicker fade-rise d-1">The field manual · Coming soon to iOS</span>
+                    <h1 class="fade-rise d-2">
+                        All the <span class="mark">pickleball</span>.<br>
+                        One elegant <em>app</em>.
+                    </h1>
+                    <p class="hero-sub fade-rise d-3">
+                        PickleCue is a calm, premium companion for how the game is actually played — discovering courts, organizing games with friends, running leagues and tournaments, and keeping a clean record of every match.
+                    </p>
+                    <form class="waitlist-form fade-rise d-4" id="waitlistForm" novalidate aria-label="Join the waitlist">
+                        <label class="kicker" for="waitlist-email" style="position:absolute;left:-9999px;">Email address</label>
+                        <input type="email" id="waitlist-email" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsg" />
                         <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true" />
-                        <button type="submit" class="btn-appstore" data-track="cta_click" data-cta="waitlist_submit">
-                            Notify me at launch
+                        <button type="submit" class="btn-pill" data-track="cta_click" data-cta="hero_waitlist">
+                            Notify me
+                            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
                         </button>
-                        <p class="waitlist-msg" id="waitlistMsg" role="status" aria-live="polite"></p>
                     </form>
+                    <p class="waitlist-msg fade-rise d-5" id="waitlistMsg" role="status" aria-live="polite"></p>
+                    <p class="waitlist-note fade-rise d-5">One email. No spam. Unsubscribe anytime.</p>
                 </div>
+                <div class="hero-device fade-rise d-3" role="img" aria-label="Interactive preview of the PickleCue app">
+                    <div class="hero-device-screen">
+                        <iframe src="demo/" title="PickleCue interactive preview" loading="lazy" allow="fullscreen"></iframe>
+                    </div>
+                    <span class="hero-device-label">Live · Preview</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================ Stats ================ -->
+        <section class="stats" aria-label="By the numbers">
+            <div class="page stats-row">
+                <div class="stat-cell">
+                    <span class="stat-num"><em>22,000</em>+</span>
+                    <span class="stat-label">Pickleball courts mapped worldwide</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-num">40+</span>
+                    <span class="stat-label">Countries covered from day one</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-num">One</span>
+                    <span class="stat-label">App for games, leagues, tournaments &amp; matches</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================ Pitch ================ -->
+        <section class="chapter" id="pitch" aria-label="What PickleCue is">
+            <div class="page">
+                <div class="chapter-head">
+                    <span class="kicker">01 / What it is</span>
+                    <h2>A single, quiet home for every part of the game.</h2>
+                </div>
+                <div class="pitch-grid">
+                    <p class="pitch-lede">Pickleball grew faster than the software around it. Group chats, spreadsheets, scribbled brackets, three different apps for one league. PickleCue is the app that finally ties it all together.</p>
+                    <div class="pitch-body">
+                        <p>We built PickleCue for players, organizers, and clubs who want one clean place to <strong>find a court</strong>, <strong>fill a game</strong>, <strong>run a season</strong>, and <strong>remember who won</strong>.</p>
+                        <p>Every feature is designed to feel like a native part of iOS — fast, private, considered. No ads. No data sold. No noise.</p>
+                        <p>Pre-launch access is free. Join the waitlist and we&rsquo;ll let you know the day it&rsquo;s live on the App Store.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================ Features ================ -->
+        <section class="chapter" id="features" aria-label="Features">
+            <div class="page">
+                <div class="chapter-head">
+                    <span class="kicker">02 / Features</span>
+                    <h2>Built for every way the game actually gets played.</h2>
+                </div>
+                <div class="catalog">
+                    <article class="catalog-item">
+                        <span class="catalog-num">01</span>
+                        <div>
+                            <h3>Courts, everywhere you play.</h3>
+                            <p>A verified global map of 22,000+ public and private courts — surface, lights, open-play schedule, amenities, reviews. Search, filter, and navigate in a tap.</p>
+                            <div class="catalog-tags">
+                                <span class="catalog-tag">Map</span>
+                                <span class="catalog-tag">Reviews</span>
+                                <span class="catalog-tag">Global</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="catalog-item">
+                        <span class="catalog-num">02</span>
+                        <div>
+                            <h3>Games, organized without a group chat.</h3>
+                            <p>Post an open game, set skill and capacity, and let players RSVP. Waitlists, check-ins, and reminders handled. Keep it public or invite-only.</p>
+                            <div class="catalog-tags">
+                                <span class="catalog-tag">RSVP</span>
+                                <span class="catalog-tag">Waitlist</span>
+                                <span class="catalog-tag">Check-in</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="catalog-item">
+                        <span class="catalog-num">03</span>
+                        <div>
+                            <h3>Leagues that run themselves.</h3>
+                            <p>Round robin, ladder, team play — your league, your rules. Standings, stats, and schedules update automatically as matches come in.</p>
+                            <div class="catalog-tags">
+                                <span class="catalog-tag">Seasons</span>
+                                <span class="catalog-tag">Standings</span>
+                                <span class="catalog-tag">Schedule</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="catalog-item">
+                        <span class="catalog-num">04</span>
+                        <div>
+                            <h3>Tournaments with real brackets.</h3>
+                            <p>Single and double elimination brackets you can share with a link. Live scoring, seeding, and a share page that works even if your players don&rsquo;t have the app.</p>
+                            <div class="catalog-tags">
+                                <span class="catalog-tag">Brackets</span>
+                                <span class="catalog-tag">Live scoring</span>
+                                <span class="catalog-tag">Shareable</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="catalog-item">
+                        <span class="catalog-num">05</span>
+                        <div>
+                            <h3>A personal match log.</h3>
+                            <p>Log a score in seconds. Track your match history, partners, opponents, and venues. Opt in to DUPR or keep it all private — your call.</p>
+                            <div class="catalog-tags">
+                                <span class="catalog-tag">History</span>
+                                <span class="catalog-tag">Stats</span>
+                                <span class="catalog-tag">DUPR-ready</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="catalog-item">
+                        <span class="catalog-num">06</span>
+                        <div>
+                            <h3>Safety &amp; privacy, by design.</h3>
+                            <p>Block, mute, report. Private profiles. Location precision you control. No ads, no tracking, no data for sale — ever. See the privacy policy for specifics.</p>
+                            <div class="catalog-tags">
+                                <span class="catalog-tag">Block</span>
+                                <span class="catalog-tag">Private mode</span>
+                                <span class="catalog-tag">No ads</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================ Preview ================ -->
+        <section class="chapter" aria-label="Interactive preview">
+            <div class="page">
+                <div class="chapter-head">
+                    <span class="kicker">03 / Preview</span>
+                    <h2>Tap around. It behaves like the real thing.</h2>
+                </div>
+                <div class="preview-frame">
+                    <iframe src="demo/" title="PickleCue interactive demo" loading="lazy" allow="fullscreen"></iframe>
+                </div>
+                <div class="preview-caption">
+                    <span class="label-mono">Demo · No sign-in required · Runs in your browser</span>
+                    <a href="demo/" data-track="cta_click" data-cta="preview_fullscreen">Open full demo</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================ FAQ ================ -->
+        <section class="chapter" id="faq" aria-label="Frequently asked questions">
+            <div class="page">
+                <div class="chapter-head">
+                    <span class="kicker">04 / Questions</span>
+                    <h2>Anything worth knowing before launch.</h2>
+                </div>
+                <div class="faq-list">
+                    <details class="faq-item">
+                        <summary class="faq-q">When does PickleCue launch?</summary>
+                        <div class="faq-a">
+                            <p>Soon. We&rsquo;re finishing up the final pre-submission pass and preparing for App Store review. Waitlist members get the launch email the moment it&rsquo;s live — before we announce anywhere else.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-q">Is it free?</summary>
+                        <div class="faq-a">
+                            <p>The core app is free — finding courts, joining games, logging matches, following friends. A small Pro subscription unlocks organizer-grade features like unlimited leagues, advanced tournament formats, and CSV / JSON match exports. No ads at any tier.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-q">What platforms?</summary>
+                        <div class="faq-a">
+                            <p>iOS first, built natively for iPhone. Android and a web app are on the roadmap. We&rsquo;d rather do one platform extremely well than three platforms adequately.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-q">Do I need a DUPR account?</summary>
+                        <div class="faq-a">
+                            <p>No. You can use PickleCue entirely without one. If you do have a DUPR account, you can optionally link it to push your match results through for rating updates — or keep your matches private. Your call, toggle any time.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-q">What do you do with my data?</summary>
+                        <div class="faq-a">
+                            <p>As little as possible. The waitlist form collects only your email and a source tag. We don&rsquo;t sell data, we don&rsquo;t share it with advertisers, and we never will. Full detail in the <a href="privacy.html">privacy policy</a>.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-q">I organize a club / league / tournament — can I help shape this?</summary>
+                        <div class="faq-a">
+                            <p>Please do. Email <a href="mailto:feedback@picklecue.com">feedback@picklecue.com</a> with what you run, what&rsquo;s painful about it today, and we&rsquo;ll get you into an early organizer cohort before launch.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================ Closing CTA ================ -->
+        <section class="closing" id="waitlist" aria-label="Join the waitlist">
+            <div class="page">
+                <span class="kicker">05 / Launch edition</span>
+                <h2>Be first on the court, <em>at launch.</em></h2>
+                <p class="lede">One email the day PickleCue is live on the App Store. Maybe a short note or two between now and then — never more.</p>
+                <form class="waitlist-form" id="waitlistFormClose" novalidate aria-label="Join the waitlist (closing)">
+                    <label class="kicker" for="waitlist-email-2" style="position:absolute;left:-9999px;">Email address</label>
+                    <input type="email" id="waitlist-email-2" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgClose" />
+                    <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true" />
+                    <button type="submit" class="btn-pill" data-track="cta_click" data-cta="closing_waitlist">
+                        Join the waitlist
+                        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+                    </button>
+                </form>
+                <p class="waitlist-msg" id="waitlistMsgClose" role="status" aria-live="polite"></p>
+                <p class="waitlist-note">Strictly zero spam. Unsubscribe in one click. Privacy policy applies.</p>
             </div>
         </section>
     </main>
 
-    <!-- ============================================
-         Footer
-         ============================================ -->
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <img src="images/app-icon-120.png" alt="" width="32" height="32" aria-hidden="true">
-                        PickleCue
-                    </div>
-                    <p>Your complete pickleball companion. Find courts, play games, and connect with your community.</p>
-                </div>
-                <nav class="footer-links" aria-label="Footer navigation">
-                    <h4>Links</h4>
-                    <ul>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                        <li><a href="support.html">Support</a></li>
-                        <li><a href="mailto:support@picklecue.com">Contact</a></li>
-                    </ul>
-                </nav>
-                <div class="footer-social">
-                    <h4>Follow Us</h4>
-                    <div class="social-icons">
+    <footer class="colophon" role="contentinfo">
+        <div class="page">
+            <div class="colophon-grid">
+                <div class="colophon-brand">
+                    <h3>PickleCue</h3>
+                    <p>A calm, premium companion for the way pickleball is actually played. Built by players, for players. Coming to iOS.</p>
+                    <h4 style="margin-top: 28px;">Follow</h4>
+                    <div class="socials">
                         <a href="https://www.instagram.com/picklecueapp" class="social-icon" aria-label="Follow PickleCue on Instagram" target="_blank" rel="noopener noreferrer">
                             <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
                         </a>
@@ -1071,22 +1239,44 @@
                         </a>
                     </div>
                 </div>
+                <div>
+                    <h4>The app</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="demo/">Demo</a></li>
+                        <li><a href="#waitlist">Waitlist</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="support.html">Help</a></li>
+                        <li><a href="mailto:support@picklecue.com">Contact</a></li>
+                        <li><a href="mailto:feedback@picklecue.com">Feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy</a></li>
+                        <li><a href="terms.html">Terms</a></li>
+                        <li><a href="mailto:privacy@picklecue.com">Data requests</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="footer-bottom">
-                &copy; 2026 PickleCue. All rights reserved.
+            <div class="colophon-base">
+                <span>&copy; 2026 PickleCue. All rights reserved.</span>
+                <span class="setinfo">Set in Fraunces, Instrument Sans &amp; JetBrains Mono.</span>
+                <span>Made for pickleball · iOS coming soon</span>
             </div>
         </div>
     </footer>
 
     <script>
-        /* ---- Lightweight analytics shim ----
-           Queues events to window.dataLayer. A real provider (Plausible / GA4 /
-           Supabase ingestion) can consume the queue later without code changes. */
+        /* Lightweight analytics — queues events to window.dataLayer. */
         window.dataLayer = window.dataLayer || [];
         window.track = function (name, props) {
-            try {
-                window.dataLayer.push({ event: name, ts: Date.now(), ...(props || {}) });
-            } catch (_) { /* no-op */ }
+            try { window.dataLayer.push({ event: name, ts: Date.now(), ...(props || {}) }); } catch (_) {}
         };
         document.addEventListener('click', function (e) {
             var el = e.target.closest('[data-track]');
@@ -1097,68 +1287,71 @@
             });
         });
 
-        /* ---- Waitlist submission ---- */
+        /* Waitlist — shared handler for hero + closing forms. */
         (function () {
             var SUPABASE_URL  = 'https://uejmhtdfbqbotvbqvfja.supabase.co';
             var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlam1odGRmYnFib3R2YnF2ZmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyMjYzMjAsImV4cCI6MjA4MjgwMjMyMH0.oSZlTczSfIe1Jls0DSG6br1pVLKZ1F6e_DOPgndPdOc';
-            var form = document.getElementById('waitlistForm');
-            if (!form) return;
-            var msg   = document.getElementById('waitlistMsg');
-            var input = document.getElementById('waitlist-email');
-            var btn   = form.querySelector('button[type="submit"]');
 
-            function setMsg(text, kind) {
-                msg.textContent = text;
-                msg.classList.remove('is-error', 'is-success');
-                if (kind) msg.classList.add('is-' + kind);
+            function wire(formId, msgId) {
+                var form = document.getElementById(formId);
+                if (!form) return;
+                var msg = document.getElementById(msgId);
+                var input = form.querySelector('input[type="email"]');
+                var btn   = form.querySelector('button[type="submit"]');
+
+                function setMsg(text, kind) {
+                    msg.textContent = text;
+                    msg.classList.remove('is-error', 'is-success');
+                    if (kind) msg.classList.add('is-' + kind);
+                }
+
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    var email = (input.value || '').trim();
+                    var hp    = form.elements['company'] ? form.elements['company'].value : '';
+                    if (hp) { setMsg('You\u2019re on the list.', 'success'); form.reset(); return; }
+                    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        setMsg('Please enter a valid email address.', 'error');
+                        input.focus();
+                        return;
+                    }
+                    if (!SUPABASE_ANON) {
+                        setMsg('Signups are temporarily unavailable. Email support@picklecue.com and we\u2019ll add you.', 'error');
+                        return;
+                    }
+                    btn.disabled = true;
+                    setMsg('Adding you\u2026', null);
+                    window.track('waitlist_submit', { form: formId });
+
+                    fetch(SUPABASE_URL + '/rest/v1/waitlist_signups', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ email: email, source: 'website' })
+                    }).then(function (r) {
+                        if (r.ok || r.status === 409) {
+                            window.track('waitlist_success', { form: formId });
+                            setMsg('You\u2019re on the list. We\u2019ll email you at launch.', 'success');
+                            form.reset();
+                        } else {
+                            window.track('waitlist_error', { status: r.status, form: formId });
+                            setMsg('Something went wrong. Email support@picklecue.com and we\u2019ll add you.', 'error');
+                        }
+                    }).catch(function () {
+                        window.track('waitlist_error', { network: true, form: formId });
+                        setMsg('Network error. Email support@picklecue.com and we\u2019ll add you.', 'error');
+                    }).finally(function () {
+                        btn.disabled = false;
+                    });
+                });
             }
 
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-                var email = (input.value || '').trim();
-                var hp    = form.elements['company'] ? form.elements['company'].value : '';
-
-                if (hp) { /* bot — silently accept, store nothing */ setMsg('You\u2019re on the list.', 'success'); form.reset(); return; }
-                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                    setMsg('Please enter a valid email address.', 'error');
-                    input.focus();
-                    return;
-                }
-                if (!SUPABASE_ANON) {
-                    // Config missing — fail closed rather than store PII locally.
-                    setMsg('Signups are temporarily unavailable. Email support@picklecue.com and we\u2019ll add you.', 'error');
-                    return;
-                }
-                btn.disabled = true;
-                setMsg('Adding you\u2026', null);
-                window.track('waitlist_submit', {});
-
-                fetch(SUPABASE_URL + '/rest/v1/waitlist_signups', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    // PII minimization: only email + a static source tag.
-                    body: JSON.stringify({ email: email, source: 'website' })
-                }).then(function (r) {
-                    if (r.ok || r.status === 409) {
-                        window.track('waitlist_success', {});
-                        setMsg('You\u2019re on the list. We\u2019ll email you at launch.', 'success');
-                        form.reset();
-                    } else {
-                        window.track('waitlist_error', { status: r.status });
-                        setMsg('Something went wrong. Email support@picklecue.com and we\u2019ll add you.', 'error');
-                    }
-                }).catch(function () {
-                    window.track('waitlist_error', { network: true });
-                    setMsg('Network error. Email support@picklecue.com and we\u2019ll add you.', 'error');
-                }).finally(function () {
-                    btn.disabled = false;
-                });
-            });
+            wire('waitlistForm', 'waitlistMsg');
+            wire('waitlistFormClose', 'waitlistMsgClose');
         })();
     </script>
 </body>
