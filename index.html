@@ -631,6 +631,172 @@
         }
 
         /* =====================================================================
+           Reel — sticky-scroll video showcase
+           ===================================================================== */
+        .reel-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: clamp(40px, 8vw, 120px);
+            align-items: start;
+        }
+        .reel-captions {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(80px, 14vh, 180px);
+            padding: 30vh 0 40vh;
+        }
+        .reel-cap {
+            transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+            opacity: 0.35;
+            transform: translateY(0);
+        }
+        .reel-cap.is-active { opacity: 1; }
+        .reel-cap .kicker { margin-bottom: 16px; }
+        .reel-cap h3 {
+            font-family: var(--f-display);
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            font-variation-settings: "opsz" 72, "SOFT" 30;
+            max-width: 18ch;
+        }
+        .reel-cap h3 em {
+            font-style: italic; color: var(--court); font-weight: 400;
+            font-variation-settings: "opsz" 72, "SOFT" 100;
+        }
+        .reel-cap p {
+            color: var(--ink-soft);
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 42ch;
+        }
+
+        .reel-stage {
+            position: sticky;
+            top: 12vh;
+            height: 76vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .reel-phone {
+            position: relative;
+            aspect-ratio: 9 / 19.5;
+            height: 100%;
+            max-height: 720px;
+            background: #0C0F12;
+            border-radius: 44px;
+            padding: 10px;
+            box-shadow:
+                0 1px 0 rgba(255,255,255,0.08) inset,
+                0 40px 80px -30px rgba(12,15,18,0.45),
+                0 14px 28px -10px rgba(12,15,18,0.25);
+        }
+        .reel-phone::before {
+            content: "";
+            position: absolute;
+            top: 18px; left: 50%;
+            transform: translateX(-50%);
+            width: 96px; height: 28px;
+            background: #0C0F12;
+            border-radius: 16px;
+            z-index: 5;
+        }
+        .reel-phone-screen {
+            position: relative;
+            width: 100%; height: 100%;
+            border-radius: 36px;
+            overflow: hidden;
+            background: #EAE5D9;
+        }
+        .reel-video {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.5s var(--ease);
+            pointer-events: none;
+        }
+        .reel-video.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* Fallback while videos haven't been produced yet */
+        .reel-empty {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 40px;
+            text-align: center;
+            background: linear-gradient(160deg, var(--paper-2) 0%, var(--paper) 100%);
+            color: var(--ink-mute);
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            gap: 14px;
+        }
+        .reel-empty-mark {
+            font-family: var(--f-display);
+            font-size: 2.4rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--court);
+            font-variation-settings: "opsz" 72, "SOFT" 100;
+            letter-spacing: -0.03em;
+        }
+
+        .reel-dots {
+            position: absolute;
+            right: -48px; top: 50%;
+            transform: translateY(-50%);
+            display: flex; flex-direction: column;
+            gap: 10px;
+        }
+        .reel-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--rule-strong);
+            border: 0; padding: 0;
+            cursor: pointer;
+            transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+        }
+        .reel-dot:hover { background: var(--ink-mute); }
+        .reel-dot.is-active { background: var(--court); transform: scale(1.4); }
+        .reel-dot:focus-visible { outline: 2px solid var(--court); outline-offset: 4px; }
+
+        /* Small sandbox callout under the reel */
+        .sandbox-bar {
+            margin-top: clamp(48px, 8vw, 96px);
+            padding-top: 32px;
+            border-top: 1px solid var(--rule);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .sandbox-bar .label-mono { max-width: 48ch; }
+        .sandbox-bar a {
+            font-family: var(--f-mono);
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 2px;
+            min-height: 44px;
+        }
+        .sandbox-bar a::after {
+            content: "→";
+            transition: transform 0.2s var(--ease);
+        }
+        .sandbox-bar a:hover::after { transform: translateX(4px); }
+
+        /* =====================================================================
            Preview (full-width demo embed)
            ===================================================================== */
         .preview-frame {
@@ -870,6 +1036,22 @@
             .pitch-grid { grid-template-columns: 1fr; }
             .colophon-grid { grid-template-columns: 1fr 1fr; }
         }
+        @media (max-width: 960px) {
+            /* Reel: stack — stage sticks to top of viewport, captions scroll below it */
+            .reel-grid {
+                grid-template-columns: 1fr;
+                grid-template-areas: "stage" "caps";
+                gap: 20px;
+            }
+            .reel-stage  { grid-area: stage; position: sticky; top: 68px; height: auto; padding-bottom: 12px; background: var(--paper); z-index: 5; }
+            .reel-captions { grid-area: caps; padding: 0; gap: 56px; }
+            .reel-cap { opacity: 1; }
+            .reel-phone { max-height: 52vh; max-width: 240px; margin: 0 auto; }
+            .reel-phone::before { width: 72px; height: 22px; top: 14px; }
+            .reel-phone-screen { border-radius: 28px; }
+            .reel-dots { display: none; }
+        }
+
         @media (max-width: 720px) {
             .masthead-nav { display: none; }
             .masthead-burger { display: inline-flex; }
@@ -1306,19 +1488,92 @@
             </div>
         </section>
 
-        <!-- ================ Preview ================ -->
-        <section class="chapter" aria-label="Interactive preview">
+        <!-- ================ Reel — sticky-scroll video showcase ================ -->
+        <section class="chapter" id="reel" aria-label="See it in motion">
             <div class="page">
                 <div class="chapter-head">
-                    <span class="kicker">03 / Preview</span>
-                    <h2>Tap around. It behaves like the real thing.</h2>
+                    <span class="kicker">03 / In motion</span>
+                    <h2>Scroll through it. Each clip is a different part of the app.</h2>
                 </div>
-                <div class="preview-frame">
-                    <iframe src="demo/" title="PickleCue interactive demo" loading="lazy" allow="fullscreen"></iframe>
+                <div class="reel-grid">
+                    <div class="reel-captions" id="reelCaps">
+                        <article class="reel-cap is-active" data-idx="0">
+                            <span class="kicker">Clip 01 · Courts</span>
+                            <h3>Find a court in <em>seconds.</em></h3>
+                            <p>A live map of 22,000+ U.S. courts. Filter by surface, lights, indoor vs. outdoor, open-play schedule. Tap for directions and reviews.</p>
+                        </article>
+                        <article class="reel-cap" data-idx="1">
+                            <span class="kicker">Clip 02 · Games</span>
+                            <h3>Post an open game.</h3>
+                            <p>Set skill, capacity, and visibility. Friends see it first, or go fully public. Waitlists and check-ins handled automatically.</p>
+                        </article>
+                        <article class="reel-cap" data-idx="2">
+                            <span class="kicker">Clip 03 · Leagues</span>
+                            <h3>Run a season <em>without a spreadsheet.</em></h3>
+                            <p>Round robin, ladder, or team play. Standings recompute the instant a match is logged. Export anytime.</p>
+                        </article>
+                        <article class="reel-cap" data-idx="3">
+                            <span class="kicker">Clip 04 · Tournaments</span>
+                            <h3>A real bracket, live.</h3>
+                            <p>Single or double elim. Share a public bracket link — your players don&rsquo;t even need the app to follow along.</p>
+                        </article>
+                        <article class="reel-cap" data-idx="4">
+                            <span class="kicker">Clip 05 · Matches</span>
+                            <h3>Log a score in under <em>ten seconds.</em></h3>
+                            <p>A tight score keypad, opponents auto-completed from your network, history that stays clean and searchable.</p>
+                        </article>
+                        <article class="reel-cap" data-idx="5">
+                            <span class="kicker">Clip 06 · Privacy</span>
+                            <h3>Safety first, as a feature.</h3>
+                            <p>Private profiles, location precision you control, one-tap block and report. No ads, ever. No data for sale.</p>
+                        </article>
+                    </div>
+                    <div class="reel-stage">
+                        <div class="reel-phone" aria-hidden="true">
+                            <div class="reel-phone-screen">
+                                <video class="reel-video is-active" data-idx="0" muted loop playsinline preload="metadata" poster="videos/01-courts.jpg">
+                                    <source src="videos/01-courts.webm" type="video/webm">
+                                    <source src="videos/01-courts.mp4" type="video/mp4">
+                                </video>
+                                <video class="reel-video" data-idx="1" muted loop playsinline preload="none" poster="videos/02-games.jpg">
+                                    <source src="videos/02-games.webm" type="video/webm">
+                                    <source src="videos/02-games.mp4" type="video/mp4">
+                                </video>
+                                <video class="reel-video" data-idx="2" muted loop playsinline preload="none" poster="videos/03-leagues.jpg">
+                                    <source src="videos/03-leagues.webm" type="video/webm">
+                                    <source src="videos/03-leagues.mp4" type="video/mp4">
+                                </video>
+                                <video class="reel-video" data-idx="3" muted loop playsinline preload="none" poster="videos/04-tournaments.jpg">
+                                    <source src="videos/04-tournaments.webm" type="video/webm">
+                                    <source src="videos/04-tournaments.mp4" type="video/mp4">
+                                </video>
+                                <video class="reel-video" data-idx="4" muted loop playsinline preload="none" poster="videos/05-matches.jpg">
+                                    <source src="videos/05-matches.webm" type="video/webm">
+                                    <source src="videos/05-matches.mp4" type="video/mp4">
+                                </video>
+                                <video class="reel-video" data-idx="5" muted loop playsinline preload="none" poster="videos/06-privacy.jpg">
+                                    <source src="videos/06-privacy.webm" type="video/webm">
+                                    <source src="videos/06-privacy.mp4" type="video/mp4">
+                                </video>
+                                <div class="reel-empty" id="reelEmpty">
+                                    <span class="reel-empty-mark">In&nbsp;motion</span>
+                                    <span>Preview clips coming soon</span>
+                                </div>
+                            </div>
+                            <div class="reel-dots" role="tablist" aria-label="Reel navigation">
+                                <button class="reel-dot is-active" data-idx="0" aria-label="Show clip 1"></button>
+                                <button class="reel-dot" data-idx="1" aria-label="Show clip 2"></button>
+                                <button class="reel-dot" data-idx="2" aria-label="Show clip 3"></button>
+                                <button class="reel-dot" data-idx="3" aria-label="Show clip 4"></button>
+                                <button class="reel-dot" data-idx="4" aria-label="Show clip 5"></button>
+                                <button class="reel-dot" data-idx="5" aria-label="Show clip 6"></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="preview-caption">
-                    <span class="label-mono">Demo · No sign-in required · Runs in your browser</span>
-                    <a href="demo/" data-track="cta_click" data-cta="preview_fullscreen">Open full demo</a>
+                <div class="sandbox-bar">
+                    <span class="label-mono">Prefer to poke around? A sandbox version of the app runs right in your browser — no sign-in.</span>
+                    <a href="demo/" data-track="cta_click" data-cta="reel_sandbox">Open interactive sandbox</a>
                 </div>
             </div>
         </section>
@@ -1528,6 +1783,81 @@
             wire('waitlistForm', 'waitlistMsg');
             wire('waitlistFormClose', 'waitlistMsgClose');
             wire('waitlistFormPopup', 'waitlistMsgPopup');
+        })();
+
+        /* ---- Reel: sticky-scroll video showcase ---- */
+        (function () {
+            var caps   = document.querySelectorAll('.reel-cap');
+            var videos = document.querySelectorAll('.reel-video');
+            var dots   = document.querySelectorAll('.reel-dot');
+            var empty  = document.getElementById('reelEmpty');
+            if (!caps.length || !videos.length) return;
+
+            // Hide the "coming soon" fallback once any video has real data.
+            var anyReady = false;
+            function markReady() {
+                if (anyReady || !empty) return;
+                anyReady = true;
+                empty.style.display = 'none';
+            }
+            videos.forEach(function (v) {
+                v.addEventListener('loadeddata', markReady);
+                // Keep fallback visible on error — don't call markReady
+                v.addEventListener('error', function (e) {
+                    var src = v.currentSrc || '';
+                    // Silently ignore; the empty-state covers for missing files
+                });
+            });
+
+            var activeIdx = 0;
+            function setActive(idx) {
+                if (idx === activeIdx) return;
+                activeIdx = idx;
+                videos.forEach(function (v) {
+                    var isActive = +v.dataset.idx === idx;
+                    v.classList.toggle('is-active', isActive);
+                    if (isActive) {
+                        if (v.preload === 'none') v.preload = 'auto';
+                        var p = v.play();
+                        if (p && p.catch) p.catch(function () {});
+                    } else {
+                        try { v.pause(); } catch (_) {}
+                    }
+                });
+                caps.forEach(function (c) { c.classList.toggle('is-active', +c.dataset.idx === idx); });
+                dots.forEach(function (d) { d.classList.toggle('is-active', +d.dataset.idx === idx); });
+                window.track('reel_view', { clip: idx });
+            }
+
+            // Kick off clip 0
+            var first = document.querySelector('.reel-video[data-idx="0"]');
+            if (first) {
+                var p = first.play();
+                if (p && p.catch) p.catch(function () {});
+            }
+
+            // IntersectionObserver: caption closest to center of viewport wins
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (entries) {
+                    var best = null;
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) {
+                            best = e;
+                        }
+                    });
+                    if (best) setActive(+best.target.dataset.idx);
+                }, { rootMargin: '-35% 0px -45% 0px', threshold: [0.1, 0.5, 0.9] });
+                caps.forEach(function (c) { io.observe(c); });
+            }
+
+            // Dots → jump to caption
+            dots.forEach(function (d) {
+                d.addEventListener('click', function () {
+                    var idx = +d.dataset.idx;
+                    var cap = document.querySelector('.reel-cap[data-idx="' + idx + '"]');
+                    if (cap) cap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
         })();
 
         /* ---- Waitlist popup: show once, after 10s, never again for this browser ---- */
