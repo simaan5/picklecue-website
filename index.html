@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="color-scheme: light;">
+<html lang="en" style="color-scheme: light dark;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -31,7 +31,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#F4F1EA">
+    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
@@ -114,7 +115,6 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
-            font-feature-settings: "ss01", "cv11";
         }
 
         /* Paper-grain texture — subtle, decorative */
@@ -1016,6 +1016,71 @@
         }
         .popup-card .waitlist-form { max-width: none; }
         .popup-card .waitlist-note { margin-top: 14px; }
+
+        /* =====================================================================
+           Dark mode — follows system preference
+           ===================================================================== */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --paper:      #0F1214;
+                --paper-2:    #1A1F23;
+                --ink:        #EDE9DF;
+                --ink-soft:   #B8BEC5;
+                --ink-mute:   #8A9097;
+                --rule:       rgba(237,233,223,0.12);
+                --rule-strong:rgba(237,233,223,0.28);
+                --court:      #6FB39B;
+                --citron:     #C8E04E;
+                --clay:       #F08250;
+            }
+            body::before {
+                mix-blend-mode: screen;
+                background-image:
+                    radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0);
+            }
+            .masthead { background: rgba(15, 18, 20, 0.82); }
+
+            /* Pinned-dark blocks — phone frame + closing CTA stay always dark for brand identity */
+            .hero-device,
+            .hero-device::before { background: #0C0F12; }
+            .hero-device-screen { background: #F4F1EA; }
+
+            .closing { background: #0C0F12; color: #EDE9DF; }
+            .closing h2 { color: #EDE9DF; }
+            .closing h2 em { color: var(--citron); }
+            .closing .kicker { color: rgba(237,233,223,0.7); }
+            .closing .kicker::before { background: rgba(237,233,223,0.35); }
+            .closing .lede { color: rgba(237,233,223,0.75); }
+            .closing .waitlist-form {
+                background: rgba(237,233,223,0.06);
+                border-color: rgba(237,233,223,0.2);
+            }
+            .closing .waitlist-form input[type="email"] { color: #EDE9DF; }
+            .closing .waitlist-form input[type="email"]::placeholder { color: rgba(237,233,223,0.5); }
+            .closing .waitlist-form .btn-pill { background: var(--citron); color: #0C0F12; }
+            .closing .waitlist-form .btn-pill:hover { background: #D9EF5C; }
+            .closing .waitlist-msg { color: rgba(237,233,223,0.7); }
+            .closing .waitlist-note { color: rgba(237,233,223,0.55); }
+            .closing .waitlist-msg.is-success { color: var(--citron); }
+
+            /* Hero mark highlighter — slightly lower opacity on dark */
+            .hero h1 .mark::before { opacity: 0.7; }
+
+            /* Catalog italic numerals — bump brightness */
+            .catalog-num { color: var(--citron); }
+
+            /* CTA pill stays inverted (light fill on dark bg makes best contrast) */
+            .btn-pill { background: var(--ink); color: var(--paper); }
+            .btn-pill:hover { background: var(--court); color: #0C0F12; }
+
+            /* Waitlist form on paper surface — darken slightly to sit on --paper */
+            .waitlist-form { background: var(--paper-2); }
+            .waitlist-form:focus-within { box-shadow: 0 8px 32px -12px rgba(0,0,0,0.5); }
+
+            /* Popup */
+            .popup-card { box-shadow: 0 40px 80px -30px rgba(0,0,0,0.8); }
+            .popup-backdrop { background: rgba(0,0,0,0.65); }
+        }
     </style>
 </head>
 <body>
@@ -1044,8 +1109,7 @@
         <div class="page edition" aria-hidden="true">
             <span class="edition-issue">
                 <span class="edition-dot"></span>
-                <span>Vol. 01 · 2026</span>
-                <span class="hide-sm">· The pickleball companion</span>
+                <span>The pickleball companion</span>
             </span>
             <span>iOS edition · Coming soon</span>
         </div>
@@ -1127,11 +1191,11 @@
             <div class="page stats-row">
                 <div class="stat-cell">
                     <span class="stat-num"><em>22,000</em>+</span>
-                    <span class="stat-label">Pickleball courts mapped worldwide</span>
+                    <span class="stat-label">Pickleball courts across the United States</span>
                 </div>
                 <div class="stat-cell">
-                    <span class="stat-num">40+</span>
-                    <span class="stat-label">Countries covered from day one</span>
+                    <span class="stat-num">50</span>
+                    <span class="stat-label">States on the map · Global rollout in progress</span>
                 </div>
                 <div class="stat-cell">
                     <span class="stat-num">One</span>
@@ -1170,11 +1234,11 @@
                         <span class="catalog-num">01</span>
                         <div>
                             <h3>Courts, everywhere you play.</h3>
-                            <p>A verified global map of 22,000+ public and private courts — surface, lights, open-play schedule, amenities, reviews. Search, filter, and navigate in a tap.</p>
+                            <p>A verified U.S. map of 22,000+ public and private courts — surface, lights, open-play schedule, amenities, reviews. Search, filter, and navigate in a tap. Global coverage is on the way.</p>
                             <div class="catalog-tags">
                                 <span class="catalog-tag">Map</span>
                                 <span class="catalog-tag">Reviews</span>
-                                <span class="catalog-tag">Global</span>
+                                <span class="catalog-tag">U.S. launch</span>
                             </div>
                         </div>
                     </article>

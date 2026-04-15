@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="color-scheme: light;">
+<html lang="en" style="color-scheme: light dark;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -9,7 +9,8 @@
 
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-    <meta name="theme-color" content="#F4F1EA">
+    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -164,6 +165,20 @@
             font-variation-settings: "opsz" 36, "SOFT" 30;
         }
         .brand img { width: 28px; height: 28px; border-radius: 6px; }
+
+        /* Dark mode — follows system preference */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --paper: #0F1214; --paper-2: #1A1F23;
+                --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
+                --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
+                --court: #6FB39B;
+            }
+            body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
+            .card { background: var(--paper); box-shadow: 0 20px 60px -30px rgba(0,0,0,0.7); }
+            .btn-primary { background: var(--ink); color: var(--paper); }
+            .btn-primary:hover { background: var(--court); color: #0C0F12; }
+        }
     </style>
 </head>
 <body>
