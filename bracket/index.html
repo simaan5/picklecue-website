@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
+    <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
     <title>Opening PickleCue&hellip;</title>
     <meta name="robots" content="noindex,follow">
 
@@ -166,19 +167,29 @@
         }
         .brand img { width: 28px; height: 28px; border-radius: 6px; }
 
-        /* Dark mode — follows system preference */
+        /* Theme — system dark auto, [data-theme="dark"] forces dark */
         @media (prefers-color-scheme: dark) {
-            :root {
+            :root:not([data-theme="light"]) {
                 --paper: #0F1214; --paper-2: #1A1F23;
                 --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
                 --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
                 --court: #6FB39B;
             }
-            body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
-            .card { background: var(--paper); box-shadow: 0 20px 60px -30px rgba(0,0,0,0.7); }
-            .btn-primary { background: var(--ink); color: var(--paper); }
-            .btn-primary:hover { background: var(--court); color: #0C0F12; }
+            :root:not([data-theme="light"]) body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
+            :root:not([data-theme="light"]) .card { background: var(--paper); box-shadow: 0 20px 60px -30px rgba(0,0,0,0.7); }
+            :root:not([data-theme="light"]) .btn-primary { background: var(--ink); color: var(--paper); }
+            :root:not([data-theme="light"]) .btn-primary:hover { background: var(--court); color: #0C0F12; }
         }
+        :root[data-theme="dark"] {
+            --paper: #0F1214; --paper-2: #1A1F23;
+            --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
+            --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
+            --court: #6FB39B;
+        }
+        :root[data-theme="dark"] body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
+        :root[data-theme="dark"] .card { background: var(--paper); box-shadow: 0 20px 60px -30px rgba(0,0,0,0.7); }
+        :root[data-theme="dark"] .btn-primary { background: var(--ink); color: var(--paper); }
+        :root[data-theme="dark"] .btn-primary:hover { background: var(--court); color: #0C0F12; }
     </style>
 </head>
 <body>

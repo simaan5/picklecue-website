@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
+    <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
     <title>Privacy Policy · PickleCue</title>
 
     <meta name="description" content="How PickleCue collects, uses, stores, and protects your information across the website waitlist and the iOS app.">
@@ -222,28 +223,45 @@
         .colophon-base .setinfo::before { content: "◆"; color: var(--citron); font-size: 8px; }
 
         /* ================ Responsive ================ */
-        /* Dark mode — follows system preference */
+        /* Theme — system dark auto-flips unless user picked light; [data-theme="dark"] forces dark */
         @media (prefers-color-scheme: dark) {
-            :root {
-                --paper:      #0F1214;
-                --paper-2:    #1A1F23;
-                --ink:        #EDE9DF;
-                --ink-soft:   #B8BEC5;
-                --ink-mute:   #8A9097;
-                --rule:       rgba(237,233,223,0.12);
-                --rule-strong:rgba(237,233,223,0.28);
-                --court:      #6FB39B;
-                --clay:       #F08250;
+            :root:not([data-theme="light"]) {
+                --paper: #0F1214; --paper-2: #1A1F23;
+                --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
+                --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
+                --court: #6FB39B; --clay: #F08250;
             }
-            body::before {
-                mix-blend-mode: screen;
-                background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0);
-            }
-            .masthead { background: rgba(15, 18, 20, 0.82); }
-            .btn-pill { background: var(--ink); color: var(--paper); }
-            .btn-pill:hover { background: var(--court); color: #0C0F12; }
-            .article-body .callout { background: var(--paper-2); }
+            :root:not([data-theme="light"]) body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
+            :root:not([data-theme="light"]) .masthead { background: rgba(15, 18, 20, 0.82); }
+            :root:not([data-theme="light"]) .btn-pill { background: var(--ink); color: var(--paper); }
+            :root:not([data-theme="light"]) .btn-pill:hover { background: var(--court); color: #0C0F12; }
+            :root:not([data-theme="light"]) .article-body .callout { background: var(--paper-2); }
         }
+        :root[data-theme="dark"] {
+            --paper: #0F1214; --paper-2: #1A1F23;
+            --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
+            --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
+            --court: #6FB39B; --clay: #F08250;
+        }
+        :root[data-theme="dark"] body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
+        :root[data-theme="dark"] .masthead { background: rgba(15, 18, 20, 0.82); }
+        :root[data-theme="dark"] .btn-pill { background: var(--ink); color: var(--paper); }
+        :root[data-theme="dark"] .btn-pill:hover { background: var(--court); color: #0C0F12; }
+        :root[data-theme="dark"] .article-body .callout { background: var(--paper-2); }
+
+        /* Theme toggle */
+        .theme-toggle { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 100px; color: var(--ink-soft); background: transparent; border: 1px solid var(--rule-strong); transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.15s var(--ease); flex-shrink: 0; }
+        .theme-toggle:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-1px); }
+        .theme-toggle svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+        .theme-toggle .icon-sun { display: none; } .theme-toggle .icon-moon { display: block; }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+        }
+        :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
 
         @media (max-width: 960px) {
             .article-layout { grid-template-columns: 1fr; }
@@ -274,6 +292,10 @@
                     <li><a href="support.html">Support</a></li>
                 </ul>
             </nav>
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme" title="Toggle theme">
+                <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
             <a href="/#waitlist" class="btn-pill" data-track="cta_click" data-cta="privacy_nav_waitlist">
                 Get early access
                 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
@@ -527,5 +549,12 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        (function(){var b=document.getElementById('themeToggle');if(!b)return;var r=document.documentElement;
+            function cur(){var e=r.getAttribute('data-theme');if(e==='light'||e==='dark')return e;return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+            b.addEventListener('click',function(){var n=cur()==='dark'?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('pc_theme',n);}catch(_){}});
+        })();
+    </script>
 </body>
 </html>

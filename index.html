@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
+    <!-- Apply saved theme before first paint to prevent a light/dark flash -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('pc_theme');
+                if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+            } catch (_) {}
+        })();
+    </script>
     <title>PickleCue — The field manual for modern pickleball. Coming soon to iOS.</title>
 
     <meta name="description" content="PickleCue is the all-in-one pickleball app — find courts, organize games, run leagues and tournaments, and log matches. Join the waitlist for iOS.">
@@ -94,6 +103,11 @@
             --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
             --page-max:   1240px;
             --gutter:     clamp(20px, 4vw, 44px);
+
+            /* Theme-dependent values, driven by tokens so manual theme toggle works */
+            --grain-blend: multiply;
+            --grain-dot:   rgba(12,15,18,0.035);
+            --masthead-bg: rgba(244,241,234,0.88);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -121,12 +135,11 @@
         body::before {
             content: "";
             position: fixed; inset: 0;
-            background-image:
-                radial-gradient(circle at 1px 1px, rgba(12,15,18,0.035) 1px, transparent 0);
+            background-image: radial-gradient(circle at 1px 1px, var(--grain-dot) 1px, transparent 0);
             background-size: 3px 3px;
             pointer-events: none;
             z-index: 0;
-            mix-blend-mode: multiply;
+            mix-blend-mode: var(--grain-blend);
         }
 
         img, svg { display: block; max-width: 100%; }
@@ -211,7 +224,7 @@
            ===================================================================== */
         .masthead {
             position: sticky; top: 0;
-            background: rgba(244, 241, 234, 0.88);
+            background: var(--masthead-bg);
             backdrop-filter: saturate(1.4) blur(14px);
             -webkit-backdrop-filter: saturate(1.4) blur(14px);
             border-bottom: 1px solid var(--rule);
@@ -446,7 +459,7 @@
             aspect-ratio: 9 / 16.2;
             max-width: 380px;
             margin-left: auto;
-            background: var(--ink);
+            background: #0C0F12;
             border-radius: 42px;
             padding: 10px;
             box-shadow:
@@ -463,7 +476,7 @@
             top: 18px; left: 50%;
             transform: translateX(-50%);
             width: 96px; height: 28px;
-            background: var(--ink);
+            background: #0C0F12;
             border-radius: 16px;
             z-index: 3;
         }
@@ -472,7 +485,7 @@
             width: 100%; height: 100%;
             border-radius: 34px;
             overflow: hidden;
-            background: var(--paper);
+            background: #F4F1EA;
         }
         .hero-device iframe {
             width: 100%; height: 100%;
@@ -890,8 +903,8 @@
            Closing CTA
            ===================================================================== */
         .closing {
-            background: var(--ink);
-            color: var(--paper);
+            background: #0C0F12;
+            color: #EDE9DF;
             padding: clamp(64px, 10vw, 140px) 0;
             position: relative;
             overflow: hidden;
@@ -905,10 +918,10 @@
             pointer-events: none;
         }
         .closing .page { position: relative; z-index: 1; }
-        .closing .kicker { color: rgba(244,241,234,0.7); }
-        .closing .kicker::before { background: rgba(244,241,234,0.35); }
+        .closing .kicker { color: rgba(237,233,223,0.7); }
+        .closing .kicker::before { background: rgba(237,233,223,0.35); }
         .closing h2 {
-            color: var(--paper);
+            color: #EDE9DF;
             font-size: clamp(2.4rem, 6vw, 4.4rem);
             margin: 24px 0 32px;
             max-width: 16ch;
@@ -920,28 +933,28 @@
             font-weight: 400;
             font-variation-settings: "opsz" 144, "SOFT" 100;
         }
-        .closing .lede { color: rgba(244,241,234,0.75); margin-bottom: 40px; }
+        .closing .lede { color: rgba(237,233,223,0.75); margin-bottom: 40px; }
         .closing .waitlist-form {
-            background: rgba(244,241,234,0.06);
-            border-color: rgba(244,241,234,0.2);
+            background: rgba(237,233,223,0.06);
+            border-color: rgba(237,233,223,0.2);
         }
         .closing .waitlist-form:focus-within {
             border-color: var(--citron);
             box-shadow: 0 0 0 4px rgba(200, 224, 78, 0.15);
         }
         .closing .waitlist-form input[type="email"] {
-            color: var(--paper);
+            color: #EDE9DF;
         }
         .closing .waitlist-form input[type="email"]::placeholder {
-            color: rgba(244,241,234,0.5);
+            color: rgba(237,233,223,0.5);
         }
         .closing .waitlist-form .btn-pill {
             background: var(--citron);
-            color: var(--ink);
+            color: #0C0F12;
         }
         .closing .waitlist-form .btn-pill:hover { background: #D9EF5C; }
-        .closing .waitlist-msg { color: rgba(244,241,234,0.7); }
-        .closing .waitlist-note { color: rgba(244,241,234,0.55); }
+        .closing .waitlist-msg { color: rgba(237,233,223,0.7); }
+        .closing .waitlist-note { color: rgba(237,233,223,0.55); }
         .closing .waitlist-msg.is-success { color: var(--citron); }
 
         /* =====================================================================
@@ -1200,10 +1213,15 @@
         .popup-card .waitlist-note { margin-top: 14px; }
 
         /* =====================================================================
-           Dark mode — follows system preference
+           Theming — system preference + manual override via data-theme
            ===================================================================== */
+        :root[data-theme="dark"],
+        :root:not([data-theme="light"]) {}  /* selector placeholder — blocks below are the real theme switchers */
+
+        /* Dark token set — applied when system prefers dark AND user hasn't
+           forced light, OR when user has forced dark. */
         @media (prefers-color-scheme: dark) {
-            :root {
+            :root:not([data-theme="light"]) {
                 --paper:      #0F1214;
                 --paper-2:    #1A1F23;
                 --ink:        #EDE9DF;
@@ -1212,57 +1230,71 @@
                 --rule:       rgba(237,233,223,0.12);
                 --rule-strong:rgba(237,233,223,0.28);
                 --court:      #6FB39B;
-                --citron:     #C8E04E;
                 --clay:       #F08250;
+                --grain-blend: screen;
+                --grain-dot:   rgba(237,233,223,0.045);
+                --masthead-bg: rgba(15,18,20,0.82);
             }
-            body::before {
-                mix-blend-mode: screen;
-                background-image:
-                    radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0);
-            }
-            .masthead { background: rgba(15, 18, 20, 0.82); }
-
-            /* Pinned-dark blocks — phone frame + closing CTA stay always dark for brand identity */
-            .hero-device,
-            .hero-device::before { background: #0C0F12; }
-            .hero-device-screen { background: #F4F1EA; }
-
-            .closing { background: #0C0F12; color: #EDE9DF; }
-            .closing h2 { color: #EDE9DF; }
-            .closing h2 em { color: var(--citron); }
-            .closing .kicker { color: rgba(237,233,223,0.7); }
-            .closing .kicker::before { background: rgba(237,233,223,0.35); }
-            .closing .lede { color: rgba(237,233,223,0.75); }
-            .closing .waitlist-form {
-                background: rgba(237,233,223,0.06);
-                border-color: rgba(237,233,223,0.2);
-            }
-            .closing .waitlist-form input[type="email"] { color: #EDE9DF; }
-            .closing .waitlist-form input[type="email"]::placeholder { color: rgba(237,233,223,0.5); }
-            .closing .waitlist-form .btn-pill { background: var(--citron); color: #0C0F12; }
-            .closing .waitlist-form .btn-pill:hover { background: #D9EF5C; }
-            .closing .waitlist-msg { color: rgba(237,233,223,0.7); }
-            .closing .waitlist-note { color: rgba(237,233,223,0.55); }
-            .closing .waitlist-msg.is-success { color: var(--citron); }
-
-            /* Hero mark highlighter — slightly lower opacity on dark */
-            .hero h1 .mark::before { opacity: 0.7; }
-
-            /* Catalog italic numerals — bump brightness */
-            .catalog-num { color: var(--citron); }
-
-            /* CTA pill stays inverted (light fill on dark bg makes best contrast) */
-            .btn-pill { background: var(--ink); color: var(--paper); }
-            .btn-pill:hover { background: var(--court); color: #0C0F12; }
-
-            /* Waitlist form on paper surface — darken slightly to sit on --paper */
-            .waitlist-form { background: var(--paper-2); }
-            .waitlist-form:focus-within { box-shadow: 0 8px 32px -12px rgba(0,0,0,0.5); }
-
-            /* Popup */
-            .popup-card { box-shadow: 0 40px 80px -30px rgba(0,0,0,0.8); }
-            .popup-backdrop { background: rgba(0,0,0,0.65); }
         }
+        :root[data-theme="dark"] {
+            --paper:      #0F1214;
+            --paper-2:    #1A1F23;
+            --ink:        #EDE9DF;
+            --ink-soft:   #B8BEC5;
+            --ink-mute:   #8A9097;
+            --rule:       rgba(237,233,223,0.12);
+            --rule-strong:rgba(237,233,223,0.28);
+            --court:      #6FB39B;
+            --clay:       #F08250;
+            --grain-blend: screen;
+            --grain-dot:   rgba(237,233,223,0.045);
+            --masthead-bg: rgba(15,18,20,0.82);
+        }
+
+        /* Dark-mode specific tweaks that aren't just token swaps */
+        :root[data-theme="dark"] .hero h1 .mark::before,
+        :root:not([data-theme="light"]) .hero h1 .mark::before {
+            opacity: 0.7;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .hero h1 .mark::before { opacity: 0.7; }
+            :root:not([data-theme="light"]) .catalog-num { color: var(--citron); }
+            :root:not([data-theme="light"]) .waitlist-form { background: var(--paper-2); }
+            :root:not([data-theme="light"]) .popup-backdrop { background: rgba(0,0,0,0.65); }
+        }
+        :root[data-theme="dark"] .catalog-num { color: var(--citron); }
+        :root[data-theme="dark"] .waitlist-form { background: var(--paper-2); }
+        :root[data-theme="dark"] .popup-backdrop { background: rgba(0,0,0,0.65); }
+
+        /* =====================================================================
+           Theme toggle button
+           ===================================================================== */
+        .theme-toggle {
+            width: 40px; height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 100px;
+            color: var(--ink-soft);
+            background: transparent;
+            border: 1px solid var(--rule-strong);
+            transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.15s var(--ease);
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-1px); }
+        .theme-toggle svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+        /* Icon convention: visible icon = the mode you'll switch TO on click.
+           So in light mode you see a moon; in dark mode you see a sun. */
+        .theme-toggle .icon-sun  { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .theme-toggle .icon-sun  { display: block; }
+            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+        }
+        :root[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-sun  { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
     </style>
 </head>
 <body>
@@ -1282,6 +1314,10 @@
                     <li><a href="support.html">Support</a></li>
                 </ul>
             </nav>
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme" title="Toggle theme">
+                <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
             <a href="#waitlist" class="btn-pill" data-track="cta_click" data-cta="nav_waitlist">
                 Get early access
                 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
@@ -1703,6 +1739,44 @@
     </footer>
 
     <script>
+        /* ---- Theme toggle ----
+           Cycles: light → dark → auto (remove override, follow system). */
+        (function () {
+            var btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            var root = document.documentElement;
+
+            function current() {
+                var explicit = root.getAttribute('data-theme');
+                if (explicit === 'light' || explicit === 'dark') return explicit;
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            function apply(next) {
+                if (next === 'auto') {
+                    root.removeAttribute('data-theme');
+                    try { localStorage.removeItem('pc_theme'); } catch (_) {}
+                } else {
+                    root.setAttribute('data-theme', next);
+                    try { localStorage.setItem('pc_theme', next); } catch (_) {}
+                }
+                btn.setAttribute('title', 'Theme: ' + (next === 'auto' ? 'auto (follows system)' : next));
+                window.track('theme_change', { to: next });
+            }
+            btn.addEventListener('click', function () {
+                // Flip to the opposite of what's currently rendered.
+                apply(current() === 'dark' ? 'light' : 'dark');
+            });
+            // Keep system preference in sync if user hasn't overridden
+            try {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+                    if (!root.getAttribute('data-theme')) {
+                        // Trigger a repaint by toggling a harmless class (browsers already do this, but notify)
+                        window.track('theme_system_change', {});
+                    }
+                });
+            } catch (_) {}
+        })();
+
         /* Lightweight analytics — queues events to window.dataLayer. */
         window.dataLayer = window.dataLayer || [];
         window.track = function (name, props) {
