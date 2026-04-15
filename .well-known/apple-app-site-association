@@ -1,11 +1,14 @@
 {
-    "applinks": {
-        "apps": [],
-        "details": [
-            {
-                "appID": "GJ9L423898.com.andrewsimaan.PickleCue",
-                "paths": ["/t/*"]
-            }
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "GJ9L423898.com.andrewsimaan.PickleCue",
+        "paths": [
+          "/t/*",
+          "/bracket/*"
         ]
-    }
+      }
+    ]
+  }
 }

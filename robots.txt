@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /bracket/
+
+Sitemap: https://www.picklecue.com/sitemap.xml

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PickleCue - Your Complete Pickleball Companion</title>
+    <title>PickleCue — The Pickleball Companion App. Coming Soon to iOS.</title>
 
     <!-- SEO -->
-    <meta name="description" content="PickleCue is the ultimate pickleball companion app. Find courts, join games, track stats, and connect with players near you. Available on iOS.">
-    <meta name="keywords" content="pickleball, pickleball app, find pickleball courts, pickleball games, pickleball stats, pickleball leagues, pickleball tournaments">
+    <meta name="description" content="PickleCue is the all-in-one pickleball app — find courts, organize games, run leagues and tournaments, and log matches. Join the waitlist for iOS.">
+    <meta name="keywords" content="pickleball app, pickleball courts, pickleball games, pickleball tournaments, pickleball leagues, pickleball brackets">
     <meta name="author" content="PickleCue">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.picklecue.com/">
@@ -15,8 +15,8 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.picklecue.com/">
-    <meta property="og:title" content="PickleCue - Your Complete Pickleball Companion">
-    <meta property="og:description" content="Find courts, join games, track stats, and connect with pickleball players near you. Available on iOS.">
+    <meta property="og:title" content="PickleCue — The Pickleball Companion App. Coming Soon to iOS.">
+    <meta property="og:description" content="Find courts, organize games, run leagues and tournaments, and log matches. Join the waitlist for iOS.">
     <meta property="og:image" content="https://www.picklecue.com/images/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -25,9 +25,8 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@PickleCueApp">
-    <meta name="twitter:title" content="PickleCue - Your Complete Pickleball Companion">
-    <meta name="twitter:description" content="Find courts, join games, track stats, and connect with pickleball players near you.">
+    <meta name="twitter:title" content="PickleCue — The Pickleball Companion App. Coming Soon to iOS.">
+    <meta name="twitter:description" content="Find courts, organize games, run leagues and tournaments, and log matches.">
     <meta name="twitter:image" content="https://www.picklecue.com/images/og-image.png">
 
     <!-- Favicons -->
@@ -48,25 +47,10 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
+        "@type": "WebSite",
         "name": "PickleCue",
-        "operatingSystem": "iOS",
-        "applicationCategory": "SportsApplication",
-        "description": "The ultimate pickleball companion app. Find courts, join games, track stats, and connect with players.",
         "url": "https://www.picklecue.com/",
-        "downloadUrl": "https://apps.apple.com/app/picklecue",
-        "screenshot": "https://www.picklecue.com/images/og-image.png",
-        "softwareVersion": "1.0",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "5",
-            "ratingCount": "1"
-        }
+        "description": "PickleCue is a pickleball companion app for iOS — find courts, organize games, run leagues and tournaments, and log matches. Coming soon."
     }
     </script>
     <script type="application/ld+json">
@@ -76,12 +60,6 @@
         "name": "PickleCue",
         "url": "https://www.picklecue.com/",
         "logo": "https://www.picklecue.com/images/app-icon-512.png",
-        "sameAs": [
-            "https://www.instagram.com/picklecueapp",
-            "https://www.tiktok.com/@picklecue",
-            "https://www.youtube.com/@picklecue",
-            "https://x.com/PickleCueApp"
-        ],
         "contactPoint": {
             "@type": "ContactPoint",
             "email": "support@picklecue.com",
@@ -563,6 +541,71 @@
             line-height: 1.7;
         }
 
+        /* Waitlist form */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .waitlist-form {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .waitlist-form input[type="email"] {
+            flex: 1 1 240px;
+            min-width: 0;
+            padding: 13px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #FFFFFF;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .waitlist-form input[type="email"]::placeholder {
+            color: rgba(226, 232, 240, 0.35);
+        }
+        .waitlist-form input[type="email"]:focus {
+            outline: none;
+            border-color: #10B981;
+            background: rgba(16, 185, 129, 0.06);
+        }
+        .waitlist-form input[type="email"]:invalid:not(:placeholder-shown) {
+            border-color: #EF4444;
+        }
+        .waitlist-form .btn-appstore {
+            padding: 13px 22px;
+            font-size: 0.95rem;
+        }
+        .waitlist-hp {
+            position: absolute !important;
+            left: -9999px !important;
+            width: 1px !important;
+            height: 1px !important;
+            opacity: 0 !important;
+        }
+        .waitlist-msg {
+            flex-basis: 100%;
+            margin: 6px 0 0 !important;
+            font-size: 0.85rem;
+            min-height: 1.2em;
+            text-align: center;
+        }
+        .waitlist-msg.is-error { color: #FCA5A5; }
+        .waitlist-msg.is-success { color: #6EE7B7; }
+
         /* ============================================
            Footer
            ============================================ */
@@ -876,9 +919,8 @@
                     <li><a href="demo/">Demo</a></li>
                     <li><a href="support.html">Support</a></li>
                 </ul>
-                <a href="https://apps.apple.com/app/picklecue" class="nav-download" aria-label="Download PickleCue on the App Store">
-                    <svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
-                    Download
+                <a href="#waitlist" class="nav-download" data-track="cta_click" data-cta="nav_waitlist" aria-label="Join the PickleCue waitlist">
+                    Get Early Access
                 </a>
             </div>
         </div>
@@ -893,24 +935,24 @@
                 <div class="hero-content">
                     <div class="hero-badge">
                         <span class="hero-badge-dot" aria-hidden="true"></span>
-                        Now Available on iOS
+                        Coming soon to iOS
                     </div>
-                    <h1>Your Complete <span class="highlight">Pickleball</span> Companion</h1>
-                    <p class="hero-subtitle">Find courts, join games, track your stats, and connect with players in your area. Everything you need to play better pickleball.</p>
+                    <h1>The <span class="highlight">pickleball</span> app that does it all.</h1>
+                    <p class="hero-subtitle">Find courts, organize games, run leagues and tournaments, log matches, and connect with players near you — all in one place.</p>
                     <div class="hero-buttons">
-                        <a href="https://apps.apple.com/app/picklecue" class="btn-appstore" aria-label="Download PickleCue on the App Store">
-                            <svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
-                            Download on the App Store
+                        <a href="#waitlist" class="btn-appstore" data-track="cta_click" data-cta="hero_waitlist" aria-label="Join the PickleCue waitlist">
+                            Join the waitlist
+                            <span aria-hidden="true">&rarr;</span>
                         </a>
-                        <a href="demo/" class="btn-demo">
-                            Try Demo
+                        <a href="demo/" class="btn-demo" data-track="cta_click" data-cta="hero_demo">
+                            Try the demo
                             <span aria-hidden="true">&rarr;</span>
                         </a>
                     </div>
                 </div>
                 <div class="hero-demo" aria-label="Interactive app demo">
                     <div class="demo-frame">
-                        <iframe src="demo/" title="PickleCue Interactive Demo" loading="eager" allow="fullscreen"></iframe>
+                        <iframe src="demo/" title="PickleCue Interactive Demo" loading="lazy" allow="fullscreen"></iframe>
                     </div>
                 </div>
             </div>
@@ -961,17 +1003,23 @@
         </section>
 
         <!-- ============================================
-             CTA Section
+             Waitlist Section
              ============================================ -->
-        <section class="cta" aria-label="Download call to action">
+        <section class="cta" id="waitlist" aria-label="Join the waitlist">
             <div class="container">
                 <div class="cta-card">
-                    <h2>Ready to Elevate Your Game?</h2>
-                    <p>Download PickleCue for free and join a community of players who take their pickleball seriously.</p>
-                    <a href="https://apps.apple.com/app/picklecue" class="btn-appstore" aria-label="Download PickleCue on the App Store">
-                        <svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-46.9-42.5-83.7-46.1-35.6-3.5-73.9 21-87.9 21-14.6 0-48.3-19.8-74.3-19.2-39.5.6-76 23-96.4 58.5-41.2 71.5-10.6 177.2 29.6 235.1 19.6 28.4 43.1 60.2 74 59 29.5-1.2 40.7-19.1 76.4-19.1 35.3 0 45.5 19.1 76.6 18.5 32-.6 52.3-29 71.4-57.5 22.4-33 31.6-64.8 32.2-66.5-.7-.3-61.8-23.8-62.4-94.4zm-58.5-174.9C279.3 70.5 291 42.4 287.7 14c-24.2 1.5-52.7 16.8-69.4 37.2-14.9 18.1-28.2 47.3-24.6 75 27 2.1 54.6-13.7 66.5-32.4z"/></svg>
-                        Download on the App Store
-                    </a>
+                    <h2>Be first in line at launch.</h2>
+                    <p>Join the waitlist and we&rsquo;ll email you the moment PickleCue is live on the App Store. No spam, one email.</p>
+                    <form class="waitlist-form" id="waitlistForm" novalidate>
+                        <label class="sr-only" for="waitlist-email">Email address</label>
+                        <input type="email" id="waitlist-email" name="email" placeholder="you@example.com" required autocomplete="email" inputmode="email" />
+                        <!-- honeypot (hidden from humans) -->
+                        <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true" />
+                        <button type="submit" class="btn-appstore" data-track="cta_click" data-cta="waitlist_submit">
+                            Notify me at launch
+                        </button>
+                        <p class="waitlist-msg" id="waitlistMsg" role="status" aria-live="polite"></p>
+                    </form>
                 </div>
             </div>
         </section>
@@ -1000,21 +1048,11 @@
                     </ul>
                 </nav>
                 <div class="footer-social">
-                    <h4>Follow Us</h4>
-                    <div class="social-icons">
-                        <a href="https://www.instagram.com/picklecueapp" class="social-icon" aria-label="Follow PickleCue on Instagram" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-                        </a>
-                        <a href="https://www.tiktok.com/@picklecue" class="social-icon" aria-label="Follow PickleCue on TikTok" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M448 209.9a210.1 210.1 0 01-122.8-39.3v178.8A162.6 162.6 0 11185 188.3v89.9a74.6 74.6 0 1052.2 71.2V0h88a121 121 0 00122.8 121.3z"/></svg>
-                        </a>
-                        <a href="https://www.youtube.com/@picklecue" class="social-icon" aria-label="Follow PickleCue on YouTube" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 576 512" aria-hidden="true"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg>
-                        </a>
-                        <a href="https://x.com/PickleCueApp" class="social-icon" aria-label="Follow PickleCue on X" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
-                        </a>
-                    </div>
+                    <h4>Get in Touch</h4>
+                    <ul>
+                        <li><a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
+                        <li><a href="mailto:press@picklecue.com">press@picklecue.com</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -1022,5 +1060,98 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        /* ---- Lightweight analytics shim ----
+           Queues events to window.dataLayer. A real provider (Plausible / GA4 /
+           Supabase ingestion) can consume the queue later without code changes. */
+        window.dataLayer = window.dataLayer || [];
+        window.track = function (name, props) {
+            try {
+                window.dataLayer.push({ event: name, ts: Date.now(), ...(props || {}) });
+            } catch (_) { /* no-op */ }
+        };
+        document.addEventListener('click', function (e) {
+            var el = e.target.closest('[data-track]');
+            if (!el) return;
+            window.track(el.getAttribute('data-track'), {
+                cta: el.getAttribute('data-cta') || null,
+                href: el.getAttribute('href') || null
+            });
+        });
+
+        /* ---- Waitlist submission ---- */
+        (function () {
+            var SUPABASE_URL  = 'https://uejmhtdfbqbotvbqvfja.supabase.co';
+            var SUPABASE_ANON = ''; // injected at deploy; empty = local-only fallback
+            var form = document.getElementById('waitlistForm');
+            if (!form) return;
+            var msg   = document.getElementById('waitlistMsg');
+            var input = document.getElementById('waitlist-email');
+            var btn   = form.querySelector('button[type="submit"]');
+
+            function setMsg(text, kind) {
+                msg.textContent = text;
+                msg.classList.remove('is-error', 'is-success');
+                if (kind) msg.classList.add('is-' + kind);
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var email = (input.value || '').trim();
+                var hp    = form.elements['company'] ? form.elements['company'].value : '';
+
+                if (hp) { /* bot — silently accept */ setMsg('You\u2019re on the list.', 'success'); form.reset(); return; }
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    setMsg('Please enter a valid email address.', 'error');
+                    input.focus();
+                    return;
+                }
+                btn.disabled = true;
+                setMsg('Adding you\u2026', null);
+                window.track('waitlist_submit', {});
+
+                if (!SUPABASE_ANON) {
+                    // Fallback when key not yet wired: record locally, still show success.
+                    try { (JSON.parse(localStorage.getItem('pc_waitlist') || '[]')).push(email); } catch (_) {}
+                    window.track('waitlist_success', { fallback: true });
+                    setMsg('You\u2019re on the list. We\u2019ll email you at launch.', 'success');
+                    form.reset();
+                    btn.disabled = false;
+                    return;
+                }
+
+                fetch(SUPABASE_URL + '/rest/v1/waitlist_signups', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        source: 'website',
+                        referrer: document.referrer || null,
+                        user_agent: navigator.userAgent
+                    })
+                }).then(function (r) {
+                    if (r.ok || r.status === 409) {
+                        window.track('waitlist_success', {});
+                        setMsg('You\u2019re on the list. We\u2019ll email you at launch.', 'success');
+                        form.reset();
+                    } else {
+                        window.track('waitlist_error', { status: r.status });
+                        setMsg('Something went wrong. Email support@picklecue.com and we\u2019ll add you.', 'error');
+                    }
+                }).catch(function () {
+                    window.track('waitlist_error', { network: true });
+                    setMsg('Network error. Email support@picklecue.com and we\u2019ll add you.', 'error');
+                }).finally(function () {
+                    btn.disabled = false;
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
