@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>PickleCue — The Pickleball Companion App. Coming Soon to iOS.</title>
 
     <!-- SEO -->
@@ -41,7 +42,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
@@ -1117,25 +1118,20 @@
                 var email = (input.value || '').trim();
                 var hp    = form.elements['company'] ? form.elements['company'].value : '';
 
-                if (hp) { /* bot — silently accept */ setMsg('You\u2019re on the list.', 'success'); form.reset(); return; }
+                if (hp) { /* bot — silently accept, store nothing */ setMsg('You\u2019re on the list.', 'success'); form.reset(); return; }
                 if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                     setMsg('Please enter a valid email address.', 'error');
                     input.focus();
                     return;
                 }
+                if (!SUPABASE_ANON) {
+                    // Config missing — fail closed rather than store PII locally.
+                    setMsg('Signups are temporarily unavailable. Email support@picklecue.com and we\u2019ll add you.', 'error');
+                    return;
+                }
                 btn.disabled = true;
                 setMsg('Adding you\u2026', null);
                 window.track('waitlist_submit', {});
-
-                if (!SUPABASE_ANON) {
-                    // Fallback when key not yet wired: record locally, still show success.
-                    try { (JSON.parse(localStorage.getItem('pc_waitlist') || '[]')).push(email); } catch (_) {}
-                    window.track('waitlist_success', { fallback: true });
-                    setMsg('You\u2019re on the list. We\u2019ll email you at launch.', 'success');
-                    form.reset();
-                    btn.disabled = false;
-                    return;
-                }
 
                 fetch(SUPABASE_URL + '/rest/v1/waitlist_signups', {
                     method: 'POST',
@@ -1145,12 +1141,8 @@
                         'Content-Type': 'application/json',
                         'Prefer': 'return=minimal'
                     },
-                    body: JSON.stringify({
-                        email: email,
-                        source: 'website',
-                        referrer: document.referrer || null,
-                        user_agent: navigator.userAgent
-                    })
+                    // PII minimization: only email + a static source tag.
+                    body: JSON.stringify({ email: email, source: 'website' })
                 }).then(function (r) {
                     if (r.ok || r.status === 409) {
                         window.track('waitlist_success', {});
