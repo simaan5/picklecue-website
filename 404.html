@@ -147,8 +147,11 @@
         .colophon-mini-links { display: flex; gap: 28px; flex-wrap: wrap; }
         .made-by { display: inline-flex; align-items: center; gap: 10px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-family: var(--f-mono); font-size: 11px; transition: color 0.2s var(--ease), opacity 0.2s var(--ease); opacity: 0.9; }
         .made-by:hover { color: var(--ink); opacity: 1; }
-        .made-by img { height: 20px; width: auto; border-radius: 4px; transition: transform 0.2s var(--ease); }
+        .made-by img { height: 18px; width: auto; object-fit: contain; border-radius: 3px; transition: transform 0.2s var(--ease); }
         .made-by:hover img { transform: scale(1.08); }
+        .made-by .sep { color: var(--rule-strong); margin: 0 2px; }
+        .made-by .site { color: var(--ink-mute); }
+        .made-by:hover .site { color: var(--ink); }
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) .made-by img { filter: invert(1) brightness(1.05); opacity: 0.9; }
         }
@@ -245,7 +248,10 @@
             <span>&copy; 2026 PickleCue</span>
             <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" aria-label="Made by Anstelias — anstelias.com">
                 <span>Made by</span>
-                <img src="images/anstelias-logo.png" alt="Anstelias" width="58" height="20">
+                <img src="images/anstelias-logo.png" alt="" aria-hidden="true" width="27" height="18">
+                <span>Anstelias Technology</span>
+                <span class="sep" aria-hidden="true">·</span>
+                <span class="site">anstelias.com</span>
             </a>
             <div class="colophon-mini-links">
                 <a href="privacy.html">Privacy</a>
