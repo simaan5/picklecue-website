@@ -1107,8 +1107,24 @@
             .reel-phone-screen { border-radius: 28px; }
             .reel-dots { display: none; }
         }
-        /* .reel-stage background only applies on mobile (inside the <=960px media query) —
-           on desktop the stage must stay transparent so no big rectangle sits behind the phone. */
+        /* Dark mode: dissolve the iPhone body (and notch) into the page so no faint
+           outline of a black rectangle shows up against the near-matching dark page. */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .reel-phone {
+                background: transparent;
+                box-shadow: none;
+                padding: 0;
+            }
+            :root:not([data-theme="light"]) .reel-phone::before { display: none; }
+            :root:not([data-theme="light"]) .reel-phone-screen { background: var(--paper-2); }
+        }
+        :root[data-theme="dark"] .reel-phone {
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+        }
+        :root[data-theme="dark"] .reel-phone::before { display: none; }
+        :root[data-theme="dark"] .reel-phone-screen { background: var(--paper-2); }
 
         @media (max-width: 720px) {
             .masthead-nav { display: none; }
