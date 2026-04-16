@@ -717,16 +717,30 @@
             aspect-ratio: 9 / 19.5;
             height: 100%;
             max-height: 720px;
-            background: transparent;
-            border-radius: 36px;
-            padding: 0;
+            background: #0C0F12;
+            border-radius: 44px;
+            padding: 10px;
+            box-shadow:
+                0 1px 0 rgba(255,255,255,0.08) inset,
+                0 40px 80px -30px rgba(12,15,18,0.45),
+                0 14px 28px -10px rgba(12,15,18,0.25);
+        }
+        .reel-phone::before {
+            content: "";
+            position: absolute;
+            top: 18px; left: 50%;
+            transform: translateX(-50%);
+            width: 96px; height: 28px;
+            background: #0C0F12;
+            border-radius: 16px;
+            z-index: 5;
         }
         .reel-phone-screen {
             position: relative;
             width: 100%; height: 100%;
             border-radius: 36px;
             overflow: hidden;
-            background: transparent;
+            background: #EAE5D9;
         }
         .reel-video {
             position: absolute; inset: 0;
@@ -747,7 +761,7 @@
             align-items: center; justify-content: center;
             padding: 40px;
             text-align: center;
-            background: transparent;   /* no dark outer layer */
+            background: linear-gradient(160deg, var(--paper-2) 0%, var(--paper) 100%);
             color: var(--ink-mute);
             font-family: var(--f-mono);
             font-size: 11px;
@@ -1093,10 +1107,8 @@
             .reel-phone-screen { border-radius: 28px; }
             .reel-dots { display: none; }
         }
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) .reel-stage { background: var(--paper); }
-        }
-        :root[data-theme="dark"] .reel-stage { background: var(--paper); }
+        /* .reel-stage background only applies on mobile (inside the <=960px media query) —
+           on desktop the stage must stay transparent so no big rectangle sits behind the phone. */
 
         @media (max-width: 720px) {
             .masthead-nav { display: none; }
