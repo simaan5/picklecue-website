@@ -94,10 +94,10 @@ build_reel "02-games" \
 build_reel "03-leagues" \
   03-leagues-take3.mp4 0.5 7.5
 
-# 04 Tournaments: search + detail (5s) → bracket reveal + pan (6s)  ~11s
+# 04 Tournaments: Spring Showdown detail → Players list (16 pts w/ seeds) → Bracket → pan
+# Take 2 is action-dense with Players modal + bracket reveal in one recording (~13s)
 build_reel "04-tournaments" \
-  04-tournaments-take1.mp4 0.5 5.0 \
-  04b-bracket-take1.mp4 19.5 6.5
+  04c-tour-take2.mp4 0.4 13.0
 
 # 05 Matches: history+stats (5s) → Log Match keypad (6s)  ~11s
 build_reel "05-matches" \
