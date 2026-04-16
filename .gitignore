@@ -1,1 +1,5 @@
 .DS_Store
+
+# Raw simulator captures (~212 MB) — kept locally for re-encode but not deployed.
+# Final clips, posters, SHOT_LIST.md and process.sh are tracked normally.
+videos/raw/*.mp4
