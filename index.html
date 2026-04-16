@@ -1107,9 +1107,16 @@
                 margin: 0 auto;
             }
             .reel-phone-screen { border-radius: 28px; }
-            .reel-empty { padding: 20px 14px; gap: 8px; }
-            .reel-empty-mark { font-size: 1.1rem; letter-spacing: -0.02em; }
-            .reel-empty > span:last-child { font-size: 9px; letter-spacing: 0.14em; }
+            /* On mobile the phone is narrow; drop the big italic headline entirely
+               and let the tiny caption alone live on the screen. Cleaner, no overflow. */
+            .reel-empty { padding: 24px 16px; gap: 0; }
+            .reel-empty-mark { display: none; }
+            .reel-empty > span:last-child {
+                font-size: 10px;
+                letter-spacing: 0.16em;
+                line-height: 1.5;
+                max-width: 14ch;
+            }
             .reel-dots { display: none; }
         }
         /* .reel-stage background only applies on mobile (inside the <=960px media query) —
