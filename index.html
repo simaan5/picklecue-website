@@ -44,11 +44,6 @@
     <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
-
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -492,6 +487,28 @@
             width: 100%; height: 100%;
             border: 0;
             display: block;
+            animation: iframeIn 0.5s var(--ease) both;
+        }
+        @keyframes iframeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hero-device-placeholder {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 14px;
+            background: linear-gradient(155deg, #EAE5D9 0%, #F4F1EA 70%);
+            color: var(--ink-mute);
+            font-family: var(--f-mono); font-size: 10px;
+            letter-spacing: 0.18em; text-transform: uppercase;
+        }
+        .hero-device-placeholder-orb {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, var(--citron), var(--court) 70%);
+            box-shadow: 0 12px 28px -12px rgba(46,94,78,0.4);
+            animation: orbPulse 1.8s var(--ease) infinite;
+        }
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(1); opacity: 0.85; }
+            50%      { transform: scale(1.12); opacity: 1; }
         }
         .hero-device-label {
             position: absolute;
@@ -1319,6 +1336,10 @@
         :root[data-theme="light"] .theme-toggle .icon-sun  { display: none; }
         :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
     </style>
+    <!-- Fonts: self-hosted, preload the two critical latin subsets -->
+    <link rel="preload" href="/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/fonts.css">
 </head>
 <body>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -1412,8 +1433,12 @@
                     <p class="waitlist-note fade-rise d-5">One email. No spam. Unsubscribe anytime.</p>
                 </div>
                 <div class="hero-device fade-rise d-3" role="img" aria-label="Interactive preview of the PickleCue app">
-                    <div class="hero-device-screen">
-                        <iframe src="demo/" title="PickleCue interactive preview" loading="lazy" allow="fullscreen"></iframe>
+                    <div class="hero-device-screen" id="heroDeviceScreen" data-iframe-src="demo/">
+                        <!-- iframe is injected post-load by JS so it never blocks first paint -->
+                        <div class="hero-device-placeholder" aria-hidden="true">
+                            <span class="hero-device-placeholder-orb"></span>
+                            <span class="hero-device-placeholder-label">Loading preview&hellip;</span>
+                        </div>
                     </div>
                     <span class="hero-device-label">Live · Preview</span>
                 </div>
@@ -1879,6 +1904,37 @@
             wire('waitlistForm', 'waitlistMsg');
             wire('waitlistFormClose', 'waitlistMsgClose');
             wire('waitlistFormPopup', 'waitlistMsgPopup');
+        })();
+
+        /* ---- Hero device iframe — inject post-load so it never blocks first paint ---- */
+        (function () {
+            var screen = document.getElementById('heroDeviceScreen');
+            if (!screen) return;
+            var src = screen.getAttribute('data-iframe-src');
+            if (!src) return;
+            function mount() {
+                if (screen.querySelector('iframe')) return;
+                var iframe = document.createElement('iframe');
+                iframe.src = src;
+                iframe.title = 'PickleCue interactive preview';
+                iframe.allow = 'fullscreen';
+                iframe.loading = 'eager';
+                // Replace placeholder once iframe paints
+                iframe.addEventListener('load', function () {
+                    var ph = screen.querySelector('.hero-device-placeholder');
+                    if (ph) ph.remove();
+                });
+                screen.appendChild(iframe);
+            }
+            function schedule() {
+                if ('requestIdleCallback' in window) {
+                    window.requestIdleCallback(mount, { timeout: 2000 });
+                } else {
+                    setTimeout(mount, 600);
+                }
+            }
+            if (document.readyState === 'complete') schedule();
+            else window.addEventListener('load', schedule, { once: true });
         })();
 
         /* ---- Reel: sticky-scroll video showcase ---- */
