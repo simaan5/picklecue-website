@@ -1090,14 +1090,28 @@
                 grid-template-areas: "stage" "caps";
                 gap: 20px;
             }
-            .reel-stage  { grid-area: stage; position: sticky; top: 68px; height: auto; padding-bottom: 12px; background: var(--paper); z-index: 5; }
+            .reel-stage  { grid-area: stage; position: sticky; top: 68px; height: auto; padding-bottom: 16px; background: var(--paper); z-index: 5; }
             .reel-captions { grid-area: caps; padding: 0; gap: 56px; }
             .reel-cap { opacity: 1; }
-            .reel-phone { max-height: 52vh; max-width: 240px; margin: 0 auto; }
-            .reel-phone::before { width: 72px; height: 22px; top: 14px; }
+            /* Override the desktop height:100% + max-height:720px.
+               On mobile the sticky container is height:auto, so height:100%
+               collapsed the phone to 0px and only the absolutely-positioned
+               notch rendered — that was the mystery black plus-sign. */
+            .reel-phone {
+                height: auto;
+                width: min(260px, 62vw);
+                max-width: 260px;
+                max-height: 56vh;
+                margin: 0 auto;
+            }
+            .reel-phone::before { width: 68px; height: 20px; top: 12px; }
             .reel-phone-screen { border-radius: 28px; }
             .reel-dots { display: none; }
         }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .reel-stage { background: var(--paper); }
+        }
+        :root[data-theme="dark"] .reel-stage { background: var(--paper); }
 
         @media (max-width: 720px) {
             .masthead-nav { display: none; }
