@@ -771,12 +771,14 @@
         }
         .reel-empty-mark {
             font-family: var(--f-display);
-            font-size: 2.4rem;
+            font-size: clamp(1.4rem, 4.2vw, 2.4rem);
             font-weight: 400;
             font-style: italic;
             color: var(--court);
             font-variation-settings: "opsz" 72, "SOFT" 100;
             letter-spacing: -0.03em;
+            line-height: 1.05;
+            max-width: 100%;
         }
 
         .reel-dots {
@@ -1105,6 +1107,8 @@
                 margin: 0 auto;
             }
             .reel-phone-screen { border-radius: 28px; }
+            .reel-empty { padding: 24px 18px; gap: 10px; }
+            .reel-empty-mark { font-size: 1.5rem; }
             .reel-dots { display: none; }
         }
         /* .reel-stage background only applies on mobile (inside the <=960px media query) —
