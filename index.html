@@ -717,24 +717,12 @@
             aspect-ratio: 9 / 19.5;
             height: 100%;
             max-height: 720px;
-            background: #0C0F12;
-            border-radius: 44px;
-            padding: 10px;
-            box-shadow:
-                0 1px 0 rgba(255,255,255,0.08) inset,
-                0 40px 80px -30px rgba(12,15,18,0.45),
-                0 14px 28px -10px rgba(12,15,18,0.25);
+            background: transparent;   /* no black rectangle body */
+            border-radius: 36px;
+            padding: 0;
+            filter: drop-shadow(0 28px 48px rgba(12,15,18,0.22));
         }
-        .reel-phone::before {
-            content: "";
-            position: absolute;
-            top: 18px; left: 50%;
-            transform: translateX(-50%);
-            width: 96px; height: 28px;
-            background: #0C0F12;
-            border-radius: 16px;
-            z-index: 5;
-        }
+        /* Notch removed (no ::before) — the dark iPhone body is gone. */
         .reel-phone-screen {
             position: relative;
             width: 100%; height: 100%;
@@ -1104,7 +1092,6 @@
                 max-height: 56vh;
                 margin: 0 auto;
             }
-            .reel-phone::before { width: 68px; height: 20px; top: 12px; }
             .reel-phone-screen { border-radius: 28px; }
             .reel-dots { display: none; }
         }
