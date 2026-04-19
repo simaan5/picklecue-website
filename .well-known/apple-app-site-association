@@ -1,14 +1,20 @@
-{
-  "applinks": {
-    "apps": [],
-    "details": [
-      {
-        "appID": "GJ9L423898.com.andrewsimaan.PickleCue",
-        "paths": [
-          "/t/*",
-          "/bracket/*"
-        ]
-      }
-    ]
+{                                                                                                                                                                                               
+    "applinks": {                                           
+      "apps": [],                                                                                                                                                                                 
+      "details": [                                          
+        {
+          "appID": "GJ9L423898.com.andrewsimaan.PickleCue",
+          "paths": [                                                                                                                                                                              
+            "/t/*",
+            "/l/*",                                                                                                                                                                               
+            "/bracket/*",                                   
+            "/game/*",                                                                                                                                                                            
+            "/court/*",
+            "/chat/*",                                                                                                                                                                            
+            "/profile/*",                                   
+            "/match/*"
+          ]                                                                                                                                                                                       
+        }
+      ]                                                                                                                                                                                           
+    }                                                       
   }
-}
