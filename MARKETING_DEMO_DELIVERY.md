@@ -1,6 +1,6 @@
 # PickleCue Marketing Demo Reel — Delivery
 
-**Date:** 2026-04-16
+**Date:** 2026-04-16 · **Live at:** https://www.picklecue.com (deployed via GitHub Pages from `main`)
 **Demo user:** Andrew S. (testuser1@gmail.com → display_name "Andrew S.", skill 4.5)
 **Sim:** iPhone 17 Pro · UUID `CF00A6D6-8340-4F88-B683-6C130EA6EB86` · iOS 18.x
 **Bundle:** `com.andrewsimaan.PickleCue`
@@ -12,7 +12,9 @@
 
 ## TL;DR
 
-Seven 540×1174 6–9s clips encoded as mp4 + webm + jpg poster, dropped into `/videos/` and auto-wired into the existing reel slots in `index.html`. The reel auto-plays the active clip and hides the "coming soon" placeholder once any video has data.
+Seventeen 540×1174 6–9s clips encoded as mp4 + webm + jpg poster, dropped into `/videos/` and auto-wired into the existing reel slots in `index.html`. Total payload ~5.8 MB. The reel auto-plays the active clip and hides the "coming soon" placeholder once any video has data. Committed + pushed to `main` — GitHub Pages auto-deploys.
+
+### Hero reel slots (already wired into index.html)
 
 | Slot | Asset | Duration | Story shown |
 |------|-------|----------|------------|
@@ -22,9 +24,22 @@ Seven 540×1174 6–9s clips encoded as mp4 + webm + jpg poster, dropped into `/
 | 04 | `videos/04-tournaments.{mp4,webm,jpg}` | 7.5s | PickleCue Spring Showdown — $600 prize, 16/16, Single Elim, 4-action grid |
 | 05 | `videos/05-matches.{mp4,webm,jpg}` | 8.0s | Matches history: 3 cards, 2-1 record, 2W streak, 66.7% win rate |
 | 06 | `videos/06-privacy.{mp4,webm,jpg}` | 8.2s | Settings → Pro upgrade card → Notifications/Privacy/Appearance picker |
-| 07 | `videos/07-home.{mp4,webm,jpg}` | 7.6s | Home feed: weather, featured game, action chips, populated cards (bonus / hero candidate) |
 
-Total payload: ~1.5 MB across all 7 clips × 3 formats. Clip 07 is not in the existing reel slot grid; it is available for hero/feature placement.
+### Extended clips (not yet placed; ready to wire wherever needed)
+
+| ID | Asset | Duration | Story shown |
+|----|-------|----------|------------|
+| 07 | `videos/07-home.{mp4,webm,jpg}` | 7.6s | Home feed: weather, featured game, action chips, populated cards |
+| 04b | `videos/04b-bracket.{mp4,webm,jpg}` | 9.0s | **Live tournament bracket** — 16-player single-elim with Champion-track, Round 1→Final progression, "in progress" badges |
+| 08 | `videos/08-game-creation.{mp4,webm,jpg}` | 9.0s | Create Game wizard — Quick Start cards, court picker, when chips, format toggle |
+| 09 | `videos/09-game-join.{mp4,webm,jpg}` | 8.5s | Tap RSVP → "You're In!" success alert → 4/4 full state |
+| 10 | `videos/10-match-log.{mp4,webm,jpg}` | 8.5s | Log Match keypad — format toggle, quick-score chips, score counter |
+| 11 | `videos/11-profile-detail.{mp4,webm,jpg}` | 9.0s | Profile main: avatar, 4.5 DUPR, bio, skill slider, stats |
+| 12 | `videos/12-profile-drawer.{mp4,webm,jpg}` | 7.5s | Profile drawer: Andrew S. card, Pro upgrade, Friends/Messages, Dark Mode toggle |
+| 13 | `videos/13-messaging.{mp4,webm,jpg}` | 7.5s | Messages list with unread counts (Sarah K., Marcus T., Weekend Pickleballers, etc.) |
+| 14 | `videos/14-group-chat.{mp4,webm,jpg}` | 8.0s | Weekend Pickleballers 🏓 group thread — 5 senders, 7 messages with avatars |
+| 15 | `videos/15-notifications.{mp4,webm,jpg}` | 8.0s | Bell tap → notifications drawer (sparse — see "Polish issues" §) |
+| 16 | `videos/16-safety.{mp4,webm,jpg}` | 8.5s | Safety Center: Tips, Emergency Contacts, Blocked, Muted, Reports, Community Guidelines |
 
 ---
 
