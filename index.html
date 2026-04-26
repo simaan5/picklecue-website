@@ -2049,10 +2049,11 @@
             });
         })();
 
-        /* ---- Waitlist popup: show once, after 10s, never again for this browser ---- */
+        /* ---- Waitlist popup: show once (scroll-intent or time fallback), never again for this browser ---- */
         (function () {
             var STORAGE_KEY = 'pc_waitlist_popup_v1';
-            var DELAY_MS    = 10000;
+            var FALLBACK_DELAY_MS = 20000;
+            var SCROLL_RATIO_TRIGGER = 0.45;
 
             function seen() {
                 try { return !!localStorage.getItem(STORAGE_KEY); }
@@ -2113,9 +2114,26 @@
                 observer.observe(popupMsg, { attributes: true, attributeFilter: ['class'] });
             });
 
-            // Schedule
+            // Schedule: show on meaningful scroll depth, with a timed fallback.
             if (!seen()) {
-                setTimeout(open, DELAY_MS);
+                var shown = false;
+                function maybeOpen() {
+                    if (shown || seen()) return;
+                    shown = true;
+                    open();
+                }
+                function onScroll() {
+                    var doc = document.documentElement;
+                    var depth = (window.scrollY + window.innerHeight) / Math.max(doc.scrollHeight, 1);
+                    if (depth >= SCROLL_RATIO_TRIGGER) {
+                        window.removeEventListener('scroll', onScroll);
+                        clearTimeout(fallbackTimer);
+                        setTimeout(maybeOpen, 700);
+                    }
+                }
+
+                var fallbackTimer = setTimeout(maybeOpen, FALLBACK_DELAY_MS);
+                window.addEventListener('scroll', onScroll, { passive: true });
             }
         })();
     </script>
