@@ -604,6 +604,37 @@
         .pitch-body p { margin-bottom: 1em; color: var(--ink-soft); max-width: 62ch; }
         .pitch-body p:last-child { margin-bottom: 0; }
         .pitch-body p strong { color: var(--ink); font-weight: 600; }
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0;
+            border-top: 1px solid var(--rule-strong);
+            border-bottom: 1px solid var(--rule-strong);
+            margin-top: clamp(28px, 4vw, 48px);
+        }
+        .persona-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: clamp(22px, 3vw, 30px);
+            border-right: 1px solid var(--rule);
+        }
+        .persona-card:last-child { border-right: 0; }
+        .persona-card h3 { font-size: clamp(1.2rem, 1.9vw, 1.45rem); }
+        .persona-card p { color: var(--ink-soft); font-size: 15px; line-height: 1.58; }
+        .persona-card a {
+            margin-top: auto;
+            width: fit-content;
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--court);
+            border-bottom: 1px solid currentColor;
+            padding-bottom: 2px;
+        }
+        .persona-card a:hover { color: var(--ink); }
+
 
         /* =====================================================================
            Features — editorial catalog
@@ -1136,6 +1167,9 @@
                 padding-left: 0; padding-right: 0;
                 border-right: 0;
             }
+            .persona-grid { grid-template-columns: 1fr; }
+            .persona-card { border-right: 0; border-bottom: 1px solid var(--rule); }
+            .persona-card:last-child { border-bottom: 0; }
             .colophon-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 40px; }
             .waitlist-form { border-radius: 16px; padding: 10px; flex-direction: column; align-items: stretch; gap: 8px; }
             .waitlist-form input[type="email"] {
@@ -1519,6 +1553,33 @@
         </section>
 
         <!-- ================ Features ================ -->
+        
+        <section class="chapter" id="personas" aria-label="Who PickleCue is for">
+            <div class="page">
+                <div class="chapter-head">
+                    <span class="kicker">01.5 / Who it is for</span>
+                    <h2>Choose your lane: player, organizer, or club.</h2>
+                </div>
+                <div class="persona-grid">
+                    <article class="persona-card">
+                        <h3>For players</h3>
+                        <p>Find courts, join games, and keep match history without juggling group chats and notes.</p>
+                        <a href="players.html">See player page</a>
+                    </article>
+                    <article class="persona-card">
+                        <h3>For organizers</h3>
+                        <p>Run leagues and tournaments with cleaner standings, bracket workflows, and communication.</p>
+                        <a href="organizers.html">See organizer page</a>
+                    </article>
+                    <article class="persona-card">
+                        <h3>For clubs &amp; venues</h3>
+                        <p>Give your community one operational home for open play, events, and recurring participation.</p>
+                        <a href="clubs.html">See club page</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <section class="chapter" id="features" aria-label="Features">
             <div class="page">
                 <div class="chapter-head">
