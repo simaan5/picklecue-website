@@ -779,10 +779,14 @@ body {
     width: 100%; max-width: none;
     padding: 0; border-radius: 0;
     background: transparent; box-shadow: none;
+    display: flex; justify-content: center;
 }
 .embedded .iphone-screen {
     border-radius: 0;
     height: 100vh; max-height: none;
+    width: min(100vw, 440px);
+    aspect-ratio: auto;
+    flex: 0 0 auto;
 }
 
 /* ─── Real app avatars + logo badges ─── */
