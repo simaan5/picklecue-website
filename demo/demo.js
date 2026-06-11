@@ -1,251 +1,94 @@
-/* PickleCue Interactive Demo — demo.js */
+/* PickleCue Interactive Demo — 1:1 mirror of the iOS app's hub interactions. */
 
 (function () {
     'use strict';
 
-    // ─── State ───
-    let currentTab = 'home';
-    let leagueDetailOpen = false;
-    let currentDetailTab = 'overview';
+    // ─── Demo game data (mirrors the app's fixture set) ───
+    var GAMES = [
+        { pill: 'NEXT GAME', title: 'Zilker Morning Rally', court: 'Zilker Park Courts • Court 4', time: 'Today • 7:00 AM',
+          level: '3.0–4.0 Level • Doubles', spots: '3/4', spotsSub: 'Open spots remaining', pcount: 3,
+          format: 'Doubles', skill: '3.0–4.0', barSub: '1 of 4 spots open', cta: '🏃 View Game', full: false },
+        { pill: '📍 NEAR YOU', title: 'Lunch Singles Ladder', court: 'Rec - Fillmore • 1.5 mi', time: 'Tomorrow • 12:00 PM',
+          level: '3.0–4.0 Level • Singles', spots: '1/2', spotsSub: 'Open spots remaining', pcount: 1,
+          format: 'Singles', skill: '3.0–4.0', barSub: '1 of 2 spots open', cta: '🏃 Join Game', full: false },
+        { pill: '📍 NEAR YOU', title: 'Sunset Doubles Rally', court: 'Carl Larsen Park • 2.4 mi', time: 'Tomorrow • 6:00 PM',
+          level: '3.5–4.0 Level • Doubles', spots: '2/4', spotsSub: 'Open spots remaining', pcount: 2,
+          format: 'Doubles', skill: '3.5–4.0', barSub: '2 of 4 spots open', cta: '🏃 Join Game', full: false },
+        { pill: '📍 NEAR YOU', title: 'Saturday Round Robin', court: 'Carl Larsen Park • 2.4 mi', time: 'Sat • 9:00 AM',
+          level: '3.0–4.5 Level • Doubles', spots: '1/8', spotsSub: 'Open spots remaining', pcount: 1,
+          format: 'Doubles', skill: '3.0–4.5', barSub: '7 of 8 spots open', cta: '🏃 Join Game', full: false },
+        { pill: '📍 NEAR YOU', title: 'Evening Open Play', court: 'Betty Ann Ong Recreation Center • 2.7 mi', time: 'Today • 8:30 PM',
+          level: '3.0–3.5 Level • Doubles', spots: '0/4', spotsSub: 'Game is full', pcount: 4,
+          format: 'Doubles', skill: '3.0–3.5', barSub: '#1 would be your position', cta: '📋 Join Waitlist', full: true }
+    ];
 
     // ─── Tab switching ───
-    function showTab(tabId) {
-        if (tabId === currentTab && !leagueDetailOpen) return;
+    window.showTab = function (tabId) {
+        closeGameDetail();
+        document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
+        document.querySelectorAll('.tab-item').forEach(function (t) { t.classList.remove('active'); });
+        var screen = document.getElementById('screen-' + tabId);
+        var tab = document.querySelector('.tab-item[data-tab="' + tabId + '"]');
+        if (screen) { screen.classList.add('active'); screen.scrollTop = 0; }
+        if (tab) { tab.classList.add('active'); }
+    };
 
-        // Close league detail if open
-        if (leagueDetailOpen) {
-            closeLeagueDetail();
+    // ─── Play hub segments ───
+    window.playSeg = function (el) {
+        document.querySelectorAll('#play-tray .tray-tab').forEach(function (t) { t.classList.remove('active'); });
+        el.classList.add('active');
+        var map = { open: 'seg-open', mine: 'seg-mine', wait: 'seg-wait', past: 'seg-past' };
+        document.querySelectorAll('.play-seg').forEach(function (s) { s.classList.remove('active'); });
+        var seg = document.getElementById(map[el.dataset.seg]);
+        if (seg) { seg.classList.add('active'); }
+    };
+
+    // ─── Compete segment control ───
+    window.competeSeg = function (el) {
+        document.querySelectorAll('#compete-seg .seg-pill').forEach(function (p) { p.classList.remove('active'); });
+        el.classList.add('active');
+        document.querySelectorAll('.hub-pane').forEach(function (p) { p.classList.remove('active'); });
+        var pane = document.getElementById('hub-' + el.dataset.hub);
+        if (pane) { pane.classList.add('active'); }
+    };
+
+    // ─── Filter pills: tap to cycle through real filter values ───
+    window.cyclePill = function (el) {
+        var options = Array.prototype.slice.call(arguments, 1);
+        var base = options[0];
+        var current = el.dataset.idx ? parseInt(el.dataset.idx, 10) : 0;
+        var next = (current + 1) % (options.length + 1);
+        el.dataset.idx = next;
+        var icon = el.textContent.trim().split(' ')[0];
+        if (next === 0) {
+            el.classList.remove('sel');
+            el.textContent = icon + ' ' + base;
+        } else {
+            el.classList.add('sel');
+            el.textContent = icon + ' ' + options[next - 1];
         }
+    };
 
-        const screens = document.querySelectorAll('.screen');
-        const tabs = document.querySelectorAll('.tab-item');
+    // ─── Game detail overlay ───
+    window.openGameDetail = function (index) {
+        var g = GAMES[index] || GAMES[0];
+        document.getElementById('gd-pill').textContent = g.pill;
+        document.getElementById('gd-title').textContent = g.title;
+        document.getElementById('gd-court').textContent = g.court;
+        document.getElementById('gd-time').textContent = g.time;
+        document.getElementById('gd-level').textContent = g.level;
+        document.getElementById('gd-spots').textContent = g.spots;
+        document.getElementById('gd-spots').classList.toggle('full', g.full);
+        document.getElementById('gd-spots-sub').textContent = g.spotsSub;
+        document.getElementById('gd-pcount').textContent = g.pcount;
+        document.getElementById('gd-format').textContent = g.format + ' ›';
+        document.getElementById('gd-skill').textContent = g.skill + ' ›';
+        document.getElementById('gd-bar-sub').textContent = g.barSub;
+        document.getElementById('gd-cta').textContent = g.cta;
+        document.getElementById('game-detail').classList.add('open');
+    };
 
-        screens.forEach(s => {
-            s.classList.remove('active', 'prev');
-        });
-
-        tabs.forEach(t => t.classList.remove('active'));
-
-        const next = document.getElementById('screen-' + tabId);
-        const activeTab = document.querySelector('.tab-item[data-tab="' + tabId + '"]');
-
-        if (next) {
-            next.classList.add('active');
-        }
-        if (activeTab) {
-            activeTab.classList.add('active');
-        }
-
-        currentTab = tabId;
-    }
-
-    // ─── League detail ───
-    function openLeagueDetail(leagueIndex) {
-        const detail = document.getElementById('league-detail');
-        if (!detail) return;
-
-        const leagues = getFakeLeagues();
-        const league = leagues[leagueIndex] || leagues[0];
-
-        // Populate header
-        document.getElementById('league-detail-icon').textContent = league.icon;
-        document.getElementById('league-detail-name').textContent = league.name;
-        document.getElementById('league-detail-sub').textContent = league.details;
-
-        detail.classList.add('open');
-        leagueDetailOpen = true;
-
-        // Show overview tab by default
-        switchDetailTab('overview');
-    }
-
-    function closeLeagueDetail() {
-        const detail = document.getElementById('league-detail');
-        if (detail) {
-            detail.classList.remove('open');
-        }
-        leagueDetailOpen = false;
-    }
-
-    function switchDetailTab(tabId) {
-        currentDetailTab = tabId;
-
-        document.querySelectorAll('.detail-tab').forEach(t => {
-            t.classList.toggle('active', t.dataset.tab === tabId);
-        });
-
-        document.querySelectorAll('.detail-content').forEach(c => {
-            c.classList.toggle('active', c.id === 'dtab-' + tabId);
-        });
-
-        // Scroll chat to bottom on open
-        if (tabId === 'chat') {
-            setTimeout(scrollChatToBottom, 50);
-        }
-    }
-
-    // ─── Chat with localStorage ───
-    const CHAT_KEY = 'picklecue_demo_chat';
-
-    function getStoredMessages() {
-        try {
-            const raw = localStorage.getItem(CHAT_KEY);
-            if (raw) return JSON.parse(raw);
-        } catch (_) { /* ignore */ }
-        return null;
-    }
-
-    function saveMessages(messages) {
-        try {
-            localStorage.setItem(CHAT_KEY, JSON.stringify(messages));
-        } catch (_) { /* ignore */ }
-    }
-
-    function getDefaultMessages() {
-        return [
-            { sender: 'Mike K.', text: 'Hey team! Who\'s ready for Saturday\'s match?', me: false },
-            { sender: 'Sarah L.', text: 'Count me in! Central Park at 10am right?', me: false },
-            { sender: 'You', text: 'I\'ll be there. Should we warm up at 9:30?', me: true },
-            { sender: 'Mike K.', text: 'Great idea. Let\'s do it!', me: false },
-            { sender: 'James R.', text: 'I can bring extra balls and my portable net', me: false },
-            { sender: 'You', text: 'Perfect, see everyone Saturday!', me: true },
-        ];
-    }
-
-    function renderChat() {
-        const container = document.getElementById('chat-messages');
-        if (!container) return;
-
-        let messages = getStoredMessages();
-        if (!messages) {
-            messages = getDefaultMessages();
-            saveMessages(messages);
-        }
-
-        container.innerHTML = messages.map(m => {
-            if (m.me) {
-                return '<div class="chat-msg me">' + escapeHtml(m.text) + '</div>';
-            }
-            return '<div class="chat-msg them"><div class="chat-sender">' +
-                escapeHtml(m.sender) + '</div>' + escapeHtml(m.text) + '</div>';
-        }).join('');
-
-        scrollChatToBottom();
-    }
-
-    function sendChatMessage() {
-        const input = document.getElementById('chat-input');
-        if (!input) return;
-
-        const text = input.value.trim();
-        if (!text) return;
-
-        let messages = getStoredMessages() || getDefaultMessages();
-        messages.push({ sender: 'You', text: text, me: true });
-        saveMessages(messages);
-
-        input.value = '';
-        renderChat();
-
-        // Simulate reply after a short delay
-        if (messages.length % 3 === 0) {
-            setTimeout(function () {
-                const replies = [
-                    { sender: 'Mike K.', text: 'Sounds good!' },
-                    { sender: 'Sarah L.', text: 'Love it!' },
-                    { sender: 'James R.', text: 'Awesome, can\'t wait!' },
-                    { sender: 'Mike K.', text: 'See you on the court!' },
-                ];
-                const reply = replies[Math.floor(Math.random() * replies.length)];
-                messages.push({ sender: reply.sender, text: reply.text, me: false });
-                saveMessages(messages);
-                renderChat();
-            }, 800 + Math.random() * 600);
-        }
-    }
-
-    function scrollChatToBottom() {
-        const container = document.getElementById('chat-messages');
-        if (container) {
-            container.scrollTop = container.scrollHeight;
-        }
-    }
-
-    function escapeHtml(str) {
-        var div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
-    // ─── Fake data ───
-    function getFakeLeagues() {
-        return [
-            { icon: '\uD83C\uDFC6', name: 'Summer Doubles League', details: '16 teams \u2022 Round Robin', status: 'Week 4 of 8', bg: '#FEF3C7' },
-            { icon: '\uD83E\uDD47', name: '3.5 Ladder Challenge', details: '32 players \u2022 Ladder', status: 'Rank: #8', bg: '#E0E7FF' },
-            { icon: '\uD83C\uDFAF', name: 'Mixed Doubles Open', details: '8 teams \u2022 Bracket', status: 'Registration Open', bg: '#D1FAE5' },
-        ];
-    }
-
-    // ─── Init ───
-    document.addEventListener('DOMContentLoaded', function () {
-        // Detect if embedded in iframe
-        if (window.self !== window.top) {
-            document.documentElement.classList.add('embedded');
-        }
-        // Tab bar clicks
-        document.querySelectorAll('.tab-item').forEach(function (tab) {
-            tab.addEventListener('click', function () {
-                showTab(this.dataset.tab);
-            });
-        });
-
-        // Welcome action clicks (navigate to tabs)
-        document.querySelectorAll('[data-nav]').forEach(function (el) {
-            el.addEventListener('click', function () {
-                showTab(this.dataset.nav);
-            });
-        });
-
-        // League card clicks
-        document.querySelectorAll('.league-card').forEach(function (card, i) {
-            card.addEventListener('click', function () {
-                openLeagueDetail(i);
-            });
-        });
-
-        // League detail back button
-        var detailBack = document.getElementById('detail-back');
-        if (detailBack) {
-            detailBack.addEventListener('click', closeLeagueDetail);
-        }
-
-        // Detail tab clicks
-        document.querySelectorAll('.detail-tab').forEach(function (tab) {
-            tab.addEventListener('click', function () {
-                switchDetailTab(this.dataset.tab);
-            });
-        });
-
-        // Chat send
-        var sendBtn = document.getElementById('chat-send');
-        if (sendBtn) {
-            sendBtn.addEventListener('click', sendChatMessage);
-        }
-
-        var chatInput = document.getElementById('chat-input');
-        if (chatInput) {
-            chatInput.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendChatMessage();
-                }
-            });
-        }
-
-        // Render initial chat
-        renderChat();
-
-        // Show home tab
-        showTab('home');
-    });
+    window.closeGameDetail = function () {
+        document.getElementById('game-detail').classList.remove('open');
+    };
 })();
