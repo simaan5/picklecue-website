@@ -3,23 +3,28 @@
 (function () {
     'use strict';
 
+    // Embedded inside the marketing hero: strip page chrome, fill the frame.
+    if (window.self !== window.top) {
+        document.documentElement.classList.add('embedded');
+    }
+
     // ─── Demo game data (mirrors the app's fixture set) ───
     var GAMES = [
         { pill: 'NEXT GAME', title: 'Zilker Morning Rally', court: 'Zilker Park Courts • Court 4', time: 'Today • 7:00 AM',
           level: '3.0–4.0 Level • Doubles', spots: '3/4', spotsSub: 'Open spots remaining', pcount: 3,
-          format: 'Doubles', skill: '3.0–4.0', barSub: '1 of 4 spots open', cta: '🏃 View Game', full: false },
-        { pill: '📍 NEAR YOU', title: 'Lunch Singles Ladder', court: 'Rec - Fillmore • 1.5 mi', time: 'Tomorrow • 12:00 PM',
+          format: 'Doubles', skill: '3.0–4.0', barSub: '1 of 4 spots open', cta: 'View Game', full: false },
+        { pill: 'NEAR YOU', title: 'Lunch Singles Ladder', court: 'Rec - Fillmore • 1.5 mi', time: 'Tomorrow • 12:00 PM',
           level: '3.0–4.0 Level • Singles', spots: '1/2', spotsSub: 'Open spots remaining', pcount: 1,
-          format: 'Singles', skill: '3.0–4.0', barSub: '1 of 2 spots open', cta: '🏃 Join Game', full: false },
-        { pill: '📍 NEAR YOU', title: 'Sunset Doubles Rally', court: 'Carl Larsen Park • 2.4 mi', time: 'Tomorrow • 6:00 PM',
+          format: 'Singles', skill: '3.0–4.0', barSub: '1 of 2 spots open', cta: 'Join Game', full: false },
+        { pill: 'NEAR YOU', title: 'Sunset Doubles Rally', court: 'Carl Larsen Park • 2.4 mi', time: 'Tomorrow • 6:00 PM',
           level: '3.5–4.0 Level • Doubles', spots: '2/4', spotsSub: 'Open spots remaining', pcount: 2,
-          format: 'Doubles', skill: '3.5–4.0', barSub: '2 of 4 spots open', cta: '🏃 Join Game', full: false },
-        { pill: '📍 NEAR YOU', title: 'Saturday Round Robin', court: 'Carl Larsen Park • 2.4 mi', time: 'Sat • 9:00 AM',
+          format: 'Doubles', skill: '3.5–4.0', barSub: '2 of 4 spots open', cta: 'Join Game', full: false },
+        { pill: 'NEAR YOU', title: 'Saturday Round Robin', court: 'Carl Larsen Park • 2.4 mi', time: 'Sat • 9:00 AM',
           level: '3.0–4.5 Level • Doubles', spots: '1/8', spotsSub: 'Open spots remaining', pcount: 1,
-          format: 'Doubles', skill: '3.0–4.5', barSub: '7 of 8 spots open', cta: '🏃 Join Game', full: false },
-        { pill: '📍 NEAR YOU', title: 'Evening Open Play', court: 'Betty Ann Ong Recreation Center • 2.7 mi', time: 'Today • 8:30 PM',
+          format: 'Doubles', skill: '3.0–4.5', barSub: '7 of 8 spots open', cta: 'Join Game', full: false },
+        { pill: 'NEAR YOU', title: 'Evening Open Play', court: 'Betty Ann Ong Recreation Center • 2.7 mi', time: 'Today • 8:30 PM',
           level: '3.0–3.5 Level • Doubles', spots: '0/4', spotsSub: 'Game is full', pcount: 4,
-          format: 'Doubles', skill: '3.0–3.5', barSub: '#1 would be your position', cta: '📋 Join Waitlist', full: true }
+          format: 'Doubles', skill: '3.0–3.5', barSub: '#1 would be your position', cta: 'Join Waitlist', full: true }
     ];
 
     // ─── Tab switching ───
@@ -59,20 +64,18 @@
         var current = el.dataset.idx ? parseInt(el.dataset.idx, 10) : 0;
         var next = (current + 1) % (options.length + 1);
         el.dataset.idx = next;
-        var icon = el.textContent.trim().split(' ')[0];
-        if (next === 0) {
-            el.classList.remove('sel');
-            el.textContent = icon + ' ' + base;
-        } else {
-            el.classList.add('sel');
-            el.textContent = icon + ' ' + options[next - 1];
-        }
+        var svg = el.querySelector('svg');
+        var label = next === 0 ? base : options[next - 1];
+        el.textContent = '';
+        if (svg) { el.appendChild(svg); }
+        el.appendChild(document.createTextNode(' ' + label));
+        el.classList.toggle('sel', next !== 0);
     };
 
     // ─── Game detail overlay ───
     window.openGameDetail = function (index) {
         var g = GAMES[index] || GAMES[0];
-        document.getElementById('gd-pill').textContent = g.pill;
+        document.getElementById('gd-pill-t').textContent = g.pill.replace('📍 ', '');
         document.getElementById('gd-title').textContent = g.title;
         document.getElementById('gd-court').textContent = g.court;
         document.getElementById('gd-time').textContent = g.time;

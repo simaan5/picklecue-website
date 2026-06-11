@@ -24,7 +24,7 @@
     --pink: #EC4899;
     --blue: #38BDF8;
     --ink: #10160A;
-    --font: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font: ui-rounded, "SF Pro Rounded", -apple-system, "DM Sans", BlinkMacSystemFont, sans-serif;
 }
 
 body {
@@ -718,3 +718,83 @@ body {
 @media (max-height: 900px) {
     .iphone-screen { height: 760px; }
 }
+
+
+/* ─── SVG icon system (SF-Symbol stand-ins) ─── */
+.i { width: 12px; height: 12px; vertical-align: -1.5px; flex-shrink: 0; }
+.i.wi { color: var(--green-light); width: 11px; height: 11px; }
+.i.sun { color: var(--lime); }
+.i.big { width: 17px; height: 17px; display: block; margin: 0 auto 1px; }
+.i.mi { color: var(--green-light); width: 12px; height: 12px; }
+.i.gi { width: 12px; height: 12px; margin-bottom: 1px; }
+.lime-i { color: var(--lime); } .purple-i { color: var(--purple); }
+.orange-i { color: var(--orange); } .teal-i { color: var(--teal); }
+.i.ci { width: 17px; height: 17px; }
+.c-ico.green .i, .cta-ico .i, .tip-ico .i { color: var(--green-light); }
+.c-ico.green .i { color: #6FBF8E; }
+.c-ico.purple .i { color: var(--purple); }
+.c-ico.orange .i { color: var(--orange); }
+.tip-ico .i { color: var(--lime); }
+.i.pi { width: 10px; height: 10px; }
+.i.hp { width: 10px; height: 10px; vertical-align: -1px; }
+.i.hi { width: 15px; height: 15px; color: #fff; }
+.i.ti { width: 12px; height: 12px; }
+.i.qi { width: 18px; height: 18px; display: block; margin: 0 auto 6px; color: var(--green-light); }
+.i.xs { width: 9px; height: 9px; }
+.i.ai { width: 16px; height: 16px; display: block; margin: 0 auto 4px; }
+.i.hi2 { width: 14px; height: 14px; color: var(--green-light); }
+.i.di { width: 12px; height: 12px; color: var(--green-light); margin-right: 2px; }
+.i.st { width: 10px; height: 10px; color: var(--orange); }
+.i.tbi { width: 19px; height: 19px; }
+.circle-btn .i { width: 17px; height: 17px; }
+.x-t { font-size: 15px; font-weight: 700; }
+.heart .i { width: 13px; height: 13px; }
+.reco-photo .heart .i { color: #fff; }
+
+/* Tab bar uses currentColor now — drop the emoji grayscale hack. */
+.t-ico { display: none; }
+.tab-item .i.tbi { color: var(--t3); }
+.tab-item.active .i.tbi { color: var(--green-light); }
+
+/* Hero countdown: chip backing for contrast over the photo. */
+.hero-count {
+    background: rgba(0,0,0,.42);
+    padding: 3px 9px;
+    border-radius: 99px;
+    backdrop-filter: blur(3px);
+}
+
+/* Detail i rows are flex now (icon + text) */
+.d-row i { display: inline-flex; align-items: center; gap: 5px; }
+.pill .i { vertical-align: -1.5px; }
+
+
+/* ─── Embedded (iframed in the marketing hero) ─── */
+.embedded body { background: var(--bg); }
+.embedded .demo-back, .embedded .demo-tag, .embedded .dynamic-island { display: none; }
+.embedded .demo-page { padding: 0; min-height: 100vh; }
+.embedded .iphone-frame {
+    width: 100%; max-width: none;
+    padding: 0; border-radius: 0;
+    background: transparent; box-shadow: none;
+}
+.embedded .iphone-screen {
+    border-radius: 0;
+    height: 100vh; max-height: none;
+}
+
+/* ─── Real app avatars + logo badges ─── */
+img.greet-avatar { object-fit: cover; }
+img.profile-av { object-fit: cover; }
+.mini-av.img { object-fit: cover; background: #0D1A12; }
+.p-av {
+    width: 32px; height: 32px; border-radius: 50%;
+    object-fit: cover; border: 1.5px solid var(--hairline-strong);
+    flex-shrink: 0;
+}
+.logo-badge {
+    width: 44px; height: 44px; border-radius: 50%;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,.4));
+}
+.hero-top .logo-badge { width: 34px; height: 34px; margin-left: auto; }

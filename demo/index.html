@@ -15,6 +15,54 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.1.8-1.3-4.5-2.7V7z"/></symbol>
+<symbol id="i-drop" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.7s-6.5 7.2-6.5 11.5a6.5 6.5 0 0 0 13 0C18.5 9.9 12 2.7 12 2.7z"/></symbol>
+<symbol id="i-wind" viewBox="0 0 24 24"><path fill="currentColor" d="M4 10h9a3 3 0 1 0-3-3h2a1 1 0 1 1 1 1H4v2zm0 4h13a3 3 0 1 1-3 3h2a1 1 0 1 0 1-1H4v-2z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5h0l1 3h-2l1-3zm0 20l-1-3h2l-1 3zM2 12l3-1v2l-3-1zm20 0l-3 1v-2l3 1zM4.9 4.9l2.8 1.4-1.4 1.4L4.9 4.9zm14.2 14.2l-2.8-1.4 1.4-1.4 1.4 2.8zM19.1 4.9l-1.4 2.8-1.4-1.4 2.8-1.4zM4.9 19.1l1.4-2.8 1.4 1.4-2.8 1.4z"/></symbol>
+<symbol id="i-check-c" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-2 15l-5-5 1.4-1.4L10 14.2l7.6-7.6L19 8l-9 9z"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path fill="currentColor" d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></symbol>
+<symbol id="i-people" viewBox="0 0 24 24"><path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
+<symbol id="i-run" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24"><path fill="currentColor" d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><path fill="currentColor" d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></symbol>
+<symbol id="i-house" viewBox="0 0 24 24"><path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
+<symbol id="i-person" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
+<symbol id="i-star-o" viewBox="0 0 24 24"><path fill="currentColor" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path fill="currentColor" d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></symbol>
+<symbol id="i-bulb" viewBox="0 0 24 24"><path fill="currentColor" d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></symbol>
+<symbol id="i-up-right" viewBox="0 0 24 24"><path fill="currentColor" d="M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5z"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><path fill="currentColor" d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6a2 2 0 0 1-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path fill="currentColor" d="M14 4l-1.41 1.41L16.17 9H6c-1.1 0-2 .9-2 2v8h2v-8h10.17l-3.58 3.59L14 16l6-6-6-6z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.61 3.61 0 0 1 8.4 12c0-1.98 1.62-3.6 3.6-3.6s3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/></symbol>
+<symbol id="i-paddle" viewBox="0 0 24 24"><path fill="currentColor" d="M17.5 2c-3.04 0-5.5 2.46-5.5 5.5 0 1.16.36 2.23.97 3.12L3 20.59 4.41 22l9.97-9.97c.89.61 1.96.97 3.12.97 3.04 0 5.5-2.46 5.5-5.5S20.54 2 17.5 2z"/><circle fill="currentColor" cx="5.5" cy="16.5" r="1.6"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2v11h3v9l7-12h-4l4-8z"/></symbol>
+
+<symbol id="lg-bay" viewBox="0 0 48 48"><defs><linearGradient id="gBay" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E5C3F"/><stop offset="1" stop-color="#059669"/></linearGradient></defs><circle cx="24" cy="24" r="23" fill="url(#gBay)"/><path d="M8 30c4-9 9-13 16-13s12 4 16 13" stroke="#CDE34A" stroke-width="2.6" fill="none"/><path d="M14 30v-7M24 30V17M34 30v-7" stroke="#CDE34A" stroke-width="2.2"/><circle cx="24" cy="24" r="23" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.6"/></symbol>
+<symbol id="lg-east" viewBox="0 0 48 48"><defs><linearGradient id="gEast" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E2630"/><stop offset="1" stop-color="#0E5C3F"/></linearGradient></defs><circle cx="24" cy="24" r="23" fill="url(#gEast)"/><path d="M26 9L15 27h7l-3 12 13-19h-8l4-11z" fill="#CDE34A"/><circle cx="24" cy="24" r="23" fill="none" stroke="rgba(205,227,74,.45)" stroke-width="1.6"/></symbol>
+<symbol id="lg-ninja" viewBox="0 0 48 48"><defs><linearGradient id="gNin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10263a"/><stop offset="1" stop-color="#1f5f73"/></linearGradient></defs><circle cx="24" cy="24" r="23" fill="url(#gNin)"/><path d="M24 10l3.5 10.5L38 24l-10.5 3.5L24 38l-3.5-10.5L10 24l10.5-3.5z" fill="#5FA8B8"/><circle cx="24" cy="24" r="4.5" fill="#0B0F14"/><circle cx="24" cy="24" r="23" fill="none" stroke="rgba(95,168,184,.5)" stroke-width="1.6"/></symbol>
+<symbol id="lg-smash" viewBox="0 0 48 48"><defs><linearGradient id="gSm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#059669"/><stop offset="1" stop-color="#CDE34A"/></linearGradient></defs><circle cx="24" cy="24" r="23" fill="url(#gSm)"/><g transform="rotate(-35 24 24)"><rect x="20.6" y="9" width="6.8" height="17" rx="3.4" fill="#0B0F14"/><rect x="22.6" y="26" width="2.8" height="9" rx="1.4" fill="#0B0F14"/></g><circle cx="33" cy="14" r="4" fill="#fff" opacity=".9"/><circle cx="24" cy="24" r="23" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.6"/></symbol>
+<symbol id="lg-coast" viewBox="0 0 48 48"><defs><linearGradient id="gCo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a4a"/><stop offset="1" stop-color="#38BDF8"/></linearGradient></defs><circle cx="24" cy="24" r="23" fill="url(#gCo)"/><path d="M8 28c4-4 8-4 12 0s8 4 12 0 6-3 8-1" stroke="#fff" stroke-width="2.6" fill="none" opacity=".9"/><path d="M8 34c4-4 8-4 12 0s8 4 12 0 6-3 8-1" stroke="#CDE34A" stroke-width="2.2" fill="none"/><circle cx="32" cy="13" r="4.5" fill="#CDE34A"/><circle cx="24" cy="24" r="23" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.6"/></symbol>
+<symbol id="lg-gate" viewBox="0 0 48 48"><defs><linearGradient id="gGa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a2e12"/><stop offset="1" stop-color="#F59E0B"/></linearGradient></defs><circle cx="24" cy="24" r="23" fill="url(#gGa)"/><path d="M7 32c5-12 12-17 17-17s12 5 17 17" stroke="#fff" stroke-width="2.4" fill="none" opacity=".92"/><path d="M13 32V21M24 32V15M35 32V21" stroke="#fff" stroke-width="2.2" opacity=".92"/><circle cx="24" cy="24" r="23" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.6"/></symbol>
+</defs>
+</svg>
+
 <div class="demo-page">
 
     <a href="../" class="demo-back">
@@ -38,7 +86,7 @@
             <!-- ═══════════ HOME ═══════════ -->
             <div class="screen active" id="screen-home">
                 <div class="greet-header">
-                    <div class="greet-avatar">A</div>
+                    <img class="greet-avatar img" src="../images/avatars/emerald_court_captain.png" alt="Andrew">
                     <div class="greet-text">
                         <span class="greet-sub">Good morning,</span>
                         <span class="greet-name">Andrew 👋</span>
@@ -54,16 +102,16 @@
                 <div class="weather-card">
                     <div class="weather-temp-col">
                         <div class="weather-temp">72°F</div>
-                        <div class="weather-cond"><span class="ico">☀️</span> Sunny</div>
+                        <div class="weather-cond"><svg class="i sun"><use href="#i-sun"/></svg> Sunny</div>
                         <div class="weather-feels">Feels like 72°</div>
                     </div>
                     <div class="weather-divider"></div>
                     <div class="weather-rows">
-                        <div><span class="w-ico">📍</span> Austin, TX</div>
-                        <div><span class="w-ico">💧</span> Humidity 45%</div>
-                        <div><span class="w-ico">🌬️</span> NW 6 mph</div>
+                        <div><svg class="i wi"><use href="#i-pin"/></svg> Austin, TX</div>
+                        <div><svg class="i wi"><use href="#i-drop"/></svg> Humidity 45%</div>
+                        <div><svg class="i wi"><use href="#i-wind"/></svg> NW 6 mph</div>
                     </div>
-                    <div class="weather-badge"><span>✓</span>Good</div>
+                    <div class="weather-badge"><svg class="i big"><use href="#i-check-c"/></svg>Good</div>
                 </div>
 
                 <div class="hero-card" onclick="openGameDetail(0)">
@@ -72,14 +120,14 @@
                         <span class="hero-count">Starts in 2h 15m</span>
                     </div>
                     <div class="hero-title">Zilker Morning Rally</div>
-                    <div class="hero-meta"><span class="m-ico">📍</span> Zilker Park Courts • Court 4</div>
+                    <div class="hero-meta"><svg class="i mi"><use href="#i-pin"/></svg> Zilker Park Courts • Court 4</div>
                     <div class="hero-meta-row">
-                        <div class="hero-meta"><span class="m-ico">📅</span> Today • 7:00 AM</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-cal"/></svg> Today • 7:00 AM</div>
                         <span class="pill-purple">Doubles</span>
                     </div>
                     <div class="hero-bottom">
                         <div class="avatar-cluster">
-                            <span class="mini-av a1">S</span><span class="mini-av a2">M</span><span class="mini-av a3">J</span>
+                            <img class="mini-av img" src="../images/avatars/coral_court_queen.png" alt=""><img class="mini-av img" src="../images/avatars/navy_pro_paddle.png" alt=""><img class="mini-av img" src="../images/avatars/mango_court_joy.png" alt="">
                         </div>
                         <span class="hero-players">3 / 4 players</span>
                         <span class="lime-cta">View Game</span>
@@ -104,10 +152,10 @@
                     <div class="card glance-card">
                         <div class="card-h">At a Glance</div>
                         <div class="glance-grid">
-                            <div class="g-tile"><span class="g-ico lime">🏆</span><b>32</b><i>Matches</i></div>
-                            <div class="g-tile"><span class="g-ico purple">📊</span><b>68%</b><i>Win Rate</i></div>
-                            <div class="g-tile"><span class="g-ico orange">🔥</span><b>12</b><i>Win Streak</i></div>
-                            <div class="g-tile"><span class="g-ico teal">↗</span><b>3.48</b><i>DUPR</i></div>
+                            <div class="g-tile"><svg class="i gi lime-i"><use href="#i-trophy"/></svg><b>32</b><i>Matches</i></div>
+                            <div class="g-tile"><svg class="i gi purple-i"><use href="#i-chart"/></svg><b>68%</b><i>Win Rate</i></div>
+                            <div class="g-tile"><svg class="i gi orange-i"><use href="#i-flame"/></svg><b>12</b><i>Win Streak</i></div>
+                            <div class="g-tile"><svg class="i gi teal-i"><use href="#i-up-right"/></svg><b>3.48</b><i>DUPR</i></div>
                         </div>
                         <div class="card-link">View Stats</div>
                     </div>
@@ -147,24 +195,24 @@
                 <div class="section-h"><span>Nearby Courts</span><a>View Map</a></div>
                 <div class="card nearby-card">
                     <div class="map-preview">
-                        <span class="map-pin" style="left:28%;top:30%">📍 1.2 mi</span>
-                        <span class="map-pin" style="left:60%;top:48%">📍 2.1 mi</span>
-                        <span class="map-pin" style="left:42%;top:68%">📍 3.3 mi</span>
+                        <span class="map-pin" style="left:28%;top:30%"><svg class="i pi"><use href="#i-pin"/></svg> 1.2 mi</span>
+                        <span class="map-pin" style="left:60%;top:48%"><svg class="i pi"><use href="#i-pin"/></svg> 2.1 mi</span>
+                        <span class="map-pin" style="left:42%;top:68%"><svg class="i pi"><use href="#i-pin"/></svg> 3.3 mi</span>
                         <span class="user-dot" style="left:50%;top:44%"></span>
                     </div>
                     <div class="court-row">
-                        <span class="c-ico green">🏓</span>
-                        <div class="c-body"><b>Zilker Park Courts</b><i>★ 4.6 (128) • 6 Courts</i></div>
+                        <span class="c-ico green"><svg class="i ci"><use href="#i-paddle"/></svg></span>
+                        <div class="c-body"><b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.6 (128) • 6 Courts</i></div>
                         <span class="c-dist">1.2 mi</span>
                     </div>
                     <div class="court-row">
-                        <span class="c-ico purple">🏓</span>
-                        <div class="c-body"><b>Mueller Courts</b><i>★ 4.4 (96) • 4 Courts</i></div>
+                        <span class="c-ico purple"><svg class="i ci"><use href="#i-paddle"/></svg></span>
+                        <div class="c-body"><b>Mueller Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.4 (96) • 4 Courts</i></div>
                         <span class="c-dist">2.1 mi</span>
                     </div>
                     <div class="court-row">
-                        <span class="c-ico orange">🏓</span>
-                        <div class="c-body"><b>Northwest Park</b><i>★ 4.3 (74) • 8 Courts</i></div>
+                        <span class="c-ico orange"><svg class="i ci"><use href="#i-paddle"/></svg></span>
+                        <div class="c-body"><b>Northwest Park</b><i><svg class="i st"><use href="#i-star"/></svg> 4.3 (74) • 8 Courts</i></div>
                         <span class="c-dist">3.3 mi</span>
                     </div>
                     <div class="outline-btn">Find More Courts</div>
@@ -173,16 +221,16 @@
                 <div class="section-h"><span>Recommended For You</span><a>View All</a></div>
                 <div class="reco-scroll">
                     <div class="reco-card">
-                        <div class="reco-photo"><span class="pill-lime">Popular</span><span class="heart">♡</span></div>
-                        <b>Zilker Park Courts</b><i>★ 4.6 (128) • 1.2 mi</i><u>Outdoor • 6 Courts</u>
+                        <div class="reco-photo"><span class="pill-lime">Popular</span><span class="heart"><svg class="i hi"><use href="#i-heart"/></svg></span></div>
+                        <b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.6 (128) • 1.2 mi</i><u>Outdoor • 6 Courts</u>
                     </div>
                     <div class="reco-card">
-                        <div class="reco-photo"><span class="pill-lime">New</span><span class="heart">♡</span></div>
-                        <b>Mueller Courts</b><i>★ 4.4 (96) • 2.1 mi</i><u>Outdoor • 4 Courts</u>
+                        <div class="reco-photo"><span class="pill-lime">New</span><span class="heart"><svg class="i hi"><use href="#i-heart"/></svg></span></div>
+                        <b>Mueller Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.4 (96) • 2.1 mi</i><u>Outdoor • 4 Courts</u>
                     </div>
                     <div class="reco-card">
-                        <div class="reco-photo"><span class="heart">♡</span></div>
-                        <b>Northwest Park</b><i>★ 4.3 (74) • 3.3 mi</i><u>Outdoor • 8 Courts</u>
+                        <div class="reco-photo"><span class="heart"><svg class="i hi"><use href="#i-heart"/></svg></span></div>
+                        <b>Northwest Park</b><i><svg class="i st"><use href="#i-star"/></svg> 4.3 (74) • 3.3 mi</i><u>Outdoor • 8 Courts</u>
                     </div>
                 </div>
 
@@ -203,7 +251,7 @@
                         <div class="p-col empty"><span></span><i>S</i></div>
                     </div>
                     <div class="pro-tip">
-                        <span class="tip-ico">💡</span>
+                        <span class="tip-ico"><svg class="i ci"><use href="#i-bulb"/></svg></span>
                         <div><b>Pro Tip</b><i>Playing 1 more match this week can improve your DUPR rating!</i></div>
                     </div>
                 </div>
@@ -220,17 +268,17 @@
                     <div class="circle-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg></div>
                 </div>
                 <div class="courts-map">
-                    <span class="map-pin" style="left:18%;top:18%">📍</span>
-                    <span class="map-pin" style="left:64%;top:26%">📍</span>
-                    <span class="map-pin" style="left:38%;top:42%">📍</span>
-                    <span class="map-pin" style="left:74%;top:56%">📍</span>
-                    <span class="map-pin" style="left:26%;top:66%">📍</span>
+                    <span class="map-pin" style="left:18%;top:18%"><svg class="i pi"><use href="#i-pin"/></svg></span>
+                    <span class="map-pin" style="left:64%;top:26%"><svg class="i pi"><use href="#i-pin"/></svg></span>
+                    <span class="map-pin" style="left:38%;top:42%"><svg class="i pi"><use href="#i-pin"/></svg></span>
+                    <span class="map-pin" style="left:74%;top:56%"><svg class="i pi"><use href="#i-pin"/></svg></span>
+                    <span class="map-pin" style="left:26%;top:66%"><svg class="i pi"><use href="#i-pin"/></svg></span>
                     <span class="user-dot" style="left:48%;top:38%"></span>
                 </div>
                 <div class="card courts-sel">
                     <div class="court-row tall">
-                        <span class="c-ico green">🏓</span>
-                        <div class="c-body"><b>Zilker Park Courts</b><i>★ 4.6 (128) • 6 Courts</i><u>Outdoor • Free • Lights</u></div>
+                        <span class="c-ico green"><svg class="i ci"><use href="#i-paddle"/></svg></span>
+                        <div class="c-body"><b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.6 (128) • 6 Courts</i><u>Outdoor • Free • Lights</u></div>
                         <span class="c-dist">1.2 mi</span>
                     </div>
                     <div class="lime-btn">View Court</div>
@@ -258,13 +306,13 @@
 
                 <div class="play-seg active" id="seg-open">
                     <div class="hero-card" onclick="openGameDetail(1)">
-                        <div class="hero-top"><span class="hero-pill">📍 NEAR YOU</span></div>
+                        <div class="hero-top"><span class="hero-pill"><svg class="i hp"><use href="#i-pin"/></svg> NEAR YOU</span></div>
                         <div class="hero-title big">Lunch Singles Ladder</div>
-                        <div class="hero-meta"><span class="m-ico">🏓</span> Rec - Fillmore</div>
-                        <div class="hero-meta"><span class="m-ico">📅</span> Tomorrow • 12:00 PM</div>
-                        <div class="hero-meta"><span class="m-ico">🏃</span> 3.0–4.0 Level • Singles</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-paddle"/></svg> Rec - Fillmore</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-cal"/></svg> Tomorrow • 12:00 PM</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-run"/></svg> 3.0–4.0 Level • Singles</div>
                         <div class="hero-bottom">
-                            <div class="avatar-cluster"><span class="mini-av a1">L</span></div>
+                            <div class="avatar-cluster"><img class="mini-av img" src="../images/avatars/lavender_mentor.png" alt=""></div>
                             <span class="hero-players">1/2 Spots Left</span>
                             <span class="lime-cta">Join Game</span>
                         </div>
@@ -273,18 +321,18 @@
                     <div class="section-h"><span>Open Games Near You</span><a>View All</a></div>
 
                     <div class="pills-row">
-                        <span class="pill sel">📍 Nearby (50mi)</span>
-                        <span class="pill" onclick="cyclePill(this,'Time','Today','This Week')">🕐 Time</span>
-                        <span class="pill" onclick="cyclePill(this,'Level','3.0–3.5','3.5–4.0','4.0+')">📶 Level</span>
-                        <span class="pill" onclick="cyclePill(this,'Format','Doubles','Singles')">👥 Format</span>
+                        <span class="pill sel"><svg class="i ti"><use href="#i-pin"/></svg> Nearby (50mi)</span>
+                        <span class="pill" onclick="cyclePill(this,'Time','Today','This Week')"><svg class="i ti"><use href="#i-clock"/></svg> Time</span>
+                        <span class="pill" onclick="cyclePill(this,'Level','3.0–3.5','3.5–4.0','4.0+')"><svg class="i ti"><use href="#i-chart"/></svg> Level</span>
+                        <span class="pill" onclick="cyclePill(this,'Format','Doubles','Singles')"><svg class="i ti"><use href="#i-people"/></svg> Format</span>
                     </div>
 
                     <div class="game-row" onclick="openGameDetail(2)">
                         <span class="mono pink">SD</span>
                         <div class="g-body">
                             <b>Sunset Doubles Rally</b>
-                            <i>📍 Pickleball Courts | Carl Larsen Park</i>
-                            <i>📅 Tomorrow 6:00 PM</i>
+                            <i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Carl Larsen Park</i>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Tomorrow 6:00 PM</i>
                             <u>3.5–4.0 • Doubles</u>
                         </div>
                         <div class="g-right"><span class="g-dist">2.4 mi</span><span class="g-count">2/4</span></div>
@@ -294,8 +342,8 @@
                         <span class="mono blue">SR</span>
                         <div class="g-body">
                             <b>Saturday Round Robin</b>
-                            <i>📍 Pickleball Courts | Carl Larsen Park</i>
-                            <i>📅 Sat 9:00 AM</i>
+                            <i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Carl Larsen Park</i>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Sat 9:00 AM</i>
                             <u>3.0–4.5 • Doubles</u>
                         </div>
                         <div class="g-right"><span class="g-dist">2.4 mi</span><span class="g-count">1/8</span></div>
@@ -305,8 +353,8 @@
                         <span class="mono green">EO</span>
                         <div class="g-body">
                             <b>Evening Open Play</b>
-                            <i>📍 Betty Ann Ong Recreation Center</i>
-                            <i>📅 Today 8:30 PM</i>
+                            <i><svg class="i di"><use href="#i-pin"/></svg> Betty Ann Ong Recreation Center</i>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Today 8:30 PM</i>
                             <u>3.0–3.5 • Doubles</u>
                         </div>
                         <div class="g-right"><span class="g-dist">2.7 mi</span><span class="g-count">4/4</span><span class="pill-purple sm">FULL</span></div>
@@ -314,12 +362,12 @@
                     </div>
 
                     <div class="cta-card">
-                        <span class="cta-ico">🏃</span>
+                        <span class="cta-ico"><svg class="i ci"><use href="#i-run"/></svg></span>
                         <div class="cta-body"><b>Host a Game</b><i>Create your own game and invite players to join.</i></div>
                         <span class="green-cta">Create Game</span>
                     </div>
                     <div class="partner-row">
-                        <span class="c-ico green">👥</span>
+                        <span class="c-ico green"><svg class="i ci"><use href="#i-people"/></svg></span>
                         <div class="c-body"><b>Find a Partner</b><i>Match with players at your skill level</i></div>
                         <span class="chev">›</span>
                     </div>
@@ -329,22 +377,22 @@
                     <div class="day-h">Saturday – June 13</div>
                     <div class="game-row">
                         <span class="mono blue">SR</span>
-                        <div class="g-body"><b>Saturday Round Robin</b><i>📍 Pickleball Courts | Carl Larsen Park</i><i>📅 9:00 AM</i><u>1/8 Spots</u></div>
+                        <div class="g-body"><b>Saturday Round Robin</b><i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Carl Larsen Park</i><i><svg class="i di"><use href="#i-cal"/></svg> 9:00 AM</i><u>1/8 Spots</u></div>
                         <span class="pill-green sm">Organizer</span>
                     </div>
                 </div>
                 <div class="play-seg" id="seg-wait">
                     <div class="game-row">
                         <span class="mono green">EO</span>
-                        <div class="g-body"><b>Evening Open Play</b><i>📍 Betty Ann Ong Recreation Center</i><i>📅 Today 8:30 PM</i><u>3.0–3.5 • Doubles</u></div>
+                        <div class="g-body"><b>Evening Open Play</b><i><svg class="i di"><use href="#i-pin"/></svg> Betty Ann Ong Recreation Center</i><i><svg class="i di"><use href="#i-cal"/></svg> Today 8:30 PM</i><u>3.0–3.5 • Doubles</u></div>
                         <span class="pill-lime sm">#2 of 4</span>
                     </div>
-                    <div class="notice-row">🔔 You'll be notified if a spot opens up!</div>
+                    <div class="notice-row"><svg class="i ti"><use href="#i-bell"/></svg> You'll be notified if a spot opens up!</div>
                 </div>
                 <div class="play-seg" id="seg-past">
                     <div class="game-row">
                         <span class="mono pink">MD</span>
-                        <div class="g-body"><b>Morning Drill Session</b><i>📍 Zilker Park Courts</i><i>📅 Mon 7:00 AM</i><u>Completed</u></div>
+                        <div class="g-body"><b>Morning Drill Session</b><i><svg class="i di"><use href="#i-pin"/></svg> Zilker Park Courts</i><i><svg class="i di"><use href="#i-cal"/></svg> Mon 7:00 AM</i><u>Completed</u></div>
                         <span class="pill-green sm">Won 11–8</span>
                     </div>
                 </div>
@@ -354,8 +402,8 @@
             <!-- ═══════════ COMPETE ═══════════ -->
             <div class="screen" id="screen-compete">
                 <div class="seg-control" id="compete-seg">
-                    <div class="seg-pill active" data-hub="tournaments" onclick="competeSeg(this)">🏆 Tournaments</div>
-                    <div class="seg-pill" data-hub="leagues" onclick="competeSeg(this)">🛡️ Leagues</div>
+                    <div class="seg-pill active" data-hub="tournaments" onclick="competeSeg(this)"><svg class="i ti"><use href="#i-trophy"/></svg> Tournaments</div>
+                    <div class="seg-pill" data-hub="leagues" onclick="competeSeg(this)"><svg class="i ti"><use href="#i-shield"/></svg> Leagues</div>
                 </div>
 
                 <div class="hub-pane active" id="hub-tournaments">
@@ -367,45 +415,45 @@
                         <div class="circle-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg></div>
                     </div>
                     <div class="tray sm">
-                        <div class="tray-tab active">📅 Upcoming</div>
-                        <div class="tray-tab">👤 Mine</div>
-                        <div class="tray-tab">▶ Live</div>
-                        <div class="tray-tab">🕐 Past</div>
+                        <div class="tray-tab active"><svg class="i ti"><use href="#i-cal"/></svg> Upcoming</div>
+                        <div class="tray-tab"><svg class="i ti"><use href="#i-person"/></svg> Mine</div>
+                        <div class="tray-tab"><svg class="i ti"><use href="#i-play"/></svg> Live</div>
+                        <div class="tray-tab"><svg class="i ti"><use href="#i-clock"/></svg> Past</div>
                     </div>
                     <div class="hero-card">
-                        <div class="hero-top"><span class="hero-pill">⭐ FEATURED</span></div>
+                        <div class="hero-top"><span class="hero-pill"><svg class="i hp"><use href="#i-star"/></svg> FEATURED</span><svg class="logo-badge"><use href="#lg-smash"/></svg></div>
                         <div class="hero-title">Spring Smash Open</div>
-                        <div class="hero-meta"><span class="m-ico">📅</span> Jun 17 – 18, 2026</div>
-                        <div class="hero-meta"><span class="m-ico">📍</span> Sacramento St Tennis Court</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-cal"/></svg> Jun 17 – 18, 2026</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-pin"/></svg> Sacramento St Tennis Court</div>
                         <div class="hero-bottom">
-                            <div class="avatar-cluster"><span class="mini-av a1">A</span><span class="mini-av a2">M</span><span class="mini-av a3">S</span></div>
+                            <div class="avatar-cluster"><img class="mini-av img" src="../images/avatars/lime_headband_ace.png" alt=""><img class="mini-av img" src="../images/avatars/aqua_net_ninja.png" alt=""><img class="mini-av img" src="../images/avatars/jade_rally_smile.png" alt=""></div>
                             <span class="hero-players lime-t">7 Players</span>
                             <span class="lime-cta">Register</span>
                         </div>
                     </div>
                     <div class="qa-row">
-                        <div class="qa"><span>🏆</span>Create<br>Tournament</div>
-                        <div class="qa"><span>🔍</span>Find<br>Tournaments</div>
-                        <div class="qa"><span>📋</span>My<br>Registrations</div>
-                        <div class="qa"><span>☆</span>Following</div>
+                        <div class="qa"><svg class="i qi"><use href="#i-trophy"/></svg>Create<br>Tournament</div>
+                        <div class="qa"><svg class="i qi"><use href="#i-search"/></svg>Find<br>Tournaments</div>
+                        <div class="qa"><svg class="i qi"><use href="#i-doc"/></svg>My<br>Registrations</div>
+                        <div class="qa"><svg class="i qi"><use href="#i-star-o"/></svg>Following</div>
                     </div>
                     <div class="section-h"><span>Upcoming Tournaments</span><a>View All</a></div>
                     <div class="game-row">
-                        <span class="mono teal">CC</span>
+                        <svg class="logo-badge"><use href="#lg-coast"/></svg>
                         <div class="g-body">
                             <span class="pill-green sm caps">Registration Open</span>
                             <b>Coastal Classic</b>
-                            <i>📅 Jul 19–20, 2026</i><i>📍 San Diego, CA</i>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Jul 19–20, 2026</i><i><svg class="i di"><use href="#i-pin"/></svg> San Diego, CA</i>
                             <u>DUPR 3.0+ • 25/48 Players</u>
                         </div>
                         <span class="chev">›</span>
                     </div>
                     <div class="game-row">
-                        <span class="mono purple">GG</span>
+                        <svg class="logo-badge"><use href="#lg-gate"/></svg>
                         <div class="g-body">
                             <span class="pill-green sm caps">Registration Open</span>
                             <b>Golden Gate Open</b>
-                            <i>📅 Jun 22, 2026</i><i>📍 San Francisco, CA</i>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Jun 22, 2026</i><i><svg class="i di"><use href="#i-pin"/></svg> San Francisco, CA</i>
                             <u>3.0+ Level • 48 max</u>
                         </div>
                         <span class="chev">›</span>
@@ -427,43 +475,43 @@
                         <div class="tray-tab">Completed</div>
                     </div>
                     <div class="hero-card">
-                        <div class="hero-top"><span class="hero-pill">⭐ FEATURED LEAGUE</span><span class="heart">☆</span></div>
+                        <div class="hero-top"><span class="hero-pill"><svg class="i hp"><use href="#i-star"/></svg> FEATURED LEAGUE</span><svg class="logo-badge"><use href="#lg-bay"/></svg></div>
                         <div class="hero-title">Bay Area Pickleball League</div>
-                        <div class="hero-meta"><span class="m-ico">📅</span> Jan 8 – Apr 8, 2026</div>
-                        <div class="hero-meta"><span class="m-ico">📍</span> San Francisco, CA</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-cal"/></svg> Jan 8 – Apr 8, 2026</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-pin"/></svg> San Francisco, CA</div>
                         <div class="hero-meta-row">
                             <span class="pill-purple">3.0 - 5.0</span><span class="pill-purple">Singles League</span>
                         </div>
                         <div class="hero-bottom">
                             <span class="green-cta">View League</span>
-                            <div class="avatar-cluster"><span class="mini-av a1">S</span><span class="mini-av a2">M</span><span class="mini-av a3">E</span></div>
+                            <div class="avatar-cluster"><img class="mini-av img" src="../images/avatars/coral_court_queen.png" alt=""><img class="mini-av img" src="../images/avatars/pink_wink_spin.png" alt=""><img class="mini-av img" src="../images/avatars/jade_rally_smile.png" alt=""></div>
                             <span class="hero-players">8/16 Members</span>
                         </div>
                     </div>
                     <div class="qa-row">
-                        <div class="qa"><span>👥</span>Create<br>League</div>
-                        <div class="qa"><span>🔍</span>Find<br>Leagues</div>
-                        <div class="qa"><span>📅</span>My<br>Schedule</div>
-                        <div class="qa"><span>📋</span>Standings</div>
+                        <div class="qa"><svg class="i qi"><use href="#i-people"/></svg>Create<br>League</div>
+                        <div class="qa"><svg class="i qi"><use href="#i-search"/></svg>Find<br>Leagues</div>
+                        <div class="qa"><svg class="i qi"><use href="#i-cal"/></svg>My<br>Schedule</div>
+                        <div class="qa"><svg class="i qi"><use href="#i-doc"/></svg>Standings</div>
                     </div>
                     <div class="section-h"><span>Active Leagues</span><a>View All</a></div>
                     <div class="game-row">
-                        <span class="mono green">EE</span>
+                        <svg class="logo-badge"><use href="#lg-east"/></svg>
                         <div class="g-body">
-                            <span class="pill-blue sm caps">⚡ Active Season</span>
+                            <span class="pill-blue sm caps"><svg class="i xs"><use href="#i-bolt"/></svg> Active Season</span>
                             <b>Eastside Elite</b>
-                            <i>📅 Season ends Apr 8</i>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Season ends Apr 8</i>
                             <u>2.5 – 4.0 Division • 12/16 members</u>
                         </div>
                         <div class="g-right"><span class="g-dist">Your Role</span><span class="g-count lime-t">Organizer</span></div>
                         <span class="chev">›</span>
                     </div>
                     <div class="game-row">
-                        <span class="mono teal">NN</span>
+                        <svg class="logo-badge"><use href="#lg-ninja"/></svg>
                         <div class="g-body">
-                            <span class="pill-blue sm caps">⚡ Active Season</span>
+                            <span class="pill-blue sm caps"><svg class="i xs"><use href="#i-bolt"/></svg> Active Season</span>
                             <b>Net Ninjas</b>
-                            <i>📅 Season ends May 2</i>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Season ends May 2</i>
                             <u>3.0 – 4.5 Division • 9/12 members</u>
                         </div>
                         <div class="g-right"><span class="g-dist">Your Role</span><span class="g-count">Player</span></div>
@@ -476,7 +524,7 @@
             <!-- ═══════════ PROFILE ═══════════ -->
             <div class="screen" id="screen-profile">
                 <div class="profile-head">
-                    <div class="profile-av">A</div>
+                    <img class="profile-av img" src="../images/avatars/emerald_court_captain.png" alt="Andrew">
                     <h1>Andrew Simaan</h1>
                     <p>@andrew_s • <span class="lime-t">DUPR 3.48</span></p>
                 </div>
@@ -486,9 +534,9 @@
                     <div class="g-tile center"><b>12</b><i>Win Streak</i></div>
                 </div>
                 <div class="card menu-card">
-                    <div class="menu-row"><span class="c-ico green">🏓</span><b>My Matches</b><span class="chev">›</span></div>
-                    <div class="menu-row"><span class="c-ico purple">📚</span><b>Learn</b><span class="chev">›</span></div>
-                    <div class="menu-row"><span class="c-ico orange">⚙️</span><b>Settings</b><span class="chev">›</span></div>
+                    <div class="menu-row"><span class="c-ico green"><svg class="i ci"><use href="#i-paddle"/></svg></span><b>My Matches</b><span class="chev">›</span></div>
+                    <div class="menu-row"><span class="c-ico purple"><svg class="i ci"><use href="#i-book"/></svg></span><b>Learn</b><span class="chev">›</span></div>
+                    <div class="menu-row"><span class="c-ico orange"><svg class="i ci"><use href="#i-gear"/></svg></span><b>Settings</b><span class="chev">›</span></div>
                 </div>
                 <div class="scroll-pad"></div>
             </div>
@@ -496,63 +544,63 @@
             <!-- ═══════════ GAME DETAIL OVERLAY ═══════════ -->
             <div class="detail-overlay" id="game-detail">
                 <div class="detail-nav">
-                    <div class="circle-btn" onclick="closeGameDetail()">✕</div>
-                    <div class="circle-btn">⬆️</div>
+                    <div class="circle-btn" onclick="closeGameDetail()"><span class="x-t">✕</span></div>
+                    <div class="circle-btn"><svg class="i"><use href="#i-share"/></svg></div>
                 </div>
                 <div class="detail-scroll">
                     <div class="detail-hero">
-                        <span class="hero-pill" id="gd-pill">📍 NEAR YOU</span>
+                        <span class="hero-pill" id="gd-pill"><svg class="i hp"><use href="#i-pin"/></svg> <span id="gd-pill-t">NEAR YOU</span></span>
                         <div class="hero-title big" id="gd-title">Evening Open Play</div>
-                        <div class="hero-meta"><span class="m-ico">🏓</span> <span id="gd-court">Sunset Park Courts • 4.1 mi</span></div>
-                        <div class="hero-meta"><span class="m-ico">📅</span> <span id="gd-time">Tomorrow • 9:00 PM</span></div>
-                        <div class="hero-meta"><span class="m-ico">📶</span> <span id="gd-level">3.5–4.5 Level • Doubles</span></div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-paddle"/></svg> <span id="gd-court">Sunset Park Courts • 4.1 mi</span></div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-cal"/></svg> <span id="gd-time">Tomorrow • 9:00 PM</span></div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-chart"/></svg> <span id="gd-level">3.5–4.5 Level • Doubles</span></div>
                     </div>
                     <div class="action-row">
-                        <div class="act"><span>👥</span>Players</div>
-                        <div class="act"><span>⬆️</span>Share</div>
-                        <div class="act"><span>➡️</span>Directions</div>
-                        <div class="act dim"><span>✓</span>Check In</div>
+                        <div class="act"><svg class="i ai"><use href="#i-people"/></svg>Players</div>
+                        <div class="act"><svg class="i ai"><use href="#i-share"/></svg>Share</div>
+                        <div class="act"><svg class="i ai"><use href="#i-arrow"/></svg>Directions</div>
+                        <div class="act dim"><svg class="i ai"><use href="#i-check"/></svg>Check In</div>
                     </div>
                     <div class="card spots-card">
                         <div><b>Spots</b><i id="gd-spots-sub">Open spots remaining</i></div>
                         <span class="spots-n" id="gd-spots">2/4</span>
                     </div>
                     <div class="card players-card">
-                        <div class="card-h">👥 Players (<span id="gd-pcount">2</span>) <span class="chev right">›</span></div>
-                        <div class="p-row"><span class="mono green sm-m">SJ</span> Sarah J.</div>
-                        <div class="p-row"><span class="mono pink sm-m">AS</span> Andrew S. <span class="pill-green sm">Organizer</span></div>
+                        <div class="card-h"><svg class="i hi2"><use href="#i-people"/></svg> Players (<span id="gd-pcount">2</span>) <span class="chev right">›</span></div>
+                        <div class="p-row"><img class="p-av" src="../images/avatars/coral_court_queen.png" alt=""> Sarah J.</div>
+                        <div class="p-row"><img class="p-av" src="../images/avatars/emerald_court_captain.png" alt=""> Andrew S. <span class="pill-green sm">Organizer</span></div>
                     </div>
                     <div class="card details-card">
-                        <div class="card-h">ℹ️ Details</div>
-                        <div class="d-row"><i>👥 Format</i><b class="lime-t" id="gd-format">Doubles ›</b></div>
-                        <div class="d-row"><i>📶 Skill Level</i><b class="lime-t" id="gd-skill">3.0–3.5 ›</b></div>
-                        <div class="d-row"><i>🕐 Duration</i><b>90 min</b></div>
-                        <div class="d-row"><i>👁 Visibility</i><b>Public</b></div>
-                        <div class="d-row"><i>✓ Check-In</i><b>Required • 30 min window</b></div>
+                        <div class="card-h"><svg class="i hi2"><use href="#i-info"/></svg> Details</div>
+                        <div class="d-row"><i><svg class="i ti"><use href="#i-people"/></svg> Format</i><b class="lime-t" id="gd-format">Doubles ›</b></div>
+                        <div class="d-row"><i><svg class="i di"><use href="#i-chart"/></svg> Skill Level</i><b class="lime-t" id="gd-skill">3.0–3.5 ›</b></div>
+                        <div class="d-row"><i><svg class="i di"><use href="#i-clock"/></svg> Duration</i><b>90 min</b></div>
+                        <div class="d-row"><i><svg class="i di"><use href="#i-eye"/></svg> Visibility</i><b>Public</b></div>
+                        <div class="d-row"><i><svg class="i di"><use href="#i-check"/></svg> Check-In</i><b>Required • 30 min window</b></div>
                     </div>
                 </div>
                 <div class="detail-bar">
                     <i id="gd-bar-sub">2 of 4 spots open</i>
-                    <div class="lime-btn big" id="gd-cta">🏃 Join Game</div>
+                    <div class="lime-btn big" id="gd-cta">Join Game</div>
                 </div>
             </div>
 
             <!-- ═══════════ TAB BAR ═══════════ -->
             <div class="tab-bar">
                 <div class="tab-item active" data-tab="home" onclick="showTab('home')">
-                    <span class="t-ico">🏠</span><span>Home</span>
+                    <svg class="i tbi"><use href="#i-house"/></svg><span>Home</span>
                 </div>
                 <div class="tab-item" data-tab="courts" onclick="showTab('courts')">
-                    <span class="t-ico">🗺️</span><span>Courts</span>
+                    <svg class="i tbi"><use href="#i-map"/></svg><span>Courts</span>
                 </div>
                 <div class="tab-item" data-tab="play" onclick="showTab('play')">
-                    <span class="t-ico">🏃</span><span>Play</span>
+                    <svg class="i tbi"><use href="#i-run"/></svg><span>Play</span>
                 </div>
                 <div class="tab-item" data-tab="compete" onclick="showTab('compete')">
-                    <span class="t-ico">🏆</span><span>Compete</span>
+                    <svg class="i tbi"><use href="#i-trophy"/></svg><span>Compete</span>
                 </div>
                 <div class="tab-item" data-tab="profile" onclick="showTab('profile')">
-                    <span class="t-ico">👤</span><span>Profile</span>
+                    <svg class="i tbi"><use href="#i-person"/></svg><span>Profile</span>
                 </div>
             </div>
 
