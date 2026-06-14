@@ -1,0 +1,17 @@
+/*
+Theme Name: Anstelias Storefront
+Theme URI: https://www.anstelias.com/
+Author: Anstelias Technology (ANSI Corporation)
+Description: Lightweight, mobile-first, search-first WooCommerce theme for Inland Empire Electronics — a professional resale store for electronics, computer hardware, A/V gear, and business equipment. No page builder, no paid dependencies.
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.0
+License: GPL-2.0-or-later
+Text Domain: anstelias-storefront
+WC requires at least: 8.0
+WC tested up to: 9.9
+*/
+
+/* This file is required by WordPress for theme metadata.
+   Actual styles live in assets/css/main.css and assets/css/woocommerce.css,
+   enqueued from functions.php (keeps style.css small and cache-friendly). */

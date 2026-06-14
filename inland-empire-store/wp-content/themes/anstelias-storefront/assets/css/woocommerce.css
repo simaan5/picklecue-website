@@ -1,0 +1,66 @@
+/* =========================================================================
+   WooCommerce-specific styling for Anstelias Storefront.
+   Loaded only when WooCommerce is active.
+   ========================================================================= */
+
+/* Shop / category layout with sidebar */
+.ie-archive { display: grid; grid-template-columns: 1fr; gap: 24px; padding: 28px 0; }
+.ie-archive__sidebar { border: 1px solid var(--ie-line); border-radius: var(--ie-radius); padding: 16px; height: max-content; }
+.ie-archive__sidebar .widget-title { font-size: 1rem; margin: 1rem 0 .5rem; }
+.ie-archive__sidebar ul { list-style: none; margin: 0; padding: 0; }
+.ie-archive__sidebar li { padding: 4px 0; }
+.ie-archive__search { margin-bottom: 12px; }
+
+/* Product grid */
+ul.products { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+ul.products li.product { border: 1px solid var(--ie-line); border-radius: var(--ie-radius); padding: 12px; background: #fff; display: flex; flex-direction: column; position: relative; }
+ul.products li.product:hover { box-shadow: 0 2px 12px rgba(10,77,140,.08); border-color: #cdd8e2; }
+ul.products li.product a img { border-radius: 6px; margin-bottom: 10px; aspect-ratio: 1/1; object-fit: contain; background: #fafbfc; }
+ul.products li.product .woocommerce-loop-product__title { font-size: .95rem; font-weight: 600; line-height: 1.3; margin: 4px 0; }
+ul.products li.product .price { color: var(--ie-brand-dk); font-weight: 700; margin: 4px 0 10px; }
+ul.products li.product .price del { color: var(--ie-muted); font-weight: 400; margin-right: 6px; }
+.ie-card-sku { font-size: .74rem; color: var(--ie-muted); display: block; margin-bottom: 6px; }
+ul.products li.product .button { margin-top: auto; background: var(--ie-brand); color: #fff; border-radius: 8px; padding: .55em 1em; text-align: center; }
+ul.products li.product .button:hover { background: var(--ie-brand-dk); text-decoration: none; }
+ul.products li.product .ie-badge { position: relative; z-index: 2; }
+
+/* Sorting / result count */
+.woocommerce-result-count { color: var(--ie-muted); font-size: .9rem; }
+.woocommerce-ordering select { padding: .5em; border: 1px solid var(--ie-line); border-radius: 8px; }
+.woocommerce-ordering { margin-bottom: 16px; }
+
+/* Single product */
+.single-product div.product { display: grid; grid-template-columns: 1fr; gap: 28px; }
+.single-product div.product .woocommerce-product-gallery { max-width: 100%; }
+.single-product div.product .product_title { font-size: 1.5rem; margin: 0 0 .4rem; }
+.single-product div.product .price { font-size: 1.4rem; color: var(--ie-brand-dk); font-weight: 700; }
+.single-product .stock.in-stock { color: var(--ie-ok); font-weight: 600; }
+.single-product .stock.out-of-stock { color: #9b1c1c; font-weight: 600; }
+.single-product div.product form.cart { margin: 1.2rem 0; }
+.single-product div.product form.cart .button { background: var(--ie-accent); color: #fff; border-radius: 8px; padding: .7em 1.6em; font-weight: 600; }
+.single-product div.product form.cart .button:hover { background: #cf6207; }
+.woocommerce-tabs { margin-top: 32px; }
+.woocommerce-tabs ul.tabs { list-style: none; padding: 0; display: flex; gap: 4px; border-bottom: 2px solid var(--ie-line); flex-wrap: wrap; }
+.woocommerce-tabs ul.tabs li { padding: 10px 16px; cursor: pointer; }
+.woocommerce-tabs ul.tabs li.active { border-bottom: 2px solid var(--ie-brand); margin-bottom: -2px; font-weight: 600; }
+
+/* Cart / checkout tweaks */
+.woocommerce table.shop_table { border-radius: var(--ie-radius); overflow: hidden; }
+.woocommerce-message, .woocommerce-info { border-top-color: var(--ie-brand); }
+.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
+	background: var(--ie-brand); color: #fff; border-radius: 8px;
+}
+.woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce button.button.alt {
+	background: var(--ie-accent);
+}
+
+@media (min-width: 720px) {
+	ul.products { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 980px) {
+	.ie-archive { grid-template-columns: 260px 1fr; }
+	.single-product div.product { grid-template-columns: 1fr 1fr; align-items: start; }
+	.single-product div.product .woocommerce-tabs,
+	.single-product div.product .related,
+	.single-product div.product .up-sells { grid-column: 1 / -1; }
+}
