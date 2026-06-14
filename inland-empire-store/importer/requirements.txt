@@ -1,0 +1,8 @@
+# Standalone importer — all free / open-source.
+requests>=2.31,<3
+python-dotenv>=1.0,<2
+# Optional OCR (Pi #3 already runs Tesseract). The Python binding is small:
+pytesseract>=0.3.10 ; platform_system != "Windows"
+Pillow>=10.0
+# Testing
+pytest>=8.0

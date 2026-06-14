@@ -117,11 +117,17 @@ class Utils {
 			array( 'keywords' => array( 'switch', 'catalyst', 'sfp', 'poe switch' ), 'path' => array( 'Networking', 'Switches' ), 'score' => 0.8 ),
 			array( 'keywords' => array( 'router', 'firewall', 'edgerouter' ), 'path' => array( 'Networking', 'Routers' ), 'score' => 0.8 ),
 			array( 'keywords' => array( 'cisco', 'unifi', 'ubiquiti', 'mikrotik', 'netgear' ), 'path' => array( 'Networking', null ), 'score' => 0.7 ),
-			array( 'keywords' => array( 'precision', 'z4', 'z6', 'z8', 'threadripper', 'workstation' ), 'path' => array( 'Computers & Workstations', 'Workstations' ), 'score' => 0.85 ),
-			array( 'keywords' => array( 'poweredge', 'proliant', 'rack server', 'server' ), 'path' => array( 'Computers & Workstations', 'Servers' ), 'score' => 0.8 ),
-			array( 'keywords' => array( 'optiplex', 'elitedesk', 'thinkcentre', 'prodesk', 'mini pc', 'micro pc', 'tiny' ), 'path' => array( 'Computers & Workstations', 'Mini PCs' ), 'score' => 0.8 ),
+			// Complete-machine MODEL names outrank component mentions (ssd/hdd/ram)
+			// so a full PC that lists its drive/memory is filed as the machine.
+			// Generic words (laptop/desktop/server) score BELOW components so e.g.
+			// "SODIMM Laptop Memory" stays in RAM, not Laptops.
+			array( 'keywords' => array( 'precision', 'z4', 'z6', 'z8', 'threadripper', 'workstation' ), 'path' => array( 'Computers & Workstations', 'Workstations' ), 'score' => 0.93 ),
+			array( 'keywords' => array( 'poweredge', 'proliant', 'rack server' ), 'path' => array( 'Computers & Workstations', 'Servers' ), 'score' => 0.92 ),
+			array( 'keywords' => array( 'optiplex', 'elitedesk', 'thinkcentre', 'prodesk', 'mini pc', 'micro pc', 'tiny desktop' ), 'path' => array( 'Computers & Workstations', 'Mini PCs' ), 'score' => 0.94 ),
+			array( 'keywords' => array( 'thinkpad', 'latitude', 'elitebook', 'macbook' ), 'path' => array( 'Computers & Workstations', 'Laptops' ), 'score' => 0.92 ),
+			array( 'keywords' => array( 'laptop', 'notebook' ), 'path' => array( 'Computers & Workstations', 'Laptops' ), 'score' => 0.72 ),
 			array( 'keywords' => array( 'desktop', 'tower pc' ), 'path' => array( 'Computers & Workstations', 'Desktops' ), 'score' => 0.7 ),
-			array( 'keywords' => array( 'laptop', 'notebook', 'thinkpad', 'latitude', 'elitebook', 'macbook' ), 'path' => array( 'Computers & Workstations', 'Laptops' ), 'score' => 0.8 ),
+			array( 'keywords' => array( 'server' ), 'path' => array( 'Computers & Workstations', 'Servers' ), 'score' => 0.72 ),
 			array( 'keywords' => array( 'cpu', 'processor', 'xeon', 'core i7', 'core i5', 'core i9', 'ryzen' ), 'path' => array( 'Components', 'CPUs / Processors' ), 'score' => 0.75 ),
 			array( 'keywords' => array( 'gpu', 'graphics card', 'geforce', 'radeon', 'quadro', 'rtx', 'gtx' ), 'path' => array( 'Components', 'GPUs / Graphics Cards' ), 'score' => 0.8 ),
 			array( 'keywords' => array( 'monitor', 'display', 'lcd panel' ), 'path' => array( 'Monitors & Displays', null ), 'score' => 0.8 ),
