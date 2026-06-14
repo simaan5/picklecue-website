@@ -1,0 +1,148 @@
+# =============================================================================
+# Inland Empire Electronics — local / single-host development stack
+#
+# Services:
+#   db        MariaDB 11 (persistent volume)
+#   redis     Redis 7 (object cache backend)
+#   wordpress WordPress + PHP 8.2-FPM (custom image, our theme/plugins mounted)
+#   nginx     Reverse proxy / static + PHP-FPM front
+#   wpcli     One-shot WP-CLI helper container (profile: tools)
+#
+# Usage:
+#   cp .env.example .env   # then edit
+#   docker compose up -d
+#   ./scripts/wp-install.sh
+#
+# All images publish multi-arch manifests (amd64 + arm64), so this runs on the
+# Anstelias x86 server and on a Raspberry Pi 4/5 running a 64-bit OS.
+# =============================================================================
+
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_allowed_packet=128M
+    environment:
+      MARIADB_DATABASE: ${MYSQL_DATABASE}
+      MARIADB_USER: ${MYSQL_USER}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: >
+      sh -c '
+      if [ -n "$$REDIS_PASSWORD" ]; then
+        exec redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --requirepass "$$REDIS_PASSWORD";
+      else
+        exec redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru;
+      fi'
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks:
+      - backend
+
+  wordpress:
+    build:
+      context: ./wordpress
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: ${DB_TABLE_PREFIX}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', '${SITE_URL}');
+        define('WP_SITEURL', '${SITE_URL}');
+        define('WP_REDIS_HOST', 'redis');
+        define('WP_REDIS_PORT', 6379);
+        define('WP_REDIS_PASSWORD', '${REDIS_PASSWORD}');
+        define('WP_REDIS_DATABASE', 0);
+        define('WP_MEMORY_LIMIT', '${PHP_MEMORY_LIMIT}');
+        define('WP_MAX_MEMORY_LIMIT', '${PHP_MEMORY_LIMIT}');
+        define('DISALLOW_FILE_EDIT', true);
+        define('AUTOMATIC_UPDATER_DISABLED', true);
+        if (isset($$_SERVER['HTTP_X_FORWARDED_PROTO']) && $$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') { $$_SERVER['HTTPS'] = 'on'; }
+    volumes:
+      - wp_core:/var/www/html
+      # Our version-controlled custom code is bind-mounted over the image:
+      - ./wp-content/themes/anstelias-storefront:/var/www/html/wp-content/themes/anstelias-storefront
+      - ./wp-content/plugins/anstelias-store-tools:/var/www/html/wp-content/plugins/anstelias-store-tools
+      - ./wp-content/plugins/anstelias-ebay-importer:/var/www/html/wp-content/plugins/anstelias-ebay-importer
+      - ./wordpress/php.ini:/usr/local/etc/php/conf.d/zz-anstelias.ini:ro
+      - ./wordpress/uploads.ini:/usr/local/etc/php/conf.d/zz-uploads.ini:ro
+    networks:
+      - backend
+      - frontend
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - wordpress
+    ports:
+      - "${HTTP_PORT}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - wp_core:/var/www/html:ro
+    networks:
+      - frontend
+
+  # One-shot WP-CLI helper. Run with:  docker compose run --rm wpcli wp <command>
+  wpcli:
+    image: wordpress:cli-php8.2
+    profiles: ["tools"]
+    user: "33:33"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: ${DB_TABLE_PREFIX}
+    volumes:
+      - wp_core:/var/www/html
+      - ./wp-content/themes/anstelias-storefront:/var/www/html/wp-content/themes/anstelias-storefront
+      - ./wp-content/plugins/anstelias-store-tools:/var/www/html/wp-content/plugins/anstelias-store-tools
+      - ./wp-content/plugins/anstelias-ebay-importer:/var/www/html/wp-content/plugins/anstelias-ebay-importer
+    networks:
+      - backend
+
+volumes:
+  db_data:
+  redis_data:
+  wp_core:
+
+networks:
+  frontend:
+  backend:

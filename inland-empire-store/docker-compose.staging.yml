@@ -1,0 +1,46 @@
+# =============================================================================
+# Production / staging overlay.
+#
+# Adds:
+#   * Let's Encrypt TLS via the companion (nginx-proxy + acme) pattern, kept
+#     optional and free. For the Anstelias server you can instead terminate TLS
+#     at an existing reverse proxy / Cloudflare Tunnel and drop these services.
+#   * HTTPS port exposure.
+#
+# Usage (production):
+#   docker compose -f docker-compose.yml -f docker-compose.staging.yml up -d
+#
+# This file only *overrides* what differs from docker-compose.yml.
+# =============================================================================
+
+services:
+  nginx:
+    ports:
+      - "${HTTP_PORT}:80"
+      - "${HTTPS_PORT}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - wp_core:/var/www/html:ro
+      - certbot_certs:/etc/letsencrypt:ro
+      - certbot_www:/var/www/certbot:ro
+
+  # Free Let's Encrypt certificate issuance + renewal.
+  # First issue:  docker compose ... run --rm certbot certonly --webroot \
+  #                 -w /var/www/certbot -d ${SITE_DOMAIN} --email ${LETSENCRYPT_EMAIL} \
+  #                 --agree-tos --no-eff-email
+  # Renewal loop runs automatically every 12h.
+  certbot:
+    image: certbot/certbot:latest
+    restart: unless-stopped
+    entrypoint: >
+      sh -c 'trap exit TERM;
+      while :; do certbot renew --webroot -w /var/www/certbot --quiet;
+      sleep 12h & wait $${!}; done'
+    volumes:
+      - certbot_certs:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+
+volumes:
+  certbot_certs:
+  certbot_www:

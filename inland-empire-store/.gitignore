@@ -1,0 +1,49 @@
+# Secrets / environment
+.env
+*.env.local
+importer/.env
+
+# Python importer
+importer/.venv/
+importer/venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+importer/reports/*.csv
+importer/reports/*.json
+importer/cache/
+
+# WordPress runtime (we version control only our custom theme + plugins)
+# Core, vendor plugins, uploads, and generated files are NOT tracked.
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/wflogs/
+wp-content/plugins/woocommerce/
+wp-content/plugins/woocommerce-*/
+wp-content/plugins/woocommerce-gateway-stripe/
+wp-content/plugins/woocommerce-paypal-payments/
+wp-content/plugins/redis-cache/
+wp-content/plugins/seo-by-rank-math/
+wp-content/plugins/wordfence/
+wp-content/plugins/wp-mail-smtp/
+wp-content/plugins/index.php
+wp-content/themes/twenty*/
+wp-content/themes/storefront/
+wp-content/themes/index.php
+wp-content/index.php
+wp-content/debug.log
+wp-content/object-cache.php
+
+# Backups
+backups/
+*.sql
+*.sql.gz
+*.tar.gz
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
