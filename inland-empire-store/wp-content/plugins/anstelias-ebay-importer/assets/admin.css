@@ -1,0 +1,22 @@
+/* Anstelias eBay Importer — admin styles. */
+.anstelias-eb .anstelias-queue td { vertical-align: middle; }
+.anstelias-eb .anstelias-noimg { color: #b0b8bf; }
+.anstelias-eb .anstelias-src { font-size: .8em; }
+.anstelias-eb .anstelias-flag {
+	display: inline-block; background: #fdeaea; color: #9b1c1c;
+	border-radius: 4px; padding: 1px 6px; font-size: .75em; margin: 1px 2px;
+}
+.anstelias-eb .anstelias-status {
+	display: inline-block; border-radius: 999px; padding: 2px 9px; font-size: .75em; font-weight: 600;
+	background: #eef0f2; color: #41515f;
+}
+.anstelias-eb .anstelias-status--needs_review { background: #fff4e5; color: #9a5b00; }
+.anstelias-eb .anstelias-status--ready_to_publish { background: #eef3ff; color: #1f47b3; }
+.anstelias-eb .anstelias-status--published { background: #e7f7ec; color: #156b32; }
+.anstelias-eb .anstelias-status--sync_error { background: #fdeaea; color: #9b1c1c; }
+.anstelias-eb .anstelias-status--archived { background: #eceff2; color: #6b7884; }
+.anstelias-eb .anstelias-log {
+	background: #1c2630; color: #d6e4f2; padding: 14px; border-radius: 8px;
+	max-height: 540px; overflow: auto; font-size: 12px; line-height: 1.5;
+}
+.anstelias-eb #catmap-table input.regular-text { width: 100%; }
