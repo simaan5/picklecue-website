@@ -87,6 +87,10 @@ echo ">> Creating WooCommerce categories, attributes, and shipping classes..."
 wp eval-file wp-content/plugins/anstelias-store-tools/includes/cli-seed.php || \
   echo "   NOTE: run the seeder later via: docker compose run --rm wpcli wp eval-file wp-content/plugins/anstelias-store-tools/includes/cli-seed.php"
 
+echo ">> Configuring shipping zone (flat-rate per class + local pickup)..."
+wp eval-file wp-content/plugins/anstelias-store-tools/includes/cli-shipping.php || \
+  echo "   NOTE: run later via: docker compose run --rm wpcli wp eval-file wp-content/plugins/anstelias-store-tools/includes/cli-shipping.php"
+
 echo ""
 echo "=============================================================="
 echo " Done. Visit:  ${SITE_URL}/wp-admin/"
