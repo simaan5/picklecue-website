@@ -1,0 +1,54 @@
+/* Anstelias Store Tools — badges, summary grid, specs table, notices.
+   Scoped with .ie- prefixes so it never collides with the theme/WooCommerce. */
+
+.ie-badge {
+	display: inline-block;
+	font-size: .72rem;
+	font-weight: 600;
+	line-height: 1;
+	padding: .32em .6em;
+	border-radius: 999px;
+	letter-spacing: .02em;
+	margin: 0 .35em .35em 0;
+	white-space: nowrap;
+}
+.ie-badge--condition.is-new      { background: #e7f7ec; color: #156b32; }
+.ie-badge--condition.is-openbox  { background: #eef3ff; color: #1f47b3; }
+.ie-badge--condition.is-refurb   { background: #fff4e5; color: #9a5b00; }
+.ie-badge--condition.is-used     { background: #eef0f2; color: #41515f; }
+.ie-badge--condition.is-parts    { background: #fdeaea; color: #9b1c1c; }
+.ie-badge--tested.is-pass        { background: #e7f7ec; color: #156b32; }
+.ie-badge--tested.is-unknown     { background: #f3f0e6; color: #6b5b00; }
+
+.ie-badges-row { margin: .25rem 0 1rem; }
+
+/* Key spec summary grid */
+.ie-summary-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+	gap: .5rem;
+	margin: 1rem 0 1.25rem;
+	border: 1px solid #e4e8ec;
+	border-radius: 10px;
+	padding: .85rem 1rem;
+	background: #fafbfc;
+}
+.ie-summary-grid__item { display: flex; flex-direction: column; gap: .15rem; }
+.ie-summary-grid__label {
+	font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; color: #6b7884;
+}
+.ie-summary-grid__value { font-weight: 600; color: #1c2630; word-break: break-word; }
+
+/* Full specs table */
+.ie-specs-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+.ie-specs-table th, .ie-specs-table td {
+	text-align: left; padding: .6rem .75rem; border-bottom: 1px solid #eceff2; vertical-align: top;
+}
+.ie-specs-table th { width: 38%; color: #41515f; font-weight: 600; background: #fafbfc; }
+
+/* Notices */
+.ie-notice { font-size: .92rem; margin: .4rem 0; color: #41515f; }
+.ie-notice--shipping { color: #156b32; }
+
+/* Admin source link (only rendered for admins) */
+.ie-admin-source { display: block; margin-top: .5rem; font-size: .8rem; opacity: .8; }
