@@ -66,6 +66,21 @@ From any tailnet machine (e.g. your laptop):
 (Copy `.env` to the host once, by hand, and edit secrets there. Secrets are
 never committed or rsynced.)
 
+### Control the whole fleet from your computer
+
+`fleetctl` wraps SSH/Tailscale so you don't juggle five IPs. Run it from your
+local machine (it can't work from a cloud sandbox — that can't reach your LAN):
+
+```bash
+./scripts/fleetctl.sh ping             # who's up
+./scripts/fleetctl.sh status           # uptime + docker per host
+./scripts/fleetctl.sh deploy production # deploy the store
+./scripts/fleetctl.sh store logs        # tail store logs
+./scripts/fleetctl.sh import ./ebay.csv # push a CSV + dry-run import
+```
+
+See `docs/fleet-control.md` for all commands.
+
 ## Budget guarantee
 
 Everything here is free / open-source: WordPress, WooCommerce, official free
