@@ -382,6 +382,7 @@
                     <li><strong>Match History</strong>: Scores, match results, and performance statistics you log.</li>
                     <li><strong>Communications</strong>: Messages sent through in-app chat, including direct messages and league chat.</li>
                     <li><strong>Social Connections</strong>: Friends you add and interact with.</li>
+                    <li><strong>Availability</strong>: The days and times you choose to mark yourself available to play.</li>
                     <li><strong>Court Reviews</strong>: Ratings, reviews, and comments you submit for pickleball courts.</li>
                     <li><strong>Reports</strong>: Information you provide when reporting other users or content.</li>
                 </ul>
@@ -391,11 +392,15 @@
                     <li><strong>Location Data</strong>: With your permission, we collect precise location (latitude and longitude) to show nearby courts, games, leagues, and weather conditions.</li>
                     <li><strong>Usage Data</strong>: App interactions, features used, search queries, and session duration.</li>
                     <li><strong>Crash and Performance Data</strong>: Error logs, crash reports, and performance metrics to improve stability.</li>
+                    <li><strong>Purchase Data</strong>: Your subscription tier and the Apple transaction identifier for a PickleCue Pro purchase. All payment is processed by Apple &mdash; we never receive or store your card details.</li>
+                    <li><strong>Reputation</strong>: Trust and reputation signals derived from your play history and peer interactions.</li>
                 </ul>
                 <h3>Device permissions</h3>
                 <ul>
                     <li><strong>Calendar</strong>: If you enable &ldquo;Auto-sync games to calendar,&rdquo; PickleCue adds and updates events for the games you join in your device calendar. These events are written directly on your device via Apple&rsquo;s EventKit and are <strong>never transmitted to our servers or any third party</strong>. Calendar access is optional and can be revoked at any time in iOS Settings.</li>
                     <li><strong>Notifications</strong>: With your permission, we store a device token to send push notifications about your games, messages, and updates. You can disable notifications at any time in iOS Settings.</li>
+                    <li><strong>Contacts</strong>: If you use &ldquo;Invite Friends&rdquo; and grant Contacts access, PickleCue matches your address book on your device to help you find friends and send SMS invitations. <strong>Your contacts are processed on your device and are never uploaded to our servers or shared.</strong> Contacts access is optional.</li>
+                    <li><strong>Emergency Contacts</strong>: If you add emergency contacts, their name and phone number are stored <strong>only on your device</strong> and are never transmitted to us or any third party.</li>
                 </ul>
 
                 <h2 id="use">How We Use Your Information</h2>
@@ -418,6 +423,7 @@
                     <li><strong>Mixpanel</strong>: Analytics platform. Receives pseudonymous usage data linked only to a random identifier (UUID). No email, name, or personally identifiable information is sent, and we do not use Apple&rsquo;s advertising identifier (IDFA) or track you across other companies&rsquo; apps or websites. If you turn analytics off in Settings &gt; Privacy, Mixpanel is not initialized and makes zero network requests.</li>
                     <li><strong>Sentry</strong>: Crash reporting. Receives anonymized error data linked only to your UUID. No email, name, or personally identifiable information is sent.</li>
                     <li><strong>Apple WeatherKit</strong>: Location coordinates sent for court weather conditions. No user identity included.</li>
+                    <li><strong>Open-Meteo</strong>: A weather API used only as a fallback when Apple WeatherKit is unavailable. It receives court/location coordinates to return conditions. No user identity is included.</li>
                     <li><strong>Apple Push Notification Service</strong>: Device token stored for push notifications. Disable anytime in iOS Settings.</li>
                 </ul>
 
@@ -475,9 +481,10 @@
                 <p>When you delete your account:</p>
                 <ul>
                     <li>Your profile is immediately removed.</li>
-                    <li>Your match history is anonymized.</li>
+                    <li>Your match participation and personal data are deleted. Matches, games, or leagues you shared with other players remain visible to them, but without your identity attached.</li>
                     <li>Your messages are deleted.</li>
-                    <li>Your push notification tokens are deactivated.</li>
+                    <li>Your push notification tokens are deleted.</li>
+                    <li>Groups, leagues, or tournaments you created that still have other members are transferred to another member rather than deleted, so those communities continue to function.</li>
                     <li>Your data is purged from our systems within 30 days.</li>
                 </ul>
                 <p>Analytics data (Mixpanel) is retained for up to 12 months. Crash data (Sentry) is retained for up to 90 days.</p>
@@ -491,7 +498,7 @@
                     <li>Access your personal data.</li>
                     <li>Correct inaccurate data.</li>
                     <li>Delete your data.</li>
-                    <li>Export your data (Pro subscribers can export in CSV or JSON format).</li>
+                    <li>Export your data (Pro subscribers can export in CSV, JSON, or PDF format).</li>
                     <li>Opt out of analytics (turn off &ldquo;Share usage analytics&rdquo; in Settings &gt; Privacy; when disabled, the analytics SDK is not initialized and collects nothing).</li>
                 </ul>
                 <p>We do not sell personal information. California residents have additional rights under CCPA. To exercise these rights, contact us at the email below.</p>
