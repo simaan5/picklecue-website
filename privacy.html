@@ -319,7 +319,7 @@
                 <span class="kicker">Legal · Document 01</span>
                 <h1>Privacy, <em>by design.</em></h1>
                 <div class="article-meta">
-                    <span><b>Effective</b>April 15, 2026</span>
+                    <span><b>Effective</b>July 2, 2026</span>
                     <span><b>Jurisdiction</b>United States · GDPR · CCPA</span>
                     <span><b>Contact</b><a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a></span>
                 </div>
@@ -350,7 +350,7 @@
 
             <article class="article-body">
                 <h2 id="overview">Overview</h2>
-                <p>PickleCue (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information across our website (<a href="https://www.picklecue.com">www.picklecue.com</a>) and our iOS mobile application.</p>
+                <p>PickleCue, operated by ANSI Corporation (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;), is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information across our website (<a href="https://www.picklecue.com">www.picklecue.com</a>) and our iOS mobile application.</p>
                 <div class="callout">
                     <strong>Plain-English summary</strong>
                     We collect the minimum we need to run the product. We never sell your data. You can delete your account, and the waitlist, at any time — no questions asked.
@@ -392,10 +392,10 @@
                     <li><strong>Usage Data</strong>: App interactions, features used, search queries, and session duration.</li>
                     <li><strong>Crash and Performance Data</strong>: Error logs, crash reports, and performance metrics to improve stability.</li>
                 </ul>
-                <h3>Optional integrations</h3>
+                <h3>Device permissions</h3>
                 <ul>
-                    <li><strong>HealthKit</strong>: If you choose to connect HealthKit, we can read calories, heart rate, steps, and workout data, and write pickleball workout summaries. <strong>HealthKit data is processed entirely on your device and is never transmitted to our servers or any third party.</strong></li>
-                    <li><strong>DUPR</strong>: If you choose to link your DUPR account, we facilitate match result exchanges with DUPR for rating calculations. See &ldquo;Third-Party Services&rdquo; below.</li>
+                    <li><strong>Calendar</strong>: If you enable &ldquo;Auto-sync games to calendar,&rdquo; PickleCue adds and updates events for the games you join in your device calendar. These events are written directly on your device via Apple&rsquo;s EventKit and are <strong>never transmitted to our servers or any third party</strong>. Calendar access is optional and can be revoked at any time in iOS Settings.</li>
+                    <li><strong>Notifications</strong>: With your permission, we store a device token to send push notifications about your games, messages, and updates. You can disable notifications at any time in iOS Settings.</li>
                 </ul>
 
                 <h2 id="use">How We Use Your Information</h2>
@@ -407,7 +407,7 @@
                     <li>Display weather conditions at courts.</li>
                     <li>Process and manage your subscription.</li>
                     <li>Send notifications about games and messages.</li>
-                    <li>Analyze usage patterns to improve the app (only with your consent via App Tracking Transparency).</li>
+                    <li>Analyze aggregate, pseudonymous usage patterns to improve the app. This first-party analytics data is linked only to a random identifier &mdash; never used for advertising, and never combined with data from other companies&rsquo; apps or websites. Because it is first-party analytics and not cross-app tracking, the app does not show Apple&rsquo;s App Tracking Transparency prompt. You can turn it off at any time in Settings &gt; Privacy.</li>
                     <li>Detect and prevent fraud, abuse, and objectionable content.</li>
                     <li>Comply with legal obligations.</li>
                 </ul>
@@ -415,9 +415,8 @@
                 <h2 id="third-parties">Third-Party Services</h2>
                 <ul>
                     <li><strong>Supabase</strong>: Backend database and authentication. Stores user accounts, profiles, games, matches, messaging, and subscription data. Encrypted in transit and at rest with row-level security policies.</li>
-                    <li><strong>Mixpanel</strong>: Analytics platform. Receives anonymized usage data linked only to your UUID. No email, name, or personally identifiable information is sent. Only active if you authorize tracking via App Tracking Transparency.</li>
+                    <li><strong>Mixpanel</strong>: Analytics platform. Receives pseudonymous usage data linked only to a random identifier (UUID). No email, name, or personally identifiable information is sent, and we do not use Apple&rsquo;s advertising identifier (IDFA) or track you across other companies&rsquo; apps or websites. If you turn analytics off in Settings &gt; Privacy, Mixpanel is not initialized and makes zero network requests.</li>
                     <li><strong>Sentry</strong>: Crash reporting. Receives anonymized error data linked only to your UUID. No email, name, or personally identifiable information is sent.</li>
-                    <li><strong>DUPR</strong>: If you link your DUPR account, we share match results (player DUPR IDs and scores) for rating updates. Tokens stored server-side only. You can unlink anytime.</li>
                     <li><strong>Apple WeatherKit</strong>: Location coordinates sent for court weather conditions. No user identity included.</li>
                     <li><strong>Apple Push Notification Service</strong>: Device token stored for push notifications. Disable anytime in iOS Settings.</li>
                 </ul>
@@ -428,7 +427,7 @@
                     <li>We do <strong>not</strong> use your data for advertising purposes.</li>
                     <li>We do <strong>not</strong> track you across other apps or websites.</li>
                     <li>We do <strong>not</strong> share your location with advertisers.</li>
-                    <li>We do <strong>not</strong> transmit HealthKit data off your device.</li>
+                    <li>We do <strong>not</strong> transmit your calendar data off your device.</li>
                 </ul>
 
                 <h2 id="security">Storage &amp; Security</h2>
@@ -493,7 +492,7 @@
                     <li>Correct inaccurate data.</li>
                     <li>Delete your data.</li>
                     <li>Export your data (Pro subscribers can export in CSV or JSON format).</li>
-                    <li>Opt out of analytics (deny App Tracking Transparency, or change in iOS Settings &gt; Privacy &amp; Security &gt; Tracking).</li>
+                    <li>Opt out of analytics (turn off &ldquo;Share usage analytics&rdquo; in Settings &gt; Privacy; when disabled, the analytics SDK is not initialized and collects nothing).</li>
                 </ul>
                 <p>We do not sell personal information. California residents have additional rights under CCPA. To exercise these rights, contact us at the email below.</p>
 
@@ -506,7 +505,7 @@
                     <li><strong>Support</strong>: <a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
                 </ul>
 
-                <p><em>This privacy policy is effective as of April 15, 2026.</em></p>
+                <p><em>This privacy policy is effective as of July 2, 2026.</em></p>
 
                 <a href="/" class="back">Back to PickleCue</a>
             </article>
@@ -553,7 +552,7 @@
                 </div>
             </div>
             <div class="colophon-base">
-                <span>&copy; 2026 PickleCue. All rights reserved.</span>
+                <span>&copy; 2026 PickleCue · ANSI Corporation. All rights reserved.</span>
                 <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="made_by_anstelias" aria-label="Made by Anstelias — anstelias.com">
                     <span>Made by</span>
                     <img src="images/anstelias-logo.png" alt="" aria-hidden="true" width="40" height="40">
