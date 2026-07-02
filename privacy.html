@@ -412,7 +412,7 @@
                     <li>Display weather conditions at courts.</li>
                     <li>Process and manage your subscription.</li>
                     <li>Send notifications about games and messages.</li>
-                    <li>Analyze aggregate, pseudonymous usage patterns to improve the app. This first-party analytics data is linked only to a random identifier &mdash; never used for advertising, and never combined with data from other companies&rsquo; apps or websites. Because it is first-party analytics and not cross-app tracking, the app does not show Apple&rsquo;s App Tracking Transparency prompt. You can turn it off at any time in Settings &gt; Privacy.</li>
+                    <li>Improve the app using aggregate, on-device usage insights. We do <strong>not</strong> use a third-party analytics provider, advertising identifiers (IDFA), or cross-app tracking, and the app does not show Apple&rsquo;s App Tracking Transparency prompt.</li>
                     <li>Detect and prevent fraud, abuse, and objectionable content.</li>
                     <li>Comply with legal obligations.</li>
                 </ul>
@@ -420,7 +420,6 @@
                 <h2 id="third-parties">Third-Party Services</h2>
                 <ul>
                     <li><strong>Supabase</strong>: Backend database and authentication. Stores user accounts, profiles, games, matches, messaging, and subscription data. Encrypted in transit and at rest with row-level security policies.</li>
-                    <li><strong>Mixpanel</strong>: Analytics platform. Receives pseudonymous usage data linked only to a random identifier (UUID). No email, name, or personally identifiable information is sent, and we do not use Apple&rsquo;s advertising identifier (IDFA) or track you across other companies&rsquo; apps or websites. If you turn analytics off in Settings &gt; Privacy, Mixpanel is not initialized and makes zero network requests.</li>
                     <li><strong>Sentry</strong>: Crash reporting. Receives anonymized error data linked only to your UUID. No email, name, or personally identifiable information is sent.</li>
                     <li><strong>Apple WeatherKit</strong>: Location coordinates sent for court weather conditions. No user identity included.</li>
                     <li><strong>Open-Meteo</strong>: A weather API used only as a fallback when Apple WeatherKit is unavailable. It receives court/location coordinates to return conditions. No user identity is included.</li>
@@ -431,6 +430,7 @@
                 <ul>
                     <li>We do <strong>not</strong> sell your personal data to third parties.</li>
                     <li>We do <strong>not</strong> use your data for advertising purposes.</li>
+                    <li>We do <strong>not</strong> use a third-party analytics provider.</li>
                     <li>We do <strong>not</strong> track you across other apps or websites.</li>
                     <li>We do <strong>not</strong> share your location with advertisers.</li>
                     <li>We do <strong>not</strong> transmit your calendar data off your device.</li>
@@ -487,7 +487,7 @@
                     <li>Groups, leagues, or tournaments you created that still have other members are transferred to another member rather than deleted, so those communities continue to function.</li>
                     <li>Your data is purged from our systems within 30 days.</li>
                 </ul>
-                <p>Analytics data (Mixpanel) is retained for up to 12 months. Crash data (Sentry) is retained for up to 90 days.</p>
+                <p>Crash data (Sentry) is retained for up to 90 days.</p>
 
                 <h2 id="children">Children&rsquo;s Privacy</h2>
                 <p>PickleCue is not intended for children under 13. We do not knowingly collect information from children under 13. If you believe a child has provided us with personal information, please contact us.</p>
@@ -499,7 +499,7 @@
                     <li>Correct inaccurate data.</li>
                     <li>Delete your data.</li>
                     <li>Export your data (Pro subscribers can export in CSV, JSON, or PDF format).</li>
-                    <li>Opt out of analytics (turn off &ldquo;Share usage analytics&rdquo; in Settings &gt; Privacy; when disabled, the analytics SDK is not initialized and collects nothing).</li>
+                    <li>Opt out of in-app usage insights (turn off &ldquo;Share usage analytics&rdquo; in Settings &gt; Privacy).</li>
                 </ul>
                 <p>We do not sell personal information. California residents have additional rights under CCPA. To exercise these rights, contact us at the email below.</p>
 
