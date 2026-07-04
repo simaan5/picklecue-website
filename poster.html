@@ -62,6 +62,8 @@
         var title = (q.get('title') || 'Scan to follow live').slice(0, 60);
         var eventName = (q.get('event') || '').slice(0, 80);
         var kicker = (q.get('kicker') || 'Live event').slice(0, 40);
+        var sponsor = (q.get('sponsor') || '').slice(0, 80);
+        if (sponsor) document.getElementById('sponsor').textContent = 'Presented by ' + sponsor;
         document.getElementById('title').textContent = title;
         document.getElementById('event').textContent = eventName;
         document.getElementById('kicker').textContent = kicker;
