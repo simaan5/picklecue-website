@@ -32,11 +32,15 @@
         'use strict';
         var PC = window.PCLive, esc = PC.esc, db = PC.client;
         var main = document.getElementById('main');
-        var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches';
+        var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches', qrOpen = false;
 
         document.getElementById('signOutBtn').addEventListener('click', async function () {
             await PC.signOut(); location.reload();
         });
+
+        var PROD_BASE = 'https://www.picklecue.com/';
+
+        function shareUrl(path) { return PROD_BASE + path; }
 
         function setConn(state) {
             var el = document.getElementById('conn');
@@ -167,7 +171,8 @@
                 '<a class="btn ghost" href="' + liveUrl + '" target="_blank" rel="noopener">Open live page</a>' +
                 '<button class="btn ghost" id="copyBtn">Copy live link</button>' +
                 '<a class="btn ghost" href="scorekeeper.html?' + kind + '=' + view.id + '">Scorekeeper mode</a>' +
-                '</div>' +
+                '<button class="btn ghost" id="qrBtn">QR codes &amp; posters</button>' +
+                '</div><div id="qrPanel" hidden></div>' +
                 (isT && window.PCBracket.isElimination(snap)
                     ? '<div class="tabs" role="tablist">' +
                       '<button class="tab" data-etab="matches" aria-selected="' + (eventTab === 'matches') + '">Matches</button>' +
@@ -228,9 +233,15 @@
                     onMatch: function (mid) { showBracketPanel(mid, nameMap); },
                 });
             }
+            document.getElementById('qrBtn').addEventListener('click', function () {
+                qrOpen = !qrOpen;
+                syncQrPanel(head.name);
+            });
+            syncQrPanel(head.name); // survive realtime re-renders
             document.getElementById('backBtn').addEventListener('click', function () {
                 if (unsub) { unsub(); unsub = null; }
                 view = { mode: 'list' };
+                qrOpen = false;
                 document.getElementById('conn').hidden = true;
                 loadList();
             });
@@ -259,6 +270,71 @@
                 if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) throw new Error('Enter the score as two numbers, like 11-8.');
                 return PC.recordScoreEvent({ scope: scopeName(), matchId: mid, eventType: 'match_completed', score1: parts[0], score2: parts[1], note: 'organizer web correction' });
             });
+        }
+
+        function syncQrPanel(eventName) {
+            var panel = document.getElementById('qrPanel');
+            if (!panel) return;
+            panel.hidden = !qrOpen;
+            if (qrOpen && !panel.innerHTML) renderQrPanel(panel, eventName);
+        }
+
+        // QR codes & printable posters — every link points at production so a
+        // printed poster works forever, regardless of where this dashboard runs.
+        function renderQrPanel(panel, eventName) {
+            var kind = view.kind;
+            var isT = kind === 't';
+            var targets = [
+                { label: 'Live event page', path: 'live.html?' + kind + '=' + view.id, poster: 'Scan to follow live' },
+            ];
+            if (isT && window.PCBracket.isElimination(snap)) targets.push({ label: 'Live bracket', path: 'live.html?' + kind + '=' + view.id + '&view=bracket', poster: 'Scan for the live bracket' });
+            targets.push({ label: 'Court board', path: 'live.html?' + kind + '=' + view.id + '&view=courts', poster: 'Scan for court assignments' });
+            targets.push({ label: 'Court board (TV mode)', path: 'live.html?' + kind + '=' + view.id + '&view=courts&display=tv', poster: null });
+            targets.push({ label: 'Scorekeeper page (staff only)', path: 'scorekeeper.html?' + kind + '=' + view.id, poster: null });
+
+            panel.innerHTML = '<div class="section" style="padding-top:6px">' + targets.map(function (tg, i) {
+                return '<div class="event-row"><div class="grow">' +
+                    '<div class="title" style="font-size:14px">' + tg.label + '</div>' +
+                    '<div class="sub">' + esc(shareUrl(tg.path)) + '</div></div>' +
+                    '<span id="qr-mini-' + i + '"></span>' +
+                    '<button class="btn ghost" data-copy="' + i + '">Copy link</button>' +
+                    (tg.poster ? '<button class="btn ghost" data-poster="' + i + '">Print poster</button>' : '') +
+                    '</div>';
+            }).join('') +
+            '<p class="sub" style="font-size:12px;color:var(--ink-mute);margin-top:6px">Posters open print-ready with a large QR code, your event name, and a sponsor slot. The scorekeeper link only works for staff you have assigned — safe to hand to volunteers, useless to anyone else.</p></div>';
+
+            Array.prototype.forEach.call(panel.querySelectorAll('[data-copy]'), function (b) {
+                b.addEventListener('click', function () {
+                    navigator.clipboard.writeText(shareUrl(targets[b.dataset.copy].path)).then(function () {
+                        b.textContent = 'Copied!';
+                        setTimeout(function () { b.textContent = 'Copy link'; }, 1500);
+                    });
+                });
+            });
+            Array.prototype.forEach.call(panel.querySelectorAll('[data-poster]'), function (b) {
+                b.addEventListener('click', function () {
+                    var tg = targets[b.dataset.poster];
+                    window.open('poster.html?u=' + encodeURIComponent(shareUrl(tg.path)) +
+                        '&title=' + encodeURIComponent(tg.poster) +
+                        '&event=' + encodeURIComponent(eventName) +
+                        '&kicker=' + encodeURIComponent(isT ? 'Tournament' : 'League'), '_blank');
+                });
+            });
+            var s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+            s.onload = function () {
+                targets.forEach(function (tg, i) {
+                    var el = document.getElementById('qr-mini-' + i);
+                    if (!el) return;
+                    var qr = window.qrcode(0, 'L');
+                    qr.addData(shareUrl(tg.path));
+                    qr.make();
+                    el.innerHTML = qr.createImgTag(1, 0);
+                    var img = el.querySelector('img');
+                    if (img) { img.style.width = '44px'; img.style.height = '44px'; img.style.imageRendering = 'pixelated'; }
+                });
+            };
+            document.head.appendChild(s);
         }
 
         // Control panel for a match tapped on the organizer bracket.
