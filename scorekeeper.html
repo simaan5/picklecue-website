@@ -57,7 +57,19 @@
                 kind === 't' ? { p_tournament_id: eventId } : { p_league_id: eventId });
             if (check.error || check.data !== true) {
                 main.innerHTML = '<div class="state"><h2>You’re not assigned to this event</h2>' +
-                    '<p>Ask the organizer to add you as a scorekeeper (in the app: event › Players › Staff).</p></div>';
+                    '<p>Have a staff code from the organizer? Enter it below — or ask them to add you in the app (event › Players › Staff).</p>' +
+                    '<div class="bar" style="justify-content:center;margin:16px 0"><input id="staffCode" maxlength="6" placeholder="STAFF CODE" ' +
+                    'style="font-family:var(--f-mono);font-size:18px;letter-spacing:0.2em;text-transform:uppercase;text-align:center;width:180px;padding:12px;border:1px solid var(--rule-strong);border-radius:10px;background:var(--paper);color:var(--ink)">' +
+                    '<button class="btn primary" id="claimBtn">Join staff</button></div>' +
+                    '<p class="err" id="claimErr"></p></div>';
+                document.getElementById('claimBtn').addEventListener('click', async function () {
+                    var code = document.getElementById('staffCode').value.trim();
+                    if (code.length !== 6) { document.getElementById('claimErr').textContent = 'Codes are 6 characters.'; return; }
+                    this.disabled = true;
+                    var r = await db.rpc('claim_staff_code', { p_code: code });
+                    if (r.error) { document.getElementById('claimErr').textContent = r.error.message; this.disabled = false; return; }
+                    await boot();
+                });
                 return;
             }
             await refetch();

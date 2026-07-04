@@ -198,7 +198,9 @@
                 html += membersTable(members || []);
             }
 
-            html += '<p class="foot-note">Scores update automatically — no refresh needed. Powered by <a href="/">PickleCue</a>.</p>';
+            html += '<p class="foot-note">Scores update automatically — no refresh needed. Powered by <a href="/">PickleCue</a>.' +
+                (/iPhone|iPad|Android/i.test(navigator.userAgent)
+                    ? ' <a href="picklecue://' + kind + '/' + eventId + '">Open in the PickleCue app \u2192</a>' : '') + '</p>';
             main.innerHTML = html;
             if (activeTab === 'bracket') {
                 window.PCBracket.render(document.getElementById('bvHost'), snap, {});
