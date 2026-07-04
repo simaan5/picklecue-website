@@ -39,7 +39,8 @@
         var eventId = tid || lid;
         var main = document.getElementById('main');
         var snap = null;
-        var activeTab = ['bracket', 'courts', 'me'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
+        var activeTab = ['bracket', 'courts', 'me', 'register'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
+        var regInfo = null, regResult = null;
         var mePid = null;
         if (params.get('display') === 'tv') document.body.classList.add('bv-tv');
         var unsub = null;
@@ -150,6 +151,12 @@
                 (isT && head.points_to_win ? '<span class="chip">To ' + head.points_to_win + (head.win_by_two ? ', win by 2' : '') + '</span>' : '') +
                 (head.organizer_name ? '<span class="chip">Organizer: ' + esc(head.organizer_name) + '</span>' : '') +
                 '</div>' +
+                (regInfo && regInfo.open && activeTab !== 'register'
+                    ? '<div class="bar" style="margin-top:14px"><button class="btn primary" id="regCta">' +
+                      (regInfo.spots_left > 0
+                          ? 'Register — ' + regInfo.spots_left + (regInfo.spots_left === 1 ? ' spot' : ' spots') + ' left'
+                          : (regInfo.waitlist_enabled ? 'Event full — join the waitlist' : 'Event full')) +
+                      '</button></div>' : '') +
                 '<div class="tabs" role="tablist">' +
                 tabBtn('matches', 'Matches') +
                 (isT && window.PCBracket.isElimination(snap) ? tabBtn('bracket', 'Bracket') : '') +
@@ -161,7 +168,9 @@
 
             if (activeTab === 'bracket' && !(kind === 't' && window.PCBracket.isElimination(snap))) activeTab = 'matches';
             if (activeTab === 'courts' && !matches.some(function (m) { return m.court; })) activeTab = 'matches';
-            if (activeTab === 'courts') {
+            if (activeTab === 'register') {
+                html += registerView();
+            } else if (activeTab === 'courts') {
                 html += courtBoard(matches);
             } else if (activeTab === 'me') {
                 html += whatsNext(matches, members || []);
@@ -183,6 +192,12 @@
             if (activeTab === 'bracket') {
                 window.PCBracket.render(document.getElementById('bvHost'), snap, {});
             }
+            var regCta = document.getElementById('regCta');
+            if (regCta) regCta.addEventListener('click', function () {
+                if (regInfo.spots_left === 0 && !regInfo.waitlist_enabled) return;
+                activeTab = 'register'; regResult = null; render();
+            });
+            if (activeTab === 'register') wireRegister();
             if (activeTab === 'me') {
                 var search = document.getElementById('meSearch');
                 if (search) search.addEventListener('input', function () {
@@ -212,6 +227,87 @@
 
         function tabBtn(id, label) {
             return '<button class="tab" role="tab" data-tab="' + id + '" aria-selected="' + (activeTab === id) + '">' + label + '</button>';
+        }
+
+        // ---- Registration ------------------------------------------------------
+        function registerView() {
+            if (!regInfo || !regInfo.open) {
+                return '<div class="state"><h2>Registration is closed</h2><p>Ask the organizer if you think this is a mistake.</p></div>';
+            }
+            if (regResult) {
+                var waitlisted = regResult.status === 'waitlisted';
+                return '<section class="section"><div class="me-card' + (waitlisted ? '' : ' me-live') + '" style="border-color:var(--court);box-shadow:none">' +
+                    '<div class="me-status" style="color:var(--court)">' + (waitlisted ? 'YOU\u2019RE ON THE WAITLIST' : '\u2705 YOU\u2019RE REGISTERED') + '</div>' +
+                    '<div class="me-sub" style="font-size:15px;margin-top:10px">' +
+                    (waitlisted
+                        ? 'The event is full right now. The organizer can move you in if a spot opens \u2014 keep an eye on this page.'
+                        : 'See you on event day \u2014 check in at the desk when you arrive, then this page will tell you where to play.') +
+                    '</div>' +
+                    '<div class="bar" style="justify-content:center;margin-top:18px">' +
+                    '<button class="btn ghost" id="regBackBtn">Back to the event</button></div></div></section>';
+            }
+            var isLeague = kind === 'l';
+            var doubles = regInfo.require_partner || regInfo.allow_need_partner;
+            return '<section class="section" style="max-width:480px"><h2>Register for this event</h2>' +
+                (isLeague ? '<p class="bnote" id="regLeagueNote" style="margin-bottom:12px">Joining a league uses your PickleCue account \u2014 you\u2019ll be asked to sign in when you submit.</p>' : '') +
+                '<div class="field"><label>Your name *</label><input id="rName" maxlength="80" autocomplete="name"></div>' +
+                '<div class="field"><label>Email</label><input id="rEmail" type="email" maxlength="254" autocomplete="email"></div>' +
+                '<div class="field"><label>Phone (optional)</label><input id="rPhone" type="tel" maxlength="30" autocomplete="tel"></div>' +
+                '<div class="field"><label>Skill level (optional)</label><input id="rSkill" maxlength="20" placeholder="e.g. 3.5"></div>' +
+                (regInfo.require_dupr
+                    ? '<div class="field"><label>DUPR ID *</label><input id="rDupr" maxlength="40"></div>'
+                    : '<div class="field"><label>DUPR ID (optional)</label><input id="rDupr" maxlength="40"></div>') +
+                (doubles
+                    ? '<div class="field"><label>Partner</label><select id="rPartnerMode">' +
+                      (!regInfo.require_partner ? '<option value="none">Playing solo / not applicable</option>' : '') +
+                      '<option value="complete">I have a partner</option>' +
+                      (regInfo.allow_need_partner ? '<option value="needed">I need a partner</option>' : '') +
+                      '</select></div>' +
+                      '<div class="field" id="rPartnerNameWrap" hidden><label>Partner\u2019s name</label><input id="rPartnerName" maxlength="80"></div>'
+                    : '') +
+                '<div class="field"><label>Note to the organizer (optional)</label><input id="rNotes" maxlength="500"></div>' +
+                '<label class="bcheck" style="padding:6px 0 14px"><input type="checkbox" id="rTerms">' +
+                '<span style="font-size:13.5px;color:var(--ink-soft)">I agree to the event rules and PickleCue\u2019s <a href="terms.html" target="_blank" rel="noopener">Terms</a> &amp; <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, and I understand the event organizer can see my registration details.</span></label>' +
+                '<button class="btn primary block" id="regSubmit">' +
+                (regInfo.spots_left > 0 ? 'Register' : 'Join the waitlist') + '</button>' +
+                '<p class="err" id="regErr"></p></section>';
+        }
+
+        function wireRegister() {
+            var back = document.getElementById('regBackBtn');
+            if (back) { back.addEventListener('click', function () { activeTab = 'matches'; refetch(); }); return; }
+            var mode = document.getElementById('rPartnerMode');
+            if (mode) mode.addEventListener('change', function () {
+                document.getElementById('rPartnerNameWrap').hidden = mode.value !== 'complete';
+            });
+            var btn = document.getElementById('regSubmit');
+            if (!btn) return;
+            btn.addEventListener('click', async function () {
+                var err = document.getElementById('regErr');
+                err.textContent = '';
+                if (!document.getElementById('rTerms').checked) { err.textContent = 'Please agree to the event rules and terms first.'; return; }
+                btn.disabled = true;
+                try {
+                    var r = await PC.client.rpc('register_for_event', {
+                        p_scope: kind === 't' ? 'tournament' : 'league',
+                        p_event_id: eventId,
+                        p_display_name: document.getElementById('rName').value,
+                        p_email: document.getElementById('rEmail').value || null,
+                        p_phone: document.getElementById('rPhone').value || null,
+                        p_skill_level: document.getElementById('rSkill').value || null,
+                        p_dupr_id: document.getElementById('rDupr').value || null,
+                        p_partner_status: mode ? mode.value : 'none',
+                        p_partner_name: mode && mode.value === 'complete' ? (document.getElementById('rPartnerName').value || null) : null,
+                        p_notes: document.getElementById('rNotes').value || null,
+                    });
+                    if (r.error) throw r.error;
+                    regResult = r.data;
+                    render();
+                } catch (e) {
+                    err.textContent = e.message || 'Registration failed — try again.';
+                    btn.disabled = false;
+                }
+            });
         }
 
         // ---- Court Board -----------------------------------------------------
@@ -357,7 +453,12 @@
 
         async function refetch() {
             try {
-                snap = kind === 't' ? await PC.tournamentSnapshot(eventId) : await PC.leagueSnapshot(eventId);
+                var results = await Promise.all([
+                    kind === 't' ? PC.tournamentSnapshot(eventId) : PC.leagueSnapshot(eventId),
+                    PC.client.rpc('event_registration_info', { p_scope: kind === 't' ? 'tournament' : 'league', p_event_id: eventId }),
+                ]);
+                snap = results[0];
+                regInfo = results[1].data || null;
             } catch (e) {
                 console.error('[live] snapshot failed', e);
                 return;
