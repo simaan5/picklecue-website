@@ -33,6 +33,7 @@
         var PC = window.PCLive, esc = PC.esc, db = PC.client;
         var main = document.getElementById('main');
         var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches', qrOpen = false;
+        var readiness = {}, ciFilter = 'all', ciSearch = '';
 
         document.getElementById('signOutBtn').addEventListener('click', async function () {
             await PC.signOut(); location.reload();
@@ -152,6 +153,12 @@
             if (view.mode !== 'event') return;
             snap = view.kind === 't' ? await PC.tournamentSnapshot(view.id) : await PC.leagueSnapshot(view.id);
             if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
+            if (eventTab === 'checkin') {
+                var r = await db.rpc('event_readiness', {
+                    p_scope: view.kind === 't' ? 'tournament' : 'league', p_event_id: view.id });
+                readiness = {};
+                (r.data || []).forEach(function (x) { readiness[x.id] = x; });
+            }
             renderEvent();
         }
 
@@ -173,11 +180,11 @@
                 '<a class="btn ghost" href="scorekeeper.html?' + kind + '=' + view.id + '">Scorekeeper mode</a>' +
                 '<button class="btn ghost" id="qrBtn">QR codes &amp; posters</button>' +
                 '</div><div id="qrPanel" hidden></div>' +
+                '<div class="tabs" role="tablist">' +
+                '<button class="tab" data-etab="matches" aria-selected="' + (eventTab === 'matches') + '">Matches</button>' +
                 (isT && window.PCBracket.isElimination(snap)
-                    ? '<div class="tabs" role="tablist">' +
-                      '<button class="tab" data-etab="matches" aria-selected="' + (eventTab === 'matches') + '">Matches</button>' +
-                      '<button class="tab" data-etab="bracket" aria-selected="' + (eventTab === 'bracket') + '">Bracket</button></div>'
-                    : '') +
+                    ? '<button class="tab" data-etab="bracket" aria-selected="' + (eventTab === 'bracket') + '">Bracket</button>' : '') +
+                '<button class="tab" data-etab="checkin" aria-selected="' + (eventTab === 'checkin') + '">Check-In</button></div>' +
                 '<p class="ok" id="barMsg"></p></div>';
 
             var rows = (snap.matches || []).map(function (m) {
@@ -212,7 +219,9 @@
             });
 
             if (eventTab === 'bracket' && !(isT && window.PCBracket.isElimination(snap))) eventTab = 'matches';
-            if (eventTab === 'bracket') {
+            if (eventTab === 'checkin') {
+                html += checkinTab(members || [], nameMap);
+            } else if (eventTab === 'bracket') {
                 html += '<section class="section"><div id="bvPanel"></div><div id="bvHost"></div></section>';
             } else {
                 html += '<section class="section"><h2>Matches <span class="count">' + rows.length + '</span></h2>' + (rows.join('') || '<p class="sub">No matches yet — generate the schedule in the app.</p>') + '</section>';
@@ -225,7 +234,10 @@
             main.innerHTML = html;
 
             Array.prototype.forEach.call(main.querySelectorAll('[data-etab]'), function (b) {
-                b.addEventListener('click', function () { eventTab = b.dataset.etab; renderEvent(); });
+                b.addEventListener('click', function () {
+                    eventTab = b.dataset.etab;
+                    if (eventTab === 'checkin') refetchEvent(); else renderEvent();
+                });
             });
             if (eventTab === 'bracket') {
                 window.PCBracket.render(document.getElementById('bvHost'), snap, {
@@ -233,6 +245,7 @@
                     onMatch: function (mid) { showBracketPanel(mid, nameMap); },
                 });
             }
+            if (eventTab === 'checkin') wireCheckin();
             document.getElementById('qrBtn').addEventListener('click', function () {
                 qrOpen = !qrOpen;
                 syncQrPanel(head.name);
@@ -272,6 +285,101 @@
             });
         }
 
+        // ---- Check-In / Event Readiness --------------------------------------
+        function ciStatusOf(m) {
+            var r = readiness[m.id] || {};
+            return r.check_in_status || m.check_in || 'not_checked_in';
+        }
+
+        function checkinTab(members, nameMap) {
+            var counts = { checked_in: 0, not_checked_in: 0, no_show: 0 };
+            members.forEach(function (m) { counts[ciStatusOf(m)] = (counts[ciStatusOf(m)] || 0) + 1; });
+
+            var chips = [
+                ['all', 'All \u00b7 ' + members.length],
+                ['not_checked_in', 'Not checked in \u00b7 ' + counts.not_checked_in],
+                ['checked_in', 'Ready \u00b7 ' + counts.checked_in],
+                ['no_show', 'No-shows \u00b7 ' + counts.no_show],
+            ].map(function (c) {
+                return '<button class="tab" data-ci-filter="' + c[0] + '" aria-selected="' + (ciFilter === c[0]) + '">' + c[1] + '</button>';
+            }).join('');
+
+            var rows = members.filter(function (m) {
+                if (ciFilter !== 'all' && ciStatusOf(m) !== ciFilter) return false;
+                if (ciSearch && (m.name || '').toLowerCase().indexOf(ciSearch.toLowerCase()) === -1) return false;
+                return true;
+            }).map(function (m) {
+                var st = ciStatusOf(m);
+                var r = readiness[m.id] || {};
+                var chip = st === 'checked_in'
+                    ? '<span class="ci-chip ci-ready">READY</span>'
+                    : st === 'no_show'
+                        ? '<span class="ci-chip ci-noshow">NO-SHOW</span>'
+                        : '<span class="ci-chip ci-waiting">NOT CHECKED IN</span>';
+                var extras = [];
+                if (r.waiver_status && r.waiver_status !== 'not_required') extras.push('Waiver: ' + esc(r.waiver_status));
+                if (r.payment_status && r.payment_status !== 'not_required') extras.push('Payment: ' + esc(r.payment_status));
+                if (r.registration_status === 'withdrew') extras.push('WITHDREW');
+                if (r.last_note) extras.push('\uD83D\uDCDD ' + esc(r.last_note));
+                var actions = st === 'checked_in'
+                    ? '<button class="btn ghost" data-ci="' + m.id + ':not_checked_in">Undo</button>'
+                    : '<button class="btn primary" data-ci="' + m.id + ':checked_in">Check in</button> ' +
+                      (st === 'no_show'
+                        ? '<button class="btn ghost" data-ci="' + m.id + ':not_checked_in">Undo</button>'
+                        : '<button class="btn danger" data-ci="' + m.id + ':no_show">No-show</button>');
+                return '<div class="event-row"><div class="grow">' +
+                    '<div class="title">' + window.PCLive.avatarStack(m.members, 20) + ' ' + esc(m.name || 'Player') + ' ' + chip + '</div>' +
+                    '<div class="sub">' + (m.seed ? 'Seed ' + m.seed + ' \u00b7 ' : '') +
+                    (r.checked_in_at ? 'Checked in ' + new Date(r.checked_in_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '') +
+                    (extras.length ? ' \u00b7 ' + extras.join(' \u00b7 ') : '') + '</div></div>' +
+                    '<div>' + actions + ' <button class="btn ghost" data-ci-note="' + m.id + '">Note</button></div></div>';
+            }).join('');
+
+            return '<section class="section"><h2>Event readiness</h2>' +
+                '<div class="bar"><input id="ciSearch" type="search" placeholder="Search players or teams\u2026" value="' + esc(ciSearch) + '"' +
+                ' style="font-size:15px;padding:10px 14px;border:1px solid var(--rule-strong);border-radius:10px;background:var(--paper);color:var(--ink);flex:1;max-width:320px">' +
+                '<div class="tabs" style="margin:0">' + chips + '</div></div>' +
+                (rows || '<p class="sub">No one matches this filter.</p>') +
+                '<p class="foot-note">Every check-in, undo, and no-show is written to the event audit log with who did it and when. Waiver and payment columns light up automatically when those systems launch.</p></section>';
+        }
+
+        function wireCheckin() {
+            var search = document.getElementById('ciSearch');
+            if (search) {
+                search.addEventListener('input', function () { ciSearch = search.value; renderEvent(); });
+                if (ciSearch) { search.focus(); search.setSelectionRange(search.value.length, search.value.length); }
+            }
+            Array.prototype.forEach.call(main.querySelectorAll('[data-ci-filter]'), function (b) {
+                b.addEventListener('click', function () { ciFilter = b.dataset.ciFilter; renderEvent(); });
+            });
+            Array.prototype.forEach.call(main.querySelectorAll('[data-ci]'), function (b) {
+                b.addEventListener('click', async function () {
+                    var parts = b.dataset.ci.split(':');
+                    b.disabled = true;
+                    try {
+                        var r = await db.rpc('set_check_in_status', {
+                            p_scope: view.kind === 't' ? 'tournament' : 'league',
+                            p_participant_id: parts[0], p_status: parts[1], p_note: null, p_source: 'web' });
+                        if (r.error) throw r.error;
+                        await refetchEvent();
+                    } catch (e) { alert(e.message || 'Check-in failed'); b.disabled = false; }
+                });
+            });
+            Array.prototype.forEach.call(main.querySelectorAll('[data-ci-note]'), function (b) {
+                b.addEventListener('click', async function () {
+                    var note = prompt('Note for this participant (visible to organizers and staff only):');
+                    if (!note) return;
+                    var m = readiness[b.dataset.ciNote] || {};
+                    var r = await db.rpc('set_check_in_status', {
+                        p_scope: view.kind === 't' ? 'tournament' : 'league',
+                        p_participant_id: b.dataset.ciNote,
+                        p_status: m.check_in_status || 'not_checked_in',
+                        p_note: note, p_source: 'web' });
+                    if (r.error) alert(r.error.message); else refetchEvent();
+                });
+            });
+        }
+
         function syncQrPanel(eventName) {
             var panel = document.getElementById('qrPanel');
             if (!panel) return;
@@ -291,6 +399,7 @@
             targets.push({ label: 'Court board', path: 'live.html?' + kind + '=' + view.id + '&view=courts', poster: 'Scan for court assignments' });
             targets.push({ label: 'Court board (TV mode)', path: 'live.html?' + kind + '=' + view.id + '&view=courts&display=tv', poster: null });
             targets.push({ label: 'Scorekeeper page (staff only)', path: 'scorekeeper.html?' + kind + '=' + view.id, poster: null });
+            targets.push({ label: 'Check-in desk (staff only)', path: 'checkin.html?' + kind + '=' + view.id, poster: null });
 
             panel.innerHTML = '<div class="section" style="padding-top:6px">' + targets.map(function (tg, i) {
                 return '<div class="event-row"><div class="grow">' +

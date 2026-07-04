@@ -239,7 +239,11 @@
                         '<div class="cb-score">' + (s1 == null ? '–' : s1) + '<span>:</span>' + (s2 == null ? '–' : s2) + '</div>';
                 } else if (onDeck) {
                     cls = 'cb-ondeck'; statusLine = 'ON DECK';
-                    body = cbTeams(onDeck) + '<div class="cb-sub">' + esc(roundLabel(onDeck)) + '</div>';
+                    var waiting = onDeck.sideIds.some(function (id) {
+                        return id && (objMap[id] || {}).check_in === 'not_checked_in';
+                    });
+                    body = cbTeams(onDeck) + '<div class="cb-sub">' + esc(roundLabel(onDeck)) +
+                        (waiting ? ' \u00b7 Waiting on players' : '') + '</div>';
                 } else if (lastDone) {
                     cls = 'cb-open'; statusLine = 'OPEN';
                     body = '<div class="cb-sub">Last: ' + esc(lastDone.sideNames[0]) + ' def. ' +
@@ -304,8 +308,13 @@
                     '<div class="me-sub">Check back \u2014 this page updates live.</div></div>';
             }
 
+            var ciChip = me.check_in === 'checked_in'
+                ? '<span class="ci-chip ci-ready">CHECKED IN</span>'
+                : me.check_in === 'no_show'
+                    ? '<span class="ci-chip ci-noshow">NO-SHOW \u2014 SEE THE DESK</span>'
+                    : '<span class="ci-chip ci-waiting">NOT CHECKED IN \u2014 CHECK IN AT THE DESK</span>';
             return '<section class="section">' +
-                '<div class="me-who">' + window.PCLive.avatarStack(me.members, 28) + ' <strong>' + esc(me.name) + '</strong>' +
+                '<div class="me-who">' + window.PCLive.avatarStack(me.members, 28) + ' <strong>' + esc(me.name) + '</strong> ' + ciChip +
                 '<button class="btn ghost" id="meClear" style="margin-left:auto;min-height:34px;padding:6px 14px;font-size:12px">Not you?</button></div>' +
                 big +
                 '<div class="me-stats">' +
