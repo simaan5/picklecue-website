@@ -34,7 +34,7 @@
         var main = document.getElementById('main');
         var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches', qrOpen = false;
         var readiness = {}, ciFilter = 'all', ciSearch = '';
-        var regSettings = null, regList = [];
+        var regSettings = null, regList = [], pairFirst = null;
 
         document.getElementById('signOutBtn').addEventListener('click', async function () {
             await PC.signOut(); location.reload();
@@ -310,23 +310,32 @@
             var settingsCard = '<div class="event-row" style="flex-wrap:wrap;gap:14px">' +
                 '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsOpen"' + (s.registration_open ? ' checked' : '') + '><span>Registration open</span></label>' +
                 '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsWaitlist"' + (s.waitlist_enabled !== false ? ' checked' : '') + '><span>Waitlist when full</span></label>' +
+                '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsAutoPromote"' + (s.auto_promote_waitlist !== false ? ' checked' : '') + '><span>Auto-promote from waitlist</span></label>' +
                 '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsNeedPartner"' + (s.allow_need_partner !== false ? ' checked' : '') + '><span>Allow \u201cneed a partner\u201d</span></label>' +
                 '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsRequireDupr"' + (s.require_dupr ? ' checked' : '') + '><span>Require DUPR ID</span></label>' +
                 '<span class="scorebox"><input type="number" min="2" id="rsCapacity" placeholder="Cap" value="' + (s.capacity || '') + '" style="width:70px"><span class="sub">capacity (blank = event max)</span></span>' +
                 '<button class="btn primary" id="rsSave">Save settings</button><span class="ok" id="rsMsg"></span></div>';
 
+            var wlPos = {};
+            regList.filter(function (r) { return r.status === 'waitlisted'; })
+                .sort(function (a, b) { return a.created_at < b.created_at ? -1 : 1; })
+                .forEach(function (r, i) { wlPos[r.id] = i + 1; });
             var rows = regList.map(function (r) {
                 var chip = r.status === 'registered' ? '<span class="ci-chip ci-ready">REGISTERED</span>'
-                    : r.status === 'waitlisted' ? '<span class="ci-chip ci-waiting">WAITLIST</span>'
+                    : r.status === 'waitlisted' ? '<span class="ci-chip ci-waiting">WAITLIST #' + wlPos[r.id] + '</span>'
                     : '<span class="ci-chip ci-noshow">WITHDRAWN</span>';
                 var partner = r.partner_status === 'needed' ? ' \u00b7 <strong>needs a partner</strong>'
                     : r.partner_status === 'complete' && r.partner_name ? ' \u00b7 w/ ' + esc(r.partner_name) : '';
                 var contact = [r.email, r.phone].filter(Boolean).map(esc).join(' \u00b7 ');
-                var actions = r.status === 'waitlisted'
+                var pairBtn = r.status !== 'withdrawn' && r.partner_status === 'needed'
+                    ? '<button class="btn ' + (pairFirst === r.id ? 'primary' : 'ghost') + '" data-pair="' + r.id + '">' +
+                      (pairFirst === r.id ? 'Pick their partner\u2026' : 'Pair') + '</button> '
+                    : '';
+                var actions = pairBtn + (r.status === 'waitlisted'
                     ? '<button class="btn primary" data-reg="' + r.id + ':promote">Move in</button> <button class="btn ghost" data-reg="' + r.id + ':withdraw">Remove</button>'
                     : r.status === 'registered'
                         ? '<button class="btn ghost" data-reg="' + r.id + ':waitlist">To waitlist</button> <button class="btn danger" data-reg="' + r.id + ':withdraw">Withdraw</button>'
-                        : '';
+                        : '');
                 return '<div class="event-row"><div class="grow">' +
                     '<div class="title">' + esc(r.display_name) + ' ' + chip + '</div>' +
                     '<div class="sub">' + (r.skill_level ? esc(r.skill_level) + ' \u00b7 ' : '') + (r.dupr_id ? 'DUPR ' + esc(r.dupr_id) + ' \u00b7 ' : '') +
@@ -351,6 +360,7 @@
                     scope: scope, event_id: view.id,
                     registration_open: document.getElementById('rsOpen').checked,
                     waitlist_enabled: document.getElementById('rsWaitlist').checked,
+                    auto_promote_waitlist: document.getElementById('rsAutoPromote').checked,
                     allow_need_partner: document.getElementById('rsNeedPartner').checked,
                     require_dupr: document.getElementById('rsRequireDupr').checked,
                     capacity: parseInt(document.getElementById('rsCapacity').value, 10) || null,
@@ -372,6 +382,20 @@
                     b.disabled = true;
                     var r = await db.rpc('manage_registration', { p_registration_id: parts[0], p_action: parts[1] });
                     if (r.error) { alert(r.error.message); b.disabled = false; return; }
+                    refetchEvent();
+                });
+            });
+            Array.prototype.forEach.call(main.querySelectorAll('[data-pair]'), function (b) {
+                b.addEventListener('click', async function () {
+                    var id = b.dataset.pair;
+                    if (!pairFirst) { pairFirst = id; renderEvent(); return; }
+                    if (pairFirst === id) { pairFirst = null; renderEvent(); return; }
+                    var a = regList.find(function (x) { return x.id === pairFirst; });
+                    var bb = regList.find(function (x) { return x.id === id; });
+                    if (!confirm('Pair ' + a.display_name + ' with ' + bb.display_name + '? They become one team.')) return;
+                    var r = await db.rpc('pair_registrations', { p_reg_a: pairFirst, p_reg_b: id });
+                    pairFirst = null;
+                    if (r.error) { alert(r.error.message); renderEvent(); return; }
                     refetchEvent();
                 });
             });

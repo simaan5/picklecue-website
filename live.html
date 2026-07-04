@@ -40,7 +40,7 @@
         var main = document.getElementById('main');
         var snap = null;
         var activeTab = ['bracket', 'courts', 'me', 'register'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
-        var regInfo = null, regResult = null;
+        var regInfo = null, regResult = null, myReg = null;
         var mePid = null;
         if (params.get('display') === 'tv') document.body.classList.add('bv-tv');
         var unsub = null;
@@ -151,12 +151,20 @@
                 (isT && head.points_to_win ? '<span class="chip">To ' + head.points_to_win + (head.win_by_two ? ', win by 2' : '') + '</span>' : '') +
                 (head.organizer_name ? '<span class="chip">Organizer: ' + esc(head.organizer_name) + '</span>' : '') +
                 '</div>' +
-                (regInfo && regInfo.open && activeTab !== 'register'
+                (myReg && activeTab !== 'register'
+                    ? '<div class="bar" style="margin-top:14px"><span class="chip ' + (myReg.status === 'registered' ? 'status-done' : '') + '">' +
+                      (myReg.status === 'registered' ? '\u2705 ' + esc(myReg.display_name) + ' — you\u2019re registered'
+                          : myReg.status === 'waitlisted' ? esc(myReg.display_name) + ' — #' + myReg.waitlist_position + ' on the waitlist'
+                          : esc(myReg.display_name) + ' — withdrawn') + '</span></div>'
+                    : regInfo && regInfo.open && activeTab !== 'register'
                     ? '<div class="bar" style="margin-top:14px"><button class="btn primary" id="regCta">' +
                       (regInfo.spots_left > 0
                           ? 'Register — ' + regInfo.spots_left + (regInfo.spots_left === 1 ? ' spot' : ' spots') + ' left'
                           : (regInfo.waitlist_enabled ? 'Event full — join the waitlist' : 'Event full')) +
-                      '</button></div>' : '') +
+                      '</button>' +
+                      (regInfo.partners_needed && regInfo.partners_needed.length
+                          ? '<span class="chip">' + regInfo.partners_needed.length + ' looking for partners</span>' : '') +
+                      '</div>' : '') +
                 '<div class="tabs" role="tablist">' +
                 tabBtn('matches', 'Matches') +
                 (isT && window.PCBracket.isElimination(snap) ? tabBtn('bracket', 'Bracket') : '') +
@@ -236,8 +244,9 @@
             }
             if (regResult) {
                 var waitlisted = regResult.status === 'waitlisted';
+                var pos = myReg && myReg.status === 'waitlisted' ? myReg.waitlist_position : null;
                 return '<section class="section"><div class="me-card' + (waitlisted ? '' : ' me-live') + '" style="border-color:var(--court);box-shadow:none">' +
-                    '<div class="me-status" style="color:var(--court)">' + (waitlisted ? 'YOU\u2019RE ON THE WAITLIST' : '\u2705 YOU\u2019RE REGISTERED') + '</div>' +
+                    '<div class="me-status" style="color:var(--court)">' + (waitlisted ? 'YOU\u2019RE ON THE WAITLIST' + (pos ? ' \u2014 #' + pos : '') : '\u2705 YOU\u2019RE REGISTERED') + '</div>' +
                     '<div class="me-sub" style="font-size:15px;margin-top:10px">' +
                     (waitlisted
                         ? 'The event is full right now. The organizer can move you in if a spot opens \u2014 keep an eye on this page.'
@@ -270,7 +279,15 @@
                 '<span style="font-size:13.5px;color:var(--ink-soft)">I agree to the event rules and PickleCue\u2019s <a href="terms.html" target="_blank" rel="noopener">Terms</a> &amp; <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, and I understand the event organizer can see my registration details.</span></label>' +
                 '<button class="btn primary block" id="regSubmit">' +
                 (regInfo.spots_left > 0 ? 'Register' : 'Join the waitlist') + '</button>' +
-                '<p class="err" id="regErr"></p></section>';
+                '<p class="err" id="regErr"></p></section>' +
+                (regInfo.partners_needed && regInfo.partners_needed.length
+                    ? '<section class="section"><h2>Looking for partners <span class="count">' + regInfo.partners_needed.length + '</span></h2>' +
+                      regInfo.partners_needed.map(function (x) {
+                          return '<div class="event-row"><div class="grow"><div class="title">' + esc(x.name) + '</div>' +
+                              (x.skill ? '<div class="sub">Skill ' + esc(x.skill) + '</div>' : '') + '</div>' +
+                              '<span class="sub">Pick \u201cI need a partner\u201d and the organizer can pair you</span></div>';
+                      }).join('') + '</section>'
+                    : '');
         }
 
         function wireRegister() {
@@ -302,7 +319,8 @@
                     });
                     if (r.error) throw r.error;
                     regResult = r.data;
-                    render();
+                    try { localStorage.setItem('pc_reg_' + eventId, r.data.registration_id); } catch (_) {}
+                    await refetch();
                 } catch (e) {
                     err.textContent = e.message || 'Registration failed — try again.';
                     btn.disabled = false;
@@ -459,6 +477,13 @@
                 ]);
                 snap = results[0];
                 regInfo = results[1].data || null;
+                try {
+                    var regId = localStorage.getItem('pc_reg_' + eventId);
+                    if (regId) {
+                        var rs = await PC.client.rpc('registration_status', { p_registration_id: regId });
+                        myReg = rs.data || null;
+                    }
+                } catch (_) {}
             } catch (e) {
                 console.error('[live] snapshot failed', e);
                 return;
