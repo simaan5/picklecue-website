@@ -114,7 +114,9 @@
                     '<a class="btn ghost" href="live.html?' + kind + '=' + e.id + '" target="_blank" rel="noopener">Live page</a></div>';
             }
 
-            var html = '<section class="section"><h2>Your events</h2>' +
+            var html = '<div class="bar" style="margin-top:12px"><button class="btn ghost" id="playerBookBtn">\uD83D\uDCD2 Player book (all events)</button></div>' +
+                '<div id="playerBook" hidden></div>' +
+                '<section class="section"><h2>Your events</h2>' +
                 myT.map(function (e) { return row(e, 't'); }).join('') +
                 myL.map(function (e) { return row(e, 'l'); }).join('') + '</section>';
             var staffRows = extraT.filter(function (e) { return !mineIds[e.id]; }).map(function (e) { return row(e, 't', 'Scorekeeper'); })
@@ -123,6 +125,17 @@
             html += '<p class="foot-note">Creating and configuring events happens in the PickleCue app. This dashboard runs them live: scores, match control, corrections, and scorekeepers.</p>';
             main.innerHTML = html;
 
+            var pbBtn = document.getElementById('playerBookBtn');
+            if (pbBtn) pbBtn.addEventListener('click', async function () {
+                var box = document.getElementById('playerBook');
+                if (!box.hidden) { box.hidden = true; return; }
+                pbBtn.disabled = true;
+                var r = await db.rpc('organizer_player_book');
+                pbBtn.disabled = false;
+                if (r.error) { alert(r.error.message); return; }
+                renderPlayerBook(box, r.data || []);
+                box.hidden = false;
+            });
             Array.prototype.forEach.call(main.querySelectorAll('[data-open]'), function (b) {
                 b.addEventListener('click', function () {
                     var parts = b.dataset.open.split(':');
@@ -132,6 +145,39 @@
         }
 
         // ---- event control room ---------------------------------------------------
+
+        // ---- Club CRM v1: cross-event player book -----------------------------
+        function renderPlayerBook(box, players) {
+            var rows = players.map(function (p) {
+                return '<div class="event-row"><div class="grow">' +
+                    '<div class="title" style="font-size:14px">' + esc(p.name) +
+                    (p.has_account ? '' : ' <span class="ci-chip ci-waiting">GUEST</span>') +
+                    (p.no_shows ? ' <span class="ci-chip ci-noshow">' + p.no_shows + ' NO-SHOW' + (p.no_shows > 1 ? 'S' : '') + '</span>' : '') + '</div>' +
+                    '<div class="sub">' + p.events + ' event' + (p.events > 1 ? 's' : '') + ' \u00b7 ' + esc(p.event_names || '') +
+                    (p.skill ? ' \u00b7 ' + esc(p.skill) : '') + (p.dupr_id ? ' \u00b7 DUPR ' + esc(p.dupr_id) : '') +
+                    ([p.email, p.phone].filter(Boolean).length ? ' \u00b7 ' + [p.email, p.phone].filter(Boolean).map(esc).join(' \u00b7 ') : '') +
+                    '</div></div></div>';
+            });
+            box.innerHTML = '<section class="section"><h2>Player book <span class="count">' + players.length + '</span></h2>' +
+                '<div class="bar"><input id="pbSearch" type="search" placeholder="Search players\u2026" style="font-size:15px;padding:10px 14px;border:1px solid var(--rule-strong);border-radius:10px;background:var(--paper);color:var(--ink);flex:1;max-width:320px">' +
+                '<button class="btn ghost" id="pbExport">Export CSV</button></div>' +
+                '<div id="pbRows">' + rows.join('') + '</div>' +
+                '<p class="foot-note">Everyone who has ever played one of your events \u2014 attendance, no-shows, waivers, and the contact info they gave you at registration. Visible only to you.</p></section>';
+            box.querySelector('#pbSearch').addEventListener('input', function () {
+                var q = this.value.toLowerCase();
+                Array.prototype.forEach.call(box.querySelectorAll('#pbRows .event-row'), function (r) {
+                    r.style.display = r.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+                });
+            });
+            box.querySelector('#pbExport').addEventListener('click', function () {
+                var rows2 = [['name', 'has_account', 'events', 'event_names', 'checked_in', 'no_shows', 'waiver_signed', 'skill', 'dupr_id', 'email', 'phone', 'last_seen']];
+                players.forEach(function (p) {
+                    rows2.push([p.name, p.has_account, p.events, p.event_names || '', p.checked_in_count, p.no_shows,
+                        p.waiver_signed, p.skill || '', p.dupr_id || '', p.email || '', p.phone || '', p.last_seen || '']);
+                });
+                downloadCsv('picklecue_player_book', rows2);
+            });
+        }
 
         async function openEvent(kind, id) {
             view = { mode: 'event', kind: kind, id: id };
@@ -310,6 +356,8 @@
                 '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsNeedPartner"' + (s.allow_need_partner !== false ? ' checked' : '') + '><span>Allow \u201cneed a partner\u201d</span></label>' +
                 '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsRequireDupr"' + (s.require_dupr ? ' checked' : '') + '><span>Require DUPR ID</span></label>' +
                 '<span class="scorebox"><input type="number" min="2" id="rsCapacity" placeholder="Cap" value="' + (s.capacity || '') + '" style="width:70px"><span class="sub">capacity (blank = event max)</span></span>' +
+                '<span class="scorebox"><input type="text" id="rsSponsor" maxlength="80" placeholder="Sponsor name" value="' + esc(s.sponsor_name || '') + '" style="width:140px">' +
+                '<input type="url" id="rsSponsorUrl" maxlength="200" placeholder="https://sponsor.com" value="' + esc(s.sponsor_url || '') + '" style="width:170px"><span class="sub">shown on live pages &amp; posters</span></span>' +
                 '<button class="btn primary" id="rsSave">Save settings</button><span class="ok" id="rsMsg"></span></div>';
 
             var wlPos = {};
@@ -381,6 +429,8 @@
                     allow_need_partner: document.getElementById('rsNeedPartner').checked,
                     require_dupr: document.getElementById('rsRequireDupr').checked,
                     capacity: parseInt(document.getElementById('rsCapacity').value, 10) || null,
+                    sponsor_name: document.getElementById('rsSponsor').value.trim() || null,
+                    sponsor_url: (function (u) { return /^https?:\/\//.test(u) ? u : null; })(document.getElementById('rsSponsorUrl').value.trim()),
                     updated_by: me.id, updated_at: new Date().toISOString(),
                 };
                 var r = await db.from('event_registration_settings').upsert(payload, { onConflict: 'scope,event_id' }).select();
@@ -662,7 +712,8 @@
                     window.open('poster.html?u=' + encodeURIComponent(shareUrl(tg.path)) +
                         '&title=' + encodeURIComponent(tg.poster) +
                         '&event=' + encodeURIComponent(eventName) +
-                        '&kicker=' + encodeURIComponent(isT ? 'Tournament' : 'League'), '_blank');
+                        '&kicker=' + encodeURIComponent(isT ? 'Tournament' : 'League') +
+                        (regSettings && regSettings.sponsor_name ? '&sponsor=' + encodeURIComponent(regSettings.sponsor_name) : ''), '_blank');
                 });
             });
             var s = document.createElement('script');

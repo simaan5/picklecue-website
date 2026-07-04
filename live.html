@@ -150,6 +150,11 @@
                 (head.format ? '<span class="chip">' + esc(head.format.replace(/_/g, ' ')) + '</span>' : '') +
                 (isT && head.points_to_win ? '<span class="chip">To ' + head.points_to_win + (head.win_by_two ? ', win by 2' : '') + '</span>' : '') +
                 (head.organizer_name ? '<span class="chip">Organizer: ' + esc(head.organizer_name) + '</span>' : '') +
+                (regInfo && regInfo.sponsor
+                    ? '<a class="chip" style="border-color:var(--court);color:var(--court)"' +
+                      (regInfo.sponsor.url ? ' href="' + esc(regInfo.sponsor.url) + '" target="_blank" rel="noopener sponsored"' : '') + '>' +
+                      (regInfo.sponsor.logo_url ? '<img src="' + esc(regInfo.sponsor.logo_url) + '" alt="" style="height:16px;border-radius:3px;margin-right:4px" onerror="this.remove()">' : '') +
+                      'Presented by ' + esc(regInfo.sponsor.name) + '</a>' : '') +
                 '</div>' +
                 (myReg && activeTab !== 'register'
                     ? '<div class="bar" style="margin-top:14px"><span class="chip ' + (myReg.status === 'registered' ? 'status-done' : '') + '">' +
@@ -311,6 +316,8 @@
                             '<div class="sub">' + esc(roundLabel(m)) + (m.court ? ' \u00b7 ' + esc(m.court) : '') + '</div></div>' +
                             '<span class="pts" style="font-family:var(--f-mono);font-weight:700">' + esc(m.score_summary || '') + '</span></div>';
                     }).join('') +
+                (regInfo && regInfo.sponsor ? '<p class="foot-note" style="border-top:0;margin-top:0;padding-top:6px">Thanks to our sponsor, ' +
+                    (regInfo.sponsor.url ? '<a href="' + esc(regInfo.sponsor.url) + '" target="_blank" rel="noopener sponsored">' + esc(regInfo.sponsor.name) + '</a>' : esc(regInfo.sponsor.name)) + ' \uD83C\uDF89</p>' : '') +
                 '<p class="foot-note">Powered by <a href="/">PickleCue</a> \u2014 live brackets, scores, and event tools.</p></section>';
             return html;
         }
