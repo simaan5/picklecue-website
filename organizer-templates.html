@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light dark;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
+    <title>Organizer Templates · PickleCue</title>
+    <meta name="description" content="Build an official PickleCue tournament spreadsheet template — round robin schedules, courts, scoring, standings, and print settings — then import it straight into the app.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.picklecue.com/organizer-templates">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
+    <style>
+        :root {
+            --paper: #F4F1EA; --paper-2: #EAE5D9;
+            --ink: #0C0F12; --ink-soft: #3D4248; --ink-mute: #6E7278;
+            --rule: rgba(12,15,18,0.12); --rule-strong: rgba(12,15,18,0.28);
+            --court: #2E5E4E; --citron: #C8E04E; --clay: #D3511A;
+            --f-display: 'Fraunces', Georgia, serif;
+            --f-body: 'Instrument Sans', -apple-system, sans-serif;
+            --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+            --page-max: 1240px; --gutter: clamp(20px, 4vw, 44px);
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body { font-family: var(--f-body); font-size: 17px; line-height: 1.65; color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; overflow-x: hidden;  font-feature-settings: "cv11"; }
+        body::before { content: ""; position: fixed; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(12,15,18,0.035) 1px, transparent 0); background-size: 3px 3px; pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
+        img, svg { display: block; max-width: 100%; }
+        a { color: var(--court); text-decoration: none; border-bottom: 1px solid currentColor; transition: color 0.2s var(--ease); }
+        a:hover { color: var(--ink); }
+        :focus-visible { outline: 2px solid var(--court); outline-offset: 3px; border-radius: 2px; }
+
+        .skip-link { position: absolute; top: -100%; left: 12px; padding: 10px 18px; background: var(--ink); color: var(--paper); font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; z-index: 1000; border-radius: 0 0 8px 8px; transition: top 0.2s var(--ease); border: 0; }
+        .skip-link:focus { top: 0; }
+        .page { position: relative; z-index: 1; max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
+
+        h1, h2, h3 { font-family: var(--f-display); font-weight: 500; color: var(--ink); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; font-variation-settings: "opsz" 72, "SOFT" 30; }
+        .kicker { font-family: var(--f-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); display: inline-flex; align-items: center; gap: 10px; }
+        .kicker::before { content: ""; width: 28px; height: 1px; background: var(--rule-strong); }
+
+        /* Masthead */
+        .masthead { position: sticky; top: 0; background: rgba(244,241,234,0.88); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); border-bottom: 1px solid var(--rule); z-index: 100; }
+        .masthead-row { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 24px; }
+        .masthead-logo { display: inline-flex; align-items: baseline; gap: 10px; font-family: var(--f-display); font-size: 1.35rem; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); border: 0; font-variation-settings: "opsz" 36, "SOFT" 30; }
+        .masthead-logo img { width: 30px; height: 30px; border-radius: 6px; align-self: center; }
+        .masthead-nav { display: flex; gap: 32px; list-style: none; }
+        .masthead-nav a { font-size: 14px; color: var(--ink-soft); border: 0; padding: 6px 0; }
+        .masthead-nav a:hover { color: var(--ink); }
+        .btn-pill { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px 10px 20px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; border: 0 !important; border-radius: 100px; min-height: 44px; line-height: 1; transition: background 0.2s var(--ease), transform 0.15s var(--ease); }
+        .btn-pill:hover { background: var(--court); transform: translateY(-1px); color: var(--paper); }
+        .btn-pill svg { width: 12px; height: 12px; }
+
+        /* Header block */
+        .page-head { padding: clamp(56px, 8vw, 120px) 0 clamp(40px, 5vw, 72px); border-bottom: 1px solid var(--rule); }
+        .page-head h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); margin-top: 24px; font-variation-settings: "opsz" 144, "SOFT" 20; max-width: 20ch; }
+        .page-head h1 em { font-style: italic; color: var(--court); font-weight: 400; font-variation-settings: "opsz" 144, "SOFT" 100; }
+        .page-head .lede { font-family: var(--f-display); font-style: italic; font-size: clamp(1.15rem, 1.8vw, 1.35rem); color: var(--ink-soft); margin-top: 24px; max-width: 48ch; line-height: 1.55; font-variation-settings: "opsz" 28, "SOFT" 100; font-weight: 400; }
+
+        /* Primary contact row */
+        .contact-row {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+            border-top: 1px solid var(--rule-strong);
+            border-bottom: 1px solid var(--rule-strong);
+            margin: clamp(56px, 8vw, 96px) 0 0;
+        }
+        .contact-cell {
+            padding: 32px 28px;
+            border-right: 1px solid var(--rule);
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .contact-cell:last-child { border-right: 0; }
+        .contact-cell .label-mono { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); }
+        .contact-cell a {
+            font-family: var(--f-display); font-size: 1.5rem; font-weight: 500;
+            color: var(--ink); border: 0; letter-spacing: -0.01em;
+            font-variation-settings: "opsz" 36, "SOFT" 30;
+        }
+        .contact-cell a:hover { color: var(--court); }
+        .contact-cell p { font-size: 14px; color: var(--ink-mute); margin-top: 6px; line-height: 1.5; max-width: 28ch; }
+
+        /* Topic catalog */
+        .topics {
+            padding: clamp(64px, 9vw, 120px) 0;
+            border-bottom: 1px solid var(--rule);
+        }
+        .topics-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(24px, 4vw, 64px); align-items: end; margin-bottom: clamp(36px, 6vw, 72px); }
+        .topics-head h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 20ch; }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0;
+            border-top: 1px solid var(--rule-strong);
+        }
+        .topic {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 28px;
+            padding: clamp(28px, 4vw, 44px) 0;
+            border-bottom: 1px solid var(--rule);
+            align-items: start;
+        }
+        .topic:nth-child(odd) { padding-right: clamp(16px, 3vw, 40px); border-right: 1px solid var(--rule); }
+        .topic:nth-child(even) { padding-left: clamp(16px, 3vw, 40px); }
+        .topic-num { font-family: var(--f-display); font-size: 2.8rem; font-weight: 400; font-style: italic; line-height: 0.9; color: var(--court); font-variation-settings: "opsz" 72, "SOFT" 100; min-width: 60px; }
+        .topic h3 { font-size: 1.4rem; margin-bottom: 8px; letter-spacing: -0.015em; }
+        .topic p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.6; max-width: 46ch; }
+        .topic ul { margin-top: 12px; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; color: var(--ink-soft); }
+        .topic li::marker { color: var(--court); }
+
+        /* Resources */
+        .resources { padding: clamp(56px, 8vw, 96px) 0; border-bottom: 1px solid var(--rule); }
+        .resources-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(24px, 4vw, 64px); align-items: start; }
+        .resources h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); max-width: 18ch; }
+        .resources-list { list-style: none; border-top: 1px solid var(--rule-strong); }
+        .resources-list li { border-bottom: 1px solid var(--rule); }
+        .resources-list a {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 22px 0; border: 0;
+            font-family: var(--f-display); font-size: clamp(1.1rem, 1.8vw, 1.3rem); font-weight: 500;
+            letter-spacing: -0.015em;
+            color: var(--ink);
+            font-variation-settings: "opsz" 36, "SOFT" 30;
+            gap: 16px;
+        }
+        .resources-list a:hover { color: var(--court); }
+        .resources-list a .sub {
+            font-family: var(--f-body); font-size: 13px; letter-spacing: 0; text-transform: none;
+            color: var(--ink-mute); font-weight: 400;
+            text-align: right; flex-shrink: 0;
+        }
+        .resources-list a::after { content: "→"; font-family: var(--f-mono); color: var(--ink-mute); transition: transform 0.2s var(--ease); }
+        .resources-list a:hover::after { transform: translateX(4px); color: var(--court); }
+
+        /* Colophon */
+        .colophon { background: var(--paper); padding: clamp(48px, 7vw, 96px) 0 40px; border-top: 1px solid var(--rule); }
+        .colophon-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 56px; border-bottom: 1px solid var(--rule); }
+        .colophon-brand h3 { font-family: var(--f-display); font-size: 1.5rem; font-weight: 600; margin-bottom: 14px; font-variation-settings: "opsz" 48, "SOFT" 30; }
+        .colophon-brand p { font-size: 14px; color: var(--ink-soft); max-width: 36ch; line-height: 1.55; }
+        .colophon h4 { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 18px; }
+        .colophon ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .colophon li a { font-size: 14.5px; color: var(--ink-soft); border: 0; }
+        .colophon li a:hover { color: var(--ink); }
+        .socials { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+        .social-icon { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--rule-strong); border-radius: 50%; color: var(--ink-soft); transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease); }
+        .social-icon:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+        .social-icon svg { width: 15px; height: 15px; fill: currentColor; }
+        .colophon-base { padding-top: 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+        .made-by { display: inline-flex; align-items: center; gap: 10px; border: 0; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-family: var(--f-mono); font-size: 11px; transition: color 0.2s var(--ease), opacity 0.2s var(--ease); opacity: 0.9; }
+        .made-by:hover { color: var(--ink); opacity: 1; }
+        .made-by img { height: 40px; width: 40px; object-fit: contain; border-radius: 5px; transition: transform 0.2s var(--ease); }
+        .made-by:hover img { transform: scale(1.08); }
+        .made-by .sep { color: var(--rule-strong); margin: 0 2px; }
+        .made-by .site { color: var(--ink-mute); }
+        .made-by:hover .site { color: var(--ink); }
+        /* Logo is full-color — no dark-mode inversion */
+
+        /* Theme — system dark auto, [data-theme="dark"] forces dark */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --paper: #0F1214; --paper-2: #1A1F23;
+                --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
+                --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
+                --court: #6FB39B; --clay: #F08250;
+            }
+            :root:not([data-theme="light"]) body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
+            :root:not([data-theme="light"]) .masthead { background: rgba(15, 18, 20, 0.82); }
+            :root:not([data-theme="light"]) .btn-pill { background: var(--ink); color: var(--paper); }
+            :root:not([data-theme="light"]) .btn-pill:hover { background: var(--court); color: #0C0F12; }
+        }
+        :root[data-theme="dark"] {
+            --paper: #0F1214; --paper-2: #1A1F23;
+            --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
+            --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
+            --court: #6FB39B; --clay: #F08250;
+        }
+        :root[data-theme="dark"] body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
+        :root[data-theme="dark"] .masthead { background: rgba(15, 18, 20, 0.82); }
+        :root[data-theme="dark"] .btn-pill { background: var(--ink); color: var(--paper); }
+        :root[data-theme="dark"] .btn-pill:hover { background: var(--court); color: #0C0F12; }
+
+        /* Theme toggle */
+        .theme-toggle { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 100px; color: var(--ink-soft); background: transparent; border: 1px solid var(--rule-strong); transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.15s var(--ease); flex-shrink: 0; }
+        .theme-toggle:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-1px); }
+        .theme-toggle svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+        .theme-toggle .icon-sun { display: none; } .theme-toggle .icon-moon { display: block; }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+        }
+        :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
+        /* Responsive */
+        @media (max-width: 960px) {
+            .topics-head { grid-template-columns: 1fr; }
+            .resources-grid { grid-template-columns: 1fr; }
+            .colophon-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 720px) {
+            .masthead-nav { display: none; }
+            .colophon-base { flex-direction: column; align-items: flex-start; gap: 14px; }
+            .made-by { flex-wrap: nowrap; white-space: nowrap; gap: 8px; }
+            .made-by img { height: 28px; width: 28px; }
+            .made-by .sep, .made-by .site { display: none; }
+            .masthead .btn-pill { padding: 10px 14px; font-size: 13px; }
+            .contact-row { grid-template-columns: 1fr; }
+            .contact-cell { border-right: 0; border-bottom: 1px solid var(--rule); }
+            .contact-cell:last-child { border-bottom: 0; }
+            .topic-grid { grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
+            .topic, .topic:nth-child(odd), .topic:nth-child(even) { padding-left: 0; padding-right: 0; border-right: 0; }
+            .colophon-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 40px; }
+            .resources-list a { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .resources-list a .sub { text-align: left; }
+        }
+    
+        /* Template builder */
+        .builder { padding: clamp(40px, 6vw, 80px) 0; border-bottom: 1px solid var(--rule); }
+        .builder-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: clamp(32px, 5vw, 72px); align-items: start; }
+        .builder-steps { display: flex; flex-direction: column; }
+        .bstep { display: grid; grid-template-columns: 56px 1fr; gap: 20px; padding: 32px 0; border-bottom: 1px solid var(--rule); }
+        .bstep:last-child { border-bottom: 0; }
+        .bstep h3 { font-size: 1.35rem; margin-bottom: 6px; }
+        .bstep-body > p { color: var(--ink-soft); max-width: 52ch; }
+        .bfield { display: flex; flex-direction: column; gap: 6px; margin-top: 18px; min-width: 0; }
+        .bfield label { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+        .bfield select, .bfield input[type="number"] {
+            font-family: var(--f-body); font-size: 16px; color: var(--ink);
+            background: var(--paper); border: 1px solid var(--rule-strong); border-radius: 10px;
+            padding: 12px 14px; min-height: 48px; width: 100%; max-width: 340px;
+            transition: border-color 0.2s var(--ease);
+        }
+        .bfield select:focus, .bfield input:focus { border-color: var(--court); outline: none; }
+        .bfield-row { display: flex; gap: 16px; flex-wrap: wrap; }
+        .bfield-row .bfield { flex: 1 1 140px; }
+        .bnote { font-size: 14px; color: var(--ink-mute); margin-top: 14px; max-width: 52ch; }
+        .bnote strong { color: var(--ink-soft); }
+        .bchecks { display: flex; flex-direction: column; gap: 4px; margin-top: 16px; }
+        .bcheck { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; cursor: pointer; }
+        .bcheck input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--court); flex-shrink: 0; }
+        .bcheck span { font-size: 16px; color: var(--ink); display: flex; flex-direction: column; }
+        .bcheck small { font-size: 13px; color: var(--ink-mute); }
+        .bdownloads { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 20px; }
+        .btn-ghost {
+            display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px;
+            background: transparent; color: var(--ink); font-family: var(--f-body); font-size: 14px; font-weight: 500;
+            border: 1px solid var(--rule-strong); border-radius: 100px; min-height: 44px; line-height: 1;
+            cursor: pointer; transition: border-color 0.2s var(--ease), color 0.2s var(--ease), transform 0.15s var(--ease);
+        }
+        .btn-ghost:hover { border-color: var(--court); color: var(--court); transform: translateY(-1px); }
+        .bdownloads .btn-pill { border: 0; cursor: pointer; font-family: var(--f-body); }
+
+        /* Summary card */
+        .bsummary { position: sticky; top: 92px; }
+        .bsummary-card { border: 1px solid var(--rule-strong); border-radius: 16px; padding: 28px; background: var(--paper-2); }
+        .bsummary-card h3 { font-size: 1.5rem; margin: 10px 0 18px; }
+        .bsummary-card dl { display: flex; flex-direction: column; }
+        .bsummary-card dl > div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+        .bsummary-card dl > div:last-child { border-bottom: 0; }
+        .bsummary-card dt { font-size: 14px; color: var(--ink-mute); }
+        .bsummary-card dd { font-size: 14px; font-weight: 500; color: var(--ink); text-align: right; }
+        .bsummary-card .bnote { color: var(--clay); }
+
+        .import-guide { padding: clamp(48px, 7vw, 96px) 0; }
+
+        @media (max-width: 960px) {
+            .builder-grid { grid-template-columns: 1fr; }
+            .bsummary { position: static; order: -1; }
+        }
+        @media (max-width: 720px) {
+            .bstep { grid-template-columns: 1fr; gap: 8px; }
+        }
+
+    </style>
+    <!-- Fonts: self-hosted, preload the two critical latin subsets -->
+    <link rel="preload" href="/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/fonts.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <header class="masthead" role="banner">
+        <div class="page masthead-row">
+            <a href="/" class="masthead-logo" aria-label="PickleCue home">
+                <img src="images/app-icon-120.png" alt="" width="30" height="30" aria-hidden="true">
+                <span>PickleCue</span>
+            </a>
+            <nav aria-label="Primary">
+                <ul class="masthead-nav">
+                    <li><a href="/#pitch">What it is</a></li>
+                    <li><a href="/#features">Features</a></li>
+                    <li><a href="demo/">Demo</a></li>
+                    <li><a href="support.html">Support</a></li>
+                </ul>
+            </nav>
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme" title="Toggle theme">
+                <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <a href="/#waitlist" class="btn-pill" data-track="cta_click" data-cta="templates_nav_waitlist">
+                Get early access
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+            </a>
+        </div>
+    </header>
+
+    <main id="main">
+        <section class="page-head">
+            <div class="page">
+                <span class="kicker">Organizer tools · Document 03</span>
+                <h1>Build your <em>tournament template.</em></h1>
+                <p class="lede">Answer a few questions, download an official PickleCue spreadsheet, fill it out anywhere — Excel, Numbers, Google Sheets — then import it into the app and your whole event is created for you.</p>
+            </div>
+        </section>
+
+        <section class="builder" aria-label="Template builder">
+            <div class="page builder-grid">
+                <div class="builder-steps">
+
+                    <article class="bstep">
+                        <span class="topic-num">01</span>
+                        <div class="bstep-body">
+                            <h3>Event type</h3>
+                            <p>What kind of event are you running?</p>
+                            <div class="bfield">
+                                <label for="eventType">Format</label>
+                                <select id="eventType">
+                                    <option value="mixed_doubles_round_robin" selected>Mixed Doubles · Round Robin</option>
+                                    <option value="mens_doubles_round_robin">Men&rsquo;s Doubles · Round Robin</option>
+                                    <option value="womens_doubles_round_robin">Women&rsquo;s Doubles · Round Robin</option>
+                                    <option value="singles_round_robin">Singles · Round Robin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bstep">
+                        <span class="topic-num">02</span>
+                        <div class="bstep-body">
+                            <h3>Teams &amp; players</h3>
+                            <p>How many teams are playing? Doubles teams have two players each.</p>
+                            <div class="bfield">
+                                <label for="teamCount">Number of teams</label>
+                                <input type="number" id="teamCount" min="2" max="64" value="18" inputmode="numeric">
+                            </div>
+                            <p class="bnote">PickleCue currently supports up to <strong>64 teams</strong> per imported tournament.</p>
+                        </div>
+                    </article>
+
+                    <article class="bstep">
+                        <span class="topic-num">03</span>
+                        <div class="bstep-body">
+                            <h3>Courts</h3>
+                            <p>Which courts do you have? If your facility numbers them 3 through 11, start at 3.</p>
+                            <div class="bfield-row">
+                                <div class="bfield">
+                                    <label for="courtCount">Number of courts</label>
+                                    <input type="number" id="courtCount" min="1" max="32" value="9" inputmode="numeric">
+                                </div>
+                                <div class="bfield">
+                                    <label for="courtStart">First court number</label>
+                                    <input type="number" id="courtStart" min="1" max="99" value="3" inputmode="numeric">
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bstep">
+                        <span class="topic-num">04</span>
+                        <div class="bstep-body">
+                            <h3>Rounds &amp; scoring</h3>
+                            <p>A full round robin for <span data-sum="teamsInline">18</span> teams is <span data-sum="fullRounds">17</span> rounds — everyone plays everyone once.</p>
+                            <div class="bfield-row">
+                                <div class="bfield">
+                                    <label for="roundCount">Rounds</label>
+                                    <input type="number" id="roundCount" min="1" max="40" value="17" inputmode="numeric">
+                                </div>
+                                <div class="bfield">
+                                    <label for="pointsToWin">Points to win</label>
+                                    <select id="pointsToWin">
+                                        <option value="11" selected>11</option>
+                                        <option value="15">15</option>
+                                        <option value="21">21</option>
+                                    </select>
+                                </div>
+                                <div class="bfield">
+                                    <label for="winBy">Win by</label>
+                                    <select id="winBy">
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bstep">
+                        <span class="topic-num">05</span>
+                        <div class="bstep-body">
+                            <h3>Optional sections</h3>
+                            <p>Everything here is optional — leaving a section out never breaks the import.</p>
+                            <div class="bchecks">
+                                <label class="bcheck"><input type="checkbox" id="optScores" checked><span>Score columns <small>Record results right on the sheet</small></span></label>
+                                <label class="bcheck"><input type="checkbox" id="optStandings" checked><span>Standings table <small>Wins, losses, points, averages</small></span></label>
+                                <label class="bcheck"><input type="checkbox" id="optTopTeams" checked><span>Top Teams block <small>Podium summary for the wall</small></span></label>
+                                <label class="bcheck"><input type="checkbox" id="optPreview" checked><span>Public preview <small>Let players view the event in PickleCue</small></span></label>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bstep">
+                        <span class="topic-num">06</span>
+                        <div class="bstep-body">
+                            <h3>Print settings</h3>
+                            <p>For posting the schedule at the courts. Big events read best on 11&times;17 tabloid, landscape.</p>
+                            <div class="bfield">
+                                <label for="printSize">Paper &amp; orientation</label>
+                                <select id="printSize">
+                                    <option value="letter_portrait">Letter 8.5&times;11 · Portrait</option>
+                                    <option value="letter_landscape">Letter 8.5&times;11 · Landscape</option>
+                                    <option value="legal_landscape">Legal 8.5&times;14 · Landscape</option>
+                                    <option value="tabloid_11x17_landscape" selected>Tabloid 11&times;17 · Landscape</option>
+                                </select>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bstep">
+                        <span class="topic-num">07</span>
+                        <div class="bstep-body">
+                            <h3>Download</h3>
+                            <p>Your template is generated right here in the browser — nothing is uploaded anywhere.</p>
+                            <div class="bdownloads">
+                                <button type="button" class="btn-pill" id="dlBlank" data-track="cta_click" data-cta="template_download_csv">
+                                    Download template (CSV)
+                                    <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1v7M2.5 5.5 6 9l3.5-3.5M1.5 11h9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+                                </button>
+                                <button type="button" class="btn-ghost" id="dlXlsx" data-track="cta_click" data-cta="template_download_xlsx">Download for Excel (XLSX)</button>
+                                <button type="button" class="btn-ghost" id="dlExample" data-track="cta_click" data-cta="template_download_example">Filled 18-team example (CSV)</button>
+                            </div>
+                            <p class="bnote" id="dlStatus" role="status" aria-live="polite"></p>
+                        </div>
+                    </article>
+                </div>
+
+                <aside class="bsummary" aria-label="Template summary">
+                    <div class="bsummary-card">
+                        <span class="label-mono">Your template</span>
+                        <h3 data-sum="title">Mixed Doubles Round Robin</h3>
+                        <dl>
+                            <div><dt>Teams</dt><dd data-sum="teams">18</dd></div>
+                            <div><dt>Players</dt><dd data-sum="players">36</dd></div>
+                            <div><dt>Courts</dt><dd data-sum="courts">9 (Courts 3–11)</dd></div>
+                            <div><dt>Rounds</dt><dd data-sum="rounds">17</dd></div>
+                            <div><dt>Games per round</dt><dd data-sum="perRound">9</dd></div>
+                            <div><dt>Total game slots</dt><dd data-sum="totalGames">153</dd></div>
+                            <div><dt>Scoring</dt><dd data-sum="scoring">To 11, win by 2</dd></div>
+                            <div><dt>Print</dt><dd data-sum="print">Tabloid 11×17 · Landscape</dd></div>
+                        </dl>
+                        <p class="bnote" data-sum="warning" hidden></p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="import-guide" aria-label="How importing works">
+            <div class="page">
+                <div class="topics-head">
+                    <span class="kicker">02 / From sheet to live event</span>
+                    <h2>Fill it out, then import. That&rsquo;s the whole job.</h2>
+                </div>
+                <div class="topic-grid">
+                    <article class="topic">
+                        <span class="topic-num">01</span>
+                        <div>
+                            <h3>Fill in your event</h3>
+                            <p>Open the template in Excel, Numbers, or Google Sheets. Add team names, assign courts, and (optionally) record scores as you go. Don&rsquo;t rearrange the section rows — they&rsquo;re how PickleCue reads the file. If you use Excel or Google Sheets, export as CSV before importing.</p>
+                        </div>
+                    </article>
+                    <article class="topic">
+                        <span class="topic-num">02</span>
+                        <div>
+                            <h3>Import in PickleCue</h3>
+                            <p>In the app: Compete &rsaquo; Organizer &rsaquo; Create Event &rsaquo; <strong>Import Spreadsheet</strong>. PickleCue recognizes official templates instantly and maps every section — teams, courts, schedule, scores, standings, even your print settings.</p>
+                        </div>
+                    </article>
+                    <article class="topic">
+                        <span class="topic-num">03</span>
+                        <div>
+                            <h3>Preview, then create</h3>
+                            <p>You&rsquo;ll see a full preview with anything that needs attention flagged in plain English. Previews and dry runs are free for everyone; creating the live tournament is part of <strong>PickleCue Pro</strong>. One tap and your brackets, teams, and schedule are live.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="colophon" role="contentinfo">
+        <div class="page">
+            <div class="colophon-grid">
+                <div class="colophon-brand">
+                    <h3>PickleCue</h3>
+                    <p>A calm, premium companion for the way pickleball is actually played. Built by players, for players. Coming to iOS.</p>
+                    <h4 style="margin-top: 28px;">Follow</h4>
+                    <div class="socials">
+                        <a href="https://www.instagram.com/picklecueapp" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
+                        <a href="https://www.tiktok.com/@picklecue" class="social-icon" aria-label="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M448 209.9a210.1 210.1 0 01-122.8-39.3v178.8A162.6 162.6 0 11185 188.3v89.9a74.6 74.6 0 1052.2 71.2V0h88a121 121 0 00122.8 121.3z"/></svg></a>
+                        <a href="https://www.youtube.com/@picklecue" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 576 512" aria-hidden="true"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg></a>
+                        <a href="https://x.com/PickleCueApp" class="social-icon" aria-label="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg></a>
+                    </div>
+                </div>
+                <div><h4>The app</h4><ul><li><a href="/#features">Features</a></li><li><a href="demo/">Demo</a></li><li><a href="/#waitlist">Waitlist</a></li></ul></div>
+                <div><h4>Support</h4><ul><li><a href="support.html">Help</a></li><li><a href="mailto:support@picklecue.com">Contact</a></li><li><a href="mailto:feedback@picklecue.com">Feedback</a></li></ul></div>
+                <div><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="mailto:privacy@picklecue.com">Data requests</a></li></ul></div>
+            </div>
+            <div class="colophon-base">
+                <span>&copy; 2026 PickleCue. All rights reserved.</span>
+                <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="made_by_anstelias" aria-label="Made by Anstelias — anstelias.com">
+                    <span>Made by</span>
+                    <img src="images/anstelias-logo.png" alt="" aria-hidden="true" width="40" height="40">
+                    <span>Anstelias Technology</span>
+                    <span class="sep" aria-hidden="true">·</span>
+                    <span class="site">anstelias.com</span>
+                </a>
+                <span>iOS coming soon</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function(){var b=document.getElementById('themeToggle');if(!b)return;var r=document.documentElement;
+            function cur(){var e=r.getAttribute('data-theme');if(e==='light'||e==='dark')return e;return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+            b.addEventListener('click',function(){var n=cur()==='dark'?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('pc_theme',n);}catch(_){}});
+        })();
+    </script>
+    <script>
+    (function () {
+        'use strict';
+        // === Template generation ===============================================
+        // This mirrors the app's OfficialTemplateGenerator byte-for-byte for the
+        // blank template. Keep the two in sync — the app's unit tests parse the
+        // same output this page produces. Format: v1, magic first row, section
+        // blocks each with their own header row.
+        var MAGIC = 'picklecue_template';
+        var VERSION = 1;
+        var MAX_TEAMS = 64;
+
+        var HEADERS = {
+            info: 'section,template_version,tournament_name,organizer_name,event_date,start_time,location_name,event_type,format,skill_level,max_players,team_count,player_count,court_count,round_count,scoring_type,points_to_win,win_by,standings_method,public_preview_enabled,import_scores,import_standings,print_size,notes',
+            team: 'section,team_id,team_name,player_1_name,player_1_email,player_2_name,player_2_email,skill_level,dupr_rating,seed,notes',
+            court: 'section,court_id,court_name,location,surface,indoor_outdoor,notes',
+            match: 'section,game_number,round_number,court_id,court_name,team_1_id,team_1_name,team_2_id,team_2_name,team_1_score,team_2_score,winner_team_id,scheduled_time,status,notes',
+            standing: 'section,team_id,team_name,byes,matches_played,wins,losses,points,possible_points,average,win_percentage,rank,notes',
+            topTeam: 'section,rank,team_id,team_name,points,percentage,notes',
+            print: 'section,paper_size,orientation,include_scores,include_standings,include_qr_link,include_picklecue_branding,notes',
+            metadata: 'section,key,value'
+        };
+
+        function csvCell(raw) {
+            if (raw.indexOf(',') !== -1 || raw.indexOf('"') !== -1 || raw.indexOf('\n') !== -1) {
+                return '"' + raw.replace(/"/g, '""') + '"';
+            }
+            return raw;
+        }
+        function paperSize(printSize) {
+            var n = printSize.toLowerCase();
+            if (n.indexOf('tabloid') !== -1 || n.indexOf('11x17') !== -1 || n.indexOf('17x11') !== -1) return 'tabloid_11x17';
+            if (n.indexOf('legal') !== -1) return 'legal';
+            return 'letter';
+        }
+        function orientation(printSize) {
+            return printSize.toLowerCase().indexOf('landscape') !== -1 ? 'landscape' : 'portrait';
+        }
+        function metadataLines(o, templateName) {
+            return [
+                HEADERS.metadata,
+                'metadata,template_name,' + csvCell(templateName),
+                'metadata,template_version,' + VERSION,
+                'metadata,generated_by,PickleCue',
+                'metadata,event_type,' + o.eventType,
+                'metadata,team_count,' + o.teamCount,
+                'metadata,court_count,' + o.courtCount,
+                'metadata,round_count,' + o.roundCount,
+                'metadata,scoring_type,' + o.scoringType,
+                'metadata,import_schema_version,' + VERSION
+            ];
+        }
+        function blankCSV(o) {
+            var lines = [MAGIC + ',' + VERSION];
+            lines = lines.concat(metadataLines(o, 'PickleCue Round Robin Template'));
+
+            lines.push(HEADERS.info);
+            lines.push('tournament_info,' + VERSION + ',,,,,,' + o.eventType + ',round_robin,,,' + o.teamCount + ',,' + o.courtCount + ',' + o.roundCount + ',' + o.scoringType + ',' + o.pointsToWin + ',' + o.winBy + ',' + o.standingsMethod + ',' + o.publicPreview + ',' + o.includeScores + ',' + o.includeStandings + ',' + o.printSize + ',');
+
+            lines.push(HEADERS.team);
+            for (var i = 1; i <= Math.max(1, o.teamCount); i++) lines.push('team,T' + i + ',,,,,,,,,');
+
+            lines.push(HEADERS.court);
+            for (var c = 0; c < Math.max(1, o.courtCount); c++) {
+                var num = o.courtNumberStart + c;
+                lines.push('court,C' + num + ',Court ' + num + ',,,,');
+            }
+
+            lines.push(HEADERS.match);
+            for (var round = 1; round <= Math.max(1, o.roundCount); round++) {
+                for (var off = 0; off < Math.max(1, o.courtCount); off++) {
+                    var courtNumber = o.courtNumberStart + off;
+                    var game = (round - 1) * o.courtCount + off + 1;
+                    lines.push('match,' + game + ',' + round + ',C' + courtNumber + ',Court ' + courtNumber + ',,,,,,,,,scheduled,');
+                }
+            }
+
+            if (o.includeStandings) {
+                lines.push(HEADERS.standing);
+                for (var s = 1; s <= Math.max(1, o.teamCount); s++) lines.push('standing,T' + s + ',,,,,,,,,,,');
+            }
+            if (o.includeTopTeams) {
+                lines.push(HEADERS.topTeam);
+                for (var r = 1; r <= Math.min(4, Math.max(1, o.teamCount)); r++) lines.push('top_team,' + r + ',,,,,');
+            }
+
+            lines.push(HEADERS.print);
+            lines.push('print_settings,' + paperSize(o.printSize) + ',' + orientation(o.printSize) + ',' + o.includeScores + ',' + o.includeStandings + ',true,true,');
+
+            return lines.join('\n') + '\n';
+        }
+
+        // === Options from the form =============================================
+        var $ = function (id) { return document.getElementById(id); };
+        function readOptions() {
+            var teams = clamp(parseInt($('teamCount').value, 10) || 18, 2, MAX_TEAMS);
+            var courts = clamp(parseInt($('courtCount').value, 10) || 9, 1, 32);
+            return {
+                eventType: $('eventType').value,
+                teamCount: teams,
+                courtCount: courts,
+                courtNumberStart: clamp(parseInt($('courtStart').value, 10) || 1, 1, 99),
+                roundCount: clamp(parseInt($('roundCount').value, 10) || 17, 1, 40),
+                pointsToWin: parseInt($('pointsToWin').value, 10),
+                winBy: parseInt($('winBy').value, 10),
+                scoringType: 'points',
+                standingsMethod: 'points',
+                includeScores: $('optScores').checked,
+                includeStandings: $('optStandings').checked,
+                includeTopTeams: $('optTopTeams').checked,
+                publicPreview: $('optPreview').checked,
+                printSize: $('printSize').value
+            };
+        }
+        function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+        // === Live summary ======================================================
+        var PRINT_LABELS = {
+            letter_portrait: 'Letter 8.5×11 · Portrait',
+            letter_landscape: 'Letter 8.5×11 · Landscape',
+            legal_landscape: 'Legal 8.5×14 · Landscape',
+            tabloid_11x17_landscape: 'Tabloid 11×17 · Landscape'
+        };
+        function sum(name) { return document.querySelector('[data-sum="' + name + '"]'); }
+        function titleFor(eventType) {
+            return eventType.split('_').map(function (w) {
+                if (w === 'mens') return 'Men’s';
+                if (w === 'womens') return 'Women’s';
+                return w.charAt(0).toUpperCase() + w.slice(1);
+            }).join(' ');
+        }
+        function refresh() {
+            var o = readOptions();
+            var perRound = Math.min(Math.floor(o.teamCount / 2), o.courtCount);
+            var isSingles = o.eventType.indexOf('singles') !== -1;
+            var lastCourt = o.courtNumberStart + o.courtCount - 1;
+            sum('title').textContent = titleFor(o.eventType);
+            sum('teams').textContent = String(o.teamCount);
+            sum('players').textContent = String(isSingles ? o.teamCount : o.teamCount * 2);
+            sum('courts').textContent = o.courtCount + ' (Court' + (o.courtCount > 1 ? 's ' + o.courtNumberStart + '–' + lastCourt : ' ' + o.courtNumberStart) + ')';
+            sum('rounds').textContent = String(o.roundCount);
+            sum('perRound').textContent = String(perRound);
+            sum('totalGames').textContent = String(o.roundCount * o.courtCount);
+            sum('scoring').textContent = 'To ' + o.pointsToWin + ', win by ' + o.winBy;
+            sum('print').textContent = PRINT_LABELS[o.printSize] || o.printSize;
+            sum('teamsInline').textContent = String(o.teamCount);
+            sum('fullRounds').textContent = String(o.teamCount % 2 === 0 ? o.teamCount - 1 : o.teamCount);
+
+            var warn = sum('warning');
+            var raw = parseInt($('teamCount').value, 10) || 0;
+            if (raw > MAX_TEAMS) {
+                warn.textContent = 'PickleCue currently supports up to ' + MAX_TEAMS + ' teams — the template caps at ' + MAX_TEAMS + '.';
+                warn.hidden = false;
+            } else if (o.courtCount > Math.floor(o.teamCount / 2)) {
+                warn.textContent = 'With ' + o.teamCount + ' teams, only ' + Math.floor(o.teamCount / 2) + ' courts can be used at once.';
+                warn.hidden = false;
+            } else {
+                warn.hidden = true;
+            }
+        }
+
+        // === Downloads =========================================================
+        function download(name, text, mime) {
+            var blob = new Blob([text], { type: mime || 'text/csv;charset=utf-8' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+        }
+        function status(msg) { $('dlStatus').textContent = msg; }
+
+        $('dlBlank').addEventListener('click', function () {
+            var o = readOptions();
+            download('PickleCue_RoundRobin_Template_' + o.teamCount + '_Teams.csv', blankCSV(o));
+            status('Template downloaded. Fill it out, then import it in PickleCue.');
+        });
+
+        $('dlExample').addEventListener('click', function () {
+            download('PickleCue_Test_Round_Robin_18_Teams.csv', EXAMPLE_CSV);
+            status('Example downloaded — 18 fictional teams, ready to import as-is.');
+        });
+
+        // XLSX: lazy-load SheetJS only when asked; fall back to CSV on failure.
+        var XLSX_CDN = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+        $('dlXlsx').addEventListener('click', function () {
+            var o = readOptions();
+            status('Preparing Excel workbook…');
+            loadSheetJS(function (ok) {
+                if (!ok) {
+                    download('PickleCue_RoundRobin_Template_' + o.teamCount + '_Teams.csv', blankCSV(o));
+                    status('Excel library unavailable — downloaded CSV instead (opens fine in Excel).');
+                    return;
+                }
+                var rows = parseCSV(blankCSV(o));
+                var ws = window.XLSX.utils.aoa_to_sheet(rows);
+                var wb = window.XLSX.utils.book_new();
+                window.XLSX.utils.book_append_sheet(wb, ws, 'PickleCue Template');
+                window.XLSX.writeFile(wb, 'PickleCue_RoundRobin_Template_' + o.teamCount + '_Teams.xlsx');
+                status('Excel workbook downloaded. Export as CSV before importing into PickleCue.');
+            });
+        });
+        function loadSheetJS(done) {
+            if (window.XLSX) return done(true);
+            var s = document.createElement('script');
+            s.src = XLSX_CDN;
+            s.onload = function () { done(!!window.XLSX); };
+            s.onerror = function () { done(false); };
+            document.head.appendChild(s);
+        }
+        function parseCSV(text) {
+            // Minimal RFC-4180 parser for our own generated output.
+            var rows = [], row = [], cell = '', inQ = false;
+            for (var i = 0; i < text.length; i++) {
+                var ch = text[i];
+                if (inQ) {
+                    if (ch === '"') {
+                        if (text[i + 1] === '"') { cell += '"'; i++; } else { inQ = false; }
+                    } else { cell += ch; }
+                } else if (ch === '"') { inQ = true; }
+                else if (ch === ',') { row.push(cell); cell = ''; }
+                else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+                else if (ch !== '\r') { cell += ch; }
+            }
+            if (cell.length || row.length) { row.push(cell); rows.push(row); }
+            return rows;
+        }
+
+        ['eventType', 'teamCount', 'courtCount', 'courtStart', 'roundCount', 'pointsToWin', 'winBy', 'optScores', 'optStandings', 'optTopTeams', 'optPreview', 'printSize'].forEach(function (id) {
+            $(id).addEventListener('input', refresh);
+            $(id).addEventListener('change', refresh);
+        });
+        refresh();
+
+        // === Filled example (generated by the PickleCue app's generator) =======
+        var EXAMPLE_CSV = "picklecue_template,1\nsection,key,value\nmetadata,template_name,PickleCue Round Robin Example\nmetadata,template_version,1\nmetadata,generated_by,PickleCue\nmetadata,event_type,mixed_doubles_round_robin\nmetadata,team_count,18\nmetadata,court_count,9\nmetadata,round_count,17\nmetadata,scoring_type,points\nmetadata,import_schema_version,1\nsection,template_version,tournament_name,organizer_name,event_date,start_time,location_name,event_type,format,skill_level,max_players,team_count,player_count,court_count,round_count,scoring_type,points_to_win,win_by,standings_method,public_preview_enabled,import_scores,import_standings,print_size,notes\ntournament_info,1,Faithie Test Round Robin,Test Organizer,2026-08-15,6:00 PM,PickleCue Test Courts,mixed_doubles_round_robin,round_robin,3.5+,,18,36,9,17,points,11,2,points,true,true,true,tabloid_11x17_landscape,Generated example \u2014 safe to import\nsection,team_id,team_name,player_1_name,player_1_email,player_2_name,player_2_email,skill_level,dupr_rating,seed,notes\nteam,T1,Dink Dynasty,Player 1A,player1a@example.com,Player 1B,player1b@example.com,3.5+,3.20,1,\nteam,T2,Net Ninjas,Player 2A,player2a@example.com,Player 2B,player2b@example.com,3.5+,3.35,2,\nteam,T3,Kitchen Kings,Player 3A,player3a@example.com,Player 3B,player3b@example.com,3.5+,3.50,3,\nteam,T4,Rally Racers,Player 4A,player4a@example.com,Player 4B,player4b@example.com,3.5+,3.65,4,\nteam,T5,Pickle Crushers,Player 5A,player5a@example.com,Player 5B,player5b@example.com,3.5+,3.80,5,\nteam,T6,Baseline Bandits,Player 6A,player6a@example.com,Player 6B,player6b@example.com,3.5+,3.95,6,\nteam,T7,Drop Shot Crew,Player 7A,player7a@example.com,Player 7B,player7b@example.com,3.5+,4.10,7,\nteam,T8,Paddle Pals,Player 8A,player8a@example.com,Player 8B,player8b@example.com,3.5+,4.25,8,\nteam,T9,Court Jesters,Player 9A,player9a@example.com,Player 9B,player9b@example.com,3.5+,3.20,9,\nteam,T10,Spin Doctors,Player 10A,player10a@example.com,Player 10B,player10b@example.com,3.5+,3.35,10,\nteam,T11,The Erne Squad,Player 11A,player11a@example.com,Player 11B,player11b@example.com,3.5+,3.50,11,\nteam,T12,Third Shot Mafia,Player 12A,player12a@example.com,Player 12B,player12b@example.com,3.5+,3.65,12,\nteam,T13,Lob Legends,Player 13A,player13a@example.com,Player 13B,player13b@example.com,3.5+,3.80,13,\nteam,T14,Serve Aces,Player 14A,player14a@example.com,Player 14B,player14b@example.com,3.5+,3.95,14,\nteam,T15,Kitchen Dinks,Player 15A,player15a@example.com,Player 15B,player15b@example.com,3.5+,4.10,15,\nteam,T16,Rally Rebels,Player 16A,player16a@example.com,Player 16B,player16b@example.com,3.5+,4.25,16,\nteam,T17,Net Gains,Player 17A,player17a@example.com,Player 17B,player17b@example.com,3.5+,3.20,17,\nteam,T18,Paddle Storm,Player 18A,player18a@example.com,Player 18B,player18b@example.com,3.5+,3.35,18,\nsection,court_id,court_name,location,surface,indoor_outdoor,notes\ncourt,C3,Court 3,PickleCue Test Courts,concrete,outdoor,\ncourt,C4,Court 4,PickleCue Test Courts,concrete,outdoor,\ncourt,C5,Court 5,PickleCue Test Courts,concrete,outdoor,\ncourt,C6,Court 6,PickleCue Test Courts,concrete,outdoor,\ncourt,C7,Court 7,PickleCue Test Courts,concrete,outdoor,\ncourt,C8,Court 8,PickleCue Test Courts,concrete,outdoor,\ncourt,C9,Court 9,PickleCue Test Courts,concrete,outdoor,\ncourt,C10,Court 10,PickleCue Test Courts,concrete,outdoor,\ncourt,C11,Court 11,PickleCue Test Courts,concrete,outdoor,\nsection,game_number,round_number,court_id,court_name,team_1_id,team_1_name,team_2_id,team_2_name,team_1_score,team_2_score,winner_team_id,scheduled_time,status,notes\nmatch,1,1,C3,Court 3,T1,Dink Dynasty,T18,Paddle Storm,11,0,T1,6:00 PM,completed,\nmatch,2,1,C4,Court 4,T2,Net Ninjas,T17,Net Gains,11,0,T2,6:00 PM,completed,\nmatch,3,1,C5,Court 5,T3,Kitchen Kings,T16,Rally Rebels,11,0,T3,6:00 PM,completed,\nmatch,4,1,C6,Court 6,T4,Rally Racers,T15,Kitchen Dinks,11,0,T4,6:00 PM,completed,\nmatch,5,1,C7,Court 7,T5,Pickle Crushers,T14,Serve Aces,11,0,T5,6:00 PM,completed,\nmatch,6,1,C8,Court 8,T6,Baseline Bandits,T13,Lob Legends,11,0,T6,6:00 PM,completed,\nmatch,7,1,C9,Court 9,T7,Drop Shot Crew,T12,Third Shot Mafia,11,0,T7,6:00 PM,completed,\nmatch,8,1,C10,Court 10,T8,Paddle Pals,T11,The Erne Squad,11,0,T8,6:00 PM,completed,\nmatch,9,1,C11,Court 11,T9,Court Jesters,T10,Spin Doctors,11,0,T9,6:00 PM,completed,\nmatch,10,2,C3,Court 3,T1,Dink Dynasty,T17,Net Gains,11,2,T1,6:30 PM,completed,\nmatch,11,2,C4,Court 4,T18,Paddle Storm,T16,Rally Rebels,11,8,T18,6:30 PM,completed,\nmatch,12,2,C5,Court 5,T2,Net Ninjas,T15,Kitchen Dinks,1,11,T15,6:30 PM,completed,\nmatch,13,2,C6,Court 6,T3,Kitchen Kings,T14,Serve Aces,1,11,T14,6:30 PM,completed,\nmatch,14,2,C7,Court 7,T4,Rally Racers,T13,Lob Legends,1,11,T13,6:30 PM,completed,\nmatch,15,2,C8,Court 8,T5,Pickle Crushers,T12,Third Shot Mafia,1,11,T12,6:30 PM,completed,\nmatch,16,2,C9,Court 9,T6,Baseline Bandits,T11,The Erne Squad,1,11,T11,6:30 PM,completed,\nmatch,17,2,C10,Court 10,T7,Drop Shot Crew,T10,Spin Doctors,1,11,T10,6:30 PM,completed,\nmatch,18,2,C11,Court 11,T8,Paddle Pals,T9,Court Jesters,1,11,T9,6:30 PM,completed,\nmatch,19,3,C3,Court 3,T1,Dink Dynasty,T16,Rally Rebels,11,4,T1,7:00 PM,completed,\nmatch,20,3,C4,Court 4,T17,Net Gains,T15,Kitchen Dinks,9,11,T15,7:00 PM,completed,\nmatch,21,3,C5,Court 5,T18,Paddle Storm,T14,Serve Aces,9,11,T14,7:00 PM,completed,\nmatch,22,3,C6,Court 6,T2,Net Ninjas,T13,Lob Legends,11,2,T2,7:00 PM,completed,\nmatch,23,3,C7,Court 7,T3,Kitchen Kings,T12,Third Shot Mafia,11,2,T3,7:00 PM,completed,\nmatch,24,3,C8,Court 8,T4,Rally Racers,T11,The Erne Squad,11,2,T4,7:00 PM,completed,\nmatch,25,3,C9,Court 9,T5,Pickle Crushers,T10,Spin Doctors,11,2,T5,7:00 PM,completed,\nmatch,26,3,C10,Court 10,T6,Baseline Bandits,T9,Court Jesters,11,2,T6,7:00 PM,completed,\nmatch,27,3,C11,Court 11,T7,Drop Shot Crew,T8,Paddle Pals,11,2,T7,7:00 PM,completed,\nmatch,28,4,C3,Court 3,T1,Dink Dynasty,T15,Kitchen Dinks,,,,7:30 PM,scheduled,\nmatch,29,4,C4,Court 4,T16,Rally Rebels,T14,Serve Aces,,,,7:30 PM,scheduled,\nmatch,30,4,C5,Court 5,T17,Net Gains,T13,Lob Legends,,,,7:30 PM,scheduled,\nmatch,31,4,C6,Court 6,T18,Paddle Storm,T12,Third Shot Mafia,,,,7:30 PM,scheduled,\nmatch,32,4,C7,Court 7,T2,Net Ninjas,T11,The Erne Squad,,,,7:30 PM,scheduled,\nmatch,33,4,C8,Court 8,T3,Kitchen Kings,T10,Spin Doctors,,,,7:30 PM,scheduled,\nmatch,34,4,C9,Court 9,T4,Rally Racers,T9,Court Jesters,,,,7:30 PM,scheduled,\nmatch,35,4,C10,Court 10,T5,Pickle Crushers,T8,Paddle Pals,,,,7:30 PM,scheduled,\nmatch,36,4,C11,Court 11,T6,Baseline Bandits,T7,Drop Shot Crew,,,,7:30 PM,scheduled,\nmatch,37,5,C3,Court 3,T1,Dink Dynasty,T14,Serve Aces,,,,8:00 PM,scheduled,\nmatch,38,5,C4,Court 4,T15,Kitchen Dinks,T13,Lob Legends,,,,8:00 PM,scheduled,\nmatch,39,5,C5,Court 5,T16,Rally Rebels,T12,Third Shot Mafia,,,,8:00 PM,scheduled,\nmatch,40,5,C6,Court 6,T17,Net Gains,T11,The Erne Squad,,,,8:00 PM,scheduled,\nmatch,41,5,C7,Court 7,T18,Paddle Storm,T10,Spin Doctors,,,,8:00 PM,scheduled,\nmatch,42,5,C8,Court 8,T2,Net Ninjas,T9,Court Jesters,,,,8:00 PM,scheduled,\nmatch,43,5,C9,Court 9,T3,Kitchen Kings,T8,Paddle Pals,,,,8:00 PM,scheduled,\nmatch,44,5,C10,Court 10,T4,Rally Racers,T7,Drop Shot Crew,,,,8:00 PM,scheduled,\nmatch,45,5,C11,Court 11,T5,Pickle Crushers,T6,Baseline Bandits,,,,8:00 PM,scheduled,\nmatch,46,6,C3,Court 3,T1,Dink Dynasty,T13,Lob Legends,,,,8:30 PM,scheduled,\nmatch,47,6,C4,Court 4,T14,Serve Aces,T12,Third Shot Mafia,,,,8:30 PM,scheduled,\nmatch,48,6,C5,Court 5,T15,Kitchen Dinks,T11,The Erne Squad,,,,8:30 PM,scheduled,\nmatch,49,6,C6,Court 6,T16,Rally Rebels,T10,Spin Doctors,,,,8:30 PM,scheduled,\nmatch,50,6,C7,Court 7,T17,Net Gains,T9,Court Jesters,,,,8:30 PM,scheduled,\nmatch,51,6,C8,Court 8,T18,Paddle Storm,T8,Paddle Pals,,,,8:30 PM,scheduled,\nmatch,52,6,C9,Court 9,T2,Net Ninjas,T7,Drop Shot Crew,,,,8:30 PM,scheduled,\nmatch,53,6,C10,Court 10,T3,Kitchen Kings,T6,Baseline Bandits,,,,8:30 PM,scheduled,\nmatch,54,6,C11,Court 11,T4,Rally Racers,T5,Pickle Crushers,,,,8:30 PM,scheduled,\nmatch,55,7,C3,Court 3,T1,Dink Dynasty,T12,Third Shot Mafia,,,,9:00 PM,scheduled,\nmatch,56,7,C4,Court 4,T13,Lob Legends,T11,The Erne Squad,,,,9:00 PM,scheduled,\nmatch,57,7,C5,Court 5,T14,Serve Aces,T10,Spin Doctors,,,,9:00 PM,scheduled,\nmatch,58,7,C6,Court 6,T15,Kitchen Dinks,T9,Court Jesters,,,,9:00 PM,scheduled,\nmatch,59,7,C7,Court 7,T16,Rally Rebels,T8,Paddle Pals,,,,9:00 PM,scheduled,\nmatch,60,7,C8,Court 8,T17,Net Gains,T7,Drop Shot Crew,,,,9:00 PM,scheduled,\nmatch,61,7,C9,Court 9,T18,Paddle Storm,T6,Baseline Bandits,,,,9:00 PM,scheduled,\nmatch,62,7,C10,Court 10,T2,Net Ninjas,T5,Pickle Crushers,,,,9:00 PM,scheduled,\nmatch,63,7,C11,Court 11,T3,Kitchen Kings,T4,Rally Racers,,,,9:00 PM,scheduled,\nmatch,64,8,C3,Court 3,T1,Dink Dynasty,T11,The Erne Squad,,,,9:30 PM,scheduled,\nmatch,65,8,C4,Court 4,T12,Third Shot Mafia,T10,Spin Doctors,,,,9:30 PM,scheduled,\nmatch,66,8,C5,Court 5,T13,Lob Legends,T9,Court Jesters,,,,9:30 PM,scheduled,\nmatch,67,8,C6,Court 6,T14,Serve Aces,T8,Paddle Pals,,,,9:30 PM,scheduled,\nmatch,68,8,C7,Court 7,T15,Kitchen Dinks,T7,Drop Shot Crew,,,,9:30 PM,scheduled,\nmatch,69,8,C8,Court 8,T16,Rally Rebels,T6,Baseline Bandits,,,,9:30 PM,scheduled,\nmatch,70,8,C9,Court 9,T17,Net Gains,T5,Pickle Crushers,,,,9:30 PM,scheduled,\nmatch,71,8,C10,Court 10,T18,Paddle Storm,T4,Rally Racers,,,,9:30 PM,scheduled,\nmatch,72,8,C11,Court 11,T2,Net Ninjas,T3,Kitchen Kings,,,,9:30 PM,scheduled,\nmatch,73,9,C3,Court 3,T1,Dink Dynasty,T10,Spin Doctors,,,,10:00 PM,scheduled,\nmatch,74,9,C4,Court 4,T11,The Erne Squad,T9,Court Jesters,,,,10:00 PM,scheduled,\nmatch,75,9,C5,Court 5,T12,Third Shot Mafia,T8,Paddle Pals,,,,10:00 PM,scheduled,\nmatch,76,9,C6,Court 6,T13,Lob Legends,T7,Drop Shot Crew,,,,10:00 PM,scheduled,\nmatch,77,9,C7,Court 7,T14,Serve Aces,T6,Baseline Bandits,,,,10:00 PM,scheduled,\nmatch,78,9,C8,Court 8,T15,Kitchen Dinks,T5,Pickle Crushers,,,,10:00 PM,scheduled,\nmatch,79,9,C9,Court 9,T16,Rally Rebels,T4,Rally Racers,,,,10:00 PM,scheduled,\nmatch,80,9,C10,Court 10,T17,Net Gains,T3,Kitchen Kings,,,,10:00 PM,scheduled,\nmatch,81,9,C11,Court 11,T18,Paddle Storm,T2,Net Ninjas,,,,10:00 PM,scheduled,\nmatch,82,10,C3,Court 3,T1,Dink Dynasty,T9,Court Jesters,,,,10:30 PM,scheduled,\nmatch,83,10,C4,Court 4,T10,Spin Doctors,T8,Paddle Pals,,,,10:30 PM,scheduled,\nmatch,84,10,C5,Court 5,T11,The Erne Squad,T7,Drop Shot Crew,,,,10:30 PM,scheduled,\nmatch,85,10,C6,Court 6,T12,Third Shot Mafia,T6,Baseline Bandits,,,,10:30 PM,scheduled,\nmatch,86,10,C7,Court 7,T13,Lob Legends,T5,Pickle Crushers,,,,10:30 PM,scheduled,\nmatch,87,10,C8,Court 8,T14,Serve Aces,T4,Rally Racers,,,,10:30 PM,scheduled,\nmatch,88,10,C9,Court 9,T15,Kitchen Dinks,T3,Kitchen Kings,,,,10:30 PM,scheduled,\nmatch,89,10,C10,Court 10,T16,Rally Rebels,T2,Net Ninjas,,,,10:30 PM,scheduled,\nmatch,90,10,C11,Court 11,T17,Net Gains,T18,Paddle Storm,,,,10:30 PM,scheduled,\nmatch,91,11,C3,Court 3,T1,Dink Dynasty,T8,Paddle Pals,,,,11:00 PM,scheduled,\nmatch,92,11,C4,Court 4,T9,Court Jesters,T7,Drop Shot Crew,,,,11:00 PM,scheduled,\nmatch,93,11,C5,Court 5,T10,Spin Doctors,T6,Baseline Bandits,,,,11:00 PM,scheduled,\nmatch,94,11,C6,Court 6,T11,The Erne Squad,T5,Pickle Crushers,,,,11:00 PM,scheduled,\nmatch,95,11,C7,Court 7,T12,Third Shot Mafia,T4,Rally Racers,,,,11:00 PM,scheduled,\nmatch,96,11,C8,Court 8,T13,Lob Legends,T3,Kitchen Kings,,,,11:00 PM,scheduled,\nmatch,97,11,C9,Court 9,T14,Serve Aces,T2,Net Ninjas,,,,11:00 PM,scheduled,\nmatch,98,11,C10,Court 10,T15,Kitchen Dinks,T18,Paddle Storm,,,,11:00 PM,scheduled,\nmatch,99,11,C11,Court 11,T16,Rally Rebels,T17,Net Gains,,,,11:00 PM,scheduled,\nmatch,100,12,C3,Court 3,T1,Dink Dynasty,T7,Drop Shot Crew,,,,11:30 PM,scheduled,\nmatch,101,12,C4,Court 4,T8,Paddle Pals,T6,Baseline Bandits,,,,11:30 PM,scheduled,\nmatch,102,12,C5,Court 5,T9,Court Jesters,T5,Pickle Crushers,,,,11:30 PM,scheduled,\nmatch,103,12,C6,Court 6,T10,Spin Doctors,T4,Rally Racers,,,,11:30 PM,scheduled,\nmatch,104,12,C7,Court 7,T11,The Erne Squad,T3,Kitchen Kings,,,,11:30 PM,scheduled,\nmatch,105,12,C8,Court 8,T12,Third Shot Mafia,T2,Net Ninjas,,,,11:30 PM,scheduled,\nmatch,106,12,C9,Court 9,T13,Lob Legends,T18,Paddle Storm,,,,11:30 PM,scheduled,\nmatch,107,12,C10,Court 10,T14,Serve Aces,T17,Net Gains,,,,11:30 PM,scheduled,\nmatch,108,12,C11,Court 11,T15,Kitchen Dinks,T16,Rally Rebels,,,,11:30 PM,scheduled,\nmatch,109,13,C3,Court 3,T1,Dink Dynasty,T6,Baseline Bandits,,,,12:00 AM,scheduled,\nmatch,110,13,C4,Court 4,T7,Drop Shot Crew,T5,Pickle Crushers,,,,12:00 AM,scheduled,\nmatch,111,13,C5,Court 5,T8,Paddle Pals,T4,Rally Racers,,,,12:00 AM,scheduled,\nmatch,112,13,C6,Court 6,T9,Court Jesters,T3,Kitchen Kings,,,,12:00 AM,scheduled,\nmatch,113,13,C7,Court 7,T10,Spin Doctors,T2,Net Ninjas,,,,12:00 AM,scheduled,\nmatch,114,13,C8,Court 8,T11,The Erne Squad,T18,Paddle Storm,,,,12:00 AM,scheduled,\nmatch,115,13,C9,Court 9,T12,Third Shot Mafia,T17,Net Gains,,,,12:00 AM,scheduled,\nmatch,116,13,C10,Court 10,T13,Lob Legends,T16,Rally Rebels,,,,12:00 AM,scheduled,\nmatch,117,13,C11,Court 11,T14,Serve Aces,T15,Kitchen Dinks,,,,12:00 AM,scheduled,\nmatch,118,14,C3,Court 3,T1,Dink Dynasty,T5,Pickle Crushers,,,,12:30 AM,scheduled,\nmatch,119,14,C4,Court 4,T6,Baseline Bandits,T4,Rally Racers,,,,12:30 AM,scheduled,\nmatch,120,14,C5,Court 5,T7,Drop Shot Crew,T3,Kitchen Kings,,,,12:30 AM,scheduled,\nmatch,121,14,C6,Court 6,T8,Paddle Pals,T2,Net Ninjas,,,,12:30 AM,scheduled,\nmatch,122,14,C7,Court 7,T9,Court Jesters,T18,Paddle Storm,,,,12:30 AM,scheduled,\nmatch,123,14,C8,Court 8,T10,Spin Doctors,T17,Net Gains,,,,12:30 AM,scheduled,\nmatch,124,14,C9,Court 9,T11,The Erne Squad,T16,Rally Rebels,,,,12:30 AM,scheduled,\nmatch,125,14,C10,Court 10,T12,Third Shot Mafia,T15,Kitchen Dinks,,,,12:30 AM,scheduled,\nmatch,126,14,C11,Court 11,T13,Lob Legends,T14,Serve Aces,,,,12:30 AM,scheduled,\nmatch,127,15,C3,Court 3,T1,Dink Dynasty,T4,Rally Racers,,,,1:00 AM,scheduled,\nmatch,128,15,C4,Court 4,T5,Pickle Crushers,T3,Kitchen Kings,,,,1:00 AM,scheduled,\nmatch,129,15,C5,Court 5,T6,Baseline Bandits,T2,Net Ninjas,,,,1:00 AM,scheduled,\nmatch,130,15,C6,Court 6,T7,Drop Shot Crew,T18,Paddle Storm,,,,1:00 AM,scheduled,\nmatch,131,15,C7,Court 7,T8,Paddle Pals,T17,Net Gains,,,,1:00 AM,scheduled,\nmatch,132,15,C8,Court 8,T9,Court Jesters,T16,Rally Rebels,,,,1:00 AM,scheduled,\nmatch,133,15,C9,Court 9,T10,Spin Doctors,T15,Kitchen Dinks,,,,1:00 AM,scheduled,\nmatch,134,15,C10,Court 10,T11,The Erne Squad,T14,Serve Aces,,,,1:00 AM,scheduled,\nmatch,135,15,C11,Court 11,T12,Third Shot Mafia,T13,Lob Legends,,,,1:00 AM,scheduled,\nmatch,136,16,C3,Court 3,T1,Dink Dynasty,T3,Kitchen Kings,,,,1:30 AM,scheduled,\nmatch,137,16,C4,Court 4,T4,Rally Racers,T2,Net Ninjas,,,,1:30 AM,scheduled,\nmatch,138,16,C5,Court 5,T5,Pickle Crushers,T18,Paddle Storm,,,,1:30 AM,scheduled,\nmatch,139,16,C6,Court 6,T6,Baseline Bandits,T17,Net Gains,,,,1:30 AM,scheduled,\nmatch,140,16,C7,Court 7,T7,Drop Shot Crew,T16,Rally Rebels,,,,1:30 AM,scheduled,\nmatch,141,16,C8,Court 8,T8,Paddle Pals,T15,Kitchen Dinks,,,,1:30 AM,scheduled,\nmatch,142,16,C9,Court 9,T9,Court Jesters,T14,Serve Aces,,,,1:30 AM,scheduled,\nmatch,143,16,C10,Court 10,T10,Spin Doctors,T13,Lob Legends,,,,1:30 AM,scheduled,\nmatch,144,16,C11,Court 11,T11,The Erne Squad,T12,Third Shot Mafia,,,,1:30 AM,scheduled,\nmatch,145,17,C3,Court 3,T1,Dink Dynasty,T2,Net Ninjas,,,,2:00 AM,scheduled,\nmatch,146,17,C4,Court 4,T3,Kitchen Kings,T18,Paddle Storm,,,,2:00 AM,scheduled,\nmatch,147,17,C5,Court 5,T4,Rally Racers,T17,Net Gains,,,,2:00 AM,scheduled,\nmatch,148,17,C6,Court 6,T5,Pickle Crushers,T16,Rally Rebels,,,,2:00 AM,scheduled,\nmatch,149,17,C7,Court 7,T6,Baseline Bandits,T15,Kitchen Dinks,,,,2:00 AM,scheduled,\nmatch,150,17,C8,Court 8,T7,Drop Shot Crew,T14,Serve Aces,,,,2:00 AM,scheduled,\nmatch,151,17,C9,Court 9,T8,Paddle Pals,T13,Lob Legends,,,,2:00 AM,scheduled,\nmatch,152,17,C10,Court 10,T9,Court Jesters,T12,Third Shot Mafia,,,,2:00 AM,scheduled,\nmatch,153,17,C11,Court 11,T10,Spin Doctors,T11,The Erne Squad,,,,2:00 AM,scheduled,\nsection,team_id,team_name,byes,matches_played,wins,losses,points,possible_points,average,win_percentage,rank,notes\nstanding,T1,Dink Dynasty,0,3,3,0,33,33,11.0,100.0,1,\nstanding,T9,Court Jesters,0,3,2,1,24,33,8.0,72.7,2,\nstanding,T2,Net Ninjas,0,3,2,1,23,33,7.7,69.7,3,\nstanding,T3,Kitchen Kings,0,3,2,1,23,33,7.7,69.7,4,\nstanding,T4,Rally Racers,0,3,2,1,23,33,7.7,69.7,5,\nstanding,T5,Pickle Crushers,0,3,2,1,23,33,7.7,69.7,6,\nstanding,T6,Baseline Bandits,0,3,2,1,23,33,7.7,69.7,7,\nstanding,T7,Drop Shot Crew,0,3,2,1,23,33,7.7,69.7,8,\nstanding,T14,Serve Aces,0,3,2,1,22,33,7.3,66.7,9,\nstanding,T15,Kitchen Dinks,0,3,2,1,22,33,7.3,66.7,10,\nstanding,T18,Paddle Storm,0,3,1,2,20,33,6.7,60.6,11,\nstanding,T8,Paddle Pals,0,3,1,2,14,33,4.7,42.4,12,\nstanding,T10,Spin Doctors,0,3,1,2,13,33,4.3,39.4,13,\nstanding,T11,The Erne Squad,0,3,1,2,13,33,4.3,39.4,14,\nstanding,T12,Third Shot Mafia,0,3,1,2,13,33,4.3,39.4,15,\nstanding,T13,Lob Legends,0,3,1,2,13,33,4.3,39.4,16,\nstanding,T16,Rally Rebels,0,3,0,3,12,33,4.0,36.4,17,\nstanding,T17,Net Gains,0,3,0,3,11,33,3.7,33.3,18,\nsection,rank,team_id,team_name,points,percentage,notes\ntop_team,1,T1,Dink Dynasty,33,100.0,\ntop_team,2,T9,Court Jesters,24,72.7,\ntop_team,3,T2,Net Ninjas,23,69.7,\ntop_team,4,T3,Kitchen Kings,23,69.7,\nsection,paper_size,orientation,include_scores,include_standings,include_qr_link,include_picklecue_branding,notes\nprint_settings,tabloid_11x17,landscape,true,true,true,true,\n";
+    })();
+    </script>
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "52751bf5bb9b42f4b7e20ccaab706ab5"}'></script>
+</body>
+</html>
