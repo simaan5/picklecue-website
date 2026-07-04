@@ -133,3 +133,95 @@ table.live-table { width: 100%; border-collapse: collapse; font-size: 14px; min-
 @media (max-width: 560px) {
     .match-list { grid-template-columns: 1fr; }
 }
+
+/* ── BracketView ─────────────────────────────────────────────────────────── */
+.bv-scroll { overflow-x: auto; padding: 8px 0 24px; -webkit-overflow-scrolling: touch; }
+.bv-tree { display: flex; align-items: stretch; gap: 0; min-width: min-content; }
+.bv-side-title { font-family: var(--f-display); font-size: 1.1rem; margin: 18px 0 6px; }
+.bv-col { display: flex; flex-direction: column; min-width: 220px; }
+.bv-round-title { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); padding: 0 26px 10px 8px; position: sticky; top: 0; }
+.bv-grid { display: grid; flex: 1; }
+.bv-cell { display: flex; align-items: center; position: relative; padding: 6px 26px 6px 8px; }
+.bv-loose { display: flex; flex-direction: column; gap: 12px; flex: 1; justify-content: space-around; padding: 0 26px 0 8px; }
+
+/* Connector elbows (perfect trees only): out-stub on the right of feeders,
+   in-stub + vertical join on the left of receivers. */
+.bv-perfect .bv-cell.bv-has-out::after {
+    content: ""; position: absolute; right: 0; top: 50%; width: 26px; height: 2px;
+    background: var(--rule-strong);
+}
+.bv-perfect .bv-cell.bv-has-in::before {
+    content: ""; position: absolute; left: -0px; top: 50%; width: 8px; height: 2px;
+    background: var(--rule-strong); transform: translateX(-8px);
+}
+.bv-perfect .bv-cell.bv-has-in { margin-left: 8px; }
+.bv-perfect .bv-cell.bv-has-in .bv-join {
+    position: absolute; left: -8px; width: 2px; background: var(--rule-strong);
+}
+/* Vertical joins drawn with an extra pseudo on odd/even feeders. */
+.bv-perfect .bv-cell.bv-has-out:nth-child(odd)  { --join-dir: down; }
+.bv-perfect .bv-cell.bv-has-out:nth-child(odd)::before {
+    content: ""; position: absolute; right: 0; top: 50%; width: 2px; height: 50%;
+    background: var(--rule-strong);
+}
+.bv-perfect .bv-cell.bv-has-out:nth-child(even)::before {
+    content: ""; position: absolute; right: 0; bottom: 50%; width: 2px; height: 50%;
+    background: var(--rule-strong);
+}
+
+/* Cards */
+.bv-card { flex: 1; border: 1px solid var(--rule-strong); border-radius: 12px; background: var(--paper-2); padding: 8px 10px; min-width: 0; transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+.bv-card.bv-live { border-color: var(--live); box-shadow: 0 0 0 1px var(--live); }
+.bv-card.bv-bye { opacity: 0.55; }
+.bv-tappable { cursor: pointer; }
+.bv-tappable:hover { border-color: var(--court); }
+.bv-row { display: flex; align-items: center; gap: 7px; padding: 3px 0; font-size: 13.5px; min-width: 0; }
+.bv-row .bv-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); font-weight: 550; }
+.bv-row.bv-won .bv-name { color: var(--court); font-weight: 700; }
+.bv-row.bv-lost .bv-name { color: var(--ink-mute); font-weight: 450; }
+.bv-row.bv-tbd .bv-name { color: var(--ink-mute); font-style: italic; font-weight: 400; }
+.bv-seed { font-family: var(--f-mono); font-size: 10px; color: var(--ink-mute); width: 16px; text-align: right; flex-shrink: 0; }
+.bv-check { color: var(--court); font-weight: 700; font-size: 12px; }
+.bv-pts { font-family: var(--f-mono); font-size: 15px; font-weight: 700; min-width: 20px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+.bv-row.bv-won .bv-pts { color: var(--court); }
+.bv-meta { font-size: 10.5px; color: var(--ink-mute); padding-top: 4px; border-top: 1px solid var(--rule); margin-top: 4px; display: flex; gap: 6px; align-items: center; font-family: var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.bv-status.bv-live { color: var(--live); font-weight: 700; animation: pulse 1.6s infinite; }
+.bv-status.bv-ready { color: var(--court); }
+
+/* Champion */
+.bv-champion-col { justify-content: center; min-width: 200px; }
+.bv-champion { border: 2px solid var(--court); border-radius: 16px; padding: 20px 18px; text-align: center; background: var(--paper-2); animation: champPop 0.6s var(--ease); }
+.bv-trophy { font-size: 34px; margin-bottom: 6px; }
+.bv-champ-name { font-family: var(--f-display); font-size: 1.15rem; font-weight: 650; color: var(--court); }
+.bv-champ-score { font-family: var(--f-mono); font-size: 12px; color: var(--ink-mute); margin-top: 4px; }
+@keyframes champPop { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+/* TV / projector mode */
+body.bv-tv .live-head, body.bv-tv .foot-note, body.bv-tv .tabs, body.bv-tv .event-meta { display: none; }
+body.bv-tv .event-head { border-bottom: 0; padding-bottom: 0; }
+body.bv-tv .bv-col { min-width: 260px; }
+body.bv-tv .bv-row { font-size: 16px; }
+body.bv-tv .bv-pts { font-size: 19px; }
+body.bv-tv { font-size: 18px; }
+
+/* ── Avatars (parity with the app's ProfileAvatarView) ──────────────────── */
+.pc-avatar { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; object-fit: cover; background: var(--paper); border: 1.5px solid var(--rule-strong); flex-shrink: 0; vertical-align: middle; }
+.pc-avatar-initials { font-family: var(--f-mono); font-weight: 700; color: var(--ink-soft); background: var(--paper); letter-spacing: 0.02em; }
+.pc-avatar-emoji { background: var(--paper); }
+.pc-avatar-stack { display: inline-flex; align-items: center; flex-shrink: 0; }
+.pc-avatar-stack .pc-avatar + .pc-avatar { margin-left: -8px; }
+
+/* ── Responsive bracket modes ───────────────────────────────────────────── */
+/* Fit mode: the tree is scaled to the container — never a page h-scrollbar. */
+.bv-viewport { overflow: hidden; position: relative; }
+.bv-viewport .bv-tree { transform-origin: top left; }
+.bv-fitnote { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute); text-align: right; padding: 4px 0 10px; }
+
+/* Vertical (mobile portrait) bracket */
+.bvv { display: flex; flex-direction: column; gap: 4px; }
+.bvv-round { padding: 10px 0 2px; }
+.bvv-round > h3 { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 8px; }
+.bvv-round .bv-card { margin-bottom: 10px; }
+.bvv .bv-champion { margin: 6px 0 14px; }
+.bvv .bv-row { font-size: 15px; padding: 5px 0; }
+.bvv .bv-pts { font-size: 17px; }

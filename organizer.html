@@ -26,12 +26,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="assets/live-core.js"></script>
+    <script src="assets/bracket.js"></script>
     <script>
     (function () {
         'use strict';
         var PC = window.PCLive, esc = PC.esc, db = PC.client;
         var main = document.getElementById('main');
-        var me = null, view = { mode: 'list' }, snap = null, unsub = null;
+        var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches';
 
         document.getElementById('signOutBtn').addEventListener('click', async function () {
             await PC.signOut(); location.reload();
@@ -154,8 +155,8 @@
             var kind = view.kind, isT = kind === 't';
             var head = isT ? snap.tournament : snap.league;
             var members = isT ? snap.participants : snap.members;
-            var nameMap = {};
-            (members || []).forEach(function (m) { nameMap[m.id] = m.name || 'Player'; });
+            var nameMap = {}, objMap = {};
+            (members || []).forEach(function (m) { nameMap[m.id] = m.name || 'Player'; objMap[m.id] = m; });
 
             var liveUrl = location.origin + '/live.html?' + kind + '=' + view.id;
             var html = '<div class="event-head">' +
@@ -166,7 +167,13 @@
                 '<a class="btn ghost" href="' + liveUrl + '" target="_blank" rel="noopener">Open live page</a>' +
                 '<button class="btn ghost" id="copyBtn">Copy live link</button>' +
                 '<a class="btn ghost" href="scorekeeper.html?' + kind + '=' + view.id + '">Scorekeeper mode</a>' +
-                '</div><p class="ok" id="barMsg"></p></div>';
+                '</div>' +
+                (isT && window.PCBracket.isElimination(snap)
+                    ? '<div class="tabs" role="tablist">' +
+                      '<button class="tab" data-etab="matches" aria-selected="' + (eventTab === 'matches') + '">Matches</button>' +
+                      '<button class="tab" data-etab="bracket" aria-selected="' + (eventTab === 'bracket') + '">Bracket</button></div>'
+                    : '') +
+                '<p class="ok" id="barMsg"></p></div>';
 
             var rows = (snap.matches || []).map(function (m) {
                 var id1 = isT ? m.participant1_id : m.team1_member_id;
@@ -191,14 +198,20 @@
                         '<button class="btn primary" data-complete="' + m.id + '">Complete</button>';
                 }
                 return '<div class="event-row"><div class="grow">' +
-                    '<div class="title">' + esc(n1) + ' vs ' + esc(n2) + '</div>' +
+                    '<div class="title">' + window.PCLive.avatarStack((objMap[id1] || {}).members, 18) + ' ' + esc(n1) +
+                    ' vs ' + window.PCLive.avatarStack((objMap[id2] || {}).members, 18) + ' ' + esc(n2) + '</div>' +
                     '<div class="sub">' + (m.week ? 'Week ' + m.week : 'Round ' + (m.round || '?')) +
                     (m.court ? ' · ' + esc(m.court) : '') + ' · ' + esc(PC.statusLabel(m.status)) +
                     (live ? ' · live ' + live.score1 + '–' + live.score2 : '') + '</div></div>' +
                     '<div>' + controls + '</div></div>';
             });
 
-            html += '<section class="section"><h2>Matches <span class="count">' + rows.length + '</span></h2>' + (rows.join('') || '<p class="sub">No matches yet — generate the schedule in the app.</p>') + '</section>';
+            if (eventTab === 'bracket' && !(isT && window.PCBracket.isElimination(snap))) eventTab = 'matches';
+            if (eventTab === 'bracket') {
+                html += '<section class="section"><div id="bvPanel"></div><div id="bvHost"></div></section>';
+            } else {
+                html += '<section class="section"><h2>Matches <span class="count">' + rows.length + '</span></h2>' + (rows.join('') || '<p class="sub">No matches yet — generate the schedule in the app.</p>') + '</section>';
+            }
             html += '<section class="section"><h2>Scorekeepers</h2>' +
                 '<p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:10px">Assigned staff can enter scores for this event from the scorekeeper page without full organizer access. Assign and remove staff in the app under the event’s Players/Members screen.</p>' +
                 '</section>';
@@ -206,6 +219,15 @@
 
             main.innerHTML = html;
 
+            Array.prototype.forEach.call(main.querySelectorAll('[data-etab]'), function (b) {
+                b.addEventListener('click', function () { eventTab = b.dataset.etab; renderEvent(); });
+            });
+            if (eventTab === 'bracket') {
+                window.PCBracket.render(document.getElementById('bvHost'), snap, {
+                    interactive: true,
+                    onMatch: function (mid) { showBracketPanel(mid, nameMap); },
+                });
+            }
             document.getElementById('backBtn').addEventListener('click', function () {
                 if (unsub) { unsub(); unsub = null; }
                 view = { mode: 'list' };
@@ -236,6 +258,72 @@
                 var parts = val.split('-').map(function (x) { return parseInt(x.trim(), 10); });
                 if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) throw new Error('Enter the score as two numbers, like 11-8.');
                 return PC.recordScoreEvent({ scope: scopeName(), matchId: mid, eventType: 'match_completed', score1: parts[0], score2: parts[1], note: 'organizer web correction' });
+            });
+        }
+
+        // Control panel for a match tapped on the organizer bracket.
+        function showBracketPanel(mid, nameMap) {
+            var m = (snap.matches || []).find(function (x) { return x.id === mid; });
+            if (!m) return;
+            var isT = view.kind === 't';
+            var id1 = isT ? m.participant1_id : m.team1_member_id;
+            var id2 = isT ? m.participant2_id : m.team2_member_id;
+            var n1 = id1 ? (nameMap[id1] || 'Player') : 'TBD';
+            var n2 = id2 ? (nameMap[id2] || 'Player') : 'TBD';
+            var live = m.live && m.status !== 'completed' ? m.live : null;
+            var ready = id1 && id2;
+            var panel = document.getElementById('bvPanel');
+            var controls;
+            if (m.status === 'completed') {
+                controls = '<span class="sub">Final: ' + esc(m.score_summary || '') + '</span> ' +
+                    (isT ? '<button class="btn ghost" data-correct="' + m.id + '">Correct</button>' : '');
+            } else if (!ready) {
+                controls = '<span class="sub">Waiting on earlier results</span>';
+            } else {
+                controls = '<span class="scorebox">' +
+                    '<input type="number" min="0" inputmode="numeric" id="s1-' + m.id + '" value="' + (live ? live.score1 : '') + '" placeholder="0">' +
+                    '<span>–</span>' +
+                    '<input type="number" min="0" inputmode="numeric" id="s2-' + m.id + '" value="' + (live ? live.score2 : '') + '" placeholder="0"></span> ' +
+                    (m.status !== 'in_progress' ? '<button class="btn ghost" data-start="' + m.id + '">Start</button> ' : '') +
+                    '<button class="btn ghost" data-save="' + m.id + '">Update</button> ' +
+                    '<button class="btn primary" data-complete="' + m.id + '">Complete</button>';
+            }
+            var court = '<span class="scorebox"><input type="text" id="court-' + m.id + '" value="' + esc(m.court || '') + '" placeholder="Court" style="width:90px"></span> ' +
+                '<button class="btn ghost" data-court="' + m.id + '">Set court</button>';
+            panel.innerHTML = '<div class="event-row"><div class="grow">' +
+                '<div class="title">' + esc(n1) + ' vs ' + esc(n2) + '</div>' +
+                '<div class="sub">Round ' + (m.round || '?') + (m.court ? ' · ' + esc(m.court) : '') + ' · ' + esc(PC.statusLabel(m.status)) + '</div></div>' +
+                '<div>' + controls + ' ' + court + '</div></div>';
+            wire('[data-start]', 'start', function (id) {
+                return PC.recordScoreEvent({ scope: scopeName(), matchId: id, eventType: 'match_started' });
+            });
+            wire('[data-save]', 'save', function (id) {
+                var s = scores(id);
+                return PC.recordScoreEvent({ scope: scopeName(), matchId: id, eventType: 'point_added', score1: s[0], score2: s[1] });
+            });
+            wire('[data-complete]', 'complete', function (id) {
+                var s = scores(id);
+                if (s[0] === s[1]) throw new Error('A completed match needs a winner.');
+                if (!confirm('Mark this match final at ' + s[0] + '\u2013' + s[1] + '? The winner advances immediately.')) return Promise.resolve(null);
+                return PC.recordScoreEvent({ scope: scopeName(), matchId: id, eventType: 'match_completed', score1: s[0], score2: s[1] });
+            });
+            wire('[data-correct]', 'correct', function (id) {
+                var val = prompt('Corrected final score (e.g. 11-8). Changing the winner repairs the next round.');
+                if (!val) return Promise.resolve(null);
+                var parts = val.split('-').map(function (x) { return parseInt(x.trim(), 10); });
+                if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) throw new Error('Enter the score as two numbers, like 11-8.');
+                return PC.recordScoreEvent({ scope: scopeName(), matchId: id, eventType: 'match_completed', score1: parts[0], score2: parts[1], note: 'organizer web correction' });
+            });
+            wire('[data-court]', 'set court', function (id) {
+                // Court assignment is a plain RLS-gated update (same field the
+                // app writes); scorer-only per tournament_matches UPDATE policy.
+                var value = document.getElementById('court-' + id).value.trim() || null;
+                var table = view.kind === 't' ? 'tournament_matches' : 'league_matches';
+                var patch = view.kind === 't' ? { court_label: value } : { notes: value };
+                return db.from(table).update(patch).eq('id', id).select('id').then(function (r) {
+                    if (r.error) throw r.error;
+                    if (!r.data || !r.data.length) throw new Error('Not allowed to assign courts for this event.');
+                });
             });
         }
 
