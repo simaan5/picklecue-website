@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light dark;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
+    <title>Organizer · PickleCue</title>
+    <meta name="description" content="Run your PickleCue tournaments and leagues from the web — live scores, match control, and scorekeepers.">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="assets/live.css">
+</head>
+<body>
+    <header class="live-head">
+        <div class="page live-head-row">
+            <a href="/" class="live-logo"><img src="images/app-icon-120.png" alt="">PickleCue <span class="kicker" style="margin-left:6px">Organizer</span></a>
+            <span class="conn" id="conn" hidden><span class="dot"></span><span id="connLabel">Live</span></span>
+            <button class="btn ghost" id="signOutBtn" hidden style="margin-left:auto">Sign out</button>
+        </div>
+    </header>
+
+    <main class="page" id="main"><div class="state"><h2>Loading…</h2></div></main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="assets/live-core.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var PC = window.PCLive, esc = PC.esc, db = PC.client;
+        var main = document.getElementById('main');
+        var me = null, view = { mode: 'list' }, snap = null, unsub = null;
+
+        document.getElementById('signOutBtn').addEventListener('click', async function () {
+            await PC.signOut(); location.reload();
+        });
+
+        function setConn(state) {
+            var el = document.getElementById('conn');
+            el.hidden = false;
+            el.className = 'conn' + (state === 'live' ? ' live' : '');
+            document.getElementById('connLabel').textContent = state === 'live' ? 'Live' : 'Reconnecting…';
+        }
+
+        // ---- auth -------------------------------------------------------------
+
+        function renderLogin() {
+            main.innerHTML =
+                '<div class="auth-card"><h1>Organizer sign in</h1>' +
+                '<p>Use your PickleCue account. Organizer tools are for event organizers and assigned staff — creating events is part of PickleCue Pro.</p>' +
+                '<div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div>' +
+                '<div class="field"><label>Password</label><input id="pw" type="password" autocomplete="current-password"></div>' +
+                '<button class="btn primary block" id="loginBtn">Sign in</button>' +
+                '<p class="err" id="loginErr"></p>' +
+                '<p style="font-size:12.5px;color:var(--ink-mute);margin-top:10px">Signed up with Apple or Google? Set a password in the app under Settings › Account, or manage your events in the app.</p></div>';
+            document.getElementById('loginBtn').addEventListener('click', doLogin);
+            document.getElementById('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+        }
+
+        async function doLogin() {
+            var btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            document.getElementById('loginErr').textContent = '';
+            try {
+                me = await PC.signIn(document.getElementById('email').value.trim(), document.getElementById('pw').value);
+                await loadList();
+            } catch (e) {
+                document.getElementById('loginErr').textContent = e.message || 'Sign in failed.';
+                btn.disabled = false;
+            }
+        }
+
+        // ---- my events ----------------------------------------------------------
+
+        async function loadList() {
+            document.getElementById('signOutBtn').hidden = false;
+            main.innerHTML = '<div class="state"><h2>Loading your events…</h2></div>';
+            var uid = me.id;
+            var results = await Promise.all([
+                db.from('tournaments').select('id,name,status,start_date,is_public').eq('organizer_id', uid).order('start_date', { ascending: false }).limit(50),
+                db.from('leagues').select('id,name,status,start_date,is_public').eq('created_by', uid).order('start_date', { ascending: false }).limit(50),
+                db.from('tournament_staff').select('tournament_id').eq('user_id', uid),
+                db.from('league_staff').select('league_id').eq('user_id', uid),
+                PC.isPro(),
+            ]);
+            var myT = results[0].data || [], myL = results[1].data || [];
+            var staffT = (results[2].data || []).map(function (r) { return r.tournament_id; });
+            var staffL = (results[3].data || []).map(function (r) { return r.league_id; });
+            var pro = results[4];
+
+            // Events where I'm staff but not organizer.
+            var extraT = staffT.length ? (await db.from('tournaments').select('id,name,status,start_date,is_public').in('id', staffT)).data || [] : [];
+            var extraL = staffL.length ? (await db.from('leagues').select('id,name,status,start_date,is_public').in('id', staffL)).data || [] : [];
+            var mineIds = {};
+            myT.concat(myL).forEach(function (e) { mineIds[e.id] = true; });
+
+            if (!myT.length && !myL.length && !extraT.length && !extraL.length) {
+                main.innerHTML = '<div class="state"><h2>' + (pro ? 'No events yet' : 'Organizer tools are part of PickleCue Pro') + '</h2>' +
+                    '<p>' + (pro
+                        ? 'Create a tournament or league in the PickleCue app — it will appear here, ready to run live from the web.'
+                        : 'Create your first tournament or league in the PickleCue app with a Pro subscription, then run it live from here. Scorekeepers assigned by an organizer can also sign in on this page.') +
+                    '</p></div>';
+                return;
+            }
+
+            function row(e, kind, roleLabel) {
+                return '<div class="event-row"><div class="grow">' +
+                    '<div class="title">' + esc(e.name) + '</div>' +
+                    '<div class="sub">' + (kind === 't' ? 'Tournament' : 'League') + ' · ' + esc(PC.statusLabel(e.status)) +
+                    (e.start_date ? ' · ' + esc(PC.fmtDate(e.start_date)) : '') +
+                    (e.is_public ? ' · Public' : ' · Private') + (roleLabel ? ' · ' + roleLabel : '') + '</div></div>' +
+                    '<button class="btn" data-open="' + kind + ':' + e.id + '">Manage</button>' +
+                    '<a class="btn ghost" href="live.html?' + kind + '=' + e.id + '" target="_blank" rel="noopener">Live page</a></div>';
+            }
+
+            var html = '<section class="section"><h2>Your events</h2>' +
+                myT.map(function (e) { return row(e, 't'); }).join('') +
+                myL.map(function (e) { return row(e, 'l'); }).join('') + '</section>';
+            var staffRows = extraT.filter(function (e) { return !mineIds[e.id]; }).map(function (e) { return row(e, 't', 'Scorekeeper'); })
+                .concat(extraL.filter(function (e) { return !mineIds[e.id]; }).map(function (e) { return row(e, 'l', 'Scorekeeper'); }));
+            if (staffRows.length) html += '<section class="section"><h2>Assigned to you</h2>' + staffRows.join('') + '</section>';
+            html += '<p class="foot-note">Creating and configuring events happens in the PickleCue app. This dashboard runs them live: scores, match control, corrections, and scorekeepers.</p>';
+            main.innerHTML = html;
+
+            Array.prototype.forEach.call(main.querySelectorAll('[data-open]'), function (b) {
+                b.addEventListener('click', function () {
+                    var parts = b.dataset.open.split(':');
+                    openEvent(parts[0], parts[1]);
+                });
+            });
+        }
+
+        // ---- event control room ---------------------------------------------------
+
+        async function openEvent(kind, id) {
+            view = { mode: 'event', kind: kind, id: id };
+            if (unsub) { unsub(); unsub = null; }
+            await refetchEvent();
+            if (!snap) return;
+            var head = kind === 't' ? snap.tournament : snap.league;
+            unsub = PC.subscribeLive(kind, id, head.is_public === true, refetchEvent, setConn);
+        }
+
+        async function refetchEvent() {
+            if (view.mode !== 'event') return;
+            snap = view.kind === 't' ? await PC.tournamentSnapshot(view.id) : await PC.leagueSnapshot(view.id);
+            if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
+            renderEvent();
+        }
+
+        function renderEvent() {
+            var kind = view.kind, isT = kind === 't';
+            var head = isT ? snap.tournament : snap.league;
+            var members = isT ? snap.participants : snap.members;
+            var nameMap = {};
+            (members || []).forEach(function (m) { nameMap[m.id] = m.name || 'Player'; });
+
+            var liveUrl = location.origin + '/live.html?' + kind + '=' + view.id;
+            var html = '<div class="event-head">' +
+                '<span class="kicker">Control room</span>' +
+                '<h1>' + esc(head.name) + '</h1>' +
+                '<div class="bar">' +
+                '<button class="btn ghost" id="backBtn">← All events</button>' +
+                '<a class="btn ghost" href="' + liveUrl + '" target="_blank" rel="noopener">Open live page</a>' +
+                '<button class="btn ghost" id="copyBtn">Copy live link</button>' +
+                '<a class="btn ghost" href="scorekeeper.html?' + kind + '=' + view.id + '">Scorekeeper mode</a>' +
+                '</div><p class="ok" id="barMsg"></p></div>';
+
+            var rows = (snap.matches || []).map(function (m) {
+                var id1 = isT ? m.participant1_id : m.team1_member_id;
+                var id2 = isT ? m.participant2_id : m.team2_member_id;
+                var n1 = id1 ? (nameMap[id1] || 'Player') : 'TBD';
+                var n2 = id2 ? (nameMap[id2] || 'Player') : 'TBD';
+                var live = m.live && m.status !== 'completed' ? m.live : null;
+                var ready = id1 && id2;
+                var controls;
+                if (m.status === 'completed') {
+                    controls = '<span class="sub">Final: ' + esc(m.score_summary || '') + '</span> ' +
+                        (isT ? '<button class="btn ghost" data-correct="' + m.id + '">Correct</button>' : '');
+                } else if (!ready) {
+                    controls = '<span class="sub">Waiting on earlier results</span>';
+                } else {
+                    controls = '<span class="scorebox">' +
+                        '<input type="number" min="0" inputmode="numeric" id="s1-' + m.id + '" value="' + (live ? live.score1 : '') + '" placeholder="0">' +
+                        '<span>–</span>' +
+                        '<input type="number" min="0" inputmode="numeric" id="s2-' + m.id + '" value="' + (live ? live.score2 : '') + '" placeholder="0"></span> ' +
+                        (m.status !== 'in_progress' ? '<button class="btn ghost" data-start="' + m.id + '">Start</button> ' : '') +
+                        '<button class="btn ghost" data-save="' + m.id + '">Update</button> ' +
+                        '<button class="btn primary" data-complete="' + m.id + '">Complete</button>';
+                }
+                return '<div class="event-row"><div class="grow">' +
+                    '<div class="title">' + esc(n1) + ' vs ' + esc(n2) + '</div>' +
+                    '<div class="sub">' + (m.week ? 'Week ' + m.week : 'Round ' + (m.round || '?')) +
+                    (m.court ? ' · ' + esc(m.court) : '') + ' · ' + esc(PC.statusLabel(m.status)) +
+                    (live ? ' · live ' + live.score1 + '–' + live.score2 : '') + '</div></div>' +
+                    '<div>' + controls + '</div></div>';
+            });
+
+            html += '<section class="section"><h2>Matches <span class="count">' + rows.length + '</span></h2>' + (rows.join('') || '<p class="sub">No matches yet — generate the schedule in the app.</p>') + '</section>';
+            html += '<section class="section"><h2>Scorekeepers</h2>' +
+                '<p style="font-size:13.5px;color:var(--ink-mute);margin-bottom:10px">Assigned staff can enter scores for this event from the scorekeeper page without full organizer access. Assign and remove staff in the app under the event’s Players/Members screen.</p>' +
+                '</section>';
+            html += '<p class="foot-note">Every score change is written to a tamper-proof audit log and appears instantly on the live page, in the app, and here.</p>';
+
+            main.innerHTML = html;
+
+            document.getElementById('backBtn').addEventListener('click', function () {
+                if (unsub) { unsub(); unsub = null; }
+                view = { mode: 'list' };
+                document.getElementById('conn').hidden = true;
+                loadList();
+            });
+            document.getElementById('copyBtn').addEventListener('click', function () {
+                navigator.clipboard.writeText(liveUrl).then(function () {
+                    document.getElementById('barMsg').textContent = 'Live link copied — share it or print it as a QR code.';
+                });
+            });
+            wire('[data-start]', 'start', function (mid) {
+                return PC.recordScoreEvent({ scope: scopeName(), matchId: mid, eventType: 'match_started' });
+            });
+            wire('[data-save]', 'save', function (mid) {
+                var s = scores(mid);
+                return PC.recordScoreEvent({ scope: scopeName(), matchId: mid, eventType: 'point_added', score1: s[0], score2: s[1] });
+            });
+            wire('[data-complete]', 'complete', function (mid) {
+                var s = scores(mid);
+                if (s[0] === s[1]) throw new Error('A completed match needs a winner — scores can’t be tied.');
+                if (!confirm('Mark this match final at ' + s[0] + '–' + s[1] + '? The bracket/standings update immediately.')) return Promise.resolve(null);
+                return PC.recordScoreEvent({ scope: scopeName(), matchId: mid, eventType: 'match_completed', score1: s[0], score2: s[1] });
+            });
+            wire('[data-correct]', 'correct', function (mid) {
+                var val = prompt('Corrected final score (e.g. 11-8). To change the winner, enter the true score and it will be applied as a new final.');
+                if (!val) return Promise.resolve(null);
+                var parts = val.split('-').map(function (x) { return parseInt(x.trim(), 10); });
+                if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) throw new Error('Enter the score as two numbers, like 11-8.');
+                return PC.recordScoreEvent({ scope: scopeName(), matchId: mid, eventType: 'match_completed', score1: parts[0], score2: parts[1], note: 'organizer web correction' });
+            });
+        }
+
+        function scopeName() { return view.kind === 't' ? 'tournament' : 'league'; }
+        function scores(mid) {
+            return [parseInt(document.getElementById('s1-' + mid).value, 10) || 0,
+                    parseInt(document.getElementById('s2-' + mid).value, 10) || 0];
+        }
+        function wire(selector, label, fn) {
+            Array.prototype.forEach.call(main.querySelectorAll(selector), function (b) {
+                b.addEventListener('click', async function () {
+                    var mid = b.dataset.start || b.dataset.save || b.dataset.complete || b.dataset.correct;
+                    b.disabled = true;
+                    try {
+                        await fn(mid);
+                        await refetchEvent();
+                    } catch (e) {
+                        alert(e.message || ('Couldn’t ' + label + ' — try again.'));
+                        b.disabled = false;
+                    }
+                });
+            });
+        }
+
+        // ---- boot -------------------------------------------------------------
+
+        (async function init() {
+            me = await PC.currentUser();
+            if (!me) renderLogin();
+            else await loadList();
+        })();
+    })();
+    </script>
+</body>
+</html>

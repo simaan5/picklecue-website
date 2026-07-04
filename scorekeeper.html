@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light dark;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
+    <title>Scorekeeper · PickleCue</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="assets/live.css">
+</head>
+<body>
+    <header class="live-head">
+        <div class="page live-head-row">
+            <a href="/" class="live-logo"><img src="images/app-icon-120.png" alt="">Scorekeeper</a>
+            <span class="conn" id="conn" hidden><span class="dot"></span><span id="connLabel">Live</span></span>
+        </div>
+    </header>
+
+    <main class="page" id="main"><div class="state"><h2>Loading…</h2></div></main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="assets/live-core.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var PC = window.PCLive, esc = PC.esc, db = PC.client;
+        var params = new URLSearchParams(location.search);
+        var kind = params.get('t') ? 't' : (params.get('l') ? 'l' : null);
+        var eventId = params.get('t') || params.get('l');
+        var scope = kind === 't' ? 'tournament' : 'league';
+        var main = document.getElementById('main');
+        var snap = null, matchId = null, local = { s1: 0, s2: 0 }, unsub = null, busy = false;
+
+        if (!kind || !/^[0-9a-f-]{36}$/i.test(eventId || '')) {
+            main.innerHTML = '<div class="state"><h2>Missing event link</h2><p>Open this page from the organizer dashboard or the link your organizer sent you.</p></div>';
+            return;
+        }
+
+        function setConn(state) {
+            var el = document.getElementById('conn');
+            el.hidden = false;
+            el.className = 'conn' + (state === 'live' ? ' live' : '');
+            document.getElementById('connLabel').textContent = state === 'live' ? 'Live' : 'Reconnecting…';
+        }
+
+        function renderLogin() {
+            main.innerHTML =
+                '<div class="auth-card"><h1>Scorekeeper sign in</h1>' +
+                '<p>Sign in with your PickleCue account. You can score matches for events you organize or are assigned to.</p>' +
+                '<div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div>' +
+                '<div class="field"><label>Password</label><input id="pw" type="password" autocomplete="current-password"></div>' +
+                '<button class="btn primary block" id="loginBtn">Sign in</button><p class="err" id="loginErr"></p></div>';
+            document.getElementById('loginBtn').addEventListener('click', async function () {
+                this.disabled = true;
+                document.getElementById('loginErr').textContent = '';
+                try {
+                    await PC.signIn(document.getElementById('email').value.trim(), document.getElementById('pw').value);
+                    await boot();
+                } catch (e) {
+                    document.getElementById('loginErr').textContent = e.message || 'Sign in failed.';
+                    this.disabled = false;
+                }
+            });
+        }
+
+        async function boot() {
+            main.innerHTML = '<div class="state"><h2>Checking your assignment…</h2></div>';
+            var check = await db.rpc(kind === 't' ? 'is_tournament_scorer' : 'is_league_scorer',
+                kind === 't' ? { p_tournament_id: eventId } : { p_league_id: eventId });
+            if (check.error || check.data !== true) {
+                main.innerHTML = '<div class="state"><h2>You’re not assigned to this event</h2>' +
+                    '<p>Ask the organizer to add you as a scorekeeper (in the app: event › Players › Staff).</p></div>';
+                return;
+            }
+            await refetch();
+            if (!snap) return;
+            var head = kind === 't' ? snap.tournament : snap.league;
+            unsub = PC.subscribeLive(kind, eventId, head.is_public === true, refetch, setConn);
+        }
+
+        async function refetch() {
+            snap = kind === 't' ? await PC.tournamentSnapshot(eventId) : await PC.leagueSnapshot(eventId);
+            if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
+            render();
+        }
+
+        function nameMap() {
+            var map = {};
+            ((kind === 't' ? snap.participants : snap.members) || []).forEach(function (m) { map[m.id] = m.name || 'Player'; });
+            return map;
+        }
+        function sides(m) {
+            return kind === 't' ? [m.participant1_id, m.participant2_id] : [m.team1_member_id, m.team2_member_id];
+        }
+
+        function render() {
+            var names = nameMap();
+            var head = kind === 't' ? snap.tournament : snap.league;
+            var open = (snap.matches || []).filter(function (m) {
+                var s = sides(m);
+                return m.status !== 'completed' && m.status !== 'bye' && s[0] && s[1];
+            });
+            var current = matchId ? open.find(function (m) { return m.id === matchId; }) : null;
+
+            if (!current) {
+                matchId = null;
+                var rows = open.map(function (m) {
+                    var s = sides(m);
+                    var live = m.live ? ' · ' + m.live.score1 + '–' + m.live.score2 : '';
+                    return '<div class="event-row"><div class="grow">' +
+                        '<div class="title">' + esc(names[s[0]]) + ' vs ' + esc(names[s[1]]) + '</div>' +
+                        '<div class="sub">' + (m.week ? 'Week ' + m.week : 'Round ' + (m.round || '?')) +
+                        (m.court ? ' · ' + esc(m.court) : '') + ' · ' + esc(PC.statusLabel(m.status)) + live + '</div></div>' +
+                        '<button class="btn primary" data-pick="' + m.id + '">Score</button></div>';
+                }).join('');
+                main.innerHTML = '<div class="event-head"><span class="kicker">Scorekeeper</span><h1>' + esc(head.name) + '</h1></div>' +
+                    '<section class="section"><h2>Open matches <span class="count">' + open.length + '</span></h2>' +
+                    (rows || '<div class="state"><h2>Nothing to score right now</h2><p>New matches appear here the moment they’re ready.</p></div>') + '</section>';
+                Array.prototype.forEach.call(main.querySelectorAll('[data-pick]'), function (b) {
+                    b.addEventListener('click', function () {
+                        matchId = b.dataset.pick;
+                        var m = open.find(function (x) { return x.id === matchId; });
+                        local = m && m.live ? { s1: m.live.score1, s2: m.live.score2 } : { s1: 0, s2: 0 };
+                        render();
+                    });
+                });
+                return;
+            }
+
+            var s = sides(current);
+            if (current.live && !busy) local = { s1: current.live.score1, s2: current.live.score2 };
+            main.innerHTML =
+                '<div class="event-head"><span class="kicker">' + (current.week ? 'Week ' + current.week : 'Round ' + (current.round || '?')) +
+                (current.court ? ' · ' + esc(current.court) : '') + '</span>' +
+                '<h1 style="font-size:1.3rem">' + esc(head.name) + '</h1></div>' +
+                '<div class="sk-board">' + skSide(1, names[s[0]], local.s1) + skSide(2, names[s[1]], local.s2) + '</div>' +
+                '<div class="sk-actions">' +
+                (current.status !== 'in_progress' ? '<button class="btn" id="startBtn">Start match</button>' : '') +
+                '<button class="btn ghost" id="undoBtn">Undo last</button>' +
+                '<button class="btn primary" id="finalBtn">Submit final score</button>' +
+                '<button class="btn ghost" id="backBtn">All matches</button>' +
+                '</div><p class="err" id="skErr" style="text-align:center"></p>';
+
+            wireSk();
+        }
+
+        function skSide(n, name, score) {
+            return '<div class="sk-side"><div class="team">' + esc(name || 'Player') + '</div>' +
+                '<div class="score" id="score' + n + '">' + score + '</div>' +
+                '<div class="sk-buttons"><button class="sk-minus" data-minus="' + n + '" aria-label="Remove point">−1</button>' +
+                '<button class="sk-plus" data-plus="' + n + '" aria-label="Add point">+1</button></div></div>';
+        }
+
+        function err(msg) { document.getElementById('skErr').textContent = msg || ''; }
+
+        async function send(eventType, note) {
+            busy = true;
+            try {
+                var r = await PC.recordScoreEvent({
+                    scope: scope, matchId: matchId, eventType: eventType,
+                    score1: local.s1, score2: local.s2, note: note || null,
+                });
+                if (r && r.live) { local = { s1: r.live.score1, s2: r.live.score2 }; }
+                err('');
+            } catch (e) {
+                err(e.message || 'That didn’t save — check your connection and try again.');
+                await refetch(); // roll back optimistic UI to server truth
+            } finally {
+                busy = false;
+            }
+        }
+
+        function bump(side, delta) {
+            var key = 's' + side;
+            var next = Math.max(0, local[key] + delta);
+            if (next === local[key]) return;
+            local[key] = next;
+            document.getElementById('score' + side).textContent = next; // optimistic
+            send(delta > 0 ? 'point_added' : 'point_removed');
+        }
+
+        function wireSk() {
+            Array.prototype.forEach.call(main.querySelectorAll('[data-plus]'), function (b) {
+                b.addEventListener('click', function () { bump(parseInt(b.dataset.plus, 10), +1); });
+            });
+            Array.prototype.forEach.call(main.querySelectorAll('[data-minus]'), function (b) {
+                b.addEventListener('click', function () { bump(parseInt(b.dataset.minus, 10), -1); });
+            });
+            var startBtn = document.getElementById('startBtn');
+            if (startBtn) startBtn.addEventListener('click', async function () {
+                startBtn.disabled = true;
+                await send('match_started');
+                await refetch();
+            });
+            document.getElementById('undoBtn').addEventListener('click', async function () {
+                this.disabled = true;
+                try {
+                    var r = await PC.undoLastScoreEvent(scope, matchId);
+                    if (r && r.live) local = { s1: r.live.score1 ?? 0, s2: r.live.score2 ?? 0 };
+                    else local = { s1: 0, s2: 0 };
+                    render();
+                } catch (e) { err(e.message || 'Nothing to undo.'); this.disabled = false; }
+            });
+            document.getElementById('finalBtn').addEventListener('click', async function () {
+                if (local.s1 === local.s2) { err('A final score can’t be tied.'); return; }
+                if (!confirm('Submit final: ' + local.s1 + '–' + local.s2 + '? This locks the match.')) return;
+                this.disabled = true;
+                await send('match_completed', 'scorekeeper final');
+                matchId = null;
+                await refetch();
+            });
+            document.getElementById('backBtn').addEventListener('click', function () { matchId = null; render(); });
+        }
+
+        (async function init() {
+            var user = await PC.currentUser();
+            if (!user) renderLogin();
+            else await boot();
+        })();
+    })();
+    </script>
+</body>
+</html>
