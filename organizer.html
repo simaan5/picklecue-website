@@ -183,6 +183,7 @@
                 '<button class="btn ghost" id="copyBtn">Copy live link</button>' +
                 '<a class="btn ghost" href="scorekeeper.html?' + kind + '=' + view.id + '">Scorekeeper mode</a>' +
                 '<button class="btn ghost" id="qrBtn">QR codes &amp; posters</button>' +
+                '<button class="btn ghost" id="exportBtn">Export CSV</button>' +
                 '</div><div id="qrPanel" hidden></div>' +
                 '<div class="tabs" role="tablist">' +
                 '<button class="tab" data-etab="matches" aria-selected="' + (eventTab === 'matches') + '">Matches</button>' +
@@ -254,6 +255,7 @@
             }
             if (eventTab === 'checkin') wireCheckin();
             if (eventTab === 'register') wireRegistration();
+            document.getElementById('exportBtn').addEventListener('click', function () { exportMenu(head.name, nameMap); });
             document.getElementById('qrBtn').addEventListener('click', function () {
                 qrOpen = !qrOpen;
                 syncQrPanel(head.name);
@@ -526,6 +528,58 @@
                     if (r.error) alert(r.error.message); else refetchEvent();
                 });
             });
+        }
+
+        // ---- CSV exports (results / registrations / readiness) ----------------
+        function csvCell(v) {
+            v = v == null ? '' : String(v);
+            return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+        }
+        function downloadCsv(name, rows) {
+            var blob = new Blob([rows.map(function (r) { return r.map(csvCell).join(','); }).join('\n')],
+                { type: 'text/csv;charset=utf-8' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = name.replace(/[^a-z0-9]+/gi, '_') + '.csv';
+            a.click();
+            setTimeout(function () { URL.revokeObjectURL(a.href); }, 500);
+        }
+
+        async function exportMenu(eventName, nameMap) {
+            var choice = prompt('Export which CSV?\n1 = Match results\n2 = Registrations (incl. contact info)\n3 = Check-in / readiness\n\nType 1, 2, or 3:');
+            var isT = view.kind === 't';
+            var scope = isT ? 'tournament' : 'league';
+            if (choice === '1') {
+                var rows = [['round', 'match', 'court', 'side_1', 'side_2', 'score', 'winner', 'status']];
+                (snap.matches || []).forEach(function (m) {
+                    var id1 = isT ? m.participant1_id : m.team1_member_id;
+                    var id2 = isT ? m.participant2_id : m.team2_member_id;
+                    var w = isT ? m.winner_id : m.winner_member_id;
+                    rows.push([m.round || '', m.match_number || '', m.court || '',
+                        id1 ? (nameMap[id1] || '') : '', id2 ? (nameMap[id2] || '') : '',
+                        m.score_summary || '', w ? (nameMap[w] || '') : '', m.status || '']);
+                });
+                downloadCsv(eventName + '_results', rows);
+            } else if (choice === '2') {
+                var r = await db.from('event_registrations').select('*').eq('event_id', view.id).order('created_at');
+                if (r.error) { alert(r.error.message); return; }
+                var rows2 = [['name', 'status', 'email', 'phone', 'skill', 'dupr_id', 'partner_status', 'partner_name', 'notes', 'registered_at']];
+                (r.data || []).forEach(function (x) {
+                    rows2.push([x.display_name, x.status, x.email || '', x.phone || '', x.skill_level || '',
+                        x.dupr_id || '', x.partner_status, x.partner_name || '', x.notes || '', x.created_at]);
+                });
+                downloadCsv(eventName + '_registrations', rows2);
+            } else if (choice === '3') {
+                var rr = await db.rpc('event_readiness', { p_scope: scope, p_event_id: view.id });
+                if (rr.error) { alert(rr.error.message); return; }
+                var rows3 = [['name', 'seed', 'check_in', 'checked_in_at', 'waiver', 'payment', 'registration_status', 'note']];
+                (rr.data || []).forEach(function (x) {
+                    var m = (isT ? snap.participants : snap.members).find(function (y) { return y.id === x.id; }) || {};
+                    rows3.push([m.name || '', m.seed || '', x.check_in_status, x.checked_in_at || '',
+                        x.waiver_status, x.payment_status, x.registration_status || '', x.last_note || '']);
+                });
+                downloadCsv(eventName + '_readiness', rows3);
+            }
         }
 
         function syncQrPanel(eventName) {
