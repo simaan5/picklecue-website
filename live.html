@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light dark;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
+    <title>Live · PickleCue</title>
+    <meta name="description" content="Live scores, brackets, and standings for PickleCue tournaments and leagues.">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="assets/live.css">
+</head>
+<body>
+    <header class="live-head">
+        <div class="page live-head-row">
+            <a href="/" class="live-logo"><img src="images/app-icon-120.png" alt="">PickleCue</a>
+            <span class="conn" id="conn"><span class="dot"></span><span id="connLabel">Connecting</span></span>
+        </div>
+    </header>
+
+    <main class="page" id="main">
+        <div class="state" id="loading"><h2>Loading…</h2><p>Fetching the latest scores.</p></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="assets/live-core.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var PC = window.PCLive, esc = PC.esc;
+        var params = new URLSearchParams(location.search);
+        var tid = params.get('t'), lid = params.get('l');
+        var kind = tid ? 't' : (lid ? 'l' : null);
+        var eventId = tid || lid;
+        var main = document.getElementById('main');
+        var snap = null;
+        var activeTab = 'matches';
+        var unsub = null;
+
+        function setConn(state) {
+            var el = document.getElementById('conn');
+            el.className = 'conn' + (state === 'live' ? ' live' : '');
+            document.getElementById('connLabel').textContent = state === 'live' ? 'Live' : 'Reconnecting…';
+        }
+
+        if (!kind || !/^[0-9a-f-]{36}$/i.test(eventId || '')) {
+            main.innerHTML = '<div class="state"><h2>Event not found</h2><p>This link is missing its event. Ask the organizer for a fresh one.</p></div>';
+            return;
+        }
+
+        // ---- rendering ------------------------------------------------------
+
+        function nameFor(map, id, fallback) {
+            return (id && map[id]) ? map[id] : (fallback || 'TBD');
+        }
+
+        function matchCard(m, sideNames) {
+            var live = m.live && m.status !== 'completed' ? m.live : null;
+            var s1 = live ? live.score1 : scoreFromSummary(m.score_summary, 0);
+            var s2 = live ? live.score2 : scoreFromSummary(m.score_summary, 1);
+            var p1 = sideNames[0], p2 = sideNames[1];
+            var w1 = m.status === 'completed' && m.winnerSide === 1;
+            var w2 = m.status === 'completed' && m.winnerSide === 2;
+            var isLive = m.status === 'in_progress';
+            return '<div class="match-card' + (isLive ? ' live-now' : '') + '">' +
+                '<div class="match-top"><span>' + esc(roundLabel(m)) + (m.court ? ' · ' + esc(m.court) : '') + '</span>' +
+                (isLive ? '<span class="live-tag">● Live' + (live && live.game ? ' · Game ' + live.game : '') + '</span>'
+                        : '<span>' + esc(PC.statusLabel(m.status)) + '</span>') + '</div>' +
+                '<div class="match-row"><span class="team' + (w1 ? ' won' : '') + '">' + esc(p1) + '</span>' +
+                '<span class="pts' + (w1 ? ' won' : '') + '">' + (s1 == null ? '–' : s1) + '</span></div>' +
+                '<div class="match-row"><span class="team' + (w2 ? ' won' : '') + '">' + esc(p2) + '</span>' +
+                '<span class="pts' + (w2 ? ' won' : '') + '">' + (s2 == null ? '–' : s2) + '</span></div>' +
+                (m.status === 'completed' && m.score_summary && m.score_summary.indexOf(',') !== -1
+                    ? '<div class="match-foot"><span>Games: ' + esc(m.score_summary) + '</span></div>' : '') +
+                '</div>';
+        }
+
+        function scoreFromSummary(summary, side) {
+            if (!summary) return null;
+            var last = summary.split(',').pop().trim();
+            var parts = last.split('-');
+            if (parts.length !== 2) return null;
+            var v = parseInt(parts[side], 10);
+            return isNaN(v) ? null : v;
+        }
+
+        function roundLabel(m) {
+            if (m.week) return 'Week ' + m.week;
+            return m.round ? 'Round ' + m.round : 'Match ' + (m.match_number || '');
+        }
+
+        function sectionOf(title, cards, extraClass) {
+            if (!cards.length) return '';
+            return '<section class="section"><h2>' + title + ' <span class="count">' + cards.length + '</span></h2>' +
+                '<div class="match-list ' + (extraClass || '') + '">' + cards.join('') + '</div></section>';
+        }
+
+        function render() {
+            if (!snap) return;
+            var isT = kind === 't';
+            var head = isT ? snap.tournament : snap.league;
+            var members = isT ? snap.participants : snap.members;
+            var nameMap = {};
+            (members || []).forEach(function (m) { nameMap[m.id] = m.name || 'Player'; });
+
+            var matches = (snap.matches || []).map(function (m) {
+                var id1 = isT ? m.participant1_id : m.team1_member_id;
+                var id2 = isT ? m.participant2_id : m.team2_member_id;
+                var winner = isT ? m.winner_id : m.winner_member_id;
+                m.sideNames = [nameFor(nameMap, id1), nameFor(nameMap, id2)];
+                m.winnerSide = winner ? (winner === id1 ? 1 : 2) : 0;
+                return m;
+            });
+
+            var liveCards = [], upcoming = [], done = [];
+            matches.forEach(function (m) {
+                var card = matchCard(m, m.sideNames);
+                if (m.status === 'in_progress') liveCards.push(card);
+                else if (m.status === 'completed') done.push(card);
+                else upcoming.push(card);
+            });
+
+            var statusChip = head.status === 'in_progress' || head.status === 'active'
+                ? '<span class="chip status-live">● Live now</span>'
+                : head.status === 'completed'
+                    ? '<span class="chip status-done">Completed</span>'
+                    : '<span class="chip">' + esc(PC.statusLabel(head.status)) + '</span>';
+
+            var html =
+                '<div class="event-head">' +
+                '<span class="kicker">' + (isT ? 'Tournament' : 'League') + ' · Live results</span>' +
+                '<h1>' + esc(head.name) + '</h1>' +
+                '<div class="event-meta">' + statusChip +
+                (head.start_date ? '<span class="chip">' + esc(PC.fmtDate(head.start_date)) + '</span>' : '') +
+                (head.format ? '<span class="chip">' + esc(head.format.replace(/_/g, ' ')) + '</span>' : '') +
+                (isT && head.points_to_win ? '<span class="chip">To ' + head.points_to_win + (head.win_by_two ? ', win by 2' : '') + '</span>' : '') +
+                (head.organizer_name ? '<span class="chip">Organizer: ' + esc(head.organizer_name) + '</span>' : '') +
+                '</div>' +
+                '<div class="tabs" role="tablist">' +
+                tabBtn('matches', 'Matches') +
+                (isT ? '' : tabBtn('standings', 'Standings')) +
+                tabBtn('players', isT ? 'Teams' : 'Members') +
+                '</div></div>';
+
+            if (activeTab === 'matches') {
+                html += sectionOf('Live now', liveCards);
+                html += sectionOf('Upcoming', upcoming.slice(0, 24));
+                html += sectionOf('Completed', done);
+                if (!matches.length) html += '<div class="state"><h2>No matches yet</h2><p>The schedule will appear here as soon as the organizer publishes it.</p></div>';
+            } else if (activeTab === 'standings') {
+                html += standingsTable(nameMap);
+            } else {
+                html += membersTable(members || []);
+            }
+
+            html += '<p class="foot-note">Scores update automatically — no refresh needed. Powered by <a href="/">PickleCue</a>.</p>';
+            main.innerHTML = html;
+
+            Array.prototype.forEach.call(main.querySelectorAll('.tab'), function (b) {
+                b.addEventListener('click', function () { activeTab = b.dataset.tab; render(); });
+            });
+        }
+
+        function tabBtn(id, label) {
+            return '<button class="tab" role="tab" data-tab="' + id + '" aria-selected="' + (activeTab === id) + '">' + label + '</button>';
+        }
+
+        function standingsTable(nameMap) {
+            var rows = (snap.standings || []).map(function (s, i) {
+                return '<tr class="' + (i < 3 ? 'top' : '') + '">' +
+                    '<td class="num">' + (s.rank || i + 1) + '</td>' +
+                    '<td class="name">' + esc(nameFor(nameMap, s.member_id)) + '</td>' +
+                    '<td class="num">' + s.wins + '</td><td class="num">' + s.losses + '</td>' +
+                    '<td class="num">' + (s.points_for ?? '–') + '</td><td class="num">' + (s.points_against ?? '–') + '</td>' +
+                    '<td class="num">' + (s.point_differential > 0 ? '+' : '') + (s.point_differential ?? '–') + '</td>' +
+                    '<td class="num">' + (s.win_percentage != null ? Number(s.win_percentage).toFixed(1) + '%' : '–') + '</td></tr>';
+            }).join('');
+            if (!rows) return '<div class="state"><h2>No standings yet</h2><p>Standings appear after the first completed match.</p></div>';
+            return '<section class="section"><h2>Standings</h2><div class="table-wrap"><table class="live-table">' +
+                '<thead><tr><th class="num">#</th><th>Team</th><th class="num">W</th><th class="num">L</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th><th class="num">Win %</th></tr></thead>' +
+                '<tbody>' + rows + '</tbody></table></div></section>';
+        }
+
+        function membersTable(members) {
+            var isT = kind === 't';
+            var rows = members.map(function (m) {
+                return '<tr><td class="num">' + (m.seed || '–') + '</td><td class="name">' + esc(m.name || 'Player') + '</td>' +
+                    '<td>' + esc(PC.statusLabel(m.status)) + '</td>' +
+                    (isT ? '<td class="num">' + (m.placement ? '#' + m.placement : '–') + '</td>' : '') + '</tr>';
+            }).join('');
+            if (!rows) return '<div class="state"><h2>No one has joined yet</h2></div>';
+            return '<section class="section"><h2>' + (isT ? 'Teams' : 'Members') + ' <span class="count">' + members.length + '</span></h2>' +
+                '<div class="table-wrap"><table class="live-table"><thead><tr><th class="num">Seed</th><th>Name</th><th>Status</th>' +
+                (isT ? '<th class="num">Place</th>' : '') + '</tr></thead><tbody>' + rows + '</tbody></table></div></section>';
+        }
+
+        // ---- data + realtime --------------------------------------------------
+
+        async function refetch() {
+            try {
+                snap = kind === 't' ? await PC.tournamentSnapshot(eventId) : await PC.leagueSnapshot(eventId);
+            } catch (e) {
+                console.error('[live] snapshot failed', e);
+                return;
+            }
+            if (!snap) {
+                if (unsub) unsub();
+                main.innerHTML = '<div class="state"><h2>This event isn’t public</h2>' +
+                    '<p>It may be private or no longer exist. If you’re part of it, open it in the PickleCue app.</p></div>';
+                return;
+            }
+            document.title = ((kind === 't' ? snap.tournament : snap.league).name || 'Live') + ' · PickleCue';
+            render();
+        }
+
+        (async function init() {
+            await refetch();
+            if (!snap) return;
+            var isPublic = (kind === 't' ? snap.tournament : snap.league).is_public === true;
+            unsub = PC.subscribeLive(kind, eventId, isPublic, refetch, setConn);
+        })();
+    })();
+    </script>
+</body>
+</html>
