@@ -39,7 +39,8 @@
         var eventId = tid || lid;
         var main = document.getElementById('main');
         var snap = null;
-        var activeTab = params.get('view') === 'bracket' ? 'bracket' : 'matches';
+        var activeTab = ['bracket', 'courts', 'me'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
+        var mePid = null;
         if (params.get('display') === 'tv') document.body.classList.add('bv-tv');
         var unsub = null;
 
@@ -152,12 +153,19 @@
                 '<div class="tabs" role="tablist">' +
                 tabBtn('matches', 'Matches') +
                 (isT && window.PCBracket.isElimination(snap) ? tabBtn('bracket', 'Bracket') : '') +
+                (matches.some(function (m) { return m.court; }) ? tabBtn('courts', 'Courts') : '') +
+                tabBtn('me', 'My next match') +
                 (isT ? '' : tabBtn('standings', 'Standings')) +
                 tabBtn('players', isT ? 'Teams' : 'Members') +
                 '</div></div>';
 
             if (activeTab === 'bracket' && !(kind === 't' && window.PCBracket.isElimination(snap))) activeTab = 'matches';
-            if (activeTab === 'bracket') {
+            if (activeTab === 'courts' && !matches.some(function (m) { return m.court; })) activeTab = 'matches';
+            if (activeTab === 'courts') {
+                html += courtBoard(matches);
+            } else if (activeTab === 'me') {
+                html += whatsNext(matches, members || []);
+            } else if (activeTab === 'bracket') {
                 html += '<section class="section"><div id="bvHost"></div></section>';
             } else if (activeTab === 'matches') {
                 html += sectionOf('Live now', liveCards);
@@ -175,6 +183,27 @@
             if (activeTab === 'bracket') {
                 window.PCBracket.render(document.getElementById('bvHost'), snap, {});
             }
+            if (activeTab === 'me') {
+                var search = document.getElementById('meSearch');
+                if (search) search.addEventListener('input', function () {
+                    Array.prototype.forEach.call(main.querySelectorAll('[data-me-pick]'), function (b) {
+                        b.style.display = b.textContent.toLowerCase().indexOf(search.value.toLowerCase()) !== -1 ? '' : 'none';
+                    });
+                });
+                Array.prototype.forEach.call(main.querySelectorAll('[data-me-pick]'), function (b) {
+                    b.addEventListener('click', function () {
+                        mePid = b.dataset.mePick;
+                        try { localStorage.setItem('pc_me_' + eventId, mePid); } catch (_) {}
+                        render();
+                    });
+                });
+                var clearBtn = document.getElementById('meClear');
+                if (clearBtn) clearBtn.addEventListener('click', function () {
+                    mePid = null;
+                    try { localStorage.removeItem('pc_me_' + eventId); } catch (_) {}
+                    render();
+                });
+            }
 
             Array.prototype.forEach.call(main.querySelectorAll('.tab'), function (b) {
                 b.addEventListener('click', function () { activeTab = b.dataset.tab; render(); });
@@ -183,6 +212,107 @@
 
         function tabBtn(id, label) {
             return '<button class="tab" role="tab" data-tab="' + id + '" aria-selected="' + (activeTab === id) + '">' + label + '</button>';
+        }
+
+        // ---- Court Board -----------------------------------------------------
+        function courtBoard(matches) {
+            var byCourt = {};
+            matches.forEach(function (m) { if (m.court) (byCourt[m.court] = byCourt[m.court] || []).push(m); });
+            var courts = Object.keys(byCourt).sort(function (a, b) {
+                var na = parseInt(a.replace(/\D+/g, ''), 10), nb = parseInt(b.replace(/\D+/g, ''), 10);
+                return (isNaN(na) ? 999 : na) - (isNaN(nb) ? 999 : nb) || a.localeCompare(b);
+            });
+            var cards = courts.map(function (court) {
+                var ms = byCourt[court];
+                var live = ms.find(function (m) { return m.status === 'in_progress'; });
+                var onDeck = ms.filter(function (m) {
+                    return (m.status === 'pending' || m.status === 'scheduled') && m.sideIds[0] && m.sideIds[1];
+                }).sort(function (a, b) { return (a.round || 0) - (b.round || 0); })[0];
+                var lastDone = ms.filter(function (m) { return m.status === 'completed'; })
+                    .sort(function (a, b) { return (b.round || 0) - (a.round || 0); })[0];
+
+                var cls, statusLine, body;
+                if (live) {
+                    var s1 = live.live ? live.live.score1 : null, s2 = live.live ? live.live.score2 : null;
+                    cls = 'cb-live'; statusLine = '● LIVE';
+                    body = cbTeams(live) +
+                        '<div class="cb-score">' + (s1 == null ? '–' : s1) + '<span>:</span>' + (s2 == null ? '–' : s2) + '</div>';
+                } else if (onDeck) {
+                    cls = 'cb-ondeck'; statusLine = 'ON DECK';
+                    body = cbTeams(onDeck) + '<div class="cb-sub">' + esc(roundLabel(onDeck)) + '</div>';
+                } else if (lastDone) {
+                    cls = 'cb-open'; statusLine = 'OPEN';
+                    body = '<div class="cb-sub">Last: ' + esc(lastDone.sideNames[0]) + ' def. ' +
+                        esc(lastDone.sideNames[lastDone.winnerSide === 1 ? 1 : 0]) + ' ' + esc(lastDone.score_summary || '') + '</div>' +
+                        '<div class="cb-free">Court free</div>';
+                } else {
+                    cls = 'cb-open'; statusLine = 'OPEN';
+                    body = '<div class="cb-free">Court free</div>';
+                }
+                return '<div class="cb-card ' + cls + '"><div class="cb-head"><span class="cb-court">' + esc(court) +
+                    '</span><span class="cb-status">' + statusLine + '</span></div>' + body + '</div>';
+            });
+            if (!cards.length) return '<div class="state"><h2>No court assignments yet</h2></div>';
+            return '<section class="section"><div class="cb-grid">' + cards.join('') + '</div></section>';
+        }
+
+        function cbTeams(m) {
+            return '<div class="cb-team">' + av(m.sideIds[0]) + '<span>' + esc(m.sideNames[0]) + '</span></div>' +
+                '<div class="cb-vs">vs</div>' +
+                '<div class="cb-team">' + av(m.sideIds[1]) + '<span>' + esc(m.sideNames[1]) + '</span></div>';
+        }
+
+        // ---- Player "What\u2019s Next?" ---------------------------------------
+        function whatsNext(matches, members) {
+            try { if (!mePid) mePid = localStorage.getItem('pc_me_' + eventId); } catch (_) {}
+            var me = mePid ? objMap[mePid] : null;
+            if (!me) {
+                return '<section class="section"><h2>Who are you following?</h2>' +
+                    '<div class="field" style="max-width:340px;margin-bottom:12px"><input id="meSearch" type="search" placeholder="Find your name or team\u2026" style="font-size:16px;padding:12px 14px;border:1px solid var(--rule-strong);border-radius:10px;background:var(--paper);color:var(--ink);width:100%"></div>' +
+                    members.map(function (m) {
+                        return '<button class="event-row" data-me-pick="' + m.id + '" style="width:100%;text-align:left;border:1px solid var(--rule);background:var(--paper-2);cursor:pointer">' +
+                            '<div class="grow"><div class="title">' + window.PCLive.avatarStack(m.members, 22) + ' ' + esc(m.name || 'Player') + '</div></div>' +
+                            '<span class="sub">Follow \u2192</span></button>';
+                    }).join('') + '</section>';
+            }
+
+            var mine = matches.filter(function (m) { return m.sideIds[0] === mePid || m.sideIds[1] === mePid; });
+            var done = mine.filter(function (m) { return m.status === 'completed'; });
+            var wins = done.filter(function (m) { return (m.winnerSide === 1 ? m.sideIds[0] : m.sideIds[1]) === mePid; }).length;
+            var next = mine.filter(function (m) { return m.status !== 'completed' && m.status !== 'bye'; })
+                .sort(function (a, b) { return (a.round || 0) - (b.round || 0); })[0];
+            var last = done.sort(function (a, b) { return (b.round || 0) - (a.round || 0); })[0];
+
+            var big;
+            if (next) {
+                var oppId = next.sideIds[0] === mePid ? next.sideIds[1] : next.sideIds[0];
+                var opp = oppId ? (objMap[oppId] || {}) : null;
+                var isLive = next.status === 'in_progress';
+                var ready = next.sideIds[0] && next.sideIds[1];
+                big = '<div class="me-card' + (isLive ? ' me-live' : '') + '">' +
+                    '<div class="me-status">' + (isLive ? '\u25CF PLAYING NOW' : (ready ? 'YOU\u2019RE ON DECK' : 'WAITING ON EARLIER RESULTS')) + '</div>' +
+                    (next.court ? '<div class="me-court">' + esc(next.court) + '</div>' : '<div class="me-court me-tbd">Court TBD</div>') +
+                    '<div class="me-opp">' + (opp ? 'vs ' + window.PCLive.avatarStack(opp.members, 26) + ' ' + esc(opp.name || 'TBD') : 'Opponent TBD') + '</div>' +
+                    (isLive && next.live ? '<div class="cb-score">' + next.live.score1 + '<span>:</span>' + next.live.score2 + '</div>' : '') +
+                    '<div class="me-sub">' + esc(roundLabel(next)) + '</div></div>';
+            } else if (done.length && kind === 't') {
+                var champ = last && (last.winnerSide === 1 ? last.sideIds[0] : last.sideIds[1]) === mePid && !matches.some(function (m) { return m.status !== 'completed' && m.status !== 'bye'; });
+                big = '<div class="me-card"><div class="me-status">' + (champ ? '\uD83C\uDFC6 CHAMPION!' : 'YOUR EVENT IS COMPLETE') + '</div>' +
+                    '<div class="me-sub">Thanks for playing \u2014 full results below.</div></div>';
+            } else {
+                big = '<div class="me-card"><div class="me-status">NO UPCOMING MATCHES</div>' +
+                    '<div class="me-sub">Check back \u2014 this page updates live.</div></div>';
+            }
+
+            return '<section class="section">' +
+                '<div class="me-who">' + window.PCLive.avatarStack(me.members, 28) + ' <strong>' + esc(me.name) + '</strong>' +
+                '<button class="btn ghost" id="meClear" style="margin-left:auto;min-height:34px;padding:6px 14px;font-size:12px">Not you?</button></div>' +
+                big +
+                '<div class="me-stats">' +
+                '<div class="me-stat"><span>' + wins + '\u2013' + (done.length - wins) + '</span>Record</div>' +
+                '<div class="me-stat"><span>' + done.length + '</span>Played</div>' +
+                (last ? '<div class="me-stat me-wide"><span>' + esc(last.score_summary || '\u2014') + '</span>Last: vs ' + esc(last.sideIds[0] === mePid ? last.sideNames[1] : last.sideNames[0]) + '</div>' : '') +
+                '</div></section>';
         }
 
         function standingsTable(nameMap) {
