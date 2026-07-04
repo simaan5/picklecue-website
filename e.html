@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light dark;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
+    <title>PickleCue</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="assets/live.css">
+</head>
+<body>
+    <main class="page"><div class="state" id="state"><h2>Finding your event…</h2></div></main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="assets/live-core.js"></script>
+    <script>
+    (function () {
+        // Accepts /e.html?c=ABC123 (and /e/ABC123 via the 404 shim).
+        var params = new URLSearchParams(location.search);
+        var code = (params.get('c') || '').toUpperCase().replace(/[^A-Z2-9]/g, '');
+        var view = params.get('view') || '';
+        var state = document.getElementById('state');
+        if (code.length !== 6) {
+            state.innerHTML = '<h2>That code doesn’t look right</h2><p>Event codes are 6 letters and numbers, like ABC123.</p>';
+            return;
+        }
+        window.PCLive.client.rpc('resolve_short_code', { p_code: code }).then(function (r) {
+            if (r.error || !r.data) {
+                state.innerHTML = '<h2>Event not found</h2><p>Double-check the code with the organizer.</p>';
+                return;
+            }
+            var kind = r.data.scope === 'tournament' ? 't' : 'l';
+            location.replace('live.html?' + kind + '=' + r.data.event_id + (view ? '&view=' + encodeURIComponent(view) : ''));
+        });
+    })();
+    </script>
+</body>
+</html>

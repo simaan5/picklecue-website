@@ -591,7 +591,13 @@
 
         // QR codes & printable posters — every link points at production so a
         // printed poster works forever, regardless of where this dashboard runs.
-        function renderQrPanel(panel, eventName) {
+        async function renderQrPanel(panel, eventName) {
+            var scope = view.kind === 't' ? 'tournament' : 'league';
+            var shortCode = null;
+            try {
+                var sc = await db.rpc('get_or_create_short_code', { p_scope: scope, p_event_id: view.id });
+                shortCode = sc.data || null;
+            } catch (_) {}
             var kind = view.kind;
             var isT = kind === 't';
             var targets = [
@@ -603,7 +609,16 @@
             targets.push({ label: 'Scorekeeper page (staff only)', path: 'scorekeeper.html?' + kind + '=' + view.id, poster: null });
             targets.push({ label: 'Check-in desk (staff only)', path: 'checkin.html?' + kind + '=' + view.id, poster: null });
 
-            panel.innerHTML = '<div class="section" style="padding-top:6px">' + targets.map(function (tg, i) {
+            var shortRow = shortCode
+                ? '<div class="event-row"><div class="grow"><div class="title" style="font-size:14px">Speakable short link</div>' +
+                  '<div class="sub" style="font-family:var(--f-mono);font-size:15px;color:var(--ink)">picklecue.com/e/' + shortCode + '</div>' +
+                  '<div class="sub">Say it, text it, or write it on the whiteboard \u2014 opens the live event page.</div></div>' +
+                  '<button class="btn ghost" data-copy-short="1">Copy</button></div>'
+                : '';
+            var staffRow = '<div class="event-row"><div class="grow"><div class="title" style="font-size:14px">Staff claim code</div>' +
+                '<div class="sub" id="staffCodeVal">Generate a 6-character code volunteers can enter (with any PickleCue account) to become scorekeeping/check-in staff for 48 hours. Every action is still logged under their own name.</div></div>' +
+                '<button class="btn ghost" id="staffCodeBtn">Generate code</button></div>';
+            panel.innerHTML = '<div class="section" style="padding-top:6px">' + shortRow + staffRow + targets.map(function (tg, i) {
                 return '<div class="event-row"><div class="grow">' +
                     '<div class="title" style="font-size:14px">' + tg.label + '</div>' +
                     '<div class="sub">' + esc(shareUrl(tg.path)) + '</div></div>' +
@@ -614,6 +629,25 @@
             }).join('') +
             '<p class="sub" style="font-size:12px;color:var(--ink-mute);margin-top:6px">Posters open print-ready with a large QR code, your event name, and a sponsor slot. The scorekeeper link only works for staff you have assigned — safe to hand to volunteers, useless to anyone else.</p></div>';
 
+            var shortBtn = panel.querySelector('[data-copy-short]');
+            if (shortBtn) shortBtn.addEventListener('click', function () {
+                navigator.clipboard.writeText('https://www.picklecue.com/e/' + shortCode).then(function () {
+                    shortBtn.textContent = 'Copied!';
+                    setTimeout(function () { shortBtn.textContent = 'Copy'; }, 1500);
+                });
+            });
+            var staffBtn = panel.querySelector('#staffCodeBtn');
+            if (staffBtn) staffBtn.addEventListener('click', async function () {
+                if (!confirm('Generate a new staff code? Any previous code for this event stops working.')) return;
+                staffBtn.disabled = true;
+                var r = await db.rpc('create_staff_code', { p_scope: scope, p_event_id: view.id });
+                staffBtn.disabled = false;
+                if (r.error) { alert(r.error.message); return; }
+                panel.querySelector('#staffCodeVal').innerHTML =
+                    '<span style="font-family:var(--f-mono);font-size:22px;font-weight:700;letter-spacing:0.15em;color:var(--ink)">' + r.data.code + '</span>' +
+                    '<span style="display:block;font-size:12px">Valid 48h \u00b7 up to 20 volunteers \u00b7 they enter it on the check-in or scorekeeper page after signing in.</span>';
+                staffBtn.textContent = 'Regenerate';
+            });
             Array.prototype.forEach.call(panel.querySelectorAll('[data-copy]'), function (b) {
                 b.addEventListener('click', function () {
                     navigator.clipboard.writeText(shareUrl(targets[b.dataset.copy].path)).then(function () {
