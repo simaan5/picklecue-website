@@ -33,7 +33,7 @@
         var eventId = params.get('t') || params.get('l');
         var scope = kind === 't' ? 'tournament' : 'league';
         var main = document.getElementById('main');
-        var snap = null, readiness = {}, search = '', unsub = null;
+        var snap = null, readiness = {}, search = '', unsub = null, waiver = null;
 
         if (!kind || !/^[0-9a-f-]{36}$/i.test(eventId || '')) {
             main.innerHTML = '<div class="state"><h2>Missing event link</h2><p>Open this page from the organizer dashboard (QR codes &amp; posters → Check-in desk).</p></div>';
@@ -70,8 +70,10 @@
             var results = await Promise.all([
                 kind === 't' ? PC.tournamentSnapshot(eventId) : PC.leagueSnapshot(eventId),
                 db.rpc('event_readiness', { p_scope: scope, p_event_id: eventId }),
+                db.rpc('get_event_waiver', { p_scope: scope, p_event_id: eventId }),
             ]);
             snap = results[0];
+            waiver = results[2].data || null;
             readiness = {};
             (results[1].data || []).forEach(function (x) { readiness[x.id] = x; });
             if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
@@ -97,6 +99,9 @@
                 return (a.name || '').localeCompare(b.name || '');
             }).map(function (m) {
                 var st = (readiness[m.id] || {}).check_in_status || m.check_in || 'not_checked_in';
+                var needsWaiver = (readiness[m.id] || {}).waiver_status === 'pending';
+                var waiverBtn = needsWaiver && waiver
+                    ? ' <button class="btn ghost" data-wv="' + m.id + '">Sign waiver</button>' : '';
                 var action = st === 'checked_in'
                     ? '<span class="ci-chip ci-ready">READY</span> <button class="btn ghost" data-ci="' + m.id + ':not_checked_in">Undo</button>'
                     : st === 'no_show'
@@ -104,9 +109,10 @@
                         : '<button class="btn primary" data-ci="' + m.id + ':checked_in" style="min-height:48px;padding:12px 22px">Check in</button>' +
                           '<button class="btn danger" data-ci="' + m.id + ':no_show" style="margin-left:6px">No-show</button>';
                 return '<div class="event-row"><div class="grow">' +
-                    '<div class="title">' + window.PCLive.avatarStack(m.members, 24) + ' ' + esc(m.name || 'Player') + '</div>' +
+                    '<div class="title">' + window.PCLive.avatarStack(m.members, 24) + ' ' + esc(m.name || 'Player') +
+                    (needsWaiver ? ' <span class="ci-chip ci-noshow">WAIVER</span>' : '') + '</div>' +
                     (m.seed ? '<div class="sub">Seed ' + m.seed + '</div>' : '') +
-                    '</div><div>' + action + '</div></div>';
+                    '</div><div>' + action + waiverBtn + '</div></div>';
             }).join('');
 
             main.innerHTML =
@@ -125,6 +131,19 @@
             input.addEventListener('input', function () { search = input.value; render(); });
             if (search) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
 
+            Array.prototype.forEach.call(main.querySelectorAll('[data-wv]'), function (b) {
+                b.addEventListener('click', async function () {
+                    var name = prompt((waiver ? waiver.title + ' (v' + waiver.version + ')\n\n' : '') +
+                        'Hand the device to the player to read the waiver on the event page, then type their FULL NAME here to sign:');
+                    if (!name || name.trim().length < 2) return;
+                    var r = await db.rpc('sign_event_waiver', {
+                        p_scope: scope, p_event_id: eventId, p_signer_name: name.trim(),
+                        p_registration_id: null, p_participant_id: b.dataset.wv,
+                        p_user_agent: navigator.userAgent, p_source: 'staff' });
+                    if (r.error) { alert(r.error.message); return; }
+                    await refetch();
+                });
+            });
             Array.prototype.forEach.call(main.querySelectorAll('[data-ci]'), function (b) {
                 b.addEventListener('click', async function () {
                     var parts = b.dataset.ci.split(':');
