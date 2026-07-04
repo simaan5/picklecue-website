@@ -34,6 +34,7 @@
         var main = document.getElementById('main');
         var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches', qrOpen = false;
         var readiness = {}, ciFilter = 'all', ciSearch = '';
+        var regSettings = null, regList = [];
 
         document.getElementById('signOutBtn').addEventListener('click', async function () {
             await PC.signOut(); location.reload();
@@ -159,6 +160,15 @@
                 readiness = {};
                 (r.data || []).forEach(function (x) { readiness[x.id] = x; });
             }
+            if (eventTab === 'register') {
+                var scope = view.kind === 't' ? 'tournament' : 'league';
+                var results = await Promise.all([
+                    db.from('event_registration_settings').select('*').eq('scope', scope).eq('event_id', view.id).maybeSingle(),
+                    db.from('event_registrations').select('*').eq('event_id', view.id).order('created_at'),
+                ]);
+                regSettings = results[0].data;
+                regList = results[1].data || [];
+            }
             renderEvent();
         }
 
@@ -184,7 +194,8 @@
                 '<button class="tab" data-etab="matches" aria-selected="' + (eventTab === 'matches') + '">Matches</button>' +
                 (isT && window.PCBracket.isElimination(snap)
                     ? '<button class="tab" data-etab="bracket" aria-selected="' + (eventTab === 'bracket') + '">Bracket</button>' : '') +
-                '<button class="tab" data-etab="checkin" aria-selected="' + (eventTab === 'checkin') + '">Check-In</button></div>' +
+                '<button class="tab" data-etab="checkin" aria-selected="' + (eventTab === 'checkin') + '">Check-In</button>' +
+                '<button class="tab" data-etab="register" aria-selected="' + (eventTab === 'register') + '">Registration</button></div>' +
                 '<p class="ok" id="barMsg"></p></div>';
 
             var rows = (snap.matches || []).map(function (m) {
@@ -219,7 +230,9 @@
             });
 
             if (eventTab === 'bracket' && !(isT && window.PCBracket.isElimination(snap))) eventTab = 'matches';
-            if (eventTab === 'checkin') {
+            if (eventTab === 'register') {
+                html += registrationTab();
+            } else if (eventTab === 'checkin') {
                 html += checkinTab(members || [], nameMap);
             } else if (eventTab === 'bracket') {
                 html += '<section class="section"><div id="bvPanel"></div><div id="bvHost"></div></section>';
@@ -236,7 +249,7 @@
             Array.prototype.forEach.call(main.querySelectorAll('[data-etab]'), function (b) {
                 b.addEventListener('click', function () {
                     eventTab = b.dataset.etab;
-                    if (eventTab === 'checkin') refetchEvent(); else renderEvent();
+                    if (eventTab === 'checkin' || eventTab === 'register') refetchEvent(); else renderEvent();
                 });
             });
             if (eventTab === 'bracket') {
@@ -246,6 +259,7 @@
                 });
             }
             if (eventTab === 'checkin') wireCheckin();
+            if (eventTab === 'register') wireRegistration();
             document.getElementById('qrBtn').addEventListener('click', function () {
                 qrOpen = !qrOpen;
                 syncQrPanel(head.name);
@@ -282,6 +296,84 @@
                 var parts = val.split('-').map(function (x) { return parseInt(x.trim(), 10); });
                 if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) throw new Error('Enter the score as two numbers, like 11-8.');
                 return PC.recordScoreEvent({ scope: scopeName(), matchId: mid, eventType: 'match_completed', score1: parts[0], score2: parts[1], note: 'organizer web correction' });
+            });
+        }
+
+        // ---- Registration ------------------------------------------------------
+        function registrationTab() {
+            var s = regSettings || {};
+            var counts = { registered: 0, waitlisted: 0, withdrawn: 0, needed: 0 };
+            regList.forEach(function (r) {
+                counts[r.status] = (counts[r.status] || 0) + 1;
+                if (r.status !== 'withdrawn' && r.partner_status === 'needed') counts.needed++;
+            });
+            var settingsCard = '<div class="event-row" style="flex-wrap:wrap;gap:14px">' +
+                '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsOpen"' + (s.registration_open ? ' checked' : '') + '><span>Registration open</span></label>' +
+                '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsWaitlist"' + (s.waitlist_enabled !== false ? ' checked' : '') + '><span>Waitlist when full</span></label>' +
+                '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsNeedPartner"' + (s.allow_need_partner !== false ? ' checked' : '') + '><span>Allow \u201cneed a partner\u201d</span></label>' +
+                '<label class="bcheck" style="padding:0"><input type="checkbox" id="rsRequireDupr"' + (s.require_dupr ? ' checked' : '') + '><span>Require DUPR ID</span></label>' +
+                '<span class="scorebox"><input type="number" min="2" id="rsCapacity" placeholder="Cap" value="' + (s.capacity || '') + '" style="width:70px"><span class="sub">capacity (blank = event max)</span></span>' +
+                '<button class="btn primary" id="rsSave">Save settings</button><span class="ok" id="rsMsg"></span></div>';
+
+            var rows = regList.map(function (r) {
+                var chip = r.status === 'registered' ? '<span class="ci-chip ci-ready">REGISTERED</span>'
+                    : r.status === 'waitlisted' ? '<span class="ci-chip ci-waiting">WAITLIST</span>'
+                    : '<span class="ci-chip ci-noshow">WITHDRAWN</span>';
+                var partner = r.partner_status === 'needed' ? ' \u00b7 <strong>needs a partner</strong>'
+                    : r.partner_status === 'complete' && r.partner_name ? ' \u00b7 w/ ' + esc(r.partner_name) : '';
+                var contact = [r.email, r.phone].filter(Boolean).map(esc).join(' \u00b7 ');
+                var actions = r.status === 'waitlisted'
+                    ? '<button class="btn primary" data-reg="' + r.id + ':promote">Move in</button> <button class="btn ghost" data-reg="' + r.id + ':withdraw">Remove</button>'
+                    : r.status === 'registered'
+                        ? '<button class="btn ghost" data-reg="' + r.id + ':waitlist">To waitlist</button> <button class="btn danger" data-reg="' + r.id + ':withdraw">Withdraw</button>'
+                        : '';
+                return '<div class="event-row"><div class="grow">' +
+                    '<div class="title">' + esc(r.display_name) + ' ' + chip + '</div>' +
+                    '<div class="sub">' + (r.skill_level ? esc(r.skill_level) + ' \u00b7 ' : '') + (r.dupr_id ? 'DUPR ' + esc(r.dupr_id) + ' \u00b7 ' : '') +
+                    contact + partner + (r.notes ? ' \u00b7 \uD83D\uDCDD ' + esc(r.notes) : '') +
+                    ' \u00b7 ' + new Date(r.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + '</div></div>' +
+                    '<div>' + actions + '</div></div>';
+            }).join('');
+
+            return '<section class="section"><h2>Registration settings</h2>' + settingsCard +
+                '<h2 style="margin-top:18px">Registrations <span class="count">' + counts.registered + ' in \u00b7 ' + counts.waitlisted + ' waitlisted' +
+                (counts.needed ? ' \u00b7 ' + counts.needed + ' need partners' : '') + '</span></h2>' +
+                (rows || '<p class="sub">No registrations yet. Open registration above, then share the live page or a QR poster \u2014 the Register button appears automatically.</p>') +
+                '<p class="foot-note">Emails, phones, and notes are visible only to you and your event staff \u2014 never on public pages. Moving someone in creates their participant record instantly, so they show up in Check-In and What\u2019s Next.</p></section>';
+        }
+
+        function wireRegistration() {
+            var save = document.getElementById('rsSave');
+            if (save) save.addEventListener('click', async function () {
+                save.disabled = true;
+                var scope = view.kind === 't' ? 'tournament' : 'league';
+                var payload = {
+                    scope: scope, event_id: view.id,
+                    registration_open: document.getElementById('rsOpen').checked,
+                    waitlist_enabled: document.getElementById('rsWaitlist').checked,
+                    allow_need_partner: document.getElementById('rsNeedPartner').checked,
+                    require_dupr: document.getElementById('rsRequireDupr').checked,
+                    capacity: parseInt(document.getElementById('rsCapacity').value, 10) || null,
+                    updated_by: me.id, updated_at: new Date().toISOString(),
+                };
+                var r = await db.from('event_registration_settings').upsert(payload, { onConflict: 'scope,event_id' }).select();
+                if (!r.error && payload.capacity) {
+                    var cap = await db.rpc('set_registration_capacity', { p_scope: scope, p_event_id: view.id, p_capacity: payload.capacity });
+                    if (cap.error) r = cap;
+                }
+                save.disabled = false;
+                if (r.error) { alert(r.error.message); return; }
+                document.getElementById('rsMsg').textContent = 'Saved \u2014 the Register button is now ' + (payload.registration_open ? 'live on the public page.' : 'hidden.');
+                refetchEvent();
+            });
+            Array.prototype.forEach.call(main.querySelectorAll('[data-reg]'), function (b) {
+                b.addEventListener('click', async function () {
+                    var parts = b.dataset.reg.split(':');
+                    b.disabled = true;
+                    var r = await db.rpc('manage_registration', { p_registration_id: parts[0], p_action: parts[1] });
+                    if (r.error) { alert(r.error.message); b.disabled = false; return; }
+                    refetchEvent();
+                });
             });
         }
 
