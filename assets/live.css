@@ -268,3 +268,11 @@ body.bv-tv .cb-score { font-size: 44px; }
 .ci-chip.ci-ready { background: color-mix(in srgb, var(--court) 18%, transparent); color: var(--court); }
 .ci-chip.ci-waiting { background: var(--paper); color: var(--ink-mute); border: 1px solid var(--rule-strong); }
 .ci-chip.ci-noshow { background: color-mix(in srgb, var(--clay) 16%, transparent); color: var(--clay); }
+
+/* ── Auth card providers ────────────────────────────────────────────────── */
+.auth-providers { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
+.auth-apple { background: #000; color: #fff; }
+:root[data-theme="dark"] .auth-apple { background: #fff; color: #000; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .auth-apple { background: #fff; color: #000; } }
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: var(--ink-mute); font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+.auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--rule); }

@@ -54,16 +54,7 @@
         // ---- auth -------------------------------------------------------------
 
         function renderLogin() {
-            main.innerHTML =
-                '<div class="auth-card"><h1>Organizer sign in</h1>' +
-                '<p>Use your PickleCue account. Organizer tools are for event organizers and assigned staff — creating events is part of PickleCue Pro.</p>' +
-                '<div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div>' +
-                '<div class="field"><label>Password</label><input id="pw" type="password" autocomplete="current-password"></div>' +
-                '<button class="btn primary block" id="loginBtn">Sign in</button>' +
-                '<p class="err" id="loginErr"></p>' +
-                '<p style="font-size:12.5px;color:var(--ink-mute);margin-top:10px">Signed up with Apple or Google? Set a password in the app under Settings › Account, or manage your events in the app.</p></div>';
-            document.getElementById('loginBtn').addEventListener('click', doLogin);
-            document.getElementById('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+            PC.renderAuthCard(main, { title: 'Organizer sign in', blurb: 'Run your events from the web. Organizer tools are for event organizers and assigned staff — creating events is part of PickleCue Pro.', onSignedIn: async function () { me = await PC.currentUser(); await loadList(); } });
         }
 
         async function doLogin() {

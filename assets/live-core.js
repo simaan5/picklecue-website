@@ -119,6 +119,94 @@
     return r.data.user;
   }
 
+  /** Passwordless: email a one-tap sign-in link that returns to this page. */
+  async function sendMagicLink(email) {
+    var redirect = location.origin.indexOf('http') === 0
+      ? location.origin + location.pathname + location.search
+      : 'https://www.picklecue.com/organizer.html';
+    var r = await client.auth.signInWithOtp({
+      email: email,
+      options: { emailRedirectTo: redirect, shouldCreateUser: false },
+    });
+    if (r.error) throw r.error;
+    return true;
+  }
+
+  /** Same Apple/Google buttons as the app, on the web. */
+  async function signInWithProvider(provider) {
+    var redirect = location.origin.indexOf('http') === 0
+      ? location.origin + location.pathname + location.search
+      : 'https://www.picklecue.com/organizer.html';
+    var r = await client.auth.signInWithOAuth({
+      provider: provider,
+      options: { redirectTo: redirect },
+    });
+    if (r.error) throw r.error; // browser redirects on success
+  }
+
+  /**
+   * Shared sign-in card: Apple + Google, email+password, and magic link.
+   * opts: { title, blurb, onSignedIn }
+   */
+  function renderAuthCard(container, opts) {
+    opts = opts || {};
+    container.innerHTML =
+      '<div class="auth-card"><h1>' + esc(opts.title || 'Sign in') + '</h1>' +
+      '<p>' + esc(opts.blurb || 'Use the same PickleCue account as the app.') + '</p>' +
+      '<div class="auth-providers">' +
+      '<button class="btn block auth-apple" id="pcAuthApple">\uF8FF Continue with Apple</button>' +
+      '<button class="btn block ghost" id="pcAuthGoogle">Continue with Google</button>' +
+      '</div>' +
+      '<div class="auth-divider"><span>or use your email</span></div>' +
+      '<div class="field"><label>Email</label><input id="pcAuthEmail" type="email" autocomplete="email"></div>' +
+      '<div class="field"><label>Password</label><input id="pcAuthPw" type="password" autocomplete="current-password" placeholder="Leave blank to get a sign-in link"></div>' +
+      '<button class="btn primary block" id="pcAuthGo">Sign in</button>' +
+      '<button class="btn ghost block" id="pcAuthMagic" style="margin-top:8px">Email me a sign-in link</button>' +
+      '<p class="err" id="pcAuthErr"></p><p class="ok" id="pcAuthOk"></p>' +
+      '<p style="font-size:12px;color:var(--ink-mute);margin-top:10px">No password? Signed up with Apple or Google in the app? Use the matching button above, or the sign-in link \u2014 it works for every account.</p></div>';
+
+    var err = function (m) { container.querySelector('#pcAuthErr').textContent = m || ''; };
+    var ok = function (m) { container.querySelector('#pcAuthOk').textContent = m || ''; };
+
+    container.querySelector('#pcAuthApple').addEventListener('click', function () {
+      err(''); signInWithProvider('apple').catch(function (e) {
+        err('Apple sign-in isn\u2019t available on the web yet \u2014 use Google, your password, or a sign-in link. (' + (e.message || e) + ')');
+      });
+    });
+    container.querySelector('#pcAuthGoogle').addEventListener('click', function () {
+      err(''); signInWithProvider('google').catch(function (e) { err(e.message || 'Google sign-in failed.'); });
+    });
+    container.querySelector('#pcAuthGo').addEventListener('click', doPassword);
+    container.querySelector('#pcAuthPw').addEventListener('keydown', function (e) { if (e.key === 'Enter') doPassword(); });
+    container.querySelector('#pcAuthMagic').addEventListener('click', async function () {
+      err(''); ok('');
+      var email = container.querySelector('#pcAuthEmail').value.trim();
+      if (!email) { err('Enter your email first, then tap the link button.'); return; }
+      this.disabled = true;
+      try {
+        await sendMagicLink(email);
+        ok('Check your email \u2014 tap the sign-in link and you\u2019ll land right back here.');
+      } catch (e) {
+        err(e.message === 'Signups not allowed for otp'
+          ? 'No PickleCue account uses that email \u2014 sign up in the app first.'
+          : (e.message || 'Couldn\u2019t send the link.'));
+        this.disabled = false;
+      }
+    });
+    async function doPassword() {
+      err(''); ok('');
+      var email = container.querySelector('#pcAuthEmail').value.trim();
+      var pw = container.querySelector('#pcAuthPw').value;
+      if (!pw) { container.querySelector('#pcAuthMagic').click(); return; }
+      var btn = container.querySelector('#pcAuthGo');
+      btn.disabled = true;
+      try {
+        await signIn(email, pw);
+        if (opts.onSignedIn) opts.onSignedIn();
+      } catch (e) { err(e.message || 'Sign in failed.'); btn.disabled = false; }
+    }
+  }
+
   async function signOut() { await client.auth.signOut(); }
 
   async function isPro() {
@@ -207,6 +295,9 @@
     subscribeLive: subscribeLive,
     currentUser: currentUser,
     signIn: signIn,
+    sendMagicLink: sendMagicLink,
+    signInWithProvider: signInWithProvider,
+    renderAuthCard: renderAuthCard,
     signOut: signOut,
     isPro: isPro,
     esc: esc,

@@ -48,23 +48,7 @@
         }
 
         function renderLogin() {
-            main.innerHTML =
-                '<div class="auth-card"><h1>Scorekeeper sign in</h1>' +
-                '<p>Sign in with your PickleCue account. You can score matches for events you organize or are assigned to.</p>' +
-                '<div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div>' +
-                '<div class="field"><label>Password</label><input id="pw" type="password" autocomplete="current-password"></div>' +
-                '<button class="btn primary block" id="loginBtn">Sign in</button><p class="err" id="loginErr"></p></div>';
-            document.getElementById('loginBtn').addEventListener('click', async function () {
-                this.disabled = true;
-                document.getElementById('loginErr').textContent = '';
-                try {
-                    await PC.signIn(document.getElementById('email').value.trim(), document.getElementById('pw').value);
-                    await boot();
-                } catch (e) {
-                    document.getElementById('loginErr').textContent = e.message || 'Sign in failed.';
-                    this.disabled = false;
-                }
-            });
+            PC.renderAuthCard(main, { title: 'Scorekeeper sign in', blurb: 'Score matches for events you organize or are assigned to.', onSignedIn: async function () { await boot(); } });
         }
 
         async function boot() {
