@@ -203,3 +203,25 @@ body.bv-tv .bv-col { min-width: 260px; }
 body.bv-tv .bv-row { font-size: 16px; }
 body.bv-tv .bv-pts { font-size: 19px; }
 body.bv-tv { font-size: 18px; }
+
+/* ── Avatars (parity with the app's ProfileAvatarView) ──────────────────── */
+.pc-avatar { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; object-fit: cover; background: var(--paper); border: 1.5px solid var(--rule-strong); flex-shrink: 0; vertical-align: middle; }
+.pc-avatar-initials { font-family: var(--f-mono); font-weight: 700; color: var(--ink-soft); background: var(--paper); letter-spacing: 0.02em; }
+.pc-avatar-emoji { background: var(--paper); }
+.pc-avatar-stack { display: inline-flex; align-items: center; flex-shrink: 0; }
+.pc-avatar-stack .pc-avatar + .pc-avatar { margin-left: -8px; }
+
+/* ── Responsive bracket modes ───────────────────────────────────────────── */
+/* Fit mode: the tree is scaled to the container — never a page h-scrollbar. */
+.bv-viewport { overflow: hidden; position: relative; }
+.bv-viewport .bv-tree { transform-origin: top left; }
+.bv-fitnote { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute); text-align: right; padding: 4px 0 10px; }
+
+/* Vertical (mobile portrait) bracket */
+.bvv { display: flex; flex-direction: column; gap: 4px; }
+.bvv-round { padding: 10px 0 2px; }
+.bvv-round > h3 { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 8px; }
+.bvv-round .bv-card { margin-bottom: 10px; }
+.bvv .bv-champion { margin: 6px 0 14px; }
+.bvv .bv-row { font-size: 15px; padding: 5px 0; }
+.bvv .bv-pts { font-size: 17px; }

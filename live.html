@@ -60,6 +60,11 @@
             return (id && map[id]) ? map[id] : (fallback || 'TBD');
         }
 
+        function av(id) {
+            return window.PCLive.avatarStack((objMap[id] || {}).members, 20);
+        }
+        var objMap = {};
+
         function matchCard(m, sideNames) {
             var live = m.live && m.status !== 'completed' ? m.live : null;
             var s1 = live ? live.score1 : scoreFromSummary(m.score_summary, 0);
@@ -72,9 +77,9 @@
                 '<div class="match-top"><span>' + esc(roundLabel(m)) + (m.court ? ' · ' + esc(m.court) : '') + '</span>' +
                 (isLive ? '<span class="live-tag">● Live' + (live && live.game ? ' · Game ' + live.game : '') + '</span>'
                         : '<span>' + esc(PC.statusLabel(m.status)) + '</span>') + '</div>' +
-                '<div class="match-row"><span class="team' + (w1 ? ' won' : '') + '">' + esc(p1) + '</span>' +
+                '<div class="match-row"><span class="team' + (w1 ? ' won' : '') + '">' + av(m.sideIds[0]) + ' ' + esc(p1) + '</span>' +
                 '<span class="pts' + (w1 ? ' won' : '') + '">' + (s1 == null ? '–' : s1) + '</span></div>' +
-                '<div class="match-row"><span class="team' + (w2 ? ' won' : '') + '">' + esc(p2) + '</span>' +
+                '<div class="match-row"><span class="team' + (w2 ? ' won' : '') + '">' + av(m.sideIds[1]) + ' ' + esc(p2) + '</span>' +
                 '<span class="pts' + (w2 ? ' won' : '') + '">' + (s2 == null ? '–' : s2) + '</span></div>' +
                 (m.status === 'completed' && m.score_summary && m.score_summary.indexOf(',') !== -1
                     ? '<div class="match-foot"><span>Games: ' + esc(m.score_summary) + '</span></div>' : '') +
@@ -107,12 +112,14 @@
             var head = isT ? snap.tournament : snap.league;
             var members = isT ? snap.participants : snap.members;
             var nameMap = {};
-            (members || []).forEach(function (m) { nameMap[m.id] = m.name || 'Player'; });
+            objMap = {};
+            (members || []).forEach(function (m) { nameMap[m.id] = m.name || 'Player'; objMap[m.id] = m; });
 
             var matches = (snap.matches || []).map(function (m) {
                 var id1 = isT ? m.participant1_id : m.team1_member_id;
                 var id2 = isT ? m.participant2_id : m.team2_member_id;
                 var winner = isT ? m.winner_id : m.winner_member_id;
+                m.sideIds = [id1, id2];
                 m.sideNames = [nameFor(nameMap, id1), nameFor(nameMap, id2)];
                 m.winnerSide = winner ? (winner === id1 ? 1 : 2) : 0;
                 return m;
@@ -182,7 +189,7 @@
             var rows = (snap.standings || []).map(function (s, i) {
                 return '<tr class="' + (i < 3 ? 'top' : '') + '">' +
                     '<td class="num">' + (s.rank || i + 1) + '</td>' +
-                    '<td class="name">' + esc(nameFor(nameMap, s.member_id)) + '</td>' +
+                    '<td class="name">' + window.PCLive.avatarStack((objMap[s.member_id] || {}).members, 20) + ' ' + esc(nameFor(nameMap, s.member_id)) + '</td>' +
                     '<td class="num">' + s.wins + '</td><td class="num">' + s.losses + '</td>' +
                     '<td class="num">' + (s.points_for ?? '–') + '</td><td class="num">' + (s.points_against ?? '–') + '</td>' +
                     '<td class="num">' + (s.point_differential > 0 ? '+' : '') + (s.point_differential ?? '–') + '</td>' +
@@ -197,7 +204,7 @@
         function membersTable(members) {
             var isT = kind === 't';
             var rows = members.map(function (m) {
-                return '<tr><td class="num">' + (m.seed || '–') + '</td><td class="name">' + esc(m.name || 'Player') + '</td>' +
+                return '<tr><td class="num">' + (m.seed || '–') + '</td><td class="name">' + window.PCLive.avatarStack(m.members, 20) + ' ' + esc(m.name || 'Player') + '</td>' +
                     '<td>' + esc(PC.statusLabel(m.status)) + '</td>' +
                     (isT ? '<td class="num">' + (m.placement ? '#' + m.placement : '–') + '</td>' : '') + '</tr>';
             }).join('');

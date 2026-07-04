@@ -155,8 +155,8 @@
             var kind = view.kind, isT = kind === 't';
             var head = isT ? snap.tournament : snap.league;
             var members = isT ? snap.participants : snap.members;
-            var nameMap = {};
-            (members || []).forEach(function (m) { nameMap[m.id] = m.name || 'Player'; });
+            var nameMap = {}, objMap = {};
+            (members || []).forEach(function (m) { nameMap[m.id] = m.name || 'Player'; objMap[m.id] = m; });
 
             var liveUrl = location.origin + '/live.html?' + kind + '=' + view.id;
             var html = '<div class="event-head">' +
@@ -198,7 +198,8 @@
                         '<button class="btn primary" data-complete="' + m.id + '">Complete</button>';
                 }
                 return '<div class="event-row"><div class="grow">' +
-                    '<div class="title">' + esc(n1) + ' vs ' + esc(n2) + '</div>' +
+                    '<div class="title">' + window.PCLive.avatarStack((objMap[id1] || {}).members, 18) + ' ' + esc(n1) +
+                    ' vs ' + window.PCLive.avatarStack((objMap[id2] || {}).members, 18) + ' ' + esc(n2) + '</div>' +
                     '<div class="sub">' + (m.week ? 'Week ' + m.week : 'Round ' + (m.round || '?')) +
                     (m.court ? ' · ' + esc(m.court) : '') + ' · ' + esc(PC.statusLabel(m.status)) +
                     (live ? ' · live ' + live.score1 + '–' + live.score2 : '') + '</div></div>' +

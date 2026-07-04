@@ -149,7 +149,56 @@
     })[s] || (s || '');
   }
 
+  // ---- avatars ---------------------------------------------------------------
+  // Mirrors the iOS app's ProfileAvatarView priority exactly:
+  // avatar_id (bundled preset, same PNGs shipped in assets/avatars/) →
+  // avatar_url (public storage photo) → avatar_emoji → initials fallback.
+  // The profile record is the single source of truth — no event-local avatars.
+
+  function initialsFor(name) {
+    var parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return '?';
+    return parts.slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase();
+  }
+
+  function avatarBubble(member, size) {
+    size = size || 24;
+    var style = 'width:' + size + 'px;height:' + size + 'px;';
+    var name = esc(member && member.name || '');
+    if (member && member.avatar_id) {
+      return '<img class="pc-avatar" style="' + style + '" src="assets/avatars/' +
+        encodeURIComponent(member.avatar_id) + '.png" alt="' + name + '" loading="lazy" ' +
+        'onerror="this.outerHTML=window.PCLive.initialsBubble(\'' + esc(initialsFor(member.name)) + '\',' + size + ')">';
+    }
+    if (member && member.avatar_url) {
+      return '<img class="pc-avatar" style="' + style + '" src="' + esc(member.avatar_url) + '" alt="' + name + '" loading="lazy" ' +
+        'onerror="this.outerHTML=window.PCLive.initialsBubble(\'' + esc(initialsFor(member.name)) + '\',' + size + ')">';
+    }
+    if (member && member.avatar_emoji) {
+      return '<span class="pc-avatar pc-avatar-emoji" style="' + style + 'font-size:' + Math.round(size * 0.55) + 'px" aria-hidden="true">' +
+        esc(member.avatar_emoji) + '</span>';
+    }
+    return initialsBubble(initialsFor(member && member.name), size);
+  }
+
+  function initialsBubble(initials, size) {
+    return '<span class="pc-avatar pc-avatar-initials" style="width:' + size + 'px;height:' + size +
+      'px;font-size:' + Math.max(9, Math.round(size * 0.38)) + 'px" aria-hidden="true">' + esc(initials || '?') + '</span>';
+  }
+
+  /** Stacked avatars for a participant/team (members array from snapshot). */
+  function avatarStack(members, size) {
+    size = size || 24;
+    var list = (members && members.length) ? members.slice(0, 2) : [null];
+    return '<span class="pc-avatar-stack">' +
+      list.map(function (m) { return avatarBubble(m, size); }).join('') + '</span>';
+  }
+
   window.PCLive = {
+    avatarBubble: avatarBubble,
+    avatarStack: avatarStack,
+    initialsBubble: initialsBubble,
+    initialsFor: initialsFor,
     client: client,
     tournamentSnapshot: tournamentSnapshot,
     leagueSnapshot: leagueSnapshot,

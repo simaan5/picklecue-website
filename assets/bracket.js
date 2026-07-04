@@ -1,14 +1,19 @@
 /* PickleCue BracketView — visual tournament tree renderer.
  *
- * Renders elimination brackets from a live_tournament_snapshot: round columns
- * left→right, match cards with seeds/scores/courts/status, CSS-grid alignment
- * with connector elbows for perfect power-of-two trees, champion card when the
- * final completes. Data-only re-render on every snapshot refetch — realtime
- * comes from the caller's existing subscription.
+ * Renders elimination brackets from a live_tournament_snapshot with three
+ * automatic layouts (no mandatory horizontal scrolling anywhere):
+ *   • Desktop / tablet / TV — full tree, scaled to FIT the container width
+ *     (CSS transform), connector elbows on perfect power-of-two trees.
+ *   • Narrow screens (or when fitting would make text unreadable) — a
+ *     vertical bracket: stacked round sections Round 1 → Final → Champion.
+ *   • display=tv (body.bv-tv) — chrome-free, always fit, larger type.
+ *
+ * Every participant row shows the SAME avatar the iOS app shows (preset
+ * avatar_id → uploaded avatar_url → avatar_emoji → initials), resolved from
+ * the profile record via the snapshot — never event-local avatar copies.
  *
  * DB round conventions differ by generator (some store the final as round 1,
- * some as round N), so display order is derived from matches-per-round:
- * biggest round first, single-match round last.
+ * some as round N), so display order is derived from matches-per-round.
  */
 (function () {
   'use strict';
@@ -23,7 +28,6 @@
     return !!f && f.indexOf('elimination') !== -1;
   }
 
-  /** rounds: [[match,…],…] display-ordered (first round → final). */
   function orderRounds(matches) {
     var byRound = {};
     matches.forEach(function (m) {
@@ -34,13 +38,10 @@
       .map(function (r) {
         return byRound[r].sort(function (a, b) { return (a.match_number || 0) - (b.match_number || 0); });
       });
-    // Display biggest round first. If counts increase with round number,
-    // the generator stored the final as round 1 — reverse.
     if (rounds.length > 1 && rounds[0].length < rounds[rounds.length - 1].length) rounds.reverse();
     return rounds;
   }
 
-  /** Perfect single-elim halving (8→4→2→1)? Enables grid + connectors. */
   function isPerfectTree(rounds) {
     for (var i = 1; i < rounds.length; i++) {
       if (rounds[i].length * 2 !== rounds[i - 1].length) return false;
@@ -53,6 +54,8 @@
     if (fromEnd === 0) return 'Final';
     if (fromEnd === 1) return 'Semifinals';
     if (fromEnd === 2 && count === 4) return 'Quarterfinals';
+    if (count === 16) return 'Round of 32';
+    if (count === 8 && fromEnd === 3) return 'Round of 16';
     return 'Round ' + (index + 1);
   }
 
@@ -85,8 +88,12 @@
     var won = m.winner_id && m.winner_id === id;
     var lost = m.winner_id && id && m.winner_id !== id;
     var score = scoreFor(m, side);
+    var avatar = id
+      ? window.PCLive.avatarStack(p && p.members, ctx.avatarSize)
+      : window.PCLive.initialsBubble('·', ctx.avatarSize);
     return '<div class="bv-row' + (won ? ' bv-won' : '') + (lost ? ' bv-lost' : '') + (id ? '' : ' bv-tbd') + '">' +
       (p && p.seed ? '<span class="bv-seed">' + p.seed + '</span>' : '<span class="bv-seed bv-noseed"></span>') +
+      avatar +
       '<span class="bv-name">' + esc(name) + '</span>' +
       (won ? '<span class="bv-check">✓</span>' : '') +
       '<span class="bv-pts">' + (score == null ? '' : score) + '</span></div>';
@@ -97,29 +104,29 @@
     var meta = [];
     if (m.court) meta.push(esc(m.court));
     if (st.label) meta.push('<span class="bv-status ' + st.cls + '">' + st.label + '</span>');
-    return '<div class="bv-card ' + st.cls + (ctx.interactive ? ' bv-tappable' : '') + '" data-bv-match="' + m.id + '">' +
+    return '<div class="bv-card ' + st.cls + (ctx.interactive ? ' bv-tappable' : '') + '" data-bv-match="' + m.id + '"' +
+      ' role="group" aria-label="Match: ' + esc((ctx.participants[m.participant1_id] || {}).name || 'TBD') +
+      ' vs ' + esc((ctx.participants[m.participant2_id] || {}).name || 'TBD') + '">' +
       sideRow(m, 1, ctx) + sideRow(m, 2, ctx) +
       (meta.length ? '<div class="bv-meta">' + meta.join(' · ') + '</div>' : '') +
       '</div>';
   }
 
-  function championCard(finalMatch, ctx) {
+  function championHTML(finalMatch, ctx) {
     if (!finalMatch || finalMatch.status !== 'completed' || !finalMatch.winner_id) return '';
     var p = ctx.participants[finalMatch.winner_id];
-    return '<div class="bv-col bv-champion-col"><div class="bv-round-title">Champion</div>' +
-      '<div class="bv-champion"><div class="bv-trophy">🏆</div>' +
+    return '<div class="bv-champion"><div class="bv-trophy">🏆</div>' +
+      (p ? window.PCLive.avatarStack(p.members, 44) : '') +
       '<div class="bv-champ-name">' + esc(p ? p.name : 'Champion') + '</div>' +
       (finalMatch.score_summary ? '<div class="bv-champ-score">' + esc(finalMatch.score_summary) + '</div>' : '') +
-      '</div></div>';
+      '</div>';
   }
 
-  /**
-   * Render a bracket into `container`.
-   * opts: { interactive: bool, onMatch: fn(matchId) }
-   * Returns false when the snapshot has no renderable bracket.
-   */
+  // ---- public entry -----------------------------------------------------
+
   function render(container, snap, opts) {
     opts = opts || {};
+    if (container._bvCleanup) { container._bvCleanup(); container._bvCleanup = null; }
     if (!snap || !isElimination(snap) || !(snap.matches || []).length) {
       container.innerHTML = '<div class="state"><h2>No bracket for this event</h2>' +
         '<p>Brackets appear for elimination tournaments once the schedule is generated.</p></div>';
@@ -127,11 +134,9 @@
     }
     var participants = {};
     (snap.participants || []).forEach(function (p) { participants[p.id] = p; });
-    var ctx = { participants: participants, interactive: !!opts.interactive };
+    var tv = document.body.classList.contains('bv-tv');
+    var ctx = { participants: participants, interactive: !!opts.interactive, avatarSize: tv ? 30 : 22 };
 
-    // Bracket sides: single elimination is ONE tree even when the generator
-    // tags the final as bracket_side='finals' — only a real losers bracket
-    // splits the view (double elimination).
     var hasLosers = snap.matches.some(function (m) { return m.bracket_side === 'losers'; });
     var sides = {};
     snap.matches.forEach(function (m) {
@@ -141,27 +146,66 @@
     var order = ['main', 'winners', 'losers', 'finals'].filter(function (k) { return sides[k]; });
     Object.keys(sides).forEach(function (k) { if (order.indexOf(k) === -1) order.push(k); });
 
-    var html = order.map(function (key) {
-      var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
-      return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
-        renderTree(sides[key], ctx);
-    }).join('');
+    var narrow = container.clientWidth <= 620 && !tv;
+    if (narrow) {
+      renderVertical(container, sides, order, ctx);
+    } else {
+      renderFit(container, sides, order, ctx, tv);
+    }
 
-    container.innerHTML = '<div class="bv-scroll">' + html + '</div>';
-
-    if (opts.interactive && opts.onMatch) {
+    if (ctx.interactive && opts.onMatch) {
       Array.prototype.forEach.call(container.querySelectorAll('[data-bv-match]'), function (el) {
         el.addEventListener('click', function () { opts.onMatch(el.dataset.bvMatch); });
       });
     }
+
+    // Re-render on real size changes (orientation, window resize).
+    var lastW = container.clientWidth;
+    var timer = null;
+    function onResize() {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        if (Math.abs(container.clientWidth - lastW) > 40) render(container, snap, opts);
+      }, 200);
+    }
+    window.addEventListener('resize', onResize);
+    container._bvCleanup = function () {
+      clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
+    };
     return true;
   }
 
-  function renderTree(matches, ctx) {
+  // ---- fit mode (desktop / tablet / TV): scale the tree to the container --
+
+  function renderFit(container, sides, order, ctx, tv) {
+    var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
+    var html = order.map(function (key) {
+      return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
+        '<div class="bv-viewport">' + treeHTML(sides[key], ctx) + '</div>';
+    }).join('');
+    container.innerHTML = html;
+
+    var minScale = tv ? 0.25 : 0.55;
+    var needVertical = false;
+    Array.prototype.forEach.call(container.querySelectorAll('.bv-viewport'), function (vp) {
+      var tree = vp.querySelector('.bv-tree');
+      var cw = vp.clientWidth;
+      var tw = tree.scrollWidth;
+      var scale = Math.min(1, cw / tw);
+      if (scale < minScale) { needVertical = true; return; }
+      tree.style.transform = scale < 1 ? 'scale(' + scale + ')' : '';
+      vp.style.height = (tree.scrollHeight * scale) + 'px';
+    });
+    // Fitting would make the text unreadably small → vertical layout instead.
+    if (needVertical) renderVertical(container, sides, order, ctx);
+  }
+
+  function treeHTML(matches, ctx) {
     var rounds = orderRounds(matches);
     var finalMatch = rounds[rounds.length - 1].length === 1 ? rounds[rounds.length - 1][0] : null;
     var perfect = isPerfectTree(rounds);
-    var units = rounds[0].length * 2; // grid rows in leaf units
+    var units = rounds[0].length * 2;
 
     var cols = rounds.map(function (round, ri) {
       var title = '<div class="bv-round-title">' + roundTitle(ri, rounds.length, round.length) + '</div>';
@@ -179,7 +223,31 @@
       return '<div class="bv-col">' + title + body + '</div>';
     });
 
-    return '<div class="bv-tree' + (perfect ? ' bv-perfect' : '') + '">' + cols.join('') + championCard(finalMatch, ctx) + '</div>';
+    var champion = championHTML(finalMatch, ctx);
+    return '<div class="bv-tree' + (perfect ? ' bv-perfect' : '') + '">' + cols.join('') +
+      (champion ? '<div class="bv-col bv-champion-col"><div class="bv-round-title">Champion</div>' + champion + '</div>' : '') +
+      '</div>';
+  }
+
+  // ---- vertical mode (mobile portrait / very large brackets on small screens)
+
+  function renderVertical(container, sides, order, ctx) {
+    var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
+    var html = order.map(function (key) {
+      var rounds = orderRounds(sides[key]);
+      var finalMatch = rounds[rounds.length - 1].length === 1 ? rounds[rounds.length - 1][0] : null;
+      var champion = championHTML(finalMatch, ctx);
+      return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
+        '<div class="bvv">' +
+        (champion ? '<div class="bvv-round"><h3>Champion</h3>' + champion + '</div>' : '') +
+        rounds.map(function (round, ri) {
+          return '<div class="bvv-round"><h3>' + roundTitle(ri, rounds.length, round.length) +
+            ' <span class="count" style="color:var(--ink-mute)">' + round.length + '</span></h3>' +
+            round.map(function (m) { return matchCard(m, ctx); }).join('') + '</div>';
+        }).join('') +
+        '</div>';
+    }).join('');
+    container.innerHTML = html;
   }
 
   window.PCBracket = { render: render, isElimination: isElimination };
