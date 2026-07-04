@@ -39,7 +39,7 @@
         var eventId = tid || lid;
         var main = document.getElementById('main');
         var snap = null;
-        var activeTab = ['bracket', 'courts', 'me', 'register'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
+        var activeTab = ['bracket', 'courts', 'me', 'register', 'results'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
         var regInfo = null, regResult = null, myReg = null, waiver = null;
         var mePid = null;
         if (params.get('display') === 'tv') document.body.classList.add('bv-tv');
@@ -169,6 +169,7 @@
                 tabBtn('matches', 'Matches') +
                 (isT && window.PCBracket.isElimination(snap) ? tabBtn('bracket', 'Bracket') : '') +
                 (matches.some(function (m) { return m.court; }) ? tabBtn('courts', 'Courts') : '') +
+                (matches.some(function (m) { return m.status === 'completed'; }) ? tabBtn('results', 'Results') : '') +
                 tabBtn('me', 'My next match') +
                 (isT ? '' : tabBtn('standings', 'Standings')) +
                 tabBtn('players', isT ? 'Teams' : 'Members') +
@@ -176,7 +177,9 @@
 
             if (activeTab === 'bracket' && !(kind === 't' && window.PCBracket.isElimination(snap))) activeTab = 'matches';
             if (activeTab === 'courts' && !matches.some(function (m) { return m.court; })) activeTab = 'matches';
-            if (activeTab === 'register') {
+            if (activeTab === 'results') {
+                html += resultsView(matches, members || [], nameMap, isT);
+            } else if (activeTab === 'register') {
                 html += registerView();
             } else if (activeTab === 'courts') {
                 html += courtBoard(matches);
@@ -200,6 +203,20 @@
             if (activeTab === 'bracket') {
                 window.PCBracket.render(document.getElementById('bvHost'), snap, {});
             }
+            var shareBtn = document.getElementById('recapShare');
+            if (shareBtn) shareBtn.addEventListener('click', async function () {
+                var url = 'https://www.picklecue.com/live.html?' + kind + '=' + eventId + '&view=results';
+                var head2 = kind === 't' ? snap.tournament : snap.league;
+                if (navigator.share) {
+                    try { await navigator.share({ title: head2.name + ' — results', url: url }); } catch (_) {}
+                } else {
+                    navigator.clipboard.writeText(url);
+                    shareBtn.textContent = 'Link copied!';
+                    setTimeout(function () { shareBtn.textContent = 'Share results'; }, 1500);
+                }
+            });
+            var dlBtn = document.getElementById('recapDownload');
+            if (dlBtn) dlBtn.addEventListener('click', function () { downloadRecapGraphic(); });
             var regCta = document.getElementById('regCta');
             if (regCta) regCta.addEventListener('click', function () {
                 if (regInfo.spots_left === 0 && !regInfo.waitlist_enabled) return;
@@ -235,6 +252,129 @@
 
         function tabBtn(id, label) {
             return '<button class="tab" role="tab" data-tab="' + id + '" aria-selected="' + (activeTab === id) + '">' + label + '</button>';
+        }
+
+        // ---- Results & Recap ---------------------------------------------------
+        function resultsView(matches, members, nameMap, isT) {
+            var done = matches.filter(function (m) { return m.status === 'completed'; });
+            var champion = null, runnerUp = null, finalMatch = null;
+            if (isT) {
+                finalMatch = findFinal(matches);
+                if (finalMatch) {
+                    champion = objMap[finalMatch.winner_id];
+                    var loserId = finalMatch.sideIds[0] === finalMatch.winner_id ? finalMatch.sideIds[1] : finalMatch.sideIds[0];
+                    runnerUp = loserId ? objMap[loserId] : null;
+                }
+            }
+            var html = '<section class="section">';
+            if (champion) {
+                html += '<div class="bv-champion" style="max-width:420px;margin:0 auto 18px">' +
+                    '<div class="bv-trophy">\uD83C\uDFC6</div>' +
+                    window.PCLive.avatarStack(champion.members, 52) +
+                    '<div class="bv-champ-name" style="font-size:1.5rem">' + esc(champion.name) + '</div>' +
+                    (finalMatch.score_summary ? '<div class="bv-champ-score">Final: ' + esc(finalMatch.score_summary) +
+                        (runnerUp ? ' vs ' + esc(runnerUp.name) : '') + '</div>' : '') + '</div>';
+                html += '<div class="bar" style="justify-content:center;margin-bottom:20px">' +
+                    '<button class="btn primary" id="recapDownload">Download champion graphic</button>' +
+                    '<button class="btn ghost" id="recapShare">Share results</button></div>';
+            } else {
+                html += '<div class="bar" style="justify-content:center;margin-bottom:16px">' +
+                    '<button class="btn ghost" id="recapShare">Share results</button></div>';
+            }
+            // Wins leaderboard from completed matches.
+            var wins = {};
+            done.forEach(function (m) {
+                var w = isT ? m.winner_id : m.winner_member_id;
+                if (w) wins[w] = (wins[w] || 0) + 1;
+            });
+            var board = Object.keys(wins).map(function (id) {
+                return { id: id, w: wins[id], name: nameFor(nameMap, id) };
+            }).sort(function (a, b) { return b.w - a.w; }).slice(0, 10);
+            if (board.length) {
+                html += '<h2>Most wins</h2><div class="table-wrap"><table class="live-table">' +
+                    '<thead><tr><th class="num">#</th><th>Team</th><th class="num">Wins</th></tr></thead><tbody>' +
+                    board.map(function (r, i) {
+                        return '<tr class="' + (i < 3 ? 'top' : '') + '"><td class="num">' + (i + 1) + '</td>' +
+                            '<td class="name">' + window.PCLive.avatarStack((objMap[r.id] || {}).members, 20) + ' ' + esc(r.name) + '</td>' +
+                            '<td class="num">' + r.w + '</td></tr>';
+                    }).join('') + '</tbody></table></div>';
+            }
+            html += '<h2 style="margin-top:16px">All results <span class="count">' + done.length + '</span></h2>' +
+                done.sort(function (a, b) { return (b.round || 0) - (a.round || 0) || (a.match_number || 0) - (b.match_number || 0); })
+                    .map(function (m) {
+                        var wId = isT ? m.winner_id : m.winner_member_id;
+                        var wSide = wId === m.sideIds[0] ? 0 : 1;
+                        return '<div class="event-row"><div class="grow"><div class="title" style="font-size:14px">' +
+                            esc(m.sideNames[wSide]) + ' <span style="color:var(--court)">def.</span> ' + esc(m.sideNames[1 - wSide]) + '</div>' +
+                            '<div class="sub">' + esc(roundLabel(m)) + (m.court ? ' \u00b7 ' + esc(m.court) : '') + '</div></div>' +
+                            '<span class="pts" style="font-family:var(--f-mono);font-weight:700">' + esc(m.score_summary || '') + '</span></div>';
+                    }).join('') +
+                '<p class="foot-note">Powered by <a href="/">PickleCue</a> \u2014 live brackets, scores, and event tools.</p></section>';
+            return html;
+        }
+
+        // The final = the completed match in the round that has exactly ONE match
+        // (works for both DB round conventions and fixtures without
+        // winner_next_match_id links).
+        function findFinal(matches) {
+            var byRound = {};
+            matches.forEach(function (m) {
+                if (m.status === 'bye') return;
+                (byRound[m.round || 0] = byRound[m.round || 0] || []).push(m);
+            });
+            var candidates = [];
+            Object.keys(byRound).forEach(function (r) {
+                if (byRound[r].length === 1) candidates.push(byRound[r][0]);
+            });
+            var decided = candidates.filter(function (m) { return m.status === 'completed' && m.winner_id; });
+            // Prefer an explicit "nothing after me" final when links exist.
+            return decided.find(function (m) { return !m.winner_next_match_id; }) || decided[0] || null;
+        }
+
+        // Canvas-rendered 1080\u00d71350 champion card (Instagram portrait).
+        function downloadRecapGraphic() {
+            var isT = kind === 't';
+            var head = isT ? snap.tournament : snap.league;
+            var matches = (snap.matches || []);
+            var finalMatch = findFinal(matches);
+            if (!finalMatch) return;
+            var champ = objMap[finalMatch.winner_id] || { name: 'Champion' };
+            var c = document.createElement('canvas');
+            c.width = 1080; c.height = 1350;
+            var x = c.getContext('2d');
+            // Ground
+            x.fillStyle = '#0F1214'; x.fillRect(0, 0, 1080, 1350);
+            x.fillStyle = '#1A1F23'; x.fillRect(60, 60, 960, 1230);
+            x.strokeStyle = '#6FB39B'; x.lineWidth = 4; x.strokeRect(60, 60, 960, 1230);
+            // Header
+            x.fillStyle = '#8A9097'; x.font = '600 34px Menlo, monospace'; x.textAlign = 'center';
+            x.fillText('T O U R N A M E N T   C H A M P I O N', 540, 200);
+            // Trophy
+            x.font = '160px serif'; x.fillText('\uD83C\uDFC6', 540, 470);
+            // Champion name (wrap if needed)
+            x.fillStyle = '#EDE9DF'; x.font = '700 84px Georgia, serif';
+            var name = champ.name || 'Champion';
+            if (x.measureText(name).width > 880) x.font = '700 60px Georgia, serif';
+            x.fillText(name, 540, 640);
+            // Final score
+            x.fillStyle = '#6FB39B'; x.font = '600 44px Menlo, monospace';
+            if (finalMatch.score_summary) x.fillText('FINAL  ' + finalMatch.score_summary, 540, 740);
+            // Event name + date
+            x.fillStyle = '#B8BEC5'; x.font = '400 46px Georgia, serif';
+            x.fillText(head.name, 540, 880);
+            if (head.start_date) {
+                x.fillStyle = '#8A9097'; x.font = '400 32px -apple-system, sans-serif';
+                x.fillText(new Date(head.start_date).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }), 540, 940);
+            }
+            // Footer brand
+            x.fillStyle = '#EDE9DF'; x.font = '700 40px Georgia, serif';
+            x.fillText('PickleCue', 540, 1180);
+            x.fillStyle = '#8A9097'; x.font = '400 26px -apple-system, sans-serif';
+            x.fillText('Live brackets \u00b7 scores \u00b7 event day tools \u2014 picklecue.com', 540, 1225);
+            var a = document.createElement('a');
+            a.download = (head.name || 'picklecue').replace(/[^a-z0-9]+/gi, '_') + '_champion.png';
+            a.href = c.toDataURL('image/png');
+            a.click();
         }
 
         // ---- Registration ------------------------------------------------------
