@@ -40,7 +40,7 @@
         var main = document.getElementById('main');
         var snap = null;
         var activeTab = ['bracket', 'courts', 'me', 'register'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
-        var regInfo = null, regResult = null, myReg = null;
+        var regInfo = null, regResult = null, myReg = null, waiver = null;
         var mePid = null;
         if (params.get('display') === 'tv') document.body.classList.add('bv-tv');
         var unsub = null;
@@ -275,6 +275,11 @@
                       '<div class="field" id="rPartnerNameWrap" hidden><label>Partner\u2019s name</label><input id="rPartnerName" maxlength="80"></div>'
                     : '') +
                 '<div class="field"><label>Note to the organizer (optional)</label><input id="rNotes" maxlength="500"></div>' +
+                (waiver && waiver.required
+                    ? '<div class="field"><label>' + esc(waiver.title) + ' (v' + waiver.version + ')</label>' +
+                      '<div style="max-height:180px;overflow-y:auto;border:1px solid var(--rule-strong);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-soft);background:var(--paper);white-space:pre-wrap">' + esc(waiver.body) + '</div></div>' +
+                      '<div class="field"><label>Sign by typing your full name *</label><input id="rWaiverSig" maxlength="120" autocomplete="name" placeholder="Your full legal name"></div>'
+                    : '') +
                 '<label class="bcheck" style="padding:6px 0 14px"><input type="checkbox" id="rTerms">' +
                 '<span style="font-size:13.5px;color:var(--ink-soft)">I agree to the event rules and PickleCue\u2019s <a href="terms.html" target="_blank" rel="noopener">Terms</a> &amp; <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, and I understand the event organizer can see my registration details.</span></label>' +
                 '<button class="btn primary block" id="regSubmit">' +
@@ -303,6 +308,8 @@
                 var err = document.getElementById('regErr');
                 err.textContent = '';
                 if (!document.getElementById('rTerms').checked) { err.textContent = 'Please agree to the event rules and terms first.'; return; }
+                var sigField = document.getElementById('rWaiverSig');
+                if (sigField && sigField.value.trim().length < 2) { err.textContent = 'Sign the waiver by typing your full name.'; return; }
                 btn.disabled = true;
                 try {
                     var r = await PC.client.rpc('register_for_event', {
@@ -320,6 +327,14 @@
                     if (r.error) throw r.error;
                     regResult = r.data;
                     try { localStorage.setItem('pc_reg_' + eventId, r.data.registration_id); } catch (_) {}
+                    if (sigField && r.data.participant_id) {
+                        var sw = await PC.client.rpc('sign_event_waiver', {
+                            p_scope: kind === 't' ? 'tournament' : 'league', p_event_id: eventId,
+                            p_signer_name: sigField.value.trim(),
+                            p_registration_id: r.data.registration_id, p_participant_id: null,
+                            p_user_agent: navigator.userAgent, p_source: 'web' });
+                        if (sw.error) console.warn('waiver sign failed', sw.error.message);
+                    }
                     await refetch();
                 } catch (e) {
                     err.textContent = e.message || 'Registration failed — try again.';
@@ -474,9 +489,11 @@
                 var results = await Promise.all([
                     kind === 't' ? PC.tournamentSnapshot(eventId) : PC.leagueSnapshot(eventId),
                     PC.client.rpc('event_registration_info', { p_scope: kind === 't' ? 'tournament' : 'league', p_event_id: eventId }),
+                    PC.client.rpc('get_event_waiver', { p_scope: kind === 't' ? 'tournament' : 'league', p_event_id: eventId }),
                 ]);
                 snap = results[0];
                 regInfo = results[1].data || null;
+                waiver = results[2].data || null;
                 try {
                     var regId = localStorage.getItem('pc_reg_' + eventId);
                     if (regId) {
