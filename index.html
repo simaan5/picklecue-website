@@ -1984,8 +1984,10 @@
                         body: JSON.stringify({ email: email, source: 'website' })
                     }).then(function (r) {
                         if (r.ok || r.status === 409) {
-                            window.track('waitlist_success', { form: formId });
-                            setMsg('You\u2019re on the list. We\u2019ll email you at launch.', 'success');
+                            window.track('waitlist_success', { form: formId, existing: r.status === 409 });
+                            setMsg(r.status === 409
+                                ? 'You\u2019re already on the list \u2014 we\u2019ll email you at launch.'
+                                : 'You\u2019re on the list. We\u2019ll email you at launch.', 'success');
                             form.reset();
                         } else {
                             window.track('waitlist_error', { status: r.status, form: formId });
