@@ -1,19 +1,22 @@
-/* PickleCue BracketView — visual tournament tree renderer.
+/* PickleCue BracketView — 1:1 web port of the app's BracketCanvasView.
  *
- * Renders elimination brackets from a live_tournament_snapshot with three
- * automatic layouts (no mandatory horizontal scrolling anywhere):
- *   • Desktop / tablet / TV — full tree, scaled to FIT the container width
- *     (CSS transform), connector elbows on perfect power-of-two trees.
- *   • Narrow screens (or when fitting would make text unreadable) — a
- *     vertical bracket: stacked round sections Round 1 → Final → Champion.
- *   • display=tv (body.bv-tv) — chrome-free, always fit, larger type.
+ * Mirrors BracketCanvasTheme / RoundTimelineRail / PremiumBracketChrome /
+ * BracketComponents from the iOS app:
+ *   • Court-line backdrop with radial emerald glow and vignette
+ *   • Round Timeline Rail: glass label capsule with a gliding emerald
+ *     selection pill, progress track with per-round nodes, and the glowing
+ *     pickleball marker with a comet trail (images/pickleball-marker.png —
+ *     the app's actual asset)
+ *   • Spotlight: the selected round renders full, adjacent ~0.45 weight,
+ *     far rounds dim/desaturate/scale (BracketTheme.activeWeight)
+ *   • Match cards: exact 160×72 geometry, "QF · M3" header tags, pulsing
+ *     LIVE chip, emerald completed check, winner/loser slot treatment,
+ *     game-progress chip, ghost bye cards, gold champion crown/ring/capsule
+ *   • Rounded-elbow connectors (SVG) with the emerald winner-path under-glow
+ *   • Floating glass dock: fit-all · zoom− · % · zoom+ · recenter
  *
- * Every participant row shows the SAME avatar the iOS app shows (preset
- * avatar_id → uploaded avatar_url → avatar_emoji → initials), resolved from
- * the profile record via the snapshot — never event-local avatar copies.
- *
- * DB round conventions differ by generator (some store the final as round 1,
- * some as round N), so display order is derived from matches-per-round.
+ * Round robin keeps its standings + rounds grid but adopts the same rail
+ * (marker glides between round sections) and card language.
  */
 (function () {
   'use strict';
@@ -23,21 +26,18 @@
       .replace(/"/g, '&quot;');
   };
 
+  // ---- BracketLayoutConstants (exact app values) --------------------------
+  var MW = 160, MH = 72, RS = 36, VG = 12, HH = 42, TP = 8, ELBOW = 6;
+
   function isElimination(snap) {
     var f = snap && snap.tournament && snap.tournament.format;
     return !!f && f.indexOf('elimination') !== -1;
   }
-
   function isRoundRobin(snap) {
     var f = snap && snap.tournament && snap.tournament.format;
     return !!f && f.indexOf('round_robin') !== -1;
   }
-
-  // Every format this renderer can draw — mirrors the app's bracket screen,
-  // which shows elimination trees AND round-robin schedules/standings.
-  function supports(snap) {
-    return isElimination(snap) || isRoundRobin(snap);
-  }
+  function supports(snap) { return isElimination(snap) || isRoundRobin(snap); }
 
   function orderRounds(matches) {
     var byRound = {};
@@ -53,13 +53,6 @@
     return rounds;
   }
 
-  function isPerfectTree(rounds) {
-    for (var i = 1; i < rounds.length; i++) {
-      if (rounds[i].length * 2 !== rounds[i - 1].length) return false;
-    }
-    return rounds.length > 1 && rounds[rounds.length - 1].length === 1;
-  }
-
   function roundTitle(index, total, count) {
     var fromEnd = total - 1 - index;
     if (fromEnd === 0) return 'Final';
@@ -70,15 +63,31 @@
     return 'Round ' + (index + 1);
   }
 
-  function statusInfo(m) {
-    if (m.status === 'in_progress') return { cls: 'bv-live', label: '● Live' };
-    if (m.status === 'completed') return { cls: 'bv-done', label: 'Final' };
-    if (m.status === 'bye') return { cls: 'bv-bye', label: 'Bye' };
-    if (m.participant1_id && m.participant2_id) return { cls: 'bv-ready', label: 'On deck' };
-    return { cls: 'bv-pending', label: '' };
+  // BracketTheme.condensedRoundLabel
+  function condense(name) {
+    var lower = name.toLowerCase();
+    if (lower.indexOf('pool') !== -1) return 'Pool';
+    if (lower.indexOf('quarter') !== -1) return 'QF';
+    if (lower.indexOf('semi') !== -1) return 'SF';
+    if (lower.indexOf('final') !== -1) return 'Final';
+    var digits = name.replace(/\D/g, '');
+    if (/round of /.test(lower)) return digits ? 'R' + digits : name;
+    if (/^round /.test(lower)) return digits ? 'R' + digits : name;
+    return name;
   }
 
-  function scoreFor(m, side) {
+  // BracketTheme.activeWeight → spotlight class (1.0 / 0.45 / 0)
+  function weightClass(round, selected) {
+    if (selected < 0) return 'bc-w2';
+    var d = Math.abs(round - selected);
+    return d === 0 ? 'bc-w2' : (d === 1 ? 'bc-w1' : 'bc-w0');
+  }
+
+  function isBye(m) {
+    return m.status === 'bye' || (!!m.winner_id && (!m.participant1_id || !m.participant2_id));
+  }
+
+  function liveScore(m, side) {
     if (m.live && m.status !== 'completed' && m.live.score1 != null) {
       return side === 1 ? m.live.score1 : m.live.score2;
     }
@@ -92,95 +101,339 @@
     return null;
   }
 
-  function sideRow(m, side, ctx) {
+  // CanvasBracketMatchCard.gameProgressLabel: decided sets = ≥11 & margin ≥2.
+  function gameProgress(m) {
+    if (m.status !== 'in_progress' || !m.score_summary) return null;
+    var w1 = 0, w2 = 0;
+    m.score_summary.split(',').forEach(function (set) {
+      var p = set.trim().split('-');
+      if (p.length !== 2) return;
+      var a = parseInt(p[0], 10), b = parseInt(p[1], 10);
+      if (isNaN(a) || isNaN(b)) return;
+      if (Math.max(a, b) >= 11 && Math.abs(a - b) >= 2) { if (a > b) w1++; else w2++; }
+    });
+    return 'Game ' + (w1 + w2 + 1) + ' · ' + w1 + '–' + w2;
+  }
+
+  // ---- card markup (CanvasBracketMatchCard port) ---------------------------
+
+  function slotRow(m, side, ctx) {
     var id = side === 1 ? m.participant1_id : m.participant2_id;
     var p = id ? ctx.participants[id] : null;
     var name = p ? p.name : (id ? 'Player' : 'TBD');
     var won = m.winner_id && m.winner_id === id;
     var lost = m.winner_id && id && m.winner_id !== id;
-    var score = scoreFor(m, side);
+    var score = liveScore(m, side);
     var avatar = id
       ? window.PCLive.avatarStack(p && p.members, ctx.avatarSize)
       : window.PCLive.initialsBubble('·', ctx.avatarSize);
-    return '<div class="bv-row' + (won ? ' bv-won' : '') + (lost ? ' bv-lost' : '') + (id ? '' : ' bv-tbd') + '">' +
-      (p && p.seed ? '<span class="bv-seed">' + p.seed + '</span>' : '<span class="bv-seed bv-noseed"></span>') +
+    return '<div class="bc-slot' + (won ? ' bc-won' : '') + (lost ? ' bc-lost' : '') + (id ? '' : ' bc-tbd') + '">' +
+      '<span class="bc-seed">' + (p && p.seed ? p.seed : '') + '</span>' +
       avatar +
-      '<span class="bv-name">' + esc(name) + '</span>' +
-      (won ? '<span class="bv-check">✓</span>' : '') +
-      '<span class="bv-pts">' + (score == null ? '' : score) + '</span></div>';
+      '<span class="bc-name">' + esc(name) + '</span>' +
+      (won ? '<span class="bc-check">✓</span>' : '') +
+      '<span class="bc-score">' + (score == null ? '' : score) + '</span></div>';
   }
 
-  function matchCard(m, ctx) {
-    var st = statusInfo(m);
-    var meta = [];
-    if (m.court) meta.push(esc(m.court));
-    if (st.label) meta.push('<span class="bv-status ' + st.cls + '">' + st.label + '</span>');
-    // "QF · M1"-style tag, exactly like the app's bracket canvas cards.
-    var tag = ctx.cardTag && m.match_number
-      ? '<div class="bv-tag">' + esc(ctx.cardTag) + ' · M' + m.match_number + '</div>' : '';
-    return '<div class="bv-card ' + st.cls + (ctx.interactive ? ' bv-tappable' : '') + '" data-bv-match="' + m.id + '"' +
+  function appCard(m, ctx, tag, extraStyle, champion) {
+    if (isBye(m)) {
+      var adv = ctx.participants[m.winner_id];
+      return '<div class="bc-card bc-bye" style="' + extraStyle + '" data-round="' + ctx.roundIndex + '">' +
+        '<span class="bc-seed">' + (adv && adv.seed ? adv.seed : '') + '</span>' +
+        '<span class="bc-name">' + esc(adv ? adv.name : 'Bye') + '</span>' +
+        '<span class="bc-bye-arrow">›</span></div>';
+    }
+    var st = m.status === 'in_progress' ? 'bc-live'
+      : m.status === 'completed' ? 'bc-done'
+      : (m.participant1_id && m.participant2_id ? 'bc-ready' : 'bc-pending');
+    var head;
+    if (m.status === 'in_progress') {
+      head = '<span class="bc-livechip"><span class="bc-livedot"></span>LIVE</span>';
+    } else if (m.status === 'completed') {
+      head = '<span class="bc-donecheck">✓</span>';
+    } else {
+      head = '';
+    }
+    var court = m.court ? (String(parseInt(m.court, 10)) === String(m.court) ? 'Court ' + m.court : m.court) : null;
+    var label = tag + ' · ' + (court || 'M' + (m.match_number || '?'));
+    var progress = gameProgress(m);
+    return '<div class="bc-card ' + st + (ctx.interactive ? ' bv-tappable' : '') + (champion ? ' bc-champ' : '') +
+      '" style="' + extraStyle + '" data-bv-match="' + m.id + '" data-round="' + ctx.roundIndex + '"' +
       ' role="group" aria-label="Match: ' + esc((ctx.participants[m.participant1_id] || {}).name || 'TBD') +
       ' vs ' + esc((ctx.participants[m.participant2_id] || {}).name || 'TBD') + '">' +
-      tag + sideRow(m, 1, ctx) + sideRow(m, 2, ctx) +
-      (meta.length ? '<div class="bv-meta">' + meta.join(' · ') + '</div>' : '') +
+      (champion ? '<span class="bc-crown">👑</span>' : '') +
+      '<div class="bc-head"><span class="bc-tag">' + esc(label) + '</span>' + head + '</div>' +
+      '<div class="bc-sep"></div>' +
+      slotRow(m, 1, ctx) +
+      '<div class="bc-sep bc-sep2"></div>' +
+      slotRow(m, 2, ctx) +
+      (progress ? '<span class="bc-gamechip">' + esc(progress) + '</span>' : '') +
+      (champion && ctx.championName ? '<span class="bc-champname">Champion · ' + esc(ctx.championName) + '</span>' : '') +
       '</div>';
   }
 
-  // "Quarterfinals" → "QF" for pills and card tags (app parity).
-  function roundAbbrev(title) {
-    if (title === 'Final') return 'Final';
-    if (title === 'Semifinals') return 'SF';
-    if (title === 'Quarterfinals') return 'QF';
-    var of = title.match(/^Round of (\d+)$/);
-    if (of) return 'R' + of[1];
-    var rn = title.match(/^Round (\d+)$/);
-    if (rn) return 'R' + rn[1];
-    return title;
+  // ---- Round Timeline Rail (RoundTimelineRail port) ------------------------
+
+  function railHTML(labels, selected, caption) {
+    var chips = labels.map(function (l, i) {
+      return '<button class="bc-chip' + (i === selected ? ' on' : '') + '" data-bc-round="' + i + '">' + esc(l) + '</button>';
+    }).join('');
+    var nodes = labels.map(function (_, i) {
+      return '<span class="bc-node" data-bc-node="' + i + '" style="left:' +
+        (((i + 0.5) / labels.length) * 100) + '%"></span>';
+    }).join('');
+    return '<div class="bc-rail">' +
+      '<div class="bc-rail-caps"><span class="bc-rail-pill"></span>' + chips + '</div>' +
+      '<div class="bc-track"><span class="bc-track-fill"></span>' + nodes +
+      '<span class="bc-trail"></span>' +
+      '<img class="bc-ball" src="images/pickleball-marker.png" alt="">' +
+      '</div>' +
+      '<div class="bc-caption">' + esc(caption) + '</div>' +
+      '</div>';
   }
 
-  // "8 teams · Single elimination · 3 rounds" — the app's bracket subtitle.
-  function summaryHTML(snap, roundsCount) {
-    var n = (snap.participants || []).length;
-    var f = String(snap.tournament.format || '').replace(/_/g, ' ');
-    f = f.charAt(0).toUpperCase() + f.slice(1);
-    return '<div class="bvx-summary">' + n + ' teams · ' + esc(f) + ' · ' + roundsCount +
-      ' round' + (roundsCount === 1 ? '' : 's') + '</div>';
+  function railCaption(labelFull, remaining) {
+    if (remaining === 0) return labelFull + ' · Round complete';
+    return labelFull + ' · ' + remaining + ' match' + (remaining === 1 ? '' : 'es') + ' remaining';
   }
 
-  // Current-round progress line + track ("Quarterfinals · 4 matches remaining").
-  function progressHTML(rounds, titleFor) {
-    var total = 0, done = 0, current = -1, remaining = 0;
-    rounds.forEach(function (round, i) {
-      round.forEach(function (m) {
-        if (m.status === 'bye') return;
-        total++;
-        if (m.status === 'completed') done++;
-      });
-      if (current === -1) {
-        var left = round.filter(function (m) { return m.status !== 'completed' && m.status !== 'bye'; }).length;
-        if (left > 0) { current = i; remaining = left; }
-      }
+  // Positions the selection pill, marker, fill, and node states for `i`.
+  function railSelect(container, i, meta) {
+    var caps = container.querySelector('.bc-rail-caps');
+    var pill = container.querySelector('.bc-rail-pill');
+    var chips = container.querySelectorAll('.bc-chip');
+    var n = chips.length;
+    var w = caps.clientWidth - 6; // minus capsule padding
+    pill.style.width = (w / n) + 'px';
+    pill.style.transform = 'translateX(' + (3 + (w / n) * i) + 'px)';
+    Array.prototype.forEach.call(chips, function (c, ci) { c.classList.toggle('on', ci === i); });
+
+    var track = container.querySelector('.bc-track');
+    var ball = container.querySelector('.bc-ball');
+    var fill = container.querySelector('.bc-track-fill');
+    var trail = container.querySelector('.bc-trail');
+    var tw = track.clientWidth;
+    var x = tw * ((i + 0.5) / n);
+    var prev = container._bcRailX == null ? x : container._bcRailX;
+    var dir = x >= prev ? 1 : -1;
+    container._bcRailX = x;
+    ball.style.transform = 'translateX(' + (x - 8.5) + 'px)';
+    ball.classList.toggle('bc-ball-live', !!(meta && meta.hasLive));
+    fill.style.width = x + 'px';
+    Array.prototype.forEach.call(container.querySelectorAll('.bc-node'), function (nd, ni) {
+      nd.className = 'bc-node' + (ni === i ? ' bc-node-on' : (ni < i ? ' bc-node-past' : ''));
     });
-    var label = current === -1
-      ? 'Bracket complete'
-      : titleFor(current) + ' · ' + remaining + ' match' + (remaining === 1 ? '' : 'es') + ' remaining';
-    var pct = total ? Math.round(done / total * 100) : 0;
-    return { html: '<div class="bvx-sub">' + esc(label) +
-      '<div class="bvx-track"><div class="bvx-fill" style="width:' + pct + '%"></div></div></div>',
-      current: current };
+    // Comet trail: flash behind the ball opposite the direction of travel.
+    trail.style.transform = 'translateX(' + (x - 26 - dir * 28) + 'px) scaleX(' + dir + ')';
+    trail.classList.add('bc-trail-on');
+    clearTimeout(container._bcTrailT);
+    container._bcTrailT = setTimeout(function () { trail.classList.remove('bc-trail-on'); }, 550);
+
+    var cap = container.querySelector('.bc-caption');
+    if (meta) {
+      cap.style.opacity = 0;
+      setTimeout(function () {
+        cap.textContent = railCaption(meta.fullName, meta.remaining);
+        cap.style.opacity = 1;
+      }, 120);
+    }
   }
 
-  function championHTML(finalMatch, ctx) {
-    if (!finalMatch || finalMatch.status !== 'completed' || !finalMatch.winner_id) return '';
-    var p = ctx.participants[finalMatch.winner_id];
-    return '<div class="bv-champion"><div class="bv-trophy">🏆</div>' +
-      (p ? window.PCLive.avatarStack(p.members, 44) : '') +
-      '<div class="bv-champ-name">' + esc(p ? p.name : 'Champion') + '</div>' +
-      (finalMatch.score_summary ? '<div class="bv-champ-score">' + esc(finalMatch.score_summary) + '</div>' : '') +
+  // ---- backdrop (PremiumBracketBackground port) ----------------------------
+
+  function backdropHTML() {
+    return '<svg class="bc-court" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+      '<rect x="8" y="16" width="84" height="72" rx="1.2" fill="none"/>' +
+      '<line x1="8" y1="52" x2="92" y2="52"/>' +
+      '<line x1="8" y1="40.5" x2="92" y2="40.5"/>' +
+      '<line x1="8" y1="63.5" x2="92" y2="63.5"/>' +
+      '<line x1="50" y1="16" x2="50" y2="40.5"/>' +
+      '<line x1="50" y1="63.5" x2="50" y2="88"/>' +
+      '</svg>';
+  }
+
+  // ---- dock (BracketBottomControlDock port) --------------------------------
+
+  function dockHTML() {
+    var grid = '<svg viewBox="0 0 16 16" width="15" height="15"><g fill="none" stroke="currentColor" stroke-width="1.6">' +
+      '<rect x="1.2" y="1.2" width="5.4" height="5.4" rx="1.4"/><rect x="9.4" y="1.2" width="5.4" height="5.4" rx="1.4"/>' +
+      '<rect x="1.2" y="9.4" width="5.4" height="5.4" rx="1.4"/><rect x="9.4" y="9.4" width="5.4" height="5.4" rx="1.4"/></g></svg>';
+    var scope = '<svg viewBox="0 0 16 16" width="15" height="15"><g fill="none" stroke="currentColor" stroke-width="1.5">' +
+      '<circle cx="8" cy="8" r="4.6"/><line x1="8" y1="0.6" x2="8" y2="3.2"/><line x1="8" y1="12.8" x2="8" y2="15.4"/>' +
+      '<line x1="0.6" y1="8" x2="3.2" y2="8"/><line x1="12.8" y1="8" x2="15.4" y2="8"/></g><circle cx="8" cy="8" r="1.3" fill="currentColor"/></svg>';
+    return '<div class="bc-dock" role="group" aria-label="Bracket controls">' +
+      '<button data-bc-dock="fit" aria-label="Fit entire bracket">' + grid + '</button>' +
+      '<span class="bc-dock-zoom">' +
+      '<button data-bc-dock="out" aria-label="Zoom out">−</button>' +
+      '<span class="bc-pct">100%</span>' +
+      '<button data-bc-dock="in" aria-label="Zoom in">+</button></span>' +
+      '<button data-bc-dock="center" aria-label="Recenter on selected round">' + scope + '</button>' +
       '</div>';
   }
 
-  // ---- public entry -----------------------------------------------------
+  // ---- elimination canvas (BracketCanvasView port) -------------------------
+
+  function renderCanvas(container, snap, ctx, sideMatches) {
+    var rounds = orderRounds(sideMatches);
+    var R = rounds.length;
+    var titles = rounds.map(function (round, i) { return roundTitle(i, R, round.length); });
+    var n0 = rounds[0].length;
+
+    // Frames — BracketLayoutEngine: round 0 stacked, parents at child midpoints.
+    var frames = [];
+    var ys = [];
+    rounds.forEach(function (round, r) {
+      ys[r] = [];
+      round.forEach(function (m, i) {
+        var y;
+        if (r === 0) {
+          y = HH + TP + i * (MH + VG);
+        } else if (ys[r - 1][i * 2] != null && ys[r - 1][i * 2 + 1] != null) {
+          y = (ys[r - 1][i * 2] + ys[r - 1][i * 2 + 1]) / 2;
+        } else {
+          // Imperfect tree fallback: distribute across the column.
+          var span = (n0 * (MH + VG)) / round.length;
+          y = HH + TP + i * span + (span - MH) / 2;
+        }
+        ys[r][i] = y;
+        frames.push({ m: m, r: r, i: i, x: TP + r * (MW + RS), y: y });
+      });
+    });
+    var W = TP * 2 + R * (MW + RS) - RS;
+    var H = HH + TP * 2 + n0 * (MH + VG) - VG + 28;
+
+    // Current round (first with an unfinished real match) + rail meta.
+    var current = -1;
+    var meta = rounds.map(function (round, i) {
+      var remaining = round.filter(function (m) { return !isBye(m) && m.status !== 'completed'; }).length;
+      if (current === -1 && remaining > 0) current = i;
+      return {
+        fullName: titles[i],
+        remaining: remaining,
+        hasLive: round.some(function (m) { return m.status === 'in_progress'; })
+      };
+    });
+    var selected = current === -1 ? R - 1 : current;
+
+    // Champion state (final decided).
+    var finalMatch = rounds[R - 1].length === 1 ? rounds[R - 1][0] : null;
+    var decided = !!(finalMatch && finalMatch.status === 'completed' && finalMatch.winner_id);
+    ctx.championName = decided ? ((ctx.participants[finalMatch.winner_id] || {}).name || null) : null;
+
+    // Connectors SVG — rounded elbows; winner path gets the emerald under-glow.
+    var conns = [];
+    frames.forEach(function (f) {
+      if (f.r === 0) return;
+      [f.i * 2, f.i * 2 + 1].forEach(function (ci) {
+        if (!rounds[f.r - 1] || ys[f.r - 1][ci] == null) return;
+        var child = rounds[f.r - 1][ci];
+        var sx = TP + (f.r - 1) * (MW + RS) + MW, sy = ys[f.r - 1][ci] + MH / 2;
+        var ex = f.x, ey = f.y + MH / 2;
+        var midX = sx + RS / 2;
+        var dy = ey - sy, r = Math.min(ELBOW, Math.abs(dy) / 2), sg = dy > 0 ? 1 : -1;
+        var d = Math.abs(dy) < 0.5
+          ? 'M' + sx + ' ' + sy + ' L' + ex + ' ' + ey
+          : 'M' + sx + ' ' + sy + ' L' + (midX - r) + ' ' + sy +
+            ' Q' + midX + ' ' + sy + ' ' + midX + ' ' + (sy + sg * r) +
+            ' L' + midX + ' ' + (ey - sg * r) +
+            ' Q' + midX + ' ' + ey + ' ' + (midX + r) + ' ' + ey +
+            ' L' + ex + ' ' + ey;
+        var winner = !!child.winner_id;
+        conns.push({ d: d, winner: winner, r: f.r - 1 });
+      });
+    });
+    var svg = '<svg class="bc-wires" width="' + W + '" height="' + H + '" aria-hidden="true">' +
+      conns.map(function (c) {
+        var cls = 'bc-wire ' + weightClass(c.r, selected) + (c.winner ? ' bc-wire-won' : '');
+        return (c.winner ? '<path class="' + cls + ' bc-wire-glow" data-round="' + c.r + '" d="' + c.d + '"/>' : '') +
+          '<path class="' + cls + '" data-round="' + c.r + '" d="' + c.d + '"/>';
+      }).join('') + '</svg>';
+
+    // Round headers (glass chips above each column).
+    var headers = rounds.map(function (round, r) {
+      return '<div class="bc-roundhead ' + weightClass(r, selected) + '" data-round="' + r + '" style="left:' +
+        (TP + r * (MW + RS)) + 'px;top:' + TP + 'px;width:' + MW + 'px">' +
+        '<span>' + esc(titles[r]) + '</span><em>' + round.length + ' match' + (round.length === 1 ? '' : 'es') + '</em></div>';
+    }).join('');
+
+    // Cards.
+    var cards = frames.map(function (f) {
+      ctx.roundIndex = f.r;
+      var champion = decided && f.r === R - 1 && f.m === finalMatch;
+      return appCard(f.m, ctx, condense(titles[f.r]),
+        'left:' + f.x + 'px;top:' + f.y + 'px', champion);
+    }).join('');
+
+    container.innerHTML = backdropHTML() +
+      railHTML(titles.map(condense), selected, railCaption(meta[selected].fullName, meta[selected].remaining)) +
+      '<div class="bc-viewport"><div class="bc-sizer"><div class="bc-canvas" style="width:' + W + 'px;height:' + H + 'px">' +
+      svg + headers + cards +
+      '</div></div></div>' + dockHTML();
+
+    // Spotlight classes on cards (headers/wires got theirs at build time).
+    function applySpotlight(sel) {
+      Array.prototype.forEach.call(container.querySelectorAll('.bc-card, .bc-roundhead, .bc-wire'), function (el) {
+        var r = parseInt(el.dataset.round, 10);
+        el.classList.remove('bc-w0', 'bc-w1', 'bc-w2');
+        el.classList.add(weightClass(r, sel));
+      });
+    }
+    applySpotlight(selected);
+
+    // Zoom / pan (ZoomableBracketScrollView + dock port).
+    var vp = container.querySelector('.bc-viewport');
+    var sizer = container.querySelector('.bc-sizer');
+    var canvas = container.querySelector('.bc-canvas');
+    var pct = container.querySelector('.bc-pct');
+    var fitScale = Math.max(0.3, Math.min(1, (vp.clientWidth - 8) / W));
+    var scale = fitScale;
+    function applyScale(s, anchorRound) {
+      scale = Math.max(0.3, Math.min(3, s));
+      canvas.style.transform = 'scale(' + scale + ')';
+      sizer.style.width = (W * scale) + 'px';
+      sizer.style.height = (H * scale) + 'px';
+      pct.textContent = Math.round(scale * 100) + '%';
+      if (anchorRound != null) centerRound(anchorRound, false);
+    }
+    function centerRound(i, smooth) {
+      var x = (TP + i * (MW + RS) + MW / 2) * scale;
+      vp.scrollTo({ left: x - vp.clientWidth / 2, behavior: smooth === false ? 'auto' : 'smooth' });
+    }
+    applyScale(fitScale);
+
+    function select(i, scroll) {
+      selected = i;
+      railSelect(container, i, meta[i]);
+      applySpotlight(i);
+      if (scroll !== false) centerRound(i, true);
+    }
+    // Initial rail geometry needs layout — defer one frame.
+    requestAnimationFrame(function () { railSelect(container, selected, meta[selected]); });
+
+    Array.prototype.forEach.call(container.querySelectorAll('[data-bc-round]'), function (b) {
+      b.addEventListener('click', function () { select(parseInt(b.dataset.bcRound, 10)); });
+    });
+    Array.prototype.forEach.call(container.querySelectorAll('[data-bc-dock]'), function (b) {
+      b.addEventListener('click', function () {
+        var k = b.dataset.bcDock;
+        if (k === 'fit') applyScale(fitScale);
+        else if (k === 'in') applyScale(scale + 0.25, selected);
+        else if (k === 'out') applyScale(scale - 0.25, selected);
+        else if (k === 'center') centerRound(selected, true);
+      });
+    });
+    // Card focus lift on tap (BracketTheme.focusSpring).
+    Array.prototype.forEach.call(container.querySelectorAll('.bc-card.bv-tappable'), function (el) {
+      el.addEventListener('click', function () {
+        Array.prototype.forEach.call(container.querySelectorAll('.bc-card.bc-focus'), function (x) {
+          if (x !== el) x.classList.remove('bc-focus');
+        });
+        el.classList.toggle('bc-focus');
+      });
+    });
+  }
+
+  // ---- public entry --------------------------------------------------------
 
   function render(container, snap, opts) {
     opts = opts || {};
@@ -190,50 +443,36 @@
         '<p>The bracket appears once the schedule is generated in the app.</p></div>';
       return false;
     }
-    container.classList.add('bvx'); // app-style skin (fixed-dark, neon green)
+    container.classList.add('bvx');
     var participants = {};
     (snap.participants || []).forEach(function (p) { participants[p.id] = p; });
     var tv = document.body.classList.contains('bv-tv');
-    var ctx = { participants: participants, interactive: !!opts.interactive, avatarSize: tv ? 30 : 22 };
+    var ctx = { participants: participants, interactive: !!opts.interactive, avatarSize: tv ? 22 : 18 };
 
     if (isRoundRobin(snap)) {
       renderRoundRobin(container, snap, ctx);
-      wireTaps(container, ctx, opts);
-      wireResize(container, snap, opts);
-      return true;
-    }
-
-    var hasLosers = snap.matches.some(function (m) { return m.bracket_side === 'losers'; });
-    var sides = {};
-    snap.matches.forEach(function (m) {
-      var key = hasLosers ? (m.bracket_side || 'winners') : 'main';
-      (sides[key] = sides[key] || []).push(m);
-    });
-    var order = ['main', 'winners', 'losers', 'finals'].filter(function (k) { return sides[k]; });
-    Object.keys(sides).forEach(function (k) { if (order.indexOf(k) === -1) order.push(k); });
-
-    // App-canvas chrome, computed on the primary side: summary line, round
-    // pills (single-sided brackets only — pills over a double-elim would be
-    // ambiguous), and the current-round progress line.
-    var primaryKey = sides.main ? 'main' : order[0];
-    var primaryRounds = orderRounds(sides[primaryKey]);
-    var roundTitles = primaryRounds.map(function (round, i) {
-      return roundTitle(i, primaryRounds.length, round.length);
-    });
-    var prog = progressHTML(primaryRounds, function (i) { return roundTitles[i]; });
-    var chrome = {
-      summary: summaryHTML(snap, primaryRounds.length),
-      progress: prog.html,
-      current: prog.current,
-      titles: roundTitles,
-      pills: order.length === 1,
-    };
-
-    var narrow = container.clientWidth <= 620 && !tv;
-    if (narrow) {
-      renderVertical(container, sides, order, ctx, chrome);
     } else {
-      renderFit(container, sides, order, ctx, tv, chrome);
+      // Multi-side (double elim) renders each side as its own canvas stack;
+      // single side gets the full spotlight/rail treatment.
+      var hasLosers = snap.matches.some(function (m) { return m.bracket_side === 'losers'; });
+      if (hasLosers) {
+        var sides = {};
+        snap.matches.forEach(function (m) {
+          var key = m.bracket_side || 'winners';
+          (sides[key] = sides[key] || []).push(m);
+        });
+        var order = ['winners', 'losers', 'finals'].filter(function (k) { return sides[k]; });
+        Object.keys(sides).forEach(function (k) { if (order.indexOf(k) === -1) order.push(k); });
+        var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
+        container.innerHTML = order.map(function (k) {
+          return '<h3 class="bv-side-title">' + (titles[k] || k) + '</h3><div class="bc-stack" data-side="' + k + '"></div>';
+        }).join('');
+        order.forEach(function (k) {
+          renderCanvas(container.querySelector('.bc-stack[data-side="' + k + '"]'), snap, ctx, sides[k]);
+        });
+      } else {
+        renderCanvas(container, snap, ctx, snap.matches);
+      }
     }
 
     wireTaps(container, ctx, opts);
@@ -249,7 +488,6 @@
     }
   }
 
-  // Re-render on real size changes (orientation, window resize).
   function wireResize(container, snap, opts) {
     var lastW = container.clientWidth;
     var timer = null;
@@ -266,11 +504,8 @@
     };
   }
 
-  // ---- round robin (mirrors the app's RR bracket: standings + rounds) ----
+  // ---- round robin (standings + rounds, app rail + card language) ----------
 
-  // Sum every set of a completed match's slot-1-oriented score_summary
-  // ("11-8, 9-11, 11-5") into [points1, points2]. Falls back to zeros when
-  // the summary is missing or unparseable — the W/L columns still count.
   function summaryPoints(m) {
     var p1 = 0, p2 = 0;
     (m.score_summary || '').split(',').forEach(function (set) {
@@ -308,34 +543,11 @@
     });
   }
 
-  function rrChampionHTML(standings, allDone, ctx) {
-    if (!allDone || !standings.length || !standings[0].wins) return '';
-    var top = standings[0];
-    var p = ctx.participants[top.id];
-    return '<div class="bv-champion"><div class="bv-trophy">🏆</div>' +
-      (p ? window.PCLive.avatarStack(p.members, 44) : '') +
-      '<div class="bv-champ-name">' + esc(p ? p.name : 'Champion') + '</div>' +
-      '<div class="bv-champ-score">' + top.wins + '–' + top.losses + ' · ' +
-      (top.pf - top.pa >= 0 ? '+' : '') + (top.pf - top.pa) + ' points</div></div>';
-  }
-
   function renderRoundRobin(container, snap, ctx) {
     var matches = snap.matches || [];
     var standings = rrStandings(matches, ctx.participants);
     var real = matches.filter(function (m) { return m.participant1_id && m.participant2_id; });
     var allDone = real.length > 0 && real.every(function (m) { return m.status === 'completed'; });
-
-    var standRows = standings.map(function (s, i) {
-      var p = ctx.participants[s.id] || {};
-      var diff = s.pf - s.pa;
-      return '<div class="bv-stand-row' + (allDone && i === 0 ? ' bv-stand-leader' : '') + '">' +
-        '<span class="bv-stand-rank">' + (i + 1) + '</span>' +
-        window.PCLive.avatarStack(p.members, ctx.avatarSize) +
-        '<span class="bv-name">' + esc(p.name || 'Player') + '</span>' +
-        '<span class="bv-stand-num">' + s.wins + '</span>' +
-        '<span class="bv-stand-num">' + s.losses + '</span>' +
-        '<span class="bv-stand-num bv-stand-diff">' + (diff > 0 ? '+' : '') + diff + '</span></div>';
-    }).join('');
 
     var byRound = {};
     matches.forEach(function (m) {
@@ -346,25 +558,55 @@
     var roundArrays = roundNums.map(function (r) {
       return byRound[r].sort(function (a, b) { return (a.match_number || 0) - (b.match_number || 0); });
     });
-    var prog = progressHTML(roundArrays, function (i) { return 'Round ' + roundNums[i]; });
+    var current = -1;
+    var meta = roundArrays.map(function (round, i) {
+      var remaining = round.filter(function (m) { return !isBye(m) && m.status !== 'completed'; }).length;
+      if (current === -1 && remaining > 0) current = i;
+      return { fullName: 'Round ' + roundNums[i], remaining: remaining,
+        hasLive: round.some(function (m) { return m.status === 'in_progress'; }) };
+    });
+    var selected = current === -1 ? roundNums.length - 1 : current;
+
+    var n = (snap.participants || []).length;
+    var summary = '<div class="bvx-summary">' + n + ' teams · Round robin · ' + roundNums.length + ' rounds</div>';
+
+    var champion = '';
+    if (allDone && standings.length && standings[0].wins) {
+      var top = standings[0], tp = ctx.participants[top.id];
+      champion = '<div class="bv-champion"><div class="bv-trophy">🏆</div>' +
+        (tp ? window.PCLive.avatarStack(tp.members, 44) : '') +
+        '<div class="bv-champ-name">' + esc(tp ? tp.name : 'Champion') + '</div>' +
+        '<div class="bv-champ-score">' + top.wins + '–' + top.losses + ' · ' +
+        (top.pf - top.pa >= 0 ? '+' : '') + (top.pf - top.pa) + ' points</div></div>';
+    }
+
+    var standRows = standings.map(function (s, i) {
+      var p = ctx.participants[s.id] || {};
+      var diff = s.pf - s.pa;
+      return '<div class="bv-stand-row' + (allDone && i === 0 ? ' bv-stand-leader' : '') + '">' +
+        '<span class="bv-stand-rank">' + (i + 1) + '</span>' +
+        window.PCLive.avatarStack(p.members, 20) +
+        '<span class="bv-name">' + esc(p.name || 'Player') + '</span>' +
+        '<span class="bv-stand-num">' + s.wins + '</span>' +
+        '<span class="bv-stand-num">' + s.losses + '</span>' +
+        '<span class="bv-stand-num bv-stand-diff">' + (diff > 0 ? '+' : '') + diff + '</span></div>';
+    }).join('');
+
     var roundsHtml = roundNums.map(function (r, idx) {
-        var round = roundArrays[idx];
-        var done = round.filter(function (m) { return m.status === 'completed'; }).length;
-        ctx.cardTag = 'R' + r;
-        var cards = round.map(function (m) { return matchCard(m, ctx); }).join('');
-        ctx.cardTag = null;
-        return '<div class="bvv-round" id="bvx-r' + r + '"><h3>Round ' + r +
-          ' <span class="count" style="color:var(--ink-mute)">' + done + '/' + round.length + '</span></h3>' +
-          cards + '</div>';
+      var round = roundArrays[idx];
+      var done = round.filter(function (m) { return m.status === 'completed'; }).length;
+      ctx.roundIndex = idx;
+      var cards = round.map(function (m) {
+        return appCard(m, ctx, 'R' + r, '');
       }).join('');
+      return '<div class="bvv-round" id="bvx-r' + idx + '"><h3>Round ' + r +
+        ' <span class="count">' + done + '/' + round.length + '</span></h3>' + cards + '</div>';
+    }).join('');
 
-    // Round-jump pills — the app bracket's round anchors, web edition.
-    var nav = '<div class="bvx-nav"><button data-bvx-go="bvx-stand" class="on">Standings</button>' +
-      roundNums.map(function (r) { return '<button data-bvx-go="bvx-r' + r + '">R' + r + '</button>'; }).join('') +
-      '</div>';
-
-    container.innerHTML = summaryHTML(snap, roundNums.length) + nav + prog.html +
-      rrChampionHTML(standings, allDone, ctx) +
+    container.innerHTML = summary +
+      railHTML(roundNums.map(function (r) { return 'R' + r; }), selected,
+        railCaption(meta[selected].fullName, meta[selected].remaining)) +
+      champion +
       '<div class="bv-stand" id="bvx-stand">' +
       '<div class="bv-stand-row bv-stand-head"><span class="bv-stand-rank">#</span><span></span>' +
       '<span class="bv-name">Round robin standings</span>' +
@@ -372,166 +614,15 @@
       standRows + '</div>' +
       '<div class="bv-rr">' + roundsHtml + '</div>';
 
-    wireAnchorPills(container);
-  }
-
-  // ---- shared chrome pieces ----------------------------------------------
-
-  function pillsHTML(chrome, anchorMode) {
-    if (!chrome.pills) return '';
-    return '<div class="bvx-nav">' + chrome.titles.map(function (t, i) {
-      var attr = anchorMode ? 'data-bvx-go="bvx-er' + i + '"' : 'data-bvx-col="' + i + '"';
-      return '<button ' + attr + (i === Math.max(chrome.current, 0) ? ' class="on"' : '') + '>' +
-        esc(roundAbbrev(t)) + '</button>';
-    }).join('') + '</div>';
-  }
-
-  function setActivePill(container, btn) {
-    Array.prototype.forEach.call(container.querySelectorAll('.bvx-nav button'), function (x) {
-      x.classList.toggle('on', x === btn);
-    });
-  }
-
-  function wireAnchorPills(container) {
-    Array.prototype.forEach.call(container.querySelectorAll('[data-bvx-go]'), function (b) {
+    requestAnimationFrame(function () { railSelect(container, selected, meta[selected]); });
+    Array.prototype.forEach.call(container.querySelectorAll('[data-bc-round]'), function (b) {
       b.addEventListener('click', function () {
-        var el = document.getElementById(b.dataset.bvxGo);
+        var i = parseInt(b.dataset.bcRound, 10);
+        railSelect(container, i, meta[i]);
+        var el = document.getElementById('bvx-r' + i);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        setActivePill(container, b);
       });
     });
-  }
-
-  // ---- fit mode (desktop / tablet / TV): scaled tree + zoom toolbar -------
-
-  function renderFit(container, sides, order, ctx, tv, chrome) {
-    var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
-    var html = chrome.summary + pillsHTML(chrome, false) + chrome.progress +
-      order.map(function (key) {
-        var isPrimary = key === (sides.main ? 'main' : order[0]);
-        return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
-          '<div class="bv-viewport' + (isPrimary ? ' bv-vp-primary' : '') + '"><div class="bv-sizer">' +
-          treeHTML(sides[key], ctx, isPrimary ? chrome.current : -1) + '</div></div>';
-      }).join('') +
-      // The app's bottom bar: zoom out · percent · zoom in · fit.
-      '<div class="bvx-toolbar" role="group" aria-label="Bracket zoom">' +
-      '<button data-bvx-zoom="out" aria-label="Zoom out">−</button>' +
-      '<span class="bvx-pct">100%</span>' +
-      '<button data-bvx-zoom="in" aria-label="Zoom in">+</button>' +
-      '<button data-bvx-zoom="fit" aria-label="Fit to screen">⤢ Fit</button></div>';
-    container.innerHTML = html;
-
-    var minScale = tv ? 0.25 : 0.4;
-    var vps = Array.prototype.slice.call(container.querySelectorAll('.bv-viewport'));
-    var dims = vps.map(function (vp) {
-      var tree = vp.querySelector('.bv-tree');
-      return { vp: vp, tree: tree, w: tree.scrollWidth, h: tree.scrollHeight };
-    });
-    var fitScale = 1;
-    dims.forEach(function (d) { fitScale = Math.min(fitScale, d.vp.clientWidth / d.w); });
-    fitScale = Math.min(1, fitScale);
-    // Unreadably small even before zooming AND we're not on a TV → vertical
-    // list instead (phones landscape etc.); desktop keeps the canvas + zoom.
-    if (fitScale < minScale && container.clientWidth <= 900 && !tv) {
-      renderVertical(container, sides, order, ctx, chrome);
-      return;
-    }
-
-    var pct = container.querySelector('.bvx-pct');
-    function applyScale(s) {
-      container._bvxScale = s;
-      dims.forEach(function (d) {
-        d.tree.style.transform = 'scale(' + s + ')';
-        d.tree.parentNode.style.width = (d.w * s) + 'px';
-        d.tree.parentNode.style.height = (d.h * s) + 'px';
-      });
-      pct.textContent = Math.round(s * 100) + '%';
-    }
-    applyScale(fitScale);
-
-    Array.prototype.forEach.call(container.querySelectorAll('[data-bvx-zoom]'), function (b) {
-      b.addEventListener('click', function () {
-        var s = container._bvxScale || fitScale;
-        if (b.dataset.bvxZoom === 'in') s = Math.min(1.5, s + 0.1);
-        else if (b.dataset.bvxZoom === 'out') s = Math.max(0.25, s - 0.1);
-        else s = fitScale;
-        applyScale(s);
-      });
-    });
-
-    // Round pills scroll the primary viewport to that round's column.
-    var primaryVp = container.querySelector('.bv-vp-primary');
-    Array.prototype.forEach.call(container.querySelectorAll('[data-bvx-col]'), function (b) {
-      b.addEventListener('click', function () {
-        var col = primaryVp.querySelector('.bv-col[data-ri="' + b.dataset.bvxCol + '"]');
-        if (col) primaryVp.scrollTo({ left: col.offsetLeft * (container._bvxScale || fitScale) - 12, behavior: 'smooth' });
-        setActivePill(container, b);
-      });
-    });
-  }
-
-  function treeHTML(matches, ctx, currentRound) {
-    var rounds = orderRounds(matches);
-    var finalMatch = rounds[rounds.length - 1].length === 1 ? rounds[rounds.length - 1][0] : null;
-    var perfect = isPerfectTree(rounds);
-    var units = rounds[0].length * 2;
-
-    var cols = rounds.map(function (round, ri) {
-      var titleText = roundTitle(ri, rounds.length, round.length);
-      ctx.cardTag = roundAbbrev(titleText);
-      var title = '<div class="bv-round-title">' + titleText + '</div>';
-      // Rounds after the one being played are dimmed, like the app's canvas.
-      var future = currentRound >= 0 && ri > currentRound;
-      var body;
-      if (perfect) {
-        var span = units / round.length;
-        body = '<div class="bv-grid" style="grid-template-rows: repeat(' + units + ', minmax(0, 1fr));">' +
-          round.map(function (m, i) {
-            return '<div class="bv-cell' + (ri > 0 ? ' bv-has-in' : '') + (ri < rounds.length - 1 ? ' bv-has-out' : '') +
-              '" style="grid-row: ' + (i * span + 1) + ' / span ' + span + ';">' + matchCard(m, ctx) + '</div>';
-          }).join('') + '</div>';
-      } else {
-        body = '<div class="bv-loose">' + round.map(function (m) { return matchCard(m, ctx); }).join('') + '</div>';
-      }
-      return '<div class="bv-col' + (future ? ' bv-future' : '') + '" data-ri="' + ri + '">' + title + body + '</div>';
-    });
-    ctx.cardTag = null;
-
-    var champion = championHTML(finalMatch, ctx);
-    return '<div class="bv-tree' + (perfect ? ' bv-perfect' : '') + '">' + cols.join('') +
-      (champion ? '<div class="bv-col bv-champion-col"><div class="bv-round-title">Champion</div>' + champion + '</div>' : '') +
-      '</div>';
-  }
-
-  // ---- vertical mode (mobile portrait / very large brackets on small screens)
-
-  function renderVertical(container, sides, order, ctx, chrome) {
-    var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
-    var primaryKey = sides.main ? 'main' : order[0];
-    var html = chrome.summary + pillsHTML(chrome, true) + chrome.progress +
-      order.map(function (key) {
-        var rounds = orderRounds(sides[key]);
-        var finalMatch = rounds[rounds.length - 1].length === 1 ? rounds[rounds.length - 1][0] : null;
-        var champion = championHTML(finalMatch, ctx);
-        var isPrimary = key === primaryKey;
-        return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
-          '<div class="bvv">' +
-          (champion ? '<div class="bvv-round"><h3>Champion</h3>' + champion + '</div>' : '') +
-          rounds.map(function (round, ri) {
-            var titleText = roundTitle(ri, rounds.length, round.length);
-            ctx.cardTag = roundAbbrev(titleText);
-            var future = isPrimary && chrome.current >= 0 && ri > chrome.current;
-            var cards = round.map(function (m) { return matchCard(m, ctx); }).join('');
-            ctx.cardTag = null;
-            return '<div class="bvv-round' + (future ? ' bv-future' : '') + '"' +
-              (isPrimary ? ' id="bvx-er' + ri + '"' : '') + '><h3>' + titleText +
-              ' <span class="count" style="color:var(--ink-mute)">' + round.length + '</span></h3>' +
-              cards + '</div>';
-          }).join('') +
-          '</div>';
-      }).join('');
-    container.innerHTML = html;
-    wireAnchorPills(container);
   }
 
   window.PCBracket = { render: render, isElimination: isElimination, isRoundRobin: isRoundRobin, supports: supports };
