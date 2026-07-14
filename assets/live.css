@@ -290,3 +290,45 @@ body.bv-tv .cb-score { font-size: 44px; }
 .bv-rr { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 4px 22px; align-items: start; }
 .bv-rr .bvv-round > h3 { margin-top: 8px; }
 .bv-tv .bv-stand-row { font-size: 17px; padding: 10px 16px; }
+
+/* ---- BracketView: app skin — matches the iOS tournament bracket family
+   (near-black green-glow backdrop, dark glass cards, neon green accents).
+   Everything below re-declares the design tokens inside .bvx, so every
+   existing bracket rule (cards, connectors, seeds, avatars, champion,
+   standings) re-skins itself — light/dark site theme has no effect here,
+   exactly like the app's fixed-dark tournament screens. ---- */
+.bvx {
+    --paper: #10150F; --paper-2: #1A211C;
+    --ink: #F2F5EF; --ink-soft: #C6CEC4; --ink-mute: #92A094;
+    --rule: rgba(255,255,255,0.09); --rule-strong: rgba(255,255,255,0.2);
+    --court: #3EDC85; --live: #3EDC85;
+    background: radial-gradient(circle at 88% -4%, rgba(62,220,133,0.16), transparent 42%), #10150F;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 14px 14px 18px;
+}
+.bvx .bv-card { border-radius: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); animation: bvxIn 0.45s var(--ease) both; }
+.bvx .bv-tappable { transition: transform 0.18s var(--ease), border-color 0.18s var(--ease), box-shadow 0.18s var(--ease); }
+.bvx .bv-tappable:hover { transform: translateY(-2px); border-color: var(--court); box-shadow: 0 8px 20px rgba(0,0,0,0.45), 0 0 0 1px rgba(62,220,133,0.4); }
+.bvx .bv-card.bv-live { box-shadow: 0 0 0 1px var(--court), 0 0 20px rgba(62,220,133,0.28); }
+.bvx .bv-champion { box-shadow: 0 0 32px rgba(62,220,133,0.22); }
+.bvx .bv-stand-leader { background: rgba(200,224,78,0.13); }
+.bvx .bv-stand-leader .bv-name { color: var(--citron); font-weight: 700; }
+.bvx .bv-stand, .bvx .bvv-round { scroll-margin-top: 66px; }
+
+/* Round-jump pills — the web twin of the app's bracket round anchors. */
+.bvx-nav { position: sticky; top: 8px; z-index: 4; display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 12px; margin-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.bvx-nav::-webkit-scrollbar { display: none; }
+.bvx-nav button { flex: 0 0 auto; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 7px 13px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.18); background: rgba(16,21,15,0.85); color: #C6CEC4; cursor: pointer; backdrop-filter: blur(6px); transition: all 0.18s var(--ease); }
+.bvx-nav button:hover { border-color: var(--court); color: var(--court); }
+.bvx-nav button.on { background: var(--court); border-color: var(--court); color: #0B140D; font-weight: 700; }
+
+/* Staggered card entrance, like the app's bracket reveal. */
+.bvx .bvv-round .bv-card:nth-child(2) { animation-delay: 0.04s; }
+.bvx .bvv-round .bv-card:nth-child(3) { animation-delay: 0.08s; }
+.bvx .bvv-round .bv-card:nth-child(4) { animation-delay: 0.12s; }
+.bvx .bvv-round .bv-card:nth-child(5) { animation-delay: 0.16s; }
+.bvx .bvv-round .bv-card:nth-child(6) { animation-delay: 0.20s; }
+.bvx .bvv-round .bv-card:nth-child(7) { animation-delay: 0.24s; }
+.bvx .bvv-round .bv-card:nth-child(n+8) { animation-delay: 0.28s; }
+@keyframes bvxIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

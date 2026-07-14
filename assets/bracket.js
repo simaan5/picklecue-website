@@ -143,6 +143,7 @@
         '<p>The bracket appears once the schedule is generated in the app.</p></div>';
       return false;
     }
+    container.classList.add('bvx'); // app-style skin (fixed-dark, neon green)
     var participants = {};
     (snap.participants || []).forEach(function (p) { participants[p.id] = p; });
     var tv = document.body.classList.contains('bv-tv');
@@ -277,23 +278,38 @@
       var r = m.round || 0;
       (byRound[r] = byRound[r] || []).push(m);
     });
-    var roundsHtml = Object.keys(byRound).map(Number).sort(function (a, b) { return a - b; })
-      .map(function (r) {
+    var roundNums = Object.keys(byRound).map(Number).sort(function (a, b) { return a - b; });
+    var roundsHtml = roundNums.map(function (r) {
         var round = byRound[r].sort(function (a, b) { return (a.match_number || 0) - (b.match_number || 0); });
         var done = round.filter(function (m) { return m.status === 'completed'; }).length;
-        return '<div class="bvv-round"><h3>Round ' + r +
+        return '<div class="bvv-round" id="bvx-r' + r + '"><h3>Round ' + r +
           ' <span class="count" style="color:var(--ink-mute)">' + done + '/' + round.length + '</span></h3>' +
           round.map(function (m) { return matchCard(m, ctx); }).join('') + '</div>';
       }).join('');
 
-    container.innerHTML =
+    // Round-jump pills — the app bracket's round anchors, web edition.
+    var nav = '<div class="bvx-nav"><button data-bvx-go="bvx-stand" class="on">Standings</button>' +
+      roundNums.map(function (r) { return '<button data-bvx-go="bvx-r' + r + '">R' + r + '</button>'; }).join('') +
+      '</div>';
+
+    container.innerHTML = nav +
       rrChampionHTML(standings, allDone, ctx) +
-      '<div class="bv-stand">' +
+      '<div class="bv-stand" id="bvx-stand">' +
       '<div class="bv-stand-row bv-stand-head"><span class="bv-stand-rank">#</span><span></span>' +
       '<span class="bv-name">Round robin standings</span>' +
       '<span class="bv-stand-num">W</span><span class="bv-stand-num">L</span><span class="bv-stand-num">+/−</span></div>' +
       standRows + '</div>' +
       '<div class="bv-rr">' + roundsHtml + '</div>';
+
+    Array.prototype.forEach.call(container.querySelectorAll('[data-bvx-go]'), function (b) {
+      b.addEventListener('click', function () {
+        var el = document.getElementById(b.dataset.bvxGo);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        Array.prototype.forEach.call(container.querySelectorAll('.bvx-nav button'), function (x) {
+          x.classList.toggle('on', x === b);
+        });
+      });
+    });
   }
 
   // ---- fit mode (desktop / tablet / TV): scale the tree to the container --
