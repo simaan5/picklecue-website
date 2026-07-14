@@ -474,3 +474,16 @@ body.bv-tv .cb-score { font-size: 44px; }
     .bc-chip { font-size: 11px; min-width: 44px; }
     .bc-dock button { width: 38px; height: 38px; }
 }
+
+/* ═══ App-fidelity pass vs the live demo canvas (Summer Championship) ═══ */
+/* TBD reads plain muted, not italic (demo reference). */
+.bc-slot.bc-tbd .bc-name { font-style: normal; }
+/* Name size matches the app's card ratio. */
+.bc-name { font-size: 12.5px; }
+/* Dock: flat zoom cluster (no inner capsule), airier spacing — demo ref. */
+.bc-dock { gap: 14px; padding: 8px 14px; }
+.bc-dock-zoom { background: transparent; gap: 6px; }
+/* Full-bleed immersive canvas on phones, like the app (escapes .page gutter). */
+@media (max-width: 700px) {
+    .bvx { margin-left: calc(-1 * var(--gutter)); margin-right: calc(-1 * var(--gutter)); border-radius: 0; border-left: 0; border-right: 0; }
+}
