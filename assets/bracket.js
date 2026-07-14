@@ -115,12 +115,59 @@
     var meta = [];
     if (m.court) meta.push(esc(m.court));
     if (st.label) meta.push('<span class="bv-status ' + st.cls + '">' + st.label + '</span>');
+    // "QF · M1"-style tag, exactly like the app's bracket canvas cards.
+    var tag = ctx.cardTag && m.match_number
+      ? '<div class="bv-tag">' + esc(ctx.cardTag) + ' · M' + m.match_number + '</div>' : '';
     return '<div class="bv-card ' + st.cls + (ctx.interactive ? ' bv-tappable' : '') + '" data-bv-match="' + m.id + '"' +
       ' role="group" aria-label="Match: ' + esc((ctx.participants[m.participant1_id] || {}).name || 'TBD') +
       ' vs ' + esc((ctx.participants[m.participant2_id] || {}).name || 'TBD') + '">' +
-      sideRow(m, 1, ctx) + sideRow(m, 2, ctx) +
+      tag + sideRow(m, 1, ctx) + sideRow(m, 2, ctx) +
       (meta.length ? '<div class="bv-meta">' + meta.join(' · ') + '</div>' : '') +
       '</div>';
+  }
+
+  // "Quarterfinals" → "QF" for pills and card tags (app parity).
+  function roundAbbrev(title) {
+    if (title === 'Final') return 'Final';
+    if (title === 'Semifinals') return 'SF';
+    if (title === 'Quarterfinals') return 'QF';
+    var of = title.match(/^Round of (\d+)$/);
+    if (of) return 'R' + of[1];
+    var rn = title.match(/^Round (\d+)$/);
+    if (rn) return 'R' + rn[1];
+    return title;
+  }
+
+  // "8 teams · Single elimination · 3 rounds" — the app's bracket subtitle.
+  function summaryHTML(snap, roundsCount) {
+    var n = (snap.participants || []).length;
+    var f = String(snap.tournament.format || '').replace(/_/g, ' ');
+    f = f.charAt(0).toUpperCase() + f.slice(1);
+    return '<div class="bvx-summary">' + n + ' teams · ' + esc(f) + ' · ' + roundsCount +
+      ' round' + (roundsCount === 1 ? '' : 's') + '</div>';
+  }
+
+  // Current-round progress line + track ("Quarterfinals · 4 matches remaining").
+  function progressHTML(rounds, titleFor) {
+    var total = 0, done = 0, current = -1, remaining = 0;
+    rounds.forEach(function (round, i) {
+      round.forEach(function (m) {
+        if (m.status === 'bye') return;
+        total++;
+        if (m.status === 'completed') done++;
+      });
+      if (current === -1) {
+        var left = round.filter(function (m) { return m.status !== 'completed' && m.status !== 'bye'; }).length;
+        if (left > 0) { current = i; remaining = left; }
+      }
+    });
+    var label = current === -1
+      ? 'Bracket complete'
+      : titleFor(current) + ' · ' + remaining + ' match' + (remaining === 1 ? '' : 'es') + ' remaining';
+    var pct = total ? Math.round(done / total * 100) : 0;
+    return { html: '<div class="bvx-sub">' + esc(label) +
+      '<div class="bvx-track"><div class="bvx-fill" style="width:' + pct + '%"></div></div></div>',
+      current: current };
   }
 
   function championHTML(finalMatch, ctx) {
@@ -165,11 +212,28 @@
     var order = ['main', 'winners', 'losers', 'finals'].filter(function (k) { return sides[k]; });
     Object.keys(sides).forEach(function (k) { if (order.indexOf(k) === -1) order.push(k); });
 
+    // App-canvas chrome, computed on the primary side: summary line, round
+    // pills (single-sided brackets only — pills over a double-elim would be
+    // ambiguous), and the current-round progress line.
+    var primaryKey = sides.main ? 'main' : order[0];
+    var primaryRounds = orderRounds(sides[primaryKey]);
+    var roundTitles = primaryRounds.map(function (round, i) {
+      return roundTitle(i, primaryRounds.length, round.length);
+    });
+    var prog = progressHTML(primaryRounds, function (i) { return roundTitles[i]; });
+    var chrome = {
+      summary: summaryHTML(snap, primaryRounds.length),
+      progress: prog.html,
+      current: prog.current,
+      titles: roundTitles,
+      pills: order.length === 1,
+    };
+
     var narrow = container.clientWidth <= 620 && !tv;
     if (narrow) {
-      renderVertical(container, sides, order, ctx);
+      renderVertical(container, sides, order, ctx, chrome);
     } else {
-      renderFit(container, sides, order, ctx, tv);
+      renderFit(container, sides, order, ctx, tv, chrome);
     }
 
     wireTaps(container, ctx, opts);
@@ -279,12 +343,19 @@
       (byRound[r] = byRound[r] || []).push(m);
     });
     var roundNums = Object.keys(byRound).map(Number).sort(function (a, b) { return a - b; });
-    var roundsHtml = roundNums.map(function (r) {
-        var round = byRound[r].sort(function (a, b) { return (a.match_number || 0) - (b.match_number || 0); });
+    var roundArrays = roundNums.map(function (r) {
+      return byRound[r].sort(function (a, b) { return (a.match_number || 0) - (b.match_number || 0); });
+    });
+    var prog = progressHTML(roundArrays, function (i) { return 'Round ' + roundNums[i]; });
+    var roundsHtml = roundNums.map(function (r, idx) {
+        var round = roundArrays[idx];
         var done = round.filter(function (m) { return m.status === 'completed'; }).length;
+        ctx.cardTag = 'R' + r;
+        var cards = round.map(function (m) { return matchCard(m, ctx); }).join('');
+        ctx.cardTag = null;
         return '<div class="bvv-round" id="bvx-r' + r + '"><h3>Round ' + r +
           ' <span class="count" style="color:var(--ink-mute)">' + done + '/' + round.length + '</span></h3>' +
-          round.map(function (m) { return matchCard(m, ctx); }).join('') + '</div>';
+          cards + '</div>';
       }).join('');
 
     // Round-jump pills — the app bracket's round anchors, web edition.
@@ -292,7 +363,7 @@
       roundNums.map(function (r) { return '<button data-bvx-go="bvx-r' + r + '">R' + r + '</button>'; }).join('') +
       '</div>';
 
-    container.innerHTML = nav +
+    container.innerHTML = summaryHTML(snap, roundNums.length) + nav + prog.html +
       rrChampionHTML(standings, allDone, ctx) +
       '<div class="bv-stand" id="bvx-stand">' +
       '<div class="bv-stand-row bv-stand-head"><span class="bv-stand-rank">#</span><span></span>' +
@@ -301,50 +372,116 @@
       standRows + '</div>' +
       '<div class="bv-rr">' + roundsHtml + '</div>';
 
+    wireAnchorPills(container);
+  }
+
+  // ---- shared chrome pieces ----------------------------------------------
+
+  function pillsHTML(chrome, anchorMode) {
+    if (!chrome.pills) return '';
+    return '<div class="bvx-nav">' + chrome.titles.map(function (t, i) {
+      var attr = anchorMode ? 'data-bvx-go="bvx-er' + i + '"' : 'data-bvx-col="' + i + '"';
+      return '<button ' + attr + (i === Math.max(chrome.current, 0) ? ' class="on"' : '') + '>' +
+        esc(roundAbbrev(t)) + '</button>';
+    }).join('') + '</div>';
+  }
+
+  function setActivePill(container, btn) {
+    Array.prototype.forEach.call(container.querySelectorAll('.bvx-nav button'), function (x) {
+      x.classList.toggle('on', x === btn);
+    });
+  }
+
+  function wireAnchorPills(container) {
     Array.prototype.forEach.call(container.querySelectorAll('[data-bvx-go]'), function (b) {
       b.addEventListener('click', function () {
         var el = document.getElementById(b.dataset.bvxGo);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        Array.prototype.forEach.call(container.querySelectorAll('.bvx-nav button'), function (x) {
-          x.classList.toggle('on', x === b);
-        });
+        setActivePill(container, b);
       });
     });
   }
 
-  // ---- fit mode (desktop / tablet / TV): scale the tree to the container --
+  // ---- fit mode (desktop / tablet / TV): scaled tree + zoom toolbar -------
 
-  function renderFit(container, sides, order, ctx, tv) {
+  function renderFit(container, sides, order, ctx, tv, chrome) {
     var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
-    var html = order.map(function (key) {
-      return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
-        '<div class="bv-viewport">' + treeHTML(sides[key], ctx) + '</div>';
-    }).join('');
+    var html = chrome.summary + pillsHTML(chrome, false) + chrome.progress +
+      order.map(function (key) {
+        var isPrimary = key === (sides.main ? 'main' : order[0]);
+        return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
+          '<div class="bv-viewport' + (isPrimary ? ' bv-vp-primary' : '') + '"><div class="bv-sizer">' +
+          treeHTML(sides[key], ctx, isPrimary ? chrome.current : -1) + '</div></div>';
+      }).join('') +
+      // The app's bottom bar: zoom out · percent · zoom in · fit.
+      '<div class="bvx-toolbar" role="group" aria-label="Bracket zoom">' +
+      '<button data-bvx-zoom="out" aria-label="Zoom out">−</button>' +
+      '<span class="bvx-pct">100%</span>' +
+      '<button data-bvx-zoom="in" aria-label="Zoom in">+</button>' +
+      '<button data-bvx-zoom="fit" aria-label="Fit to screen">⤢ Fit</button></div>';
     container.innerHTML = html;
 
-    var minScale = tv ? 0.25 : 0.55;
-    var needVertical = false;
-    Array.prototype.forEach.call(container.querySelectorAll('.bv-viewport'), function (vp) {
+    var minScale = tv ? 0.25 : 0.4;
+    var vps = Array.prototype.slice.call(container.querySelectorAll('.bv-viewport'));
+    var dims = vps.map(function (vp) {
       var tree = vp.querySelector('.bv-tree');
-      var cw = vp.clientWidth;
-      var tw = tree.scrollWidth;
-      var scale = Math.min(1, cw / tw);
-      if (scale < minScale) { needVertical = true; return; }
-      tree.style.transform = scale < 1 ? 'scale(' + scale + ')' : '';
-      vp.style.height = (tree.scrollHeight * scale) + 'px';
+      return { vp: vp, tree: tree, w: tree.scrollWidth, h: tree.scrollHeight };
     });
-    // Fitting would make the text unreadably small → vertical layout instead.
-    if (needVertical) renderVertical(container, sides, order, ctx);
+    var fitScale = 1;
+    dims.forEach(function (d) { fitScale = Math.min(fitScale, d.vp.clientWidth / d.w); });
+    fitScale = Math.min(1, fitScale);
+    // Unreadably small even before zooming AND we're not on a TV → vertical
+    // list instead (phones landscape etc.); desktop keeps the canvas + zoom.
+    if (fitScale < minScale && container.clientWidth <= 900 && !tv) {
+      renderVertical(container, sides, order, ctx, chrome);
+      return;
+    }
+
+    var pct = container.querySelector('.bvx-pct');
+    function applyScale(s) {
+      container._bvxScale = s;
+      dims.forEach(function (d) {
+        d.tree.style.transform = 'scale(' + s + ')';
+        d.tree.parentNode.style.width = (d.w * s) + 'px';
+        d.tree.parentNode.style.height = (d.h * s) + 'px';
+      });
+      pct.textContent = Math.round(s * 100) + '%';
+    }
+    applyScale(fitScale);
+
+    Array.prototype.forEach.call(container.querySelectorAll('[data-bvx-zoom]'), function (b) {
+      b.addEventListener('click', function () {
+        var s = container._bvxScale || fitScale;
+        if (b.dataset.bvxZoom === 'in') s = Math.min(1.5, s + 0.1);
+        else if (b.dataset.bvxZoom === 'out') s = Math.max(0.25, s - 0.1);
+        else s = fitScale;
+        applyScale(s);
+      });
+    });
+
+    // Round pills scroll the primary viewport to that round's column.
+    var primaryVp = container.querySelector('.bv-vp-primary');
+    Array.prototype.forEach.call(container.querySelectorAll('[data-bvx-col]'), function (b) {
+      b.addEventListener('click', function () {
+        var col = primaryVp.querySelector('.bv-col[data-ri="' + b.dataset.bvxCol + '"]');
+        if (col) primaryVp.scrollTo({ left: col.offsetLeft * (container._bvxScale || fitScale) - 12, behavior: 'smooth' });
+        setActivePill(container, b);
+      });
+    });
   }
 
-  function treeHTML(matches, ctx) {
+  function treeHTML(matches, ctx, currentRound) {
     var rounds = orderRounds(matches);
     var finalMatch = rounds[rounds.length - 1].length === 1 ? rounds[rounds.length - 1][0] : null;
     var perfect = isPerfectTree(rounds);
     var units = rounds[0].length * 2;
 
     var cols = rounds.map(function (round, ri) {
-      var title = '<div class="bv-round-title">' + roundTitle(ri, rounds.length, round.length) + '</div>';
+      var titleText = roundTitle(ri, rounds.length, round.length);
+      ctx.cardTag = roundAbbrev(titleText);
+      var title = '<div class="bv-round-title">' + titleText + '</div>';
+      // Rounds after the one being played are dimmed, like the app's canvas.
+      var future = currentRound >= 0 && ri > currentRound;
       var body;
       if (perfect) {
         var span = units / round.length;
@@ -356,8 +493,9 @@
       } else {
         body = '<div class="bv-loose">' + round.map(function (m) { return matchCard(m, ctx); }).join('') + '</div>';
       }
-      return '<div class="bv-col">' + title + body + '</div>';
+      return '<div class="bv-col' + (future ? ' bv-future' : '') + '" data-ri="' + ri + '">' + title + body + '</div>';
     });
+    ctx.cardTag = null;
 
     var champion = championHTML(finalMatch, ctx);
     return '<div class="bv-tree' + (perfect ? ' bv-perfect' : '') + '">' + cols.join('') +
@@ -367,23 +505,33 @@
 
   // ---- vertical mode (mobile portrait / very large brackets on small screens)
 
-  function renderVertical(container, sides, order, ctx) {
+  function renderVertical(container, sides, order, ctx, chrome) {
     var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
-    var html = order.map(function (key) {
-      var rounds = orderRounds(sides[key]);
-      var finalMatch = rounds[rounds.length - 1].length === 1 ? rounds[rounds.length - 1][0] : null;
-      var champion = championHTML(finalMatch, ctx);
-      return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
-        '<div class="bvv">' +
-        (champion ? '<div class="bvv-round"><h3>Champion</h3>' + champion + '</div>' : '') +
-        rounds.map(function (round, ri) {
-          return '<div class="bvv-round"><h3>' + roundTitle(ri, rounds.length, round.length) +
-            ' <span class="count" style="color:var(--ink-mute)">' + round.length + '</span></h3>' +
-            round.map(function (m) { return matchCard(m, ctx); }).join('') + '</div>';
-        }).join('') +
-        '</div>';
-    }).join('');
+    var primaryKey = sides.main ? 'main' : order[0];
+    var html = chrome.summary + pillsHTML(chrome, true) + chrome.progress +
+      order.map(function (key) {
+        var rounds = orderRounds(sides[key]);
+        var finalMatch = rounds[rounds.length - 1].length === 1 ? rounds[rounds.length - 1][0] : null;
+        var champion = championHTML(finalMatch, ctx);
+        var isPrimary = key === primaryKey;
+        return (order.length > 1 ? '<h3 class="bv-side-title">' + (titles[key] || key) + '</h3>' : '') +
+          '<div class="bvv">' +
+          (champion ? '<div class="bvv-round"><h3>Champion</h3>' + champion + '</div>' : '') +
+          rounds.map(function (round, ri) {
+            var titleText = roundTitle(ri, rounds.length, round.length);
+            ctx.cardTag = roundAbbrev(titleText);
+            var future = isPrimary && chrome.current >= 0 && ri > chrome.current;
+            var cards = round.map(function (m) { return matchCard(m, ctx); }).join('');
+            ctx.cardTag = null;
+            return '<div class="bvv-round' + (future ? ' bv-future' : '') + '"' +
+              (isPrimary ? ' id="bvx-er' + ri + '"' : '') + '><h3>' + titleText +
+              ' <span class="count" style="color:var(--ink-mute)">' + round.length + '</span></h3>' +
+              cards + '</div>';
+          }).join('') +
+          '</div>';
+      }).join('');
     container.innerHTML = html;
+    wireAnchorPills(container);
   }
 
   window.PCBracket = { render: render, isElimination: isElimination, isRoundRobin: isRoundRobin, supports: supports };
