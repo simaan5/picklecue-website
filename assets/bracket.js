@@ -124,8 +124,12 @@
     var won = m.winner_id && m.winner_id === id;
     var lost = m.winner_id && id && m.winner_id !== id;
     var score = liveScore(m, side);
+    // Player avatars on the cards (user request): the app's avatar chain —
+    // preset → uploaded photo → emoji → initials — via PCLive.avatarStack.
+    var avatar = id ? window.PCLive.avatarStack(p && p.members, ctx.avatarSize) : '';
     return '<div class="bc-slot' + (won ? ' bc-won' : '') + (lost ? ' bc-lost' : '') + (id ? '' : ' bc-tbd') + '">' +
       '<span class="bc-seed">' + (p && p.seed ? p.seed : '') + '</span>' +
+      avatar +
       '<span class="bc-name">' + esc(name) + '</span>' +
       (won ? '<span class="bc-check">✓</span>' : '') +
       '<span class="bc-score">' + (score == null ? '' : score) + '</span></div>';
