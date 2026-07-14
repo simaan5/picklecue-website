@@ -276,3 +276,17 @@ body.bv-tv .cb-score { font-size: 44px; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .auth-apple { background: #fff; color: #000; } }
 .auth-divider { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: var(--ink-mute); font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
 .auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+
+/* ---- BracketView: round robin (standings + rounds grid) ---- */
+.bv-stand { border: 1px solid var(--rule-strong); border-radius: 14px; overflow: hidden; margin-bottom: 18px; background: var(--paper); }
+.bv-stand-row { display: grid; grid-template-columns: 28px 30px minmax(0, 1fr) 40px 40px 56px; align-items: center; gap: 6px; padding: 8px 14px; border-bottom: 1px solid var(--rule); font-size: 14px; }
+.bv-stand-row:last-child { border-bottom: none; }
+.bv-stand-head { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); background: var(--paper-2); }
+.bv-stand-rank { font-family: var(--f-mono); font-size: 12px; color: var(--ink-mute); }
+.bv-stand-num { text-align: right; font-variant-numeric: tabular-nums; }
+.bv-stand-diff { color: var(--ink-soft); }
+.bv-stand-leader { background: color-mix(in srgb, var(--citron) 16%, var(--paper)); }
+.bv-stand-leader .bv-stand-rank { color: var(--court); font-weight: 700; }
+.bv-rr { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 4px 22px; align-items: start; }
+.bv-rr .bvv-round > h3 { margin-top: 8px; }
+.bv-tv .bv-stand-row { font-size: 17px; padding: 10px 16px; }

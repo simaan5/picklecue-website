@@ -172,7 +172,7 @@
                       '</div>' : '') +
                 '<div class="tabs" role="tablist">' +
                 tabBtn('matches', 'Matches') +
-                (isT && window.PCBracket.isElimination(snap) ? tabBtn('bracket', 'Bracket') : '') +
+                (isT && window.PCBracket.supports(snap) ? tabBtn('bracket', 'Bracket') : '') +
                 (matches.some(function (m) { return m.court; }) ? tabBtn('courts', 'Courts') : '') +
                 (matches.some(function (m) { return m.status === 'completed'; }) ? tabBtn('results', 'Results') : '') +
                 tabBtn('me', 'My next match') +
@@ -180,7 +180,7 @@
                 tabBtn('players', isT ? 'Teams' : 'Members') +
                 '</div></div>';
 
-            if (activeTab === 'bracket' && !(kind === 't' && window.PCBracket.isElimination(snap))) activeTab = 'matches';
+            if (activeTab === 'bracket' && !(kind === 't' && window.PCBracket.supports(snap))) activeTab = 'matches';
             if (activeTab === 'courts' && !matches.some(function (m) { return m.court; })) activeTab = 'matches';
             if (activeTab === 'results') {
                 html += resultsView(matches, members || [], nameMap, isT);

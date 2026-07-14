@@ -233,7 +233,7 @@
                 '</div><div id="qrPanel" hidden></div>' +
                 '<div class="tabs" role="tablist">' +
                 '<button class="tab" data-etab="matches" aria-selected="' + (eventTab === 'matches') + '">Matches</button>' +
-                (isT && window.PCBracket.isElimination(snap)
+                (isT && window.PCBracket.supports(snap)
                     ? '<button class="tab" data-etab="bracket" aria-selected="' + (eventTab === 'bracket') + '">Bracket</button>' : '') +
                 '<button class="tab" data-etab="checkin" aria-selected="' + (eventTab === 'checkin') + '">Check-In</button>' +
                 '<button class="tab" data-etab="register" aria-selected="' + (eventTab === 'register') + '">Registration</button></div>' +
@@ -270,7 +270,7 @@
                     '<div>' + controls + '</div></div>';
             });
 
-            if (eventTab === 'bracket' && !(isT && window.PCBracket.isElimination(snap))) eventTab = 'matches';
+            if (eventTab === 'bracket' && !(isT && window.PCBracket.supports(snap))) eventTab = 'matches';
             if (eventTab === 'register') {
                 html += registrationTab();
             } else if (eventTab === 'checkin') {
@@ -653,7 +653,7 @@
             var targets = [
                 { label: 'Live event page', path: 'live.html?' + kind + '=' + view.id, poster: 'Scan to follow live' },
             ];
-            if (isT && window.PCBracket.isElimination(snap)) targets.push({ label: 'Live bracket', path: 'live.html?' + kind + '=' + view.id + '&view=bracket', poster: 'Scan for the live bracket' });
+            if (isT && window.PCBracket.supports(snap)) targets.push({ label: 'Live bracket', path: 'live.html?' + kind + '=' + view.id + '&view=bracket', poster: 'Scan for the live bracket' });
             targets.push({ label: 'Court board', path: 'live.html?' + kind + '=' + view.id + '&view=courts', poster: 'Scan for court assignments' });
             targets.push({ label: 'Court board (TV mode)', path: 'live.html?' + kind + '=' + view.id + '&view=courts&display=tv', poster: null });
             targets.push({ label: 'Scorekeeper page (staff only)', path: 'scorekeeper.html?' + kind + '=' + view.id, poster: null });
