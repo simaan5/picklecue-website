@@ -332,3 +332,18 @@ body.bv-tv .cb-score { font-size: 44px; }
 .bvx .bvv-round .bv-card:nth-child(7) { animation-delay: 0.24s; }
 .bvx .bvv-round .bv-card:nth-child(n+8) { animation-delay: 0.28s; }
 @keyframes bvxIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ---- BracketView: app-canvas chrome (summary, progress, tags, zoom) ---- */
+.bvx .bvx-summary { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); padding: 2px 2px 10px; }
+.bvx .bvx-sub { font-size: 13px; font-weight: 600; color: var(--ink-soft); padding: 2px 2px 12px; }
+.bvx .bvx-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,0.1); margin-top: 8px; overflow: hidden; }
+.bvx .bvx-fill { height: 100%; border-radius: 999px; background: var(--court); box-shadow: 0 0 8px rgba(62,220,133,0.6); transition: width 0.5s var(--ease); }
+.bvx .bv-tag { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); padding-bottom: 3px; }
+.bvx .bv-col.bv-future, .bvx .bvv-round.bv-future { opacity: 0.55; }
+.bvx .bv-viewport { overflow: auto; scrollbar-width: thin; }
+.bvx .bv-sizer { position: relative; overflow: hidden; }
+.bvx .bv-sizer .bv-tree { position: absolute; top: 0; left: 0; transform-origin: top left; }
+.bvx .bvx-toolbar { position: sticky; bottom: 12px; z-index: 4; display: flex; gap: 4px; align-items: center; width: max-content; margin: 14px auto 0; padding: 6px 8px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.16); background: rgba(16,21,15,0.92); backdrop-filter: blur(8px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.bvx .bvx-toolbar button { font-family: var(--f-mono); font-size: 13px; min-width: 34px; padding: 7px 10px; border-radius: 999px; border: none; background: transparent; color: var(--ink-soft); cursor: pointer; transition: all 0.15s var(--ease); }
+.bvx .bvx-toolbar button:hover { background: rgba(62,220,133,0.15); color: var(--court); }
+.bvx .bvx-pct { font-family: var(--f-mono); font-size: 12px; color: var(--ink); min-width: 46px; text-align: center; font-variant-numeric: tabular-nums; }
