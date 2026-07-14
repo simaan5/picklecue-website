@@ -461,3 +461,6 @@ body.bv-tv .cb-score { font-size: 44px; }
 .bv-rr .bc-gamechip { bottom: -6px; }
 .bvx .bvv-round > h3 { color: #889590; }
 .bvx .bvv-round .count { color: #889590; }
+
+/* RR canvas host: canvas first, standings below */
+.bc-host { position: relative; margin-bottom: 16px; }

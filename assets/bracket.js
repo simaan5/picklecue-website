@@ -273,20 +273,25 @@
 
   // ---- elimination canvas (BracketCanvasView port) -------------------------
 
-  function renderCanvas(container, snap, ctx, sideMatches) {
-    var rounds = orderRounds(sideMatches);
+  function renderCanvas(container, snap, ctx, sideMatches, opts) {
+    opts = opts || {};
+    var rr = !!opts.rr;
+    var rounds = opts.rounds || orderRounds(sideMatches);
     var R = rounds.length;
-    var titles = rounds.map(function (round, i) { return roundTitle(i, R, round.length); });
+    var titles = opts.titles || rounds.map(function (round, i) { return roundTitle(i, R, round.length); });
+    var condensedLabels = opts.condensed || titles.map(condense);
     var n0 = rounds[0].length;
 
-    // Frames — BracketLayoutEngine: round 0 stacked, parents at child midpoints.
+    // Frames — BracketLayoutEngine: round 0 stacked, parents at child
+    // midpoints. RR mode (the app's round-robin canvas): every round is a
+    // plain stacked column, no advancement geometry.
     var frames = [];
     var ys = [];
     rounds.forEach(function (round, r) {
       ys[r] = [];
       round.forEach(function (m, i) {
         var y;
-        if (r === 0) {
+        if (rr || r === 0) {
           y = HH + TP + i * (MH + VG);
         } else if (ys[r - 1][i * 2] != null && ys[r - 1][i * 2 + 1] != null) {
           y = (ys[r - 1][i * 2] + ys[r - 1][i * 2 + 1]) / 2;
@@ -315,15 +320,15 @@
     });
     var selected = current === -1 ? R - 1 : current;
 
-    // Champion state (final decided).
-    var finalMatch = rounds[R - 1].length === 1 ? rounds[R - 1][0] : null;
+    // Champion state (final decided). RR has no final match on the canvas.
+    var finalMatch = !rr && rounds[R - 1].length === 1 ? rounds[R - 1][0] : null;
     var decided = !!(finalMatch && finalMatch.status === 'completed' && finalMatch.winner_id);
     ctx.championName = decided ? ((ctx.participants[finalMatch.winner_id] || {}).name || null) : null;
 
     // Connectors SVG — rounded elbows; winner path gets the emerald under-glow.
     var conns = [];
     frames.forEach(function (f) {
-      if (f.r === 0) return;
+      if (rr || f.r === 0) return;
       [f.i * 2, f.i * 2 + 1].forEach(function (ci) {
         if (!rounds[f.r - 1] || ys[f.r - 1][ci] == null) return;
         var child = rounds[f.r - 1][ci];
@@ -360,12 +365,12 @@
     var cards = frames.map(function (f) {
       ctx.roundIndex = f.r;
       var champion = decided && f.r === R - 1 && f.m === finalMatch;
-      return appCard(f.m, ctx, condense(titles[f.r]),
+      return appCard(f.m, ctx, condensedLabels[f.r],
         'left:' + f.x + 'px;top:' + f.y + 'px', champion);
     }).join('');
 
     container.innerHTML = backdropHTML() +
-      railHTML(titles.map(condense), selected, railCaption(meta[selected].fullName, meta[selected].remaining)) +
+      railHTML(condensedLabels, selected, railCaption(meta[selected].fullName, meta[selected].remaining)) +
       '<div class="bc-viewport"><div class="bc-sizer"><div class="bc-canvas" style="width:' + W + 'px;height:' + H + 'px">' +
       svg + headers + cards +
       '</div></div></div>' + dockHTML();
@@ -399,7 +404,11 @@
       var x = (TP + i * (MW + RS) + MW / 2) * scale;
       vp.scrollTo({ left: x - vp.clientWidth / 2, behavior: smooth === false ? 'auto' : 'smooth' });
     }
-    applyScale(fitScale);
+    // Open readable: never below 55% initially — wide brackets start
+    // centered on the current round instead of a microscopic fit-all
+    // (fit remains one dock tap away).
+    applyScale(Math.max(fitScale, 0.55));
+    requestAnimationFrame(function () { centerRound(selected, false); });
 
     function select(i, scroll) {
       selected = i;
@@ -558,14 +567,6 @@
     var roundArrays = roundNums.map(function (r) {
       return byRound[r].sort(function (a, b) { return (a.match_number || 0) - (b.match_number || 0); });
     });
-    var current = -1;
-    var meta = roundArrays.map(function (round, i) {
-      var remaining = round.filter(function (m) { return !isBye(m) && m.status !== 'completed'; }).length;
-      if (current === -1 && remaining > 0) current = i;
-      return { fullName: 'Round ' + roundNums[i], remaining: remaining,
-        hasLive: round.some(function (m) { return m.status === 'in_progress'; }) };
-    });
-    var selected = current === -1 ? roundNums.length - 1 : current;
 
     var n = (snap.participants || []).length;
     var summary = '<div class="bvx-summary">' + n + ' teams · Round robin · ' + roundNums.length + ' rounds</div>';
@@ -592,36 +593,21 @@
         '<span class="bv-stand-num bv-stand-diff">' + (diff > 0 ? '+' : '') + diff + '</span></div>';
     }).join('');
 
-    var roundsHtml = roundNums.map(function (r, idx) {
-      var round = roundArrays[idx];
-      var done = round.filter(function (m) { return m.status === 'completed'; }).length;
-      ctx.roundIndex = idx;
-      var cards = round.map(function (m) {
-        return appCard(m, ctx, 'R' + r, '');
-      }).join('');
-      return '<div class="bvv-round" id="bvx-r' + idx + '"><h3>Round ' + r +
-        ' <span class="count">' + done + '/' + round.length + '</span></h3>' + cards + '</div>';
-    }).join('');
-
-    container.innerHTML = summary +
-      railHTML(roundNums.map(function (r) { return 'R' + r; }), selected,
-        railCaption(meta[selected].fullName, meta[selected].remaining)) +
+    // Canvas first (the app's RR bracket: rounds as columns on the court
+    // backdrop, rail + ball + spotlight + zoom dock); standings below it.
+    container.innerHTML = summary + '<div class="bc-host"></div>' +
       champion +
       '<div class="bv-stand" id="bvx-stand">' +
       '<div class="bv-stand-row bv-stand-head"><span class="bv-stand-rank">#</span><span></span>' +
       '<span class="bv-name">Round robin standings</span>' +
       '<span class="bv-stand-num">W</span><span class="bv-stand-num">L</span><span class="bv-stand-num">+/−</span></div>' +
-      standRows + '</div>' +
-      '<div class="bv-rr">' + roundsHtml + '</div>';
+      standRows + '</div>';
 
-    requestAnimationFrame(function () { railSelect(container, selected, meta[selected]); });
-    Array.prototype.forEach.call(container.querySelectorAll('[data-bc-round]'), function (b) {
-      b.addEventListener('click', function () {
-        var i = parseInt(b.dataset.bcRound, 10);
-        railSelect(container, i, meta[i]);
-        var el = document.getElementById('bvx-r' + i);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+    renderCanvas(container.querySelector('.bc-host'), snap, ctx, matches, {
+      rr: true,
+      rounds: roundArrays,
+      titles: roundNums.map(function (r) { return 'Round ' + r; }),
+      condensed: roundNums.map(function (r) { return 'R' + r; }),
     });
   }
 
