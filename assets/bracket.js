@@ -203,9 +203,12 @@
     var pill = container.querySelector('.bc-rail-pill');
     var chips = container.querySelectorAll('.bc-chip');
     var n = chips.length;
-    var w = caps.clientWidth - 6; // minus capsule padding
-    pill.style.width = (w / n) + 'px';
-    pill.style.transform = 'translateX(' + (3 + (w / n) * i) + 'px)';
+    // Anchor the selection pill to the actual chip (the capsule scrolls on
+    // narrow screens / many rounds — equal-division math breaks there).
+    var chip = chips[i];
+    pill.style.width = chip.offsetWidth + 'px';
+    pill.style.transform = 'translateX(' + chip.offsetLeft + 'px)';
+    caps.scrollTo({ left: chip.offsetLeft - caps.clientWidth / 2 + chip.offsetWidth / 2, behavior: 'smooth' });
     Array.prototype.forEach.call(chips, function (c, ci) { c.classList.toggle('on', ci === i); });
 
     var track = container.querySelector('.bc-track');
@@ -404,10 +407,10 @@
       var x = (TP + i * (MW + RS) + MW / 2) * scale;
       vp.scrollTo({ left: x - vp.clientWidth / 2, behavior: smooth === false ? 'auto' : 'smooth' });
     }
-    // Open readable: never below 55% initially — wide brackets start
-    // centered on the current round instead of a microscopic fit-all
-    // (fit remains one dock tap away).
-    applyScale(Math.max(fitScale, 0.55));
+    // Open readable, like the app: phones get full-size cards panned to the
+    // current round (page pinch-zoom never needed); desktop opens at fit
+    // unless fit would be unreadably small. Fit-all stays one dock tap away.
+    applyScale(vp.clientWidth < 700 ? 1 : Math.max(fitScale, 0.55));
     requestAnimationFrame(function () { centerRound(selected, false); });
 
     function select(i, scroll) {
