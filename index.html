@@ -250,6 +250,18 @@
             border-radius: 6px;
             align-self: center;
         }
+        /* Brand wordmark (approved lockup typography) — swaps with theme.
+           Light theme shows the dark wordmark; dark theme shows the white one. */
+        .masthead-logo img.masthead-wordmark { height: 21px; width: auto; align-self: center; display: block; }
+        .masthead-logo img.wm-dark { display: none; }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .masthead-logo img.wm-light { display: none; }
+            :root:not([data-theme="light"]) .masthead-logo img.wm-dark  { display: block; }
+        }
+        :root[data-theme="dark"] .masthead-logo img.wm-light { display: none; }
+        :root[data-theme="dark"] .masthead-logo img.wm-dark  { display: block; }
+        :root[data-theme="light"] .masthead-logo img.wm-light { display: block; }
+        :root[data-theme="light"] .masthead-logo img.wm-dark  { display: none; }
         .masthead-nav {
             display: flex;
             gap: 32px;
@@ -1436,7 +1448,8 @@
         <div class="page masthead-row">
             <a href="/" class="masthead-logo" aria-label="PickleCue home">
                 <img src="images/app-icon-120.png" alt="" width="30" height="30" aria-hidden="true">
-                <span>PickleCue</span>
+                <img class="masthead-wordmark wm-light" src="images/wordmark-on-light.png" alt="" height="21" aria-hidden="true">
+                <img class="masthead-wordmark wm-dark" src="images/wordmark-on-dark.png" alt="" height="21" aria-hidden="true">
             </a>
             <nav aria-label="Primary">
                 <ul class="masthead-nav">
