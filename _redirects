@@ -1,0 +1,2 @@
+https://picklecue.com/.well-known/* /.well-known/:splat 200
+https://picklecue.com/* https://www.picklecue.com/:splat 301
