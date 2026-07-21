@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" style="color-scheme: light dark;">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XCV417L0J8"></script>
+<!-- Google tag (gtag.js) with Consent Mode v2 -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  // Region-scoped defaults: EEA + UK + CH require prior opt-in (GDPR/ePrivacy);
+  // everywhere else analytics is granted by default. Must run BEFORE gtag.js.
+  gtag('consent', 'default', {
+    analytics_storage: 'granted',
+    ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied'
+  });
+  gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+    region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']
+  });
   gtag('js', new Date());
   gtag('config', 'G-XCV417L0J8');
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XCV417L0J8"></script>
+<script defer src="/assets/consent.js"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -409,6 +421,7 @@
                     <li><strong>What is sent to Google</strong> &mdash; pseudonymous usage data (page paths, referrer, approximate location, device/browser). GA4 does <strong>not</strong> log or store your full IP address, and we do not use it to identify you personally.</li>
                     <li><strong>What we do NOT do</strong> &mdash; we do not sell this data, build cross-site advertising profiles, or link website analytics to any PickleCue account.</li>
                 </ul>
+                <p><strong>Consent in the EU/UK/Switzerland.</strong> If you visit from the European Economic Area, the United Kingdom, or Switzerland, analytics cookies are <strong>off by default</strong> and only activate if you accept them in our cookie banner (Google Consent Mode). You can change your mind at any time via the &ldquo;Cookie preferences&rdquo; link in the site footer, which reopens the banner.</p>
                 <p><strong>Your choices.</strong> You can decline these cookies through your browser&rsquo;s cookie settings, use the official <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a>, or enable &ldquo;Do Not Track.&rdquo; Blocking them does not affect your ability to use the site or join the waitlist. Google&rsquo;s handling of this data is described in the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.</p>
 
                 <h2 id="collect">Information the App Collects</h2>
@@ -593,6 +606,7 @@
                         <li><a href="privacy.html">Privacy</a></li>
                         <li><a href="terms.html">Terms</a></li>
                         <li><a href="mailto:privacy@picklecue.com">Data requests</a></li>
+                        <li><a href="#cookie-preferences">Cookie preferences</a></li>
                     </ul>
                 </div>
             </div>
