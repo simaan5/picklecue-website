@@ -28,7 +28,7 @@ function esc(value) {
   }[c]));
 }
 
-async function fetchLeagueName(id) {
+async function fetchLeague(id) {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/live_league_snapshot`, {
       method: "POST",
@@ -38,8 +38,7 @@ async function fetchLeagueName(id) {
     });
     if (!res.ok) return null;
     const json = await res.json();
-    const name = json && json.league && json.league.name;
-    return name ? String(name).slice(0, 80) : null;
+    return (json && json.league) || null;
   } catch (_) {
     // Snapshot unavailable (private league, deleted league, timeout) —
     // fall back to the generic invitation copy. Never fail the page.
@@ -47,16 +46,32 @@ async function fetchLeagueName(id) {
   }
 }
 
+// Non-secret cache-buster so Messages re-fetches the card when the league's
+// public identity (name / approved logo) changes. Never the invite token.
+function metaVersion(league) {
+  const basis = league ? `${league.name || ""}|${league.avatar_url || ""}` : "generic";
+  let hash = 5381;
+  for (let i = 0; i < basis.length; i++) {
+    hash = ((hash << 5) + hash + basis.charCodeAt(i)) >>> 0;
+  }
+  return hash.toString(36);
+}
+
 export async function onRequestGet({ params }) {
   const rawId = String(params.id || "").toLowerCase();
   const validId = UUID_RE.test(rawId);
-  const leagueName = validId ? await fetchLeagueName(rawId) : null;
+  const league = validId ? await fetchLeague(rawId) : null;
+  const leagueName = league && league.name ? String(league.name).slice(0, 80) : null;
 
   const title = leagueName || "League Invitation";
   const description = leagueName
     ? `You’ve been invited to join ${leagueName} on PickleCue.`
     : "You’ve been invited to join a league on PickleCue.";
   const canonical = validId ? `${ORIGIN}/l/${rawId}` : `${ORIGIN}/`;
+  // Dedicated 1200×630 invitation card (generated server-side; token-free).
+  const ogImage = validId
+    ? `${ORIGIN}/og/l/${rawId}?v=${metaVersion(league)}`
+    : `${ORIGIN}/images/og-image.png`;
 
   const html = `<!DOCTYPE html>
 <html lang="en" style="color-scheme: light dark;">
@@ -77,14 +92,15 @@ export async function onRequestGet({ params }) {
     <meta property="og:url" content="${esc(canonical)}">
     <meta property="og:title" content="${esc(title)}">
     <meta property="og:description" content="${esc(description)}">
-    <meta property="og:image" content="${ORIGIN}/images/og-image.png">
+    <meta property="og:image" content="${esc(ogImage)}">
+    <meta property="og:image:secure_url" content="${esc(ogImage)}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="${esc(title)} on PickleCue">
+    <meta property="og:image:alt" content="League invitation: ${esc(title)} on PickleCue">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${esc(title)}">
     <meta name="twitter:description" content="${esc(description)}">
-    <meta name="twitter:image" content="${ORIGIN}/images/og-image.png">
+    <meta name="twitter:image" content="${esc(ogImage)}">
 
     <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">

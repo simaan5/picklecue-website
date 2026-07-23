@@ -23,8 +23,23 @@ const checks = [
     const m = html.match(/property="og:url" content="([^"]+)"/);
     return !!m && !m[1].includes("token") && !m[1].includes("mode=");
   })()],
+  ["og:image is the dedicated card route", /property="og:image" content="https:\/\/www\.picklecue\.com\/og\/l\//.test(html)],
+  ["og:image URL has no token", (() => {
+    const m = html.match(/property="og:image" content="([^"]+)"/);
+    return !!m && !m[1].includes("token");
+  })()],
   ["token never rendered", !html.includes(FAKE_TOKEN)],
 ];
+
+// The card itself: HTTP 200 PNG.
+{
+  const m = html.match(/property="og:image" content="([^"]+)"/);
+  if (m) {
+    const img = await fetch(m[1].replace(/&amp;/g, "&"));
+    checks.push(["og image HTTP 200", img.status === 200]);
+    checks.push(["og image is png", (img.headers.get("content-type") || "").includes("image/png")]);
+  }
+}
 
 let failed = 0;
 for (const [name, ok] of checks) {
