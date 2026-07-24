@@ -2,7 +2,13 @@
   "name": "picklecue-website",
   "private": true,
   "description": "Static site + Cloudflare Pages Functions (league link pages, OG image generation).",
+  "scripts": {
+    "test": "node tests/responsive.test.mjs"
+  },
   "dependencies": {
     "workers-og": "^0.0.25"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.61.1"
   }
 }

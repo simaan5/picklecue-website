@@ -1,4 +1,8 @@
 /* PickleCue live pages — shared styles (house paper/ink editorial system). */
+/* The hidden attribute must always win — .btn/.conn etc. set display and
+   would otherwise resurrect [hidden] elements (e.g. the signed-out
+   organizer "Sign out" button overflowing 320px viewports). */
+[hidden] { display: none !important; }
 :root {
     --paper: #F4F1EA; --paper-2: #EAE5D9;
     --ink: #0C0F12; --ink-soft: #3D4248; --ink-mute: #6E7278;

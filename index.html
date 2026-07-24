@@ -96,9 +96,13 @@
     }
     </script>
 
+    <link rel="stylesheet" href="/assets/site.css">
+    <script defer src="/assets/site.js"></script>
     <style>
         /* =====================================================================
-           Design tokens — Athletic Editorial system
+           Page-specific styles. The shared shell (tokens, masthead, mobile
+           menu, footer, theme system) lives in /assets/site.css and loads
+           BEFORE this block so page rules keep override priority.
            ===================================================================== */
         :root {
             --paper:      #F4F1EA;   /* canvas */
@@ -146,7 +150,6 @@
             background: var(--paper);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
         }
 
         /* Paper-grain texture — subtle, decorative */
@@ -165,26 +168,6 @@
         button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 
         :focus-visible { outline: 2px solid var(--court); outline-offset: 3px; border-radius: 2px; }
-
-        .skip-link {
-            position: absolute; top: -100%; left: 12px;
-            padding: 10px 18px;
-            background: var(--ink); color: var(--paper);
-            font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.04em;
-            text-transform: uppercase;
-            z-index: 1000;
-            border-radius: 0 0 8px 8px;
-            transition: top 0.2s var(--ease);
-        }
-        .skip-link:focus { top: 0; }
-
-        .page {
-            position: relative;
-            z-index: 1;
-            max-width: var(--page-max);
-            margin: 0 auto;
-            padding: 0 var(--gutter);
-        }
 
         /* =====================================================================
            Typography
@@ -238,126 +221,6 @@
         }
 
         /* =====================================================================
-           Masthead — editorial newspaper header
-           ===================================================================== */
-        .masthead {
-            position: sticky; top: 0;
-            background: var(--masthead-bg);
-            backdrop-filter: saturate(1.4) blur(14px);
-            -webkit-backdrop-filter: saturate(1.4) blur(14px);
-            border-bottom: 1px solid var(--rule);
-            z-index: 100;
-        }
-        .masthead-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 68px;
-            gap: 24px;
-        }
-        .masthead-logo {
-            display: inline-flex;
-            align-items: baseline;
-            gap: 10px;
-            font-family: var(--f-display);
-            font-size: 1.35rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            color: var(--ink);
-            font-variation-settings: "opsz" 36, "SOFT" 30;
-        }
-        .masthead-logo img {
-            width: 30px; height: 30px;
-            border-radius: 6px;
-            align-self: center;
-        }
-        /* Brand wordmark (approved lockup typography) — swaps with theme.
-           Light theme shows the dark wordmark; dark theme shows the white one. */
-        .masthead-logo img.masthead-wordmark { height: 21px; width: auto; align-self: center; display: block; }
-        .masthead-logo img.wm-dark { display: none; }
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) .masthead-logo img.wm-light { display: none; }
-            :root:not([data-theme="light"]) .masthead-logo img.wm-dark  { display: block; }
-        }
-        :root[data-theme="dark"] .masthead-logo img.wm-light { display: none; }
-        :root[data-theme="dark"] .masthead-logo img.wm-dark  { display: block; }
-        :root[data-theme="light"] .masthead-logo img.wm-light { display: block; }
-        :root[data-theme="light"] .masthead-logo img.wm-dark  { display: none; }
-        .masthead-nav {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
-        .masthead-nav a {
-            font-size: 14px;
-            color: var(--ink-soft);
-            padding: 6px 0;
-            position: relative;
-            transition: color 0.2s var(--ease);
-        }
-        .masthead-nav a:hover { color: var(--ink); }
-        .masthead-nav a::after {
-            content: "";
-            position: absolute; left: 0; right: 0; bottom: 0;
-            height: 1px; background: var(--ink);
-            transform: scaleX(0); transform-origin: right;
-            transition: transform 0.3s var(--ease);
-        }
-        .masthead-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
-
-        .btn-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 18px 10px 20px;
-            background: var(--ink);
-            color: var(--paper);
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 100px;
-            transition: background 0.2s var(--ease), transform 0.15s var(--ease);
-            min-height: 44px;
-            line-height: 1;
-        }
-        .btn-pill:hover { background: var(--court); transform: translateY(-1px); }
-
-        /* Discord CTA — brand blurple in BOTH themes (out-specifies the
-           per-theme .btn-pill overrides). */
-        .btn-pill.btn-discord,
-        :root:not([data-theme="light"]) .btn-pill.btn-discord,
-        :root[data-theme="dark"] .btn-pill.btn-discord { background: #5865F2; color: #fff; }
-        .btn-pill.btn-discord:hover { background: #4752C4; }
-        .btn-pill.btn-discord svg { width: 16px; height: 16px; fill: currentColor; }
-        .btn-pill.btn-discord { white-space: nowrap; }
-        /* Mid widths: icon-only so the masthead row never wraps. */
-        @media (max-width: 1023px) {
-            .btn-discord-label { display: none; }
-            .btn-pill.btn-discord { padding: 10px 14px; }
-        }
-
-        .btn-pill svg { width: 12px; height: 12px; }
-
-        .masthead-burger {
-            display: none;
-            width: 44px; height: 44px;
-            align-items: center; justify-content: center;
-        }
-        .masthead-burger span {
-            display: block;
-            width: 20px; height: 1.5px;
-            background: var(--ink);
-            position: relative;
-        }
-        .masthead-burger span::before,
-        .masthead-burger span::after {
-            content: ""; position: absolute; left: 0;
-            width: 20px; height: 1.5px; background: var(--ink);
-            transition: transform 0.2s var(--ease);
-        }
-        .masthead-burger span::before { top: -6px; }
-        .masthead-burger span::after { top: 6px; }
-
-        /* =====================================================================
            Edition marker — newspaper-style dateline
            ===================================================================== */
         .edition {
@@ -403,7 +266,9 @@
         }
         .hero-copy { max-width: 640px; }
         .hero h1 {
-            font-size: clamp(2.8rem, 8vw, 6.25rem);
+            /* Bounded fluid scale: ~41px @320, ~46px @390, ~49px @430, caps at 100px.
+               The old clamp(2.8rem, 8vw, …) floored at 44.8px even on 320px phones. */
+            font-size: clamp(2.5rem, 6.9vw + 1.2rem, 6.25rem);
             font-weight: 500;
             margin: 20px 0 28px;
             font-variation-settings: "opsz" 144, "SOFT" 20;
@@ -1059,104 +924,6 @@
         .closing .waitlist-msg.is-success { color: var(--citron); }
 
         /* =====================================================================
-           Colophon (footer)
-           ===================================================================== */
-        .colophon {
-            background: var(--paper);
-            padding: clamp(48px, 7vw, 96px) 0 40px;
-            border-top: 1px solid var(--rule);
-        }
-        .colophon-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 40px;
-            padding-bottom: 56px;
-            border-bottom: 1px solid var(--rule);
-        }
-        .colophon-brand h3 {
-            font-family: var(--f-display);
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 14px;
-            font-variation-settings: "opsz" 48, "SOFT" 30;
-        }
-        .colophon-brand p {
-            font-size: 14px;
-            color: var(--ink-soft);
-            max-width: 36ch;
-            line-height: 1.55;
-        }
-        .colophon h4 {
-            font-family: var(--f-mono);
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--ink-mute);
-            margin-bottom: 18px;
-        }
-        .colophon ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-        .colophon li a {
-            font-size: 14.5px;
-            color: var(--ink-soft);
-            transition: color 0.2s var(--ease);
-        }
-        .colophon li a:hover { color: var(--ink); }
-        .socials { display: flex; gap: 8px; flex-wrap: wrap; }
-        .social-icon {
-            width: 40px; height: 40px;
-            display: inline-flex; align-items: center; justify-content: center;
-            border: 1px solid var(--rule-strong);
-            border-radius: 50%;
-            color: var(--ink-soft);
-            transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
-        }
-        .social-icon:hover {
-            background: var(--ink);
-            color: var(--paper);
-            border-color: var(--ink);
-        }
-        .social-icon svg { width: 15px; height: 15px; fill: currentColor; }
-
-        .colophon-base {
-            padding-top: 28px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            font-family: var(--f-mono);
-            font-size: 11px;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--ink-mute);
-        }
-        .made-by {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border: 0;
-            color: var(--ink-mute);
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            font-family: var(--f-mono);
-            font-size: 11px;
-            transition: color 0.2s var(--ease), opacity 0.2s var(--ease);
-            opacity: 0.9;
-        }
-        .made-by:hover { color: var(--ink); opacity: 1; }
-        .made-by img {
-            height: 40px; width: 40px;
-            object-fit: contain;
-            border-radius: 5px;
-            transition: transform 0.2s var(--ease);
-        }
-        .made-by:hover img { transform: scale(1.08); }
-        .made-by .sep { color: var(--rule-strong); margin: 0 2px; }
-        .made-by .site { color: var(--ink-mute); }
-        .made-by:hover .site { color: var(--ink); }
-
-        /* =====================================================================
            Responsive — tablet & mobile
            ===================================================================== */
         @media (max-width: 960px) {
@@ -1164,7 +931,6 @@
             .hero-device { transform: none; margin: 0 auto; max-width: 320px; }
             .chapter-head { grid-template-columns: 1fr; }
             .pitch-grid { grid-template-columns: 1fr; }
-            .colophon-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 960px) {
             /* Reel: stack — stage sticks to top of viewport, captions scroll below it */
@@ -1204,9 +970,6 @@
            on desktop the stage must stay transparent so no big rectangle sits behind the phone. */
 
         @media (max-width: 720px) {
-            .masthead-nav { display: none; }
-            .masthead-burger { display: inline-flex; }
-            .masthead .btn-pill { display: none; }
             .edition-issue span.hide-sm { display: none; }
             .stats-row { grid-template-columns: 1fr; gap: 28px; }
             .stat-cell + .stat-cell { padding-left: 0; padding-top: 28px; border-left: 0; border-top: 1px solid var(--rule); }
@@ -1220,7 +983,6 @@
             .persona-grid { grid-template-columns: 1fr; }
             .persona-card { border-right: 0; border-bottom: 1px solid var(--rule); }
             .persona-card:last-child { border-bottom: 0; }
-            .colophon-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 40px; }
             .waitlist-form { border-radius: 16px; padding: 10px; flex-direction: column; align-items: stretch; gap: 8px; }
             .waitlist-form input[type="email"] {
                 flex: 0 0 auto;       /* was flex: 1 1 200px — that 200px basis became a 200px *height* in column mode */
@@ -1231,57 +993,7 @@
             }
             .waitlist-form .btn-pill { width: 100%; justify-content: center; padding: 14px; min-height: 48px; }
             .hero h1 .mark::before { inset: 82% -2px 4% -2px; }
-
-            /* Footer bottom: stack vertically and keep Made-by on one line */
-            .colophon-base {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 14px;
-            }
-            .made-by {
-                flex-wrap: nowrap;
-                white-space: nowrap;
-                gap: 8px;
-            }
-            .made-by img { height: 28px; width: 28px; }
-            .made-by .sep, .made-by .site { display: none; }
         }
-
-        /* =====================================================================
-           Mobile menu (shown via :target)
-           ===================================================================== */
-        .mobile-menu {
-            position: fixed; inset: 0;
-            background: var(--paper);
-            z-index: 200;
-            padding: 80px 24px 40px;
-            transform: translateY(-100%);
-            transition: transform 0.35s var(--ease);
-            display: flex;
-            flex-direction: column;
-        }
-        .mobile-menu:target { transform: translateY(0); }
-        .mobile-menu-close {
-            position: absolute; top: 20px; right: 20px;
-            width: 44px; height: 44px;
-            display: inline-flex; align-items: center; justify-content: center;
-            font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--ink);
-        }
-        .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: 24px; border-top: 1px solid var(--rule); }
-        .mobile-menu li { border-bottom: 1px solid var(--rule); }
-        .mobile-menu li a {
-            display: block;
-            padding: 22px 4px;
-            font-family: var(--f-display);
-            font-size: 1.8rem;
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            color: var(--ink);
-            font-variation-settings: "opsz" 48, "SOFT" 30;
-        }
-        .mobile-menu .btn-pill { margin-top: 32px; align-self: flex-start; }
 
         /* =====================================================================
            Waitlist popup (lazy, one-shot)
@@ -1427,35 +1139,6 @@
         :root[data-theme="dark"] .waitlist-form { background: var(--paper-2); }
         :root[data-theme="dark"] .popup-backdrop { background: rgba(0,0,0,0.65); }
 
-        /* =====================================================================
-           Theme toggle button
-           ===================================================================== */
-        .theme-toggle {
-            width: 40px; height: 40px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 100px;
-            color: var(--ink-soft);
-            background: transparent;
-            border: 1px solid var(--rule-strong);
-            transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.15s var(--ease);
-            flex-shrink: 0;
-        }
-        .theme-toggle:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-1px); }
-        .theme-toggle svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-        /* Icon convention: visible icon = the mode you'll switch TO on click.
-           So in light mode you see a moon; in dark mode you see a sun. */
-        .theme-toggle .icon-sun  { display: none; }
-        .theme-toggle .icon-moon { display: block; }
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) .theme-toggle .icon-sun  { display: block; }
-            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
-        }
-        :root[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
-        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-        :root[data-theme="light"] .theme-toggle .icon-sun  { display: none; }
-        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
     </style>
     <!-- Fonts: self-hosted, preload the two critical latin subsets -->
     <link rel="preload" href="/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2" as="font" type="font/woff2" crossorigin>
@@ -1480,6 +1163,7 @@
                     <li><a href="support.html">Support</a></li>
                 </ul>
             </nav>
+            <div class="masthead-actions">
             <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme" title="Toggle theme">
                 <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
                 <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1492,25 +1176,32 @@
                 Get early access
                 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
             </a>
-            <a href="#menu" class="masthead-burger" aria-label="Open menu" role="button"><span></span></a>
+            <button type="button" class="masthead-burger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu"><span></span></button>
+            </div>
         </div>
     </header>
 
-    <aside class="mobile-menu" id="menu" aria-label="Mobile navigation">
-        <a href="#" class="mobile-menu-close" aria-label="Close menu">Close ✕</a>
-        <ul>
-            <li><a href="#pitch">What it is</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="demo/">Demo</a></li>
-            <li><a href="support.html">Support</a></li>
-            <li><a href="https://discord.gg/YvfgkFGVxd" target="_blank" rel="noopener noreferrer">Discord</a></li>
-            <li><a href="privacy.html">Privacy</a></li>
-        </ul>
-        <a href="#waitlist" class="btn-pill" data-track="cta_click" data-cta="mobile_waitlist">
-            Get early access
-            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
-        </a>
-    </aside>
+    <div class="site-menu" id="siteMenu" hidden>
+        <button type="button" class="site-menu-close" aria-label="Close menu">Close ✕</button>
+        <nav aria-label="Site menu">
+            <ul>
+                <li><a href="#pitch">What it is</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="demo/">Demo</a></li>
+                <li class="site-menu-minor"><a href="players.html">For players</a></li>
+                <li class="site-menu-minor"><a href="organizers.html">For organizers</a></li>
+                <li class="site-menu-minor"><a href="clubs.html">For clubs &amp; venues</a></li>
+                <li class="site-menu-minor"><a href="support.html">Support</a></li>
+                <li class="site-menu-minor"><a href="https://discord.gg/YvfgkFGVxd" target="_blank" rel="noopener noreferrer">Discord</a></li>
+                <li class="site-menu-minor"><a href="privacy.html">Privacy</a></li>
+                <li class="site-menu-minor"><a href="terms.html">Terms</a></li>
+            </ul>
+            <a href="#waitlist" class="btn-pill" data-track="cta_click" data-cta="mobile_waitlist">
+                Get early access
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+            </a>
+        </nav>
+    </div>
 
     <!-- Waitlist popup (lazy — 10s delay, shown at most once per browser) -->
     <div class="popup-backdrop" id="waitlistPopup" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-hidden="true">
@@ -1945,43 +1636,7 @@
     </footer>
 
     <script>
-        /* ---- Theme toggle ----
-           Cycles: light → dark → auto (remove override, follow system). */
-        (function () {
-            var btn = document.getElementById('themeToggle');
-            if (!btn) return;
-            var root = document.documentElement;
-
-            function current() {
-                var explicit = root.getAttribute('data-theme');
-                if (explicit === 'light' || explicit === 'dark') return explicit;
-                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            function apply(next) {
-                if (next === 'auto') {
-                    root.removeAttribute('data-theme');
-                    try { localStorage.removeItem('pc_theme'); } catch (_) {}
-                } else {
-                    root.setAttribute('data-theme', next);
-                    try { localStorage.setItem('pc_theme', next); } catch (_) {}
-                }
-                btn.setAttribute('title', 'Theme: ' + (next === 'auto' ? 'auto (follows system)' : next));
-                window.track('theme_change', { to: next });
-            }
-            btn.addEventListener('click', function () {
-                // Flip to the opposite of what's currently rendered.
-                apply(current() === 'dark' ? 'light' : 'dark');
-            });
-            // Keep system preference in sync if user hasn't overridden
-            try {
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
-                    if (!root.getAttribute('data-theme')) {
-                        // Trigger a repaint by toggling a harmless class (browsers already do this, but notify)
-                        window.track('theme_system_change', {});
-                    }
-                });
-            } catch (_) {}
-        })();
+        /* Theme toggle lives in /assets/site.js (shared shell). */
 
         /* Lightweight analytics — queues events to window.dataLayer. */
         window.dataLayer = window.dataLayer || [];

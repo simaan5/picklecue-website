@@ -1,0 +1,404 @@
+/* =========================================================================
+   PickleCue — shared site shell (tokens, masthead, mobile menu, footer)
+   One source of truth for every marketing/legal page. Page-specific styles
+   stay inline on each page and load AFTER this file so they can override.
+   ========================================================================= */
+
+:root {
+    --paper:      #F4F1EA;
+    --paper-2:    #EAE5D9;
+    --ink:        #0C0F12;
+    --ink-soft:   #3D4248;
+    --ink-mute:   #6E7278;
+    --rule:       rgba(12,15,18,0.12);
+    --rule-strong:rgba(12,15,18,0.28);
+    --court:      #2E5E4E;
+    --citron:     #C8E04E;
+    --clay:       #D3511A;
+    --f-display:  'Fraunces', Georgia, serif;
+    --f-body:     'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-mono:     'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
+    --page-max:   1240px;
+    --gutter:     clamp(20px, 4vw, 44px);
+    --masthead-bg: rgba(244,241,234,0.88);
+    --masthead-h: 68px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+    font-feature-settings: "cv11";
+    font-family: var(--f-body);
+    font-size: 17px; line-height: 1.65;
+    color: var(--ink); background: var(--paper);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: var(--ink); text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+:focus-visible { outline: 2px solid var(--court); outline-offset: 3px; border-radius: 2px; }
+
+/* Root overflow safeguard — the shell fixes every known overflow source;
+   this only guards against regressions in page-specific content. `clip`
+   (not `hidden`) so iOS Safari cannot pan the clipped area. */
+html, body { max-width: 100%; overflow-x: clip; }
+
+/* Anchor targets must land below the sticky masthead */
+[id] { scroll-margin-top: calc(var(--masthead-h) + 24px); }
+
+.skip-link {
+    position: absolute; top: -100%; left: 12px;
+    padding: 10px 18px; background: var(--ink); color: var(--paper);
+    font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase;
+    z-index: 1000; border-radius: 0 0 8px 8px; transition: top 0.2s var(--ease);
+}
+.skip-link:focus { top: 0; }
+
+.page {
+    position: relative; z-index: 1;
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
+
+/* =========================================================================
+   Masthead
+   ========================================================================= */
+.masthead {
+    position: sticky; top: 0;
+    background: var(--masthead-bg);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid var(--rule);
+    z-index: 100;
+    padding-top: env(safe-area-inset-top);
+}
+.masthead-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--masthead-h);
+    gap: 16px;
+}
+.masthead-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    border: 0;
+    flex-shrink: 0;
+    min-height: 44px;
+}
+.masthead-logo img { width: 30px; height: 30px; border-radius: 6px; }
+.masthead-logo img.masthead-wordmark { height: 21px; width: auto; display: block; }
+.masthead-logo img.wm-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .masthead-logo img.wm-light { display: none; }
+    :root:not([data-theme="light"]) .masthead-logo img.wm-dark  { display: block; }
+}
+:root[data-theme="dark"] .masthead-logo img.wm-light { display: none; }
+:root[data-theme="dark"] .masthead-logo img.wm-dark  { display: block; }
+:root[data-theme="light"] .masthead-logo img.wm-light { display: block; }
+:root[data-theme="light"] .masthead-logo img.wm-dark  { display: none; }
+
+.masthead-nav { display: flex; gap: 32px; list-style: none; }
+.masthead-nav a {
+    font-size: 14px;
+    color: var(--ink-soft);
+    padding: 6px 0;
+    position: relative;
+    border: 0;
+    transition: color 0.2s var(--ease);
+}
+.masthead-nav a:hover { color: var(--ink); }
+.masthead-nav a::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 1px; background: var(--ink);
+    transform: scaleX(0); transform-origin: right;
+    transition: transform 0.3s var(--ease);
+}
+.masthead-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.masthead-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+.btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px 10px 20px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 14px;
+    font-weight: 500;
+    border: 0 !important;
+    border-radius: 100px;
+    min-height: 44px;
+    line-height: 1;
+    transition: background 0.2s var(--ease), transform 0.15s var(--ease);
+}
+.btn-pill:hover { background: var(--court); transform: translateY(-1px); color: var(--paper); }
+.btn-pill svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* Discord CTA — brand blurple in BOTH themes (out-specifies the
+   per-theme .btn-pill overrides). */
+.btn-pill.btn-discord,
+:root:not([data-theme="light"]) .btn-pill.btn-discord,
+:root[data-theme="dark"] .btn-pill.btn-discord { background: #5865F2; color: #fff; }
+.btn-pill.btn-discord:hover { background: #4752C4; }
+.btn-pill.btn-discord svg { width: 16px; height: 16px; fill: currentColor; }
+.btn-pill.btn-discord { white-space: nowrap; }
+/* Mid widths: icon-only so the masthead row never wraps. */
+@media (max-width: 1099px) {
+    .btn-discord-label { display: none; }
+    .btn-pill.btn-discord { padding: 10px 14px; }
+}
+
+/* Theme toggle */
+.theme-toggle {
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 100px;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.15s var(--ease);
+    flex-shrink: 0;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-1px); }
+.theme-toggle svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle .icon-sun  { display: block; }
+    :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+:root[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+:root[data-theme="light"] .theme-toggle .icon-sun  { display: none; }
+:root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
+/* Hamburger (mobile only) */
+.masthead-burger {
+    display: none;
+    width: 44px; height: 44px;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.masthead-burger span {
+    display: block;
+    width: 20px; height: 1.5px;
+    background: var(--ink);
+    position: relative;
+    transition: background 0.2s var(--ease);
+}
+.masthead-burger span::before,
+.masthead-burger span::after {
+    content: ""; position: absolute; left: 0;
+    width: 20px; height: 1.5px; background: var(--ink);
+    transition: transform 0.2s var(--ease), top 0.2s var(--ease);
+}
+.masthead-burger span::before { top: -6px; }
+.masthead-burger span::after  { top: 6px; }
+.masthead-burger[aria-expanded="true"] span { background: transparent; }
+.masthead-burger[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+.masthead-burger[aria-expanded="true"] span::after  { top: 0; transform: rotate(-45deg); }
+
+/* Responsive header states.
+   ≤ 860px the desktop nav + pills cannot fit next to the logo — collapse
+   to logo · theme · burger. The CTA moves inside the menu. */
+@media (max-width: 860px) {
+    .masthead-nav { display: none; }
+    .masthead .btn-pill { display: none; }
+    .masthead-burger { display: inline-flex; }
+}
+
+/* =========================================================================
+   Site menu (mobile navigation overlay) — JS-driven, accessible.
+   Closed state is display:none via [hidden]: nothing can ever peek into
+   the viewport, unlike the old translateY(-100%) approach.
+   ========================================================================= */
+.site-menu {
+    position: fixed; inset: 0;
+    z-index: 200;
+    background: var(--paper);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: calc(80px + env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.site-menu[hidden] { display: none; }
+.site-menu.is-open { opacity: 1; transform: translateY(0); }
+.site-menu-close {
+    position: absolute;
+    top: calc(16px + env(safe-area-inset-top)); right: max(20px, env(safe-area-inset-right));
+    min-width: 44px; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    border: 0;
+}
+.site-menu ul { list-style: none; display: flex; flex-direction: column; margin-top: 12px; border-top: 1px solid var(--rule); }
+.site-menu li { border-bottom: 1px solid var(--rule); }
+.site-menu li a {
+    display: block;
+    padding: 16px 4px;
+    font-family: var(--f-display);
+    font-size: 1.55rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    border: 0;
+    font-variation-settings: "opsz" 48, "SOFT" 30;
+}
+.site-menu li.site-menu-minor a {
+    font-family: var(--f-body);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 14px 4px;
+    color: var(--ink-soft);
+}
+.site-menu .btn-pill { margin-top: 28px; align-self: flex-start; display: inline-flex; }
+
+/* =========================================================================
+   Colophon (footer)
+   ========================================================================= */
+.colophon { background: var(--paper); padding: clamp(48px, 7vw, 96px) 0 calc(40px + env(safe-area-inset-bottom)); border-top: 1px solid var(--rule); }
+.colophon-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 56px; border-bottom: 1px solid var(--rule); }
+.colophon-brand h3 { font-family: var(--f-display); font-size: 1.5rem; font-weight: 600; margin-bottom: 14px; font-variation-settings: "opsz" 48, "SOFT" 30; }
+.colophon-brand p { font-size: 14px; color: var(--ink-soft); max-width: 36ch; line-height: 1.55; }
+.colophon h4 { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 18px; }
+.colophon ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.colophon li a { font-size: 14.5px; color: var(--ink-soft); border: 0; }
+.colophon li a:hover { color: var(--ink); }
+.socials { display: flex; gap: 8px; flex-wrap: wrap; }
+.social-icon { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--rule-strong); border-radius: 50%; color: var(--ink-soft); transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease); }
+.social-icon:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.social-icon svg { width: 15px; height: 15px; fill: currentColor; }
+.colophon-base { padding-top: 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+.made-by { display: inline-flex; align-items: center; gap: 10px; border: 0; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-family: var(--f-mono); font-size: 11px; transition: color 0.2s var(--ease), opacity 0.2s var(--ease); opacity: 0.9; }
+.made-by:hover { color: var(--ink); opacity: 1; }
+.made-by img { height: 40px; width: 40px; object-fit: contain; border-radius: 5px; transition: transform 0.2s var(--ease); }
+.made-by:hover img { transform: scale(1.08); }
+.made-by .sep { color: var(--rule-strong); margin: 0 2px; }
+.made-by .site { color: var(--ink-mute); }
+.made-by:hover .site { color: var(--ink); }
+
+@media (max-width: 960px) {
+    .colophon-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+    .colophon-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 40px; }
+    .colophon-base { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .made-by { flex-wrap: nowrap; white-space: nowrap; gap: 8px; }
+    .made-by img { height: 28px; width: 28px; }
+    .made-by .sep, .made-by .site { display: none; }
+}
+
+/* =========================================================================
+   Legal / article layout ("On this page" TOC)
+   Desktop ≥ 961px: sticky sidebar. Mobile: collapsed disclosure.
+   The <details> ships with `open`; site.js closes it below 961px.
+   ========================================================================= */
+.article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    padding-top: clamp(48px, 6vw, 88px);
+    padding-bottom: clamp(64px, 8vw, 112px);
+}
+.article-toc {
+    position: sticky; top: calc(var(--masthead-h) + 32px);
+    align-self: start;
+    font-family: var(--f-mono); font-size: 12px;
+    letter-spacing: 0.04em;
+    min-width: 0;
+}
+.article-toc summary {
+    font-family: var(--f-mono); font-size: 11px;
+    font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-mute);
+    list-style: none;
+    cursor: default;
+    pointer-events: none;   /* desktop: acts as a plain heading */
+    padding: 0 0 18px;
+}
+.article-toc summary::-webkit-details-marker { display: none; }
+.article-toc summary::after { content: none; }
+.article-toc ul { list-style: none; display: flex; flex-direction: column; gap: 10px; border-left: 1px solid var(--rule); padding-left: 16px; }
+.article-toc li a {
+    display: block; font-size: 13px; padding: 5px 0;
+    color: var(--ink-soft); border: 0; letter-spacing: 0;
+    font-family: var(--f-body); text-transform: none;
+    line-height: 1.4;
+}
+.article-toc li a:hover { color: var(--ink); }
+
+@media (max-width: 960px) {
+    .article-layout { grid-template-columns: minmax(0, 1fr); }
+    .article-toc {
+        position: static;
+        border: 1px solid var(--rule-strong);
+        border-radius: 12px;
+        background: var(--paper-2);
+    }
+    .article-toc summary {
+        pointer-events: auto;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px;
+        min-height: 44px;
+        padding: 12px 18px;
+        color: var(--ink);
+    }
+    .article-toc summary::after {
+        content: "+";
+        font-size: 16px; line-height: 1;
+        color: var(--ink-mute);
+        transition: transform 0.2s var(--ease);
+    }
+    .article-toc[open] summary::after { content: "–"; }
+    .article-toc ul { border-left: 0; padding: 4px 18px 14px; gap: 0; }
+    .article-toc li a { padding: 10px 0; font-size: 15px; border-bottom: 1px solid var(--rule); }
+    .article-toc li:last-child a { border-bottom: 0; }
+}
+
+/* Long emails / URLs must wrap, never overflow */
+.article-body { min-width: 0; overflow-wrap: break-word; }
+.article-body a { overflow-wrap: anywhere; }
+
+/* =========================================================================
+   Theme system — system dark auto-flips unless user picked light;
+   [data-theme="dark"] forces dark.
+   ========================================================================= */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #0F1214; --paper-2: #1A1F23;
+        --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
+        --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
+        --court: #6FB39B; --clay: #F08250;
+        --masthead-bg: rgba(15,18,20,0.82);
+    }
+    :root:not([data-theme="light"]) .btn-pill { background: var(--ink); color: var(--paper); }
+    :root:not([data-theme="light"]) .btn-pill:hover { background: var(--court); color: #0C0F12; }
+}
+:root[data-theme="dark"] {
+    --paper: #0F1214; --paper-2: #1A1F23;
+    --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
+    --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
+    --court: #6FB39B; --clay: #F08250;
+    --masthead-bg: rgba(15,18,20,0.82);
+}
+:root[data-theme="dark"] .btn-pill { background: var(--ink); color: var(--paper); }
+:root[data-theme="dark"] .btn-pill:hover { background: var(--court); color: #0C0F12; }
