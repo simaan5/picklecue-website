@@ -4,23 +4,110 @@
    stay inline on each page and load AFTER this file so they can override.
    ========================================================================= */
 
+/* =========================================================================
+   CANONICAL TOKEN LAYER (Stage 2)
+   This block owns the design system. Other stylesheets and page-level
+   <style> blocks CONSUME these tokens. They must not keep private copies of
+   the primitive palette. Scoped overrides that mean something different
+   (the dark theme, .bvx broadcast skin, operational widths) are legitimate
+   and are documented in qa/site-modernization/STAGE2_TOKEN_INVENTORY.md
+   ========================================================================= */
 :root {
+    /* --- BRAND PRIMITIVES -------------------------------------------------
+       Locked. Contrast is never solved by shifting these; the SEMANTIC
+       layer below picks safe combinations instead.                        */
+    --green-950:  #1F4538;   /* deepest court green                        */
+    --green-700:  #2E5E4E;   /* standard court green (light-theme --court) */
+    --green-400:  #6FB39B;   /* light court accent (dark-theme --court)    */
+    --citron:     #C8E04E;
+    --clay:       #D3511A;
+
+    /* --- NEUTRAL PRIMITIVES ---------------------------------------------- */
     --paper:      #F4F1EA;
     --paper-2:    #EAE5D9;
     --ink:        #0C0F12;
     --ink-soft:   #3D4248;
-    --ink-mute:   #6E7278;
+    /* Was #6E7278 = 4.29:1 on --paper, under the 4.5:1 AA floor, and the
+       single cause of 36 of 56 baseline contrast failures. Darkened along
+       the same hue to the nearest value clearing AA on BOTH light surfaces
+       (5.03:1 on --paper, 4.51:1 on --paper-2). A neutral, not a brand
+       colour: the protected palette is untouched.                         */
+    --ink-mute:   #64676D;
     --rule:       rgba(12,15,18,0.12);
     --rule-strong:rgba(12,15,18,0.28);
-    --court:      #2E5E4E;
-    --citron:     #C8E04E;
-    --clay:       #D3511A;
-    --f-display:  'Fraunces', Georgia, serif;
-    --f-body:     'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    --f-mono:     'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+    /* --court is the historical name every component already consumes, so
+       it stays and simply aliases the standard green. No component edits
+       are needed, while --green-* name each concept unambiguously.        */
+    --court:      var(--green-700);
+
+    /* --- SEMANTIC COLOUR --------------------------------------------------
+       Every pairing below is recorded in STAGE2_CONTRAST_MATRIX.md.       */
+    --surface-page:      var(--paper);
+    --surface-raised:    var(--paper-2);
+    --text-primary:      var(--ink);
+    --text-secondary:    var(--ink-soft);
+    --text-muted:        var(--ink-mute);
+    --border-subtle:     var(--rule);
+    --border-strong:     var(--rule-strong);
+
+    --action-primary:    var(--green-700);
+    /* Court green carries PAPER, never ink. ink-on-court is 2.59:1, which
+       fails AA for normal text; paper-on-court is 6.58:1.                 */
+    --action-primary-on: var(--paper);
+
+    /* Citron and clay clear AA only as BACKGROUNDS carrying ink text
+       (13.02:1 and 4.54:1). As text on paper they are 1.31:1 and 3.75:1,
+       so readable text usage gets its own darkened semantics.             */
+    --accent-citron:     var(--citron);
+    --accent-citron-on:  var(--ink);
+    --accent-clay:       var(--clay);
+    --accent-clay-on:    var(--ink);
+    --text-on-citron:    #5F6D13;   /* 5.05:1 paper / 4.54:1 paper-2       */
+    --text-live:         #B14416;   /* 5.02:1 paper / 4.51:1 paper-2       */
+    --text-link:         var(--green-700);
+    --text-link-hover:   var(--green-950);
+
+    /* --- TYPOGRAPHY -------------------------------------------------------
+       'Fraunces Fallback' and 'Instrument Sans Fallback' are metric-matched
+       size-adjust faces declared in fonts.css. They are performance
+       infrastructure that suppresses layout shift during font swap, not
+       duplicate typography. Only index.html carried them before Stage 2.  */
+    --f-display:  'Fraunces', 'Fraunces Fallback', 'Iowan Old Style', Georgia, serif;
+    --f-body:     'Instrument Sans', 'Instrument Sans Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --f-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    /* --- SHAPE: general UI radius scale ---------------------------------- */
+    --radius-xs:   4px;
+    --radius-sm:   8px;
+    --radius-md:   16px;
+    --radius-lg:   24px;
+    --radius-pill: 100px;
+
+    /* --- SHAPE: device-mockup geometry (NOT radius sprawl) ----------------
+       The shell/screen pairs preserve a constant 8px bezel relationship.
+       Collapsing them into the scale above would make the mockups
+       optically wrong, so they are named geometry instead.
+         .hero-device 42 / .hero-device-screen 34
+         .reel-phone  44 / .reel-phone-screen  36
+       True circles (.edition-dot, .reel-dot) keep 50%.                    */
+    --radius-hero-device-shell:  42px;
+    --radius-hero-device-screen: 34px;
+    --radius-reel-device-shell:  44px;
+    --radius-reel-device-screen: 36px;
+
+    /* --- MOTION ----------------------------------------------------------- */
     --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
-    --page-max:   1240px;
-    --gutter:     clamp(20px, 4vw, 44px);
+
+    /* --- LAYOUT -----------------------------------------------------------
+       Marketing pages run 1240px. The live / scorekeeper / check-in family
+       intentionally runs narrower and tighter for dense operational
+       screens; that is now named rather than being an unexplained second
+       value of the same token.                                            */
+    --page-max:               1240px;
+    --page-max-operational:   1080px;
+    --gutter:                 clamp(20px, 4vw, 44px);
+    --gutter-operational:     clamp(16px, 4vw, 40px);
     --masthead-bg: rgba(244,241,234,0.88);
     --masthead-h: 68px;
 }
@@ -387,8 +474,18 @@ html, body { max-width: 100%; overflow-x: clip; }
         --paper: #0F1214; --paper-2: #1A1F23;
         --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
         --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
-        --court: #6FB39B; --clay: #F08250;
+        --court: var(--green-400); --clay: #F08250;
         --masthead-bg: rgba(15,18,20,0.82);
+        /* Dark semantics. Every pairing verified in
+           STAGE2_CONTRAST_MATRIX.md; all clear AA unchanged, so only the
+           accent-carrying roles flip. On dark, court is light enough to
+           carry PAPER-dark text at 7.70:1.                              */
+        --action-primary:    var(--green-400);
+        --action-primary-on: var(--paper);
+        --text-on-citron:    var(--citron);   /* 12.74:1 direct on dark  */
+        --text-live:         var(--clay);     /* 7.17:1 direct on dark   */
+        --text-link:         var(--green-400);
+        --text-link-hover:   var(--ink);
     }
     :root:not([data-theme="light"]) .btn-pill { background: var(--ink); color: var(--paper); }
     :root:not([data-theme="light"]) .btn-pill:hover { background: var(--court); color: #0C0F12; }
@@ -397,8 +494,16 @@ html, body { max-width: 100%; overflow-x: clip; }
     --paper: #0F1214; --paper-2: #1A1F23;
     --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
     --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
-    --court: #6FB39B; --clay: #F08250;
+    --court: var(--green-400); --clay: #F08250;
     --masthead-bg: rgba(15,18,20,0.82);
+    /* Mirrors the media-query block above. Kept as two blocks because one
+       is system preference and one is the explicit user choice.         */
+    --action-primary:    var(--green-400);
+    --action-primary-on: var(--paper);
+    --text-on-citron:    var(--citron);
+    --text-live:         var(--clay);
+    --text-link:         var(--green-400);
+    --text-link-hover:   var(--ink);
 }
 :root[data-theme="dark"] .btn-pill { background: var(--ink); color: var(--paper); }
 :root[data-theme="dark"] .btn-pill:hover { background: var(--court); color: #0C0F12; }
