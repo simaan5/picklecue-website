@@ -535,9 +535,6 @@
         .persona-card--players    { grid-area: players; }
         .persona-card--organizers { grid-area: organizers; border-right: 0; border-bottom: 1px solid var(--rule); }
         .persona-card--clubs      { grid-area: clubs; border-right: 0; }
-        /* The dominant cell earns more room and a larger heading; it is not a
-           different component, just weighted. */
-        .persona-card--players    { padding: clamp(28px, 4vw, 44px); }
         .persona-card--players h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
         .persona-card--players p  { font-size: 16px; max-width: 34ch; }
         @media (max-width: 760px) {
@@ -562,6 +559,17 @@
             padding-bottom: 2px;
         }
         .persona-card a:hover { color: var(--ink); }
+
+        /* Dominant-cell weighting. Declared AFTER the generic .persona-card
+           rules on purpose: `.persona-card--players h3` and `.persona-card h3`
+           have identical specificity (0,1,1), so source order decides. Placed
+           earlier, these silently lost - the heading stayed 23.2px and the link
+           kept margin-top:auto, stranding it 160px below the copy in a cell
+           that spans two rows. */
+        .persona-card--players    { padding: clamp(28px, 4vw, 44px); }
+        .persona-card--players h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+        .persona-card--players p  { font-size: 16px; max-width: 34ch; }
+        .persona-card--players a  { margin-top: 4px; }
 
 
         /* =====================================================================
