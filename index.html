@@ -512,7 +512,13 @@
         .pitch-body p strong { color: var(--ink); font-weight: 600; }
         .persona-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            /* Asymmetric on purpose. Equal thirds implied three equivalent
+               audiences; players is the broadest, so it holds a tall dominant
+               cell while organizers and clubs stack beside it. */
+            grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+            grid-template-areas:
+                "players organizers"
+                "players clubs";
             gap: 0;
             border-top: 1px solid var(--rule-strong);
             border-bottom: 1px solid var(--rule-strong);
@@ -526,6 +532,22 @@
             border-right: 1px solid var(--rule);
         }
         .persona-card:last-child { border-right: 0; }
+        .persona-card--players    { grid-area: players; }
+        .persona-card--organizers { grid-area: organizers; border-right: 0; border-bottom: 1px solid var(--rule); }
+        .persona-card--clubs      { grid-area: clubs; border-right: 0; }
+        /* The dominant cell earns more room and a larger heading; it is not a
+           different component, just weighted. */
+        .persona-card--players    { padding: clamp(28px, 4vw, 44px); }
+        .persona-card--players h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+        .persona-card--players p  { font-size: 16px; max-width: 34ch; }
+        @media (max-width: 760px) {
+            .persona-grid {
+                grid-template-columns: minmax(0, 1fr);
+                grid-template-areas: "players" "organizers" "clubs";
+            }
+            .persona-card { border-right: 0; border-bottom: 1px solid var(--rule); }
+            .persona-card--clubs { border-bottom: 0; }
+        }
         .persona-card h3 { font-size: clamp(1.2rem, 1.9vw, 1.45rem); }
         .persona-card p { color: var(--ink-soft); font-size: 15px; line-height: 1.58; }
         .persona-card a {
@@ -1176,17 +1198,17 @@
                     <h2>Choose your lane: player, organizer, or club.</h2>
                 </div>
                 <div class="persona-grid">
-                    <article class="persona-card">
+                    <article class="persona-card persona-card--players">
                         <h3>For players</h3>
                         <p>Find courts, join games, and keep match history without juggling group chats and notes.</p>
                         <a href="players.html">See player page</a>
                     </article>
-                    <article class="persona-card">
+                    <article class="persona-card persona-card--organizers">
                         <h3>For organizers</h3>
                         <p>Run leagues and tournaments with cleaner standings, bracket workflows, and communication.</p>
                         <a href="organizers.html">See organizer page</a>
                     </article>
-                    <article class="persona-card">
+                    <article class="persona-card persona-card--clubs">
                         <h3>For clubs &amp; venues</h3>
                         <p>Give your community one operational home for open play, events, and recurring participation.</p>
                         <a href="clubs.html">See club page</a>
@@ -1202,7 +1224,6 @@
                 </div>
                 <div class="catalog">
                     <article class="catalog-item">
-                        <span class="catalog-num">01</span>
                         <div>
                             <h3>Courts, everywhere you play.</h3>
                             <p>A verified U.S. map of 22,000+ public and private courts — surface, lights, open-play schedule, amenities, reviews. Search, filter, and navigate in a tap. Global coverage is on the way.</p>
@@ -1214,7 +1235,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">02</span>
                         <div>
                             <h3>Games, organized without a group chat.</h3>
                             <p>Post an open game, set skill and capacity, and let players RSVP. Waitlists, check-ins, and reminders handled. Keep it public or invite-only.</p>
@@ -1226,7 +1246,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">03</span>
                         <div>
                             <h3>Leagues that run themselves.</h3>
                             <p>Round robin, ladder, team play — your league, your rules. Standings, stats, and schedules update automatically as matches come in.</p>
@@ -1238,7 +1257,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">04</span>
                         <div>
                             <h3>Tournaments with real brackets.</h3>
                             <p>Single and double elimination brackets you can share with a link. Live scoring, seeding, and a share page that works even if your players don&rsquo;t have the app.</p>
@@ -1250,7 +1268,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">05</span>
                         <div>
                             <h3>A personal match log.</h3>
                             <p>Log a score in seconds. Track your match history, partners, opponents, and venues. Opt in to DUPR or keep it all private — your call.</p>
@@ -1262,7 +1279,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">06</span>
                         <div>
                             <h3>Safety &amp; privacy, by design.</h3>
                             <p>Block, mute, report. Private profiles. Location precision you control. No ads, no tracking, no data for sale — ever. See the privacy policy for specifics.</p>
