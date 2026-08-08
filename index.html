@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" style="color-scheme: light dark;">
 <head>
+    <meta charset="UTF-8">
 <!-- Google tag (gtag.js) with Consent Mode v2 -->
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -22,7 +23,6 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XCV417L0J8"></script>
 <script defer src="/assets/consent.js"></script>
 
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <!-- Apply saved theme before first paint to prevent a light/dark flash -->
@@ -723,12 +723,20 @@
             right: -48px; top: 50%;
             transform: translateY(-50%);
             display: flex; flex-direction: column;
-            gap: 10px;
+            /* Was 10px. The dots now carry 8px padding a side, so the visual
+               rhythm is preserved without the targets overlapping. */
+            gap: 0;
         }
         .reel-dot {
+            /* 8px visual dot inside a 24x24 target. WCAG 2.5.8 wants 24x24
+               minimum; these were 8x8. content-box + background-clip keeps the
+               dot the same size on screen while the padding becomes touchable
+               area rather than painted area. */
+            box-sizing: content-box;
             width: 8px; height: 8px; border-radius: 50%;
             background: var(--rule-strong);
-            border: 0; padding: 0;
+            background-clip: content-box;
+            border: 0; padding: 8px;
             cursor: pointer;
             transition: background 0.2s var(--ease), transform 0.2s var(--ease);
         }
@@ -1034,8 +1042,8 @@
         <div class="page masthead-row">
             <a href="/" class="masthead-logo" aria-label="PickleCue home">
                 <img src="images/app-icon-120.png" alt="" width="30" height="30" aria-hidden="true">
-                <img class="masthead-wordmark wm-light" src="images/wordmark-on-light.png" alt="" height="21" aria-hidden="true">
-                <img class="masthead-wordmark wm-dark" src="images/wordmark-on-dark.png" alt="" height="21" aria-hidden="true">
+                <img class="masthead-wordmark wm-light" src="images/wordmark-on-light.png" alt="" width="126" height="21" aria-hidden="true">
+                <img class="masthead-wordmark wm-dark" src="images/wordmark-on-dark.png" alt="" width="124" height="21" aria-hidden="true">
             </a>
             <nav aria-label="Primary">
                 <ul class="masthead-nav">
@@ -1313,29 +1321,29 @@
                         </article>
                     </div>
                     <div class="reel-stage">
-                        <div class="reel-phone" aria-hidden="true">
-                            <div class="reel-phone-screen">
-                                <video class="reel-video is-active" data-idx="0" muted loop playsinline preload="metadata" poster="videos/01-courts.jpg">
+                        <div class="reel-phone">
+                            <div class="reel-phone-screen" aria-hidden="true">
+                                <video tabindex="-1" class="reel-video is-active" data-idx="0" muted loop playsinline preload="metadata" poster="videos/01-courts.jpg">
                                     <source src="videos/01-courts.webm" type="video/webm">
                                     <source src="videos/01-courts.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="1" muted loop playsinline preload="none" poster="videos/02-games.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="1" muted loop playsinline preload="none" poster="videos/02-games.jpg">
                                     <source src="videos/02-games.webm" type="video/webm">
                                     <source src="videos/02-games.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="2" muted loop playsinline preload="none" poster="videos/03-leagues.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="2" muted loop playsinline preload="none" poster="videos/03-leagues.jpg">
                                     <source src="videos/03-leagues.webm" type="video/webm">
                                     <source src="videos/03-leagues.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="3" muted loop playsinline preload="none" poster="videos/04-tournaments.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="3" muted loop playsinline preload="none" poster="videos/04-tournaments.jpg">
                                     <source src="videos/04-tournaments.webm" type="video/webm">
                                     <source src="videos/04-tournaments.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="4" muted loop playsinline preload="none" poster="videos/05-matches.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="4" muted loop playsinline preload="none" poster="videos/05-matches.jpg">
                                     <source src="videos/05-matches.webm" type="video/webm">
                                     <source src="videos/05-matches.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="5" muted loop playsinline preload="none" poster="videos/06-privacy.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="5" muted loop playsinline preload="none" poster="videos/06-privacy.jpg">
                                     <source src="videos/06-privacy.webm" type="video/webm">
                                     <source src="videos/06-privacy.mp4" type="video/mp4">
                                 </video>
@@ -1344,7 +1352,7 @@
                                     <span>Preview clips coming soon</span>
                                 </div>
                             </div>
-                            <div class="reel-dots" role="tablist" aria-label="Reel navigation">
+                            <div class="reel-dots" role="group" aria-label="Choose a clip">
                                 <button class="reel-dot is-active" data-idx="0" aria-label="Show clip 1"></button>
                                 <button class="reel-dot" data-idx="1" aria-label="Show clip 2"></button>
                                 <button class="reel-dot" data-idx="2" aria-label="Show clip 3"></button>
@@ -1485,7 +1493,7 @@
             </div>
             <div class="colophon-base">
                 <span>&copy; 2026 PickleCue. All rights reserved.</span>
-                <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="made_by_anstelias" aria-label="Made by Anstelias — anstelias.com">
+                <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="made_by_anstelias">
                     <span>Made by</span>
                     <img src="images/anstelias-logo.png" alt="" aria-hidden="true" width="40" height="40">
                     <span>Anstelias Technology</span>
