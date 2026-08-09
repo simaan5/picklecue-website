@@ -60,12 +60,20 @@
     .cta-ghost{display:inline-flex;align-items:center;gap:9px;margin-top:14px;padding:13px 22px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--ink);text-decoration:none;font-weight:600;min-height:44px}
     .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
     .badge{display:inline-flex;align-items:center;padding:5px 11px;border:1px solid var(--rule-strong);border-radius:999px;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
-    .event{display:grid;gap:6px;justify-items:start;background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:22px;margin:22px 0}
+    .event{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:8px 30px;align-items:start;background:var(--paper-2);border:1px solid var(--card-rule,var(--rule));border-radius:16px;padding:24px;margin:22px 0}
+    .event-body{display:grid;gap:6px;justify-items:start}
+    .event-media{margin:0;align-self:stretch}
+    .event-media img{width:100%;height:100%;min-height:230px;object-fit:cover;border-radius:12px;border:1px solid var(--rule);filter:brightness(.92)}
+    @media (max-width:760px){.event{grid-template-columns:1fr}.event-media{order:-1}.event-media img{min-height:0;aspect-ratio:16/9}}
+    :root{--card-rule:rgba(12,15,18,0.18)}
+    @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card-rule:var(--rule)}}
+    :root[data-theme="dark"]{--card-rule:var(--rule)}
+    :root[data-theme="light"]{--card-rule:rgba(12,15,18,0.18)}
     .event h3{font-family:var(--f-display);font-weight:500;font-size:1.6rem;margin:.25em 0 0;letter-spacing:-0.01em}
     .event .when{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute)}
     .event p{color:var(--ink-soft);max-width:62ch;margin:.5em 0 0}
     .empty{border:1px dashed var(--rule-strong);border-radius:12px;padding:20px;color:var(--ink-mute);max-width:66ch}
-    .fineprint{color:var(--ink-mute);font-size:.82rem;line-height:1.55;max-width:64ch;margin:16px 0 0}
+    .fineprint{color:var(--ink-soft);font-size:.9rem;line-height:1.6;max-width:64ch;margin:16px 0 0}
     ul.plain{color:var(--ink-soft);max-width:64ch;padding-left:1.1em}
     ul.plain li{margin:.4em 0}
       .evfacts{list-style:none;margin:10px 0 6px;padding:0;display:flex;flex-direction:column;gap:8px}
@@ -111,7 +119,7 @@
       <ul>
         <li><a href="/#pitch">What it is</a></li>
         <li><a href="/#features">Features</a></li>
-        <li><a href="/community.html">Community</a></li>
+        <li><a href="/community.html" aria-current="page">Community</a></li>
         <li><a href="/demo/">Demo</a></li>
         <li class="site-menu-minor"><a href="/players.html">For players</a></li>
         <li class="site-menu-minor"><a href="/organizers.html">For organizers</a></li>
@@ -140,6 +148,7 @@
       <p class="sub">Charity tournaments, fundraisers, and community events we're helping spread the word about.</p>
 
       <article class="event">
+        <div class="event-body">
         <span class="badge">Community event supported by PickleCue</span>
         <h3>Pickle for a Purpose</h3>
         <ul class="evfacts">
@@ -152,38 +161,27 @@
           <a class="cta-ghost" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="community_card">Register</a>
         </div>
         <p class="fineprint">Organized by Echelon LA Metro in support of The Salvation Army. Registration, payments, and event operations are handled by the organizers — PickleCue is helping promote it.</p>
+        </div>
+        <figure class="event-media">
+          <picture>
+            <source type="image/webp" srcset="/images/p4p-hero-golden-sm.webp 640w, /images/p4p-hero-golden.webp 1200w" sizes="(max-width: 760px) 92vw, 32vw">
+            <img src="/images/p4p-hero-golden.jpg" width="1200" height="900" alt="Pickleball on a court at golden hour" loading="lazy" decoding="async">
+          </picture>
+        </figure>
       </article>
     </section>
 
     <section>
-      <h2>Community partners</h2>
-      <!-- Do NOT list an organization here until it has confirmed the partnership
-           and the exact wording IN WRITING. Events being promoted go under
-           "Events we support" above. Logos require separate written permission
-           covering the file, the naming, and how long it may stay up. -->
-      <div class="empty">
-        <p style="margin:0">We're just getting started. Organizations partnering with PickleCue will be listed here.</p>
-      </div>
-    </section>
-
-    <section>
       <h2>Partner with PickleCue</h2>
-      <p class="sub">Organizing a tournament, league, club night, or fundraiser? We'd love to hear about it. Tell us what you're planning and we'll look at how PickleCue can help you reach players, run the event, and grow your community.</p>
-      <ul class="plain">
-        <li>Promotion to players in your area</li>
-        <li>Tools for registration, brackets, scheduling, and live results</li>
-        <li>A listing in the PickleCue app once we launch</li>
-      </ul>
+      <p class="sub">Running a tournament, league, club, or community event? We&rsquo;d love to hear what you&rsquo;re building.</p>
       <div class="cta-row">
         <a class="cta" href="mailto:partners@picklecue.com?subject=Partner%20with%20PickleCue&amp;body=Organization%3A%20%0AContact%20name%3A%20%0AEmail%20%2F%20phone%3A%20%0AWebsite%20or%20social%3A%20%0AEvent%20name%3A%20%0AEvent%20date%20%26%20location%3A%20%0AEstimated%20attendance%3A%20%0AWhat%20you%27re%20looking%20for%3A%20%0A%0ATell%20us%20a%20bit%20about%20what%20you%27re%20planning%3A%20%0A" data-track="cta_click" data-cta="community_partner_email">
           Tell us about your event
           <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
         </a>
       </div>
-      <p class="sub" style="margin-top:14px;font-size:.92rem;color:var(--ink-mute)">Prefer to write your own? Email <a href="mailto:partners@picklecue.com">partners@picklecue.com</a>.</p>
     </section>
 
-    <p class="k" style="margin-top:38px"><a href="/">← Back to PickleCue homepage</a></p>
   </main>
 
   <footer class="colophon-mini" role="contentinfo" style="border-top:1px solid var(--rule); padding:28px 0 calc(28px + env(safe-area-inset-bottom)); font-family:var(--f-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-mute);">

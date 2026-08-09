@@ -125,22 +125,22 @@
     /* Page styles — shared shell in /assets/site.css. Tokens keep the page
        correct in both themes. */
     .wrap{max-width:var(--page-max);margin:0 auto;padding-top:28px;padding-bottom:28px}
-    .measure{max-width:920px;margin-left:auto;margin-right:auto}
+    .measure{max-width:920px}
     .k{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-family:var(--f-mono)}
     h1{font-family:var(--f-display);font-weight:500;font-size:clamp(2rem,4.4vw + 0.4rem,3.9rem);line-height:1.04;margin:.24em 0;letter-spacing:-0.02em}
     h2{font-family:var(--f-display);font-weight:500;font-size:1.45rem;margin-top:1.7em}
     .sub{color:var(--ink-soft);max-width:68ch}
-    .lede{font-size:1.12rem;color:var(--ink-soft);max-width:46ch;margin-top:.6em}
-    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border:1px solid var(--rule-strong);border-radius:999px;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+    .lede{font-size:1.12rem;color:var(--ink-soft);max-width:46ch;margin-top:.6em;line-height:1.6}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--rule-strong);border-radius:999px;font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
 
     /* Split hero — copy left, photograph right; photo spans both rows so the
        CTA sits under the facts on desktop. Mobile stacks badge > headline >
        copy > facts > photo > CTA (the brief's hierarchy). */
     .hero-split{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,6fr);grid-template-areas:"copy photo" "cta photo";column-gap:clamp(28px,5vw,64px);row-gap:0;align-items:start;padding:42px 0 34px;border-bottom:1px solid var(--rule)}
     .hero-copy{grid-area:copy;min-width:0}
-    .hero-cta{grid-area:cta;align-self:end}
+    .hero-cta{grid-area:cta;align-self:start}
     .hero-photo{grid-area:photo;margin:0;min-width:0}
-    .hero-photo img{width:100%;height:100%;max-height:640px;object-fit:cover;border-radius:18px;border:1px solid var(--rule)}
+    .hero-photo img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:18px;border:1px solid var(--rule)}
     @media (max-width:899px){
       .hero-split{display:block;padding-top:30px}
       .hero-photo{margin:22px 0 0}
@@ -151,40 +151,59 @@
     .factlist{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
     .factlist li{display:flex;gap:13px;align-items:flex-start;color:var(--ink)}
     .factlist svg{flex:none;width:21px;height:21px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin-top:2px}
-    .factlist small{display:block;color:var(--ink-mute);font-size:.88rem;margin-top:2px}
+    .factlist small{display:block;color:var(--ink-soft);font-size:.95rem;margin-top:2px}
 
     /* What to expect — compact equal-height icon cards */
     .xgrid{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(4,minmax(0,1fr))}
     @media (max-width:1000px){.xgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media (max-width:700px){.xgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    .xcard{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:20px 14px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;min-height:108px;justify-content:flex-start}
-    .xcard svg{width:26px;height:26px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-    .xcard span{font-size:.94rem;line-height:1.3;color:var(--ink)}
+    .xcard{background:var(--paper-2);border:1px solid var(--card-rule);border-radius:14px;padding:18px 14px 16px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;min-height:96px;justify-content:center}
+    .xcard svg{width:30px;height:30px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+    .xcard span{font-size:.98rem;font-weight:500;line-height:1.3;color:var(--ink)}
 
     /* Pricing */
-    .price-row{display:grid;gap:14px;margin:22px 0;grid-template-columns:repeat(3,minmax(0,1fr))}
-    @media (max-width:900px){.price-row{grid-template-columns:1fr 1fr}.price-deadline{grid-column:1 / -1}}
-    @media (max-width:560px){.price-row{grid-template-columns:1fr}.price-deadline{grid-column:auto}}
-    .price{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:20px}
-    .price .lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
+    .price-row{display:grid;gap:14px;margin:22px 0 0;grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:560px){.price-row{grid-template-columns:1fr}}
+    .price{background:var(--paper-2);border:1px solid var(--card-rule);border-radius:14px;padding:20px}
+    .price .lbl{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
     .price .amt{font-family:var(--f-display);font-size:2.3rem;font-weight:500;line-height:1;display:inline-block;margin:.22em 0 0}
     .price .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--court);margin-left:8px}
-    .price .was{display:block;color:var(--ink-mute);font-size:.9rem;margin-top:9px;padding-top:9px;border-top:1px solid var(--rule)}
-    .price-deadline{display:flex;gap:13px;align-items:center;color:var(--ink-soft)}
-    .price-deadline svg{flex:none;width:22px;height:22px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-    .price-deadline strong{display:block;color:var(--ink);font-weight:600}
+    .price .was{display:block;color:var(--ink-soft);font-size:.95rem;margin-top:9px;padding-top:9px;border-top:1px solid var(--rule)}
+    .limited{display:flex;gap:10px;align-items:center;color:var(--ink-soft);margin:14px 0 0;font-size:1rem}
+    .limited svg{flex:none;width:20px;height:20px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 
     .cta{display:inline-flex;align-items:center;gap:9px;margin-top:6px;padding:13px 22px;border-radius:999px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:600;min-height:44px}
     .cta-ghost{display:inline-flex;align-items:center;gap:9px;margin-top:6px;padding:13px 22px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--ink);text-decoration:none;font-weight:600;min-height:44px}
     .cta:hover{background:var(--court);color:#0C0F12}
     .cta-ghost:hover{border-color:var(--court)}
     .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:16px}
-    .disclaimer{margin-top:18px;padding:15px 17px;border-left:2px solid var(--rule-strong);color:var(--ink-mute);font-size:.9rem;max-width:70ch}
+    .disclaimer{margin-top:20px;padding:15px 17px;border-left:2px solid var(--rule-strong);color:var(--ink-soft);font-size:.97rem;line-height:1.65;max-width:70ch}
 
     @media (prefers-reduced-motion:no-preference){
       .hero-copy,.hero-photo,.hero-cta{animation:rise .5s ease both}
       .hero-photo{animation-delay:.08s}
       @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    }
+    .callout{margin:24px 0 0;max-width:68ch}
+    .callout strong{display:block;font-family:var(--f-display);font-weight:500;font-size:1.35rem;letter-spacing:-0.01em;margin-bottom:.3em}
+    .callout p{margin:0;color:var(--ink-soft);line-height:1.6}
+    .cta-big{width:100%;max-width:560px;justify-content:center;font-size:1.05rem;padding:16px 26px}
+    .follow{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-weight:600;color:var(--court);text-decoration:none}
+    .follow:hover{text-decoration:underline;text-underline-offset:4px}
+
+    /* Light mode: slightly stronger card separation (dark inherits --rule). */
+    :root{--card-rule:rgba(12,15,18,0.18)}
+    @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card-rule:var(--rule)}}
+    :root[data-theme="dark"]{--card-rule:var(--rule)}
+    :root[data-theme="light"]{--card-rule:rgba(12,15,18,0.18)}
+
+    /* Mobile sticky register bar - hides once the pricing section is on
+       screen (IntersectionObserver at the end of <body>). */
+    .sticky-cta{display:none}
+    @media (max-width:768px){
+      .sticky-cta{display:flex;position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:60}
+      .sticky-cta a{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:15px 22px;border-radius:999px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:600;min-height:48px;box-shadow:0 10px 28px rgba(0,0,0,0.35)}
+      .sticky-cta[hidden]{display:none}
     }
   </style>
 </head>
@@ -202,7 +221,7 @@
         <ul class="masthead-nav">
           <li><a href="/#pitch">What it is</a></li>
           <li><a href="/#features">Features</a></li>
-          <li><a href="/community.html">Community</a></li>
+          <li><a href="/community.html" aria-current="page">Community</a></li>
           <li><a href="/support.html">Support</a></li>
         </ul>
       </nav>
@@ -270,8 +289,8 @@
       </div>
       <figure class="hero-photo">
         <picture>
-          <source type="image/webp" srcset="/images/p4p-hero-court-sm.webp 620w, /images/p4p-hero-court.webp 1000w" sizes="(max-width: 899px) 92vw, 44vw">
-          <img src="/images/p4p-hero-court.jpg" srcset="/images/p4p-hero-court-sm.jpg 620w, /images/p4p-hero-court.jpg 1000w" sizes="(max-width: 899px) 92vw, 44vw" width="1000" height="1209" alt="Pickleball court at dusk, palm trees behind the fence line" decoding="async">
+          <source type="image/webp" srcset="/images/p4p-hero-golden-sm.webp 640w, /images/p4p-hero-golden.webp 1200w" sizes="(max-width: 899px) 92vw, 44vw">
+          <img src="/images/p4p-hero-golden.jpg" width="1200" height="900" alt="Pickleball resting on a court at golden hour, palm trees behind the fence" decoding="async">
         </picture>
       </figure>
       <div class="hero-cta cta-row">
@@ -279,7 +298,10 @@
           Register
           <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
         </a>
-        <a class="cta-ghost" href="#expect">Event details</a>
+        <a class="cta-ghost" href="https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="hero_official">
+          Official event page
+          <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+        </a>
       </div>
     </section>
 
@@ -295,7 +317,11 @@
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.4" cy="8.8" r="3"/><circle cx="16.4" cy="9.8" r="2.4"/><path d="M3.4 19.4a5.2 5.2 0 0 1 10 0M13.8 19.4a4.4 4.4 0 0 1 6.8-3.2"/></svg><span>Networking mixer</span></li>
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9h10l-1.2 11H8.2L7 9ZM7.6 13h8.8M13.4 9l2-5.5"/></svg><span>Light snacks &amp; non&#8209;alcoholic beverages</span></li>
       </ul>
-      <p class="sub" style="margin-top:18px">You don&rsquo;t need a partner and you don&rsquo;t need experience &mdash; register on your own and the organizers will pair you by skill level, or bring someone along. Player registration includes club access, pro coaching during the event, the beginner clinic, rental paddles and balls, a welcome bag, medal eligibility, refreshments, and the networking mixer. General admission includes club access, beginner instruction, courtside spectator access, a welcome bag, refreshments, and the mixer.</p>
+      <div class="callout">
+        <strong>No partner? No problem.</strong>
+        <p>Register individually and the organizers will pair you by skill level, or bring someone along.</p>
+      </div>
+      <p class="sub" style="margin-top:16px">Player registration includes club access, pro coaching, beginner instruction, rental paddles and balls, a welcome bag, medal eligibility, refreshments, and the networking mixer. General admission includes club access, beginner instruction, courtside spectator access, a welcome bag, refreshments, and the mixer.</p>
     </section>
 
     <section class="measure" aria-labelledby="pricing-title">
@@ -311,18 +337,19 @@
           <div><span class="amt">$45</span><span class="tag">early bird</span></div>
           <span class="was">Regularly $75</span>
         </div>
-        <div class="price price-deadline">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
-          <span><strong>Tentative early-bird deadline: Aug&nbsp;10</strong>Early-bird pricing is available for a limited time.</span>
-        </div>
       </div>
+      <p class="limited">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+        Early-bird pricing available for a limited time.
+      </p>
       <!-- Regular prices ($100 / $75) verified 2026-08-08 against the official
-           registration page's embedded event JSON. The Aug 10 deadline is
-           TENTATIVE per the organizers and must never be rendered as a firm
-           date until the official page publishes one. -->
+           registration page's embedded event JSON. The early-bird deadline
+           (Aug 10) is TENTATIVE per the organizers and is deliberately NOT
+           rendered. Once the official page publishes it, change the .limited
+           line to "Early bird ends Aug 10." -->
       <p class="sub">All proceeds go to Salvation Army LA Metro programs.</p>
       <div class="cta-row">
-        <a class="cta" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="pricing">
+        <a class="cta cta-big" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="pricing">
           Register for Pickle for a Purpose
           <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
         </a>
@@ -332,7 +359,9 @@
 
     <section class="measure" aria-labelledby="about-title">
       <h2 id="about-title">About Echelon LA Metro</h2>
-      <p class="sub">Echelon LA Metro is the young-professionals chapter of The Salvation Army in Los Angeles &mdash; a group of people in their 20s and 30s who love this city and want to give back to it. Pickle for a Purpose is their first annual charity pickleball tournament. Follow the organizers on Instagram: <a href="https://www.instagram.com/echelonlosangeles/" rel="noopener">@echelonlosangeles</a>.</p>
+      <p class="sub">Echelon LA Metro is the young-professionals chapter of The Salvation Army in Los Angeles &mdash; people in their 20s and 30s giving back to the city they love.</p>
+      <p class="sub" style="margin-top:10px">Pickle for a Purpose is their first annual charity pickleball tournament.</p>
+      <a class="follow" href="https://www.instagram.com/echelonlosangeles/" target="_blank" rel="noopener noreferrer">Follow Echelon LA Metro &rarr; @echelonlosangeles</a>
     </section>
 
     <p class="k measure" style="margin-top:38px"><a href="/community.html">&larr; Back to Community</a></p>
@@ -349,7 +378,30 @@
       </div>
     </div>
   </footer>
+  <div class="sticky-cta" id="stickyCta" hidden>
+    <a href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="sticky_mobile">
+      Register &middot; $60 Early Bird
+      <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+    </a>
+  </div>
   <script>
+    /* Sticky register bar (mobile): appears after the hero CTA scrolls out,
+       hides while the pricing/registration section is on screen. */
+    (function () {
+      var bar = document.getElementById('stickyCta');
+      var heroCta = document.querySelector('.hero-cta');
+      var pricing = document.getElementById('pricing-title');
+      if (!bar || !heroCta || !pricing || !('IntersectionObserver' in window)) return;
+      var heroGone = false, pricingVisible = false;
+      function update() { bar.hidden = !(heroGone && !pricingVisible); }
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { heroGone = !e.isIntersecting; }); update();
+      }).observe(heroCta);
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { pricingVisible = e.isIntersecting; }); update();
+      }, { rootMargin: '0px 0px -20% 0px' }).observe(pricing.parentElement);
+    })();
+
     /* Lightweight analytics - same pattern as the homepage: queues to
        window.dataLayer (GA4 reads it; consent gating in /assets/consent.js).
        Register CTAs carry event_slug + placement per the campaign spec. */
