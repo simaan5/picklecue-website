@@ -1511,19 +1511,53 @@
                 </div>
                 <p style="max-width:62ch;color:var(--ink-soft);font-size:1.05rem;line-height:1.7">Pickleball is more than a game. It's a way to build friendships, support real causes, and strengthen a neighborhood. PickleCue supports clubs, nonprofits, and organizers doing exactly that.</p>
 
-                <article style="margin-top:34px;background:var(--paper-2);border:1px solid var(--rule);border-radius:16px;padding:clamp(22px,3vw,34px)">
-                    <span style="display:inline-flex;align-items:center;padding:5px 12px;border:1px solid var(--rule-strong);border-radius:999px;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)">Community event supported by PickleCue</span>
-                    <h3 style="font-family:var(--f-display);font-weight:500;font-size:clamp(1.7rem,3.4vw,2.5rem);letter-spacing:-0.02em;line-height:1.08;margin:.45em 0 .1em">Pickle for a Purpose</h3>
-                    <p style="font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin:0">August 29 &middot; 5&ndash;8&nbsp;PM &middot; Rancho Palos Verdes</p>
-                    <p style="max-width:60ch;color:var(--ink-soft);margin:.9em 0 0;line-height:1.65">Echelon LA Metro's first annual charity pickleball tournament, benefiting The Salvation Army's Los Angeles-area programs. Mixed doubles, beginner through advanced &mdash; register solo and be paired, or bring your own partner.</p>
-                    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px">
-                        <a href="/events/pickle-for-a-purpose/" class="btn-pill" data-track="cta_click" data-cta="home_p4p_view">
-                            View event
-                            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
-                        </a>
-                        <a href="/go/pickle-for-a-purpose" style="display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--ink);text-decoration:none;font-weight:600;min-height:44px" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="home_card">Register now</a>
+                <style>
+                  /* Campaign feature card - always dark, matching the event
+                     page's app-brand design in BOTH homepage themes. */
+                  .p4p-card{margin-top:34px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px 40px;align-items:center;background:#0C110E;border:1px solid rgba(235,255,235,0.12);border-radius:22px;padding:clamp(24px,3vw,38px);color:#F4F7F2}
+                  .p4p-card .p4p-badge{display:inline-flex;align-items:center;padding:8px 15px;border:1px solid rgba(191,232,79,0.45);border-radius:999px;font-size:.9rem;font-weight:500;color:#BFE84F;background:rgba(191,232,79,0.07)}
+                  .p4p-card h3{font-family:var(--f-body);font-weight:650;font-size:clamp(1.8rem,3.2vw,2.4rem);letter-spacing:-0.02em;line-height:1.06;margin:.5em 0 .15em;color:#F4F7F2}
+                  .p4p-card .p4p-meta{display:flex;gap:11px;align-items:center;color:#F4F7F2;font-size:1.0625rem;margin:.35em 0 0}
+                  .p4p-card .p4p-meta svg{flex:none;width:21px;height:21px;stroke:#BFE84F;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+                  .p4p-card p.p4p-desc{max-width:56ch;color:#C3CDC4;margin:.8em 0 0;line-height:1.65;font-size:1.0625rem}
+                  .p4p-card .p4p-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+                  .p4p-card .p4p-primary{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:999px;background:#BFE84F;color:#0C110E;text-decoration:none;font-weight:650;font-size:1.0625rem;min-height:50px}
+                  .p4p-card .p4p-primary:hover{background:#D3F76A}
+                  .p4p-card .p4p-ghost{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:999px;border:1px solid rgba(235,255,235,0.25);color:#F4F7F2;text-decoration:none;font-weight:600;font-size:1.0625rem;min-height:50px}
+                  .p4p-card .p4p-ghost:hover{border-color:#BFE84F;color:#BFE84F}
+                  .p4p-card .p4p-fine{color:#95A29A;font-size:.95rem;line-height:1.6;max-width:58ch;margin:20px 0 0}
+                  .p4p-card figure{margin:0;align-self:stretch}
+                  .p4p-card figure img{width:100%;height:100%;min-height:300px;object-fit:cover;object-position:78% center;border-radius:14px;display:block}
+                  @media (max-width:760px){
+                    .p4p-card{grid-template-columns:1fr}
+                    .p4p-card figure{order:-1}
+                    .p4p-card figure img{min-height:0;aspect-ratio:16/9}
+                  }
+                </style>
+                <article class="p4p-card">
+                    <div>
+                        <span class="p4p-badge">Community event supported by PickleCue</span>
+                        <h3>Pickle for a Purpose</h3>
+                        <p class="p4p-meta">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+                            <span>Saturday, August 29 &middot; 5&ndash;8&nbsp;PM &middot; Rancho Palos Verdes</span>
+                        </p>
+                        <p class="p4p-desc">Echelon LA Metro&rsquo;s first annual charity pickleball tournament, benefiting Salvation Army programs across Los Angeles County.</p>
+                        <div class="p4p-ctas">
+                            <a href="/events/pickle-for-a-purpose/" class="p4p-primary" data-track="cta_click" data-cta="home_p4p_view">
+                                View event
+                                <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+                            </a>
+                            <a href="/go/pickle-for-a-purpose" class="p4p-ghost" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="home_card">Register now</a>
+                        </div>
+                        <p class="p4p-fine">Organized by Echelon LA Metro in support of The Salvation Army &mdash; PickleCue is supporting the event through community promotion.</p>
                     </div>
-                    <p style="color:var(--ink-mute);font-size:.82rem;line-height:1.55;max-width:64ch;margin:18px 0 0">Organized by Echelon LA Metro in support of The Salvation Army. Registration, payments, and event operations are handled by the organizers &mdash; PickleCue is helping promote it.</p>
+                    <figure>
+                        <picture>
+                            <source type="image/webp" srcset="/images/p4p-hero-golden-sm.webp 640w, /images/p4p-hero-golden.webp 1200w" sizes="(max-width: 760px) 92vw, 38vw">
+                            <img src="/images/p4p-hero-golden.jpg" width="1200" height="900" alt="Pickleball on a court at dusk" loading="lazy" decoding="async">
+                        </picture>
+                    </figure>
                 </article>
 
                 <p style="margin-top:26px"><a href="/community.html" style="font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)" data-track="cta_click" data-cta="home_community_all">See how PickleCue supports the community &rarr;</a></p>
