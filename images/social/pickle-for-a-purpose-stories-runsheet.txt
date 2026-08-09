@@ -1,8 +1,9 @@
 PICKLE FOR A PURPOSE — POSTING RUN SHEET
 (post only after organizer approval + signed agreement)
 
-FEED POST (4-slide carousel, campaign design):
-1. Upload slides s1-s4 in order.
+FEED POST (4-slide carousel, 1080x1350 4:5, campaign design):
+1. Upload the s1-s4 files (4:5 feed exports) in order - do NOT
+   upload the story files to the feed.
 2. Caption: images/social/pickle-for-a-purpose-caption.txt
 3. TAG @echelonlosangeles directly on slide 1 (photo tag).
 4. Send a COLLABORATOR INVITATION to @echelonlosangeles on the post -

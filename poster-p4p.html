@@ -9,7 +9,7 @@
   <style>
     /* ------------------------------------------------------------------
        INTERNAL TOOL — not linked from the site, noindex.
-       Renders four 1080x1080 Instagram slides in the CAMPAIGN design
+       Renders four 1080x1350 (4:5 feed) Instagram slides in the CAMPAIGN design
        language (dark forest canvas, lime accent, Instrument Sans) —
        matching the event page. Export: `npm run export:carousel`.
 
@@ -29,12 +29,12 @@
     .toolbar h1{font-weight:650;font-size:1.2rem;margin:0 16px 0 0}
     .hint{font-size:12px;color:#8A9097;letter-spacing:.02em}
     .sheet{display:flex;flex-wrap:wrap;gap:26px}
-    .slot{display:flex;flex-direction:column;gap:10px;width:454px;height:475px}
+    .slot{display:flex;flex-direction:column;gap:10px;width:454px;height:590px}
     .slot > .cap{font-size:12px;letter-spacing:.06em;color:#8A9097}
 
     /* Slides authored at exactly 1080x1080, scaled for preview only. */
     .slide{
-      width:1080px;height:1080px;flex:none;position:relative;overflow:hidden;
+      width:1080px;height:1350px;flex:none;position:relative;overflow:hidden;
       background:
         radial-gradient(110% 80% at 82% -8%, rgba(191,232,79,0.06), transparent 55%),
         var(--bg);
@@ -53,9 +53,9 @@
     .foot{border-top:2px solid var(--rule);padding-top:30px;font-size:21px;font-weight:500;color:var(--mute);display:flex;justify-content:space-between;align-items:center;gap:20px}
     .foot .org{white-space:nowrap}
     .brandrow{display:flex;align-items:center;gap:14px;white-space:nowrap}
-    .brandrow img{height:38px;width:auto;display:block}
-    .brandrow img.mark{height:46px;width:46px;border-radius:11px}
-    ul.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:30px}
+    .brandrow img{height:29px;width:auto;display:block}
+    .brandrow img.mark{height:36px;width:36px;border-radius:9px}
+    ul.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:38px}
     ul.list li{font-size:42px;font-weight:500;line-height:1.25;color:var(--ink);display:flex;gap:24px;align-items:baseline}
     ul.list li::before{content:"";width:13px;height:13px;flex:none;border-radius:50%;background:var(--lime);transform:translateY(-5px)}
     .note{font-size:28px;color:var(--soft);line-height:1.5;max-width:34ch}
@@ -81,7 +81,7 @@
 <body>
   <div class="toolbar">
     <h1>Pickle for a Purpose — carousel</h1>
-    <span class="hint">1080 × 1080 · campaign design · no third-party logos &nbsp;—&nbsp; export with <code style="color:#EDE9DF">npm run export:carousel</code></span>
+    <span class="hint">1080 × 1350 (4:5 feed) · campaign design · no third-party logos &nbsp;—&nbsp; export with <code style="color:#EDE9DF">npm run export:carousel</code></span>
   </div>
 
   <div class="sheet" id="sheet">

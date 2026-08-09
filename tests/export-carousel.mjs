@@ -1,5 +1,5 @@
 /**
- * Export the Pickle for a Purpose Instagram carousel to 1080x1080 PNGs.
+ * Export the Pickle for a Purpose FEED carousel to 1080x1350 (4:5) PNGs.
  *
  * Uses the same launcher as responsive.test.mjs (playwright-core with
  * channel:'chrome', no browser download needed).
@@ -54,7 +54,7 @@ await mkdir(OUT, { recursive: true });
 
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const page = await browser.newPage({
-  viewport: { width: 1200, height: 1200 },
+  viewport: { width: 1200, height: 1500 },
   deviceScaleFactor: 1,
 });
 
@@ -74,8 +74,8 @@ for (const id of SLIDES) {
     failures++;
     continue;
   }
-  if (Math.round(box.width) !== 1080 || Math.round(box.height) !== 1080) {
-    console.error(`  ${id}: FAILED — expected 1080x1080, got ${Math.round(box.width)}x${Math.round(box.height)}`);
+  if (Math.round(box.width) !== 1080 || Math.round(box.height) !== 1350) {
+    console.error(`  ${id}: FAILED — expected 1080x1350, got ${Math.round(box.width)}x${Math.round(box.height)}`);
     failures++;
     continue;
   }
