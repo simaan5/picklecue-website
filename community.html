@@ -56,16 +56,16 @@
     .hero{padding:42px 0 24px;border-bottom:1px solid var(--rule)}
     .sub{color:var(--ink-soft);max-width:64ch;font-size:1.0625rem;line-height:1.7}
     .lede{font-size:1.25rem;color:var(--ink-soft);max-width:52ch;margin-top:.7em;line-height:1.6}
-    .cta{display:inline-flex;align-items:center;gap:10px;margin-top:14px;padding:15px 26px;border-radius:999px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:600;font-size:1.0625rem;min-height:50px}
-    .cta:hover{background:var(--court);color:#0C0F12}
+    .cta{display:inline-flex;align-items:center;gap:10px;margin-top:14px;padding:15px 26px;border-radius:999px;background:var(--court);color:var(--paper);text-decoration:none;font-weight:600;font-size:1.0625rem;min-height:50px}
+    .cta:hover{filter:brightness(1.08)}
     .cta-ghost{display:inline-flex;align-items:center;gap:9px;margin-top:14px;padding:15px 26px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--ink);text-decoration:none;font-weight:600;font-size:1.0625rem;min-height:50px}
     .cta-ghost:hover{border-color:var(--court)}
     .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
     .badge{display:inline-flex;align-items:center;padding:7px 14px;border:1px solid var(--rule-strong);border-radius:999px;font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
-    .event{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:8px 30px;align-items:start;background:var(--paper-2);border:1px solid var(--card-rule,var(--rule));border-radius:16px;padding:24px;margin:22px 0}
+    .event{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:8px 34px;align-items:center;background:var(--paper-2);border:1px solid var(--card-rule,var(--rule));border-radius:18px;padding:28px;margin:18px 0 22px}
     .event-body{display:grid;gap:6px;justify-items:start}
     .event-media{margin:0;align-self:stretch}
-    .event-media img{width:100%;height:100%;min-height:230px;object-fit:cover;border-radius:12px;border:1px solid var(--rule);filter:brightness(.92)}
+    .event-media img{width:100%;height:100%;min-height:260px;object-fit:cover;object-position:78% center;border-radius:14px}
     @media (max-width:760px){.event{grid-template-columns:1fr}.event-media{order:-1}.event-media img{min-height:0;aspect-ratio:16/9}}
     :root{--card-rule:rgba(12,15,18,0.18)}
     @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card-rule:var(--rule)}}
@@ -147,7 +147,7 @@
 
     <section>
       <h2>Events we support</h2>
-      <p class="sub">Charity tournaments, fundraisers, and community events we're helping spread the word about.</p>
+      <p class="k" style="margin-top:18px">Featured event</p>
 
       <article class="event">
         <div class="event-body">
@@ -157,7 +157,7 @@
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Saturday, August 29, 2026 &middot; 5&ndash;8&nbsp;PM</li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>Peninsula Racquet Club &middot; Rancho Palos Verdes, CA</li>
         </ul>
-        <p>Echelon LA Metro's first annual charity pickleball tournament, benefiting The Salvation Army's food assistance, housing, youth, and senior programs across Los Angeles County. Mixed doubles, beginner through advanced.</p>
+        <p>Echelon LA Metro&rsquo;s first annual charity pickleball tournament, benefiting Salvation Army programs across Los Angeles County.</p>
         <div class="cta-row">
           <a class="cta" href="/events/pickle-for-a-purpose/" data-track="cta_click" data-cta="community_p4p_view">View event</a>
           <a class="cta-ghost" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="community_card">Register</a>
@@ -174,8 +174,8 @@
     </section>
 
     <section>
-      <h2>Partner with PickleCue</h2>
-      <p class="sub">Running a tournament, league, club, or community event? We&rsquo;d love to hear what you&rsquo;re building.</p>
+      <h2>Bring your community to PickleCue</h2>
+      <p class="sub">Running a tournament, league, club, fundraiser, or community event? Let&rsquo;s see how PickleCue can help you reach more players.</p>
       <div class="cta-row">
         <a class="cta" href="mailto:partners@picklecue.com?subject=Partner%20with%20PickleCue&amp;body=Organization%3A%20%0AContact%20name%3A%20%0AEmail%20%2F%20phone%3A%20%0AWebsite%20or%20social%3A%20%0AEvent%20name%3A%20%0AEvent%20date%20%26%20location%3A%20%0AEstimated%20attendance%3A%20%0AWhat%20you%27re%20looking%20for%3A%20%0A%0ATell%20us%20a%20bit%20about%20what%20you%27re%20planning%3A%20%0A" data-track="cta_click" data-cta="community_partner_email">
           Tell us about your event
@@ -186,7 +186,7 @@
 
   </main>
 
-  <footer class="colophon-mini" role="contentinfo" style="border-top:1px solid var(--rule); padding:28px 0 calc(28px + env(safe-area-inset-bottom)); font-family:var(--f-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-mute);">
+  <footer class="colophon-mini" role="contentinfo" style="border-top:1px solid var(--rule); padding:30px 0 calc(30px + env(safe-area-inset-bottom)); font-family:var(--f-mono); font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-soft);">
     <div class="page" style="display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap;">
       <span>&copy; 2026 PickleCue</span>
       <div style="display:flex; gap:28px; flex-wrap:wrap;">
