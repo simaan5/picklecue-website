@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pickle for a Purpose — Instagram stories export</title>
+  <link rel="stylesheet" href="/fonts.css">
+  <style>
+    /* ------------------------------------------------------------------
+       INTERNAL TOOL — not linked from the site, noindex.
+       Renders four 1080x1920 Instagram STORY frames. Same design system as
+       poster-p4p.html (the square carousel); export via
+       `node tests/export-stories.mjs`.
+
+       Safe zones: Instagram overlays UI over roughly the top 250px and
+       bottom 340px of a story. Every frame keeps critical content inside
+       vertical padding of 280px top / 360px bottom; only the dot-grain
+       texture bleeds full-frame.
+
+       NOTE ON LOGOS: no Echelon or Salvation Army logo is used here. Their
+       marks require written permission. Organization names appear as plain
+       text only, which is nominative use. Do not add logo files to this page
+       until permission is confirmed in writing.
+       ------------------------------------------------------------------ */
+    :root{
+      --paper:#F4F1EA; --paper-2:#EAE5D9;
+      --ink:#0C0F12; --ink-soft:#3D4248; --ink-mute:#6E7278;
+      --court:#4F7942;
+      --rule:rgba(12,15,18,0.12); --rule-strong:rgba(12,15,18,0.28);
+      --f-display:'Fraunces',Georgia,serif;
+      --f-body:'Instrument Sans',-apple-system,sans-serif;
+      --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#1A1F23;color:#EDE9DF;font-family:var(--f-body);padding:28px}
+    .toolbar{position:sticky;top:0;z-index:10;background:#1A1F23;padding:12px 0 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(237,233,223,.14);margin-bottom:26px}
+    .toolbar h1{font-family:var(--f-display);font-weight:500;font-size:1.3rem;margin:0 16px 0 0}
+    .hint{font-size:12px;color:#8A9097;font-family:var(--f-mono);letter-spacing:.06em}
+    .sheet{display:flex;flex-wrap:wrap;gap:26px}
+    .slot{display:flex;flex-direction:column;gap:10px;width:410px;height:750px}
+    .slot > .cap{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A9097}
+
+    /* Frames are authored at exactly 1080x1920, scaled down for preview only. */
+    .frame{
+      width:1080px;height:1920px;flex:none;position:relative;overflow:hidden;
+      background:var(--paper);color:var(--ink);
+      padding:280px 110px 360px;display:flex;flex-direction:column;
+      transform:scale(.38);transform-origin:top left;
+    }
+    .frame::after{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background-image:radial-gradient(circle at 1px 1px, rgba(12,15,18,0.05) 1px, transparent 0);
+      background-size:4px 4px;mix-blend-mode:multiply;
+    }
+    .frame.dark{background:#0F1214;color:#EDE9DF;--ink:#EDE9DF;--ink-soft:#B8BEC5;--ink-mute:#8A9097;--rule:rgba(237,233,223,.14);--rule-strong:rgba(237,233,223,.3)}
+    .frame.dark::after{mix-blend-mode:screen;background-image:radial-gradient(circle at 1px 1px, rgba(237,233,223,0.05) 1px, transparent 0)}
+
+    .kick{font-family:var(--f-mono);font-size:26px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute);display:flex;align-items:center;gap:18px}
+    .kick::before{content:"";width:54px;height:2px;background:var(--rule-strong)}
+    .disp{font-family:var(--f-display);font-weight:500;letter-spacing:-.025em;line-height:.98;font-variation-settings:"opsz" 144,"SOFT" 20;margin:0}
+    .t-hero{font-size:150px}
+    .t-mid{font-size:112px}
+    em{font-style:italic;color:var(--court);font-weight:400;font-variation-settings:"opsz" 144,"SOFT" 100}
+    .frame.dark em{color:#8FBF7F}
+    .spacer{flex:1}
+    .meta{font-family:var(--f-mono);font-size:30px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);line-height:1.9}
+    .foot{border-top:2px solid var(--rule);padding-top:34px;font-family:var(--f-mono);font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+    ul.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:34px}
+    ul.list li{font-size:48px;line-height:1.25;color:var(--ink-soft);display:flex;gap:26px;align-items:baseline}
+    ul.list li::before{content:"";width:16px;height:16px;flex:none;border-radius:50%;background:var(--court);transform:translateY(-6px)}
+    .prices{display:flex;flex-direction:column;gap:30px;margin-top:14px}
+    .price{border:2px solid var(--rule-strong);border-radius:26px;padding:44px 48px;display:flex;align-items:baseline;justify-content:space-between;gap:24px}
+    .price .lbl{font-family:var(--f-mono);font-size:24px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
+    .price .was{font-family:var(--f-mono);font-size:19px;letter-spacing:.06em;color:var(--ink-mute);text-transform:uppercase}
+    .price .amt{font-family:var(--f-display);font-size:112px;font-weight:500;line-height:1;letter-spacing:-.03em}
+    .price .col{display:flex;flex-direction:column;gap:10px}
+    .note{font-size:34px;color:var(--ink-soft);line-height:1.5;max-width:26ch}
+    .sub{font-size:44px;color:var(--ink-soft);line-height:1.5;max-width:24ch;margin:0}
+    .brandrow{display:flex;align-items:center;gap:20px}
+    .brandrow img{height:40px;width:auto;display:block}
+    .pill{align-self:flex-start;font-family:var(--f-mono);font-size:24px;letter-spacing:.14em;text-transform:uppercase;border:2px solid var(--rule-strong);border-radius:999px;padding:18px 34px;color:var(--ink-soft)}
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h1>Pickle for a Purpose — stories</h1>
+    <span class="hint">1080 × 1920 · IG-safe zones · no third-party logos &nbsp;—&nbsp; export with <code style="color:#EDE9DF">node tests/export-stories.mjs</code></span>
+  </div>
+
+  <div class="sheet" id="sheet">
+
+    <div class="slot">
+      <div class="cap"><span>Story 1 — registration is open</span></div>
+      <div class="frame dark" id="st1">
+        <div class="kick">Charity Pickleball Tournament</div>
+        <div class="spacer"></div>
+        <div class="pill">Registration is open</div>
+        <h2 class="disp t-hero" style="margin-top:54px">Pickle<br>for a <em>Purpose.</em></h2>
+        <div class="spacer"></div>
+        <div class="meta">
+          Saturday, August 29 · 5–8 PM<br>
+          Peninsula Racquet Club<br>
+          Rancho Palos Verdes
+        </div>
+        <div class="foot" style="margin-top:48px">
+          <span style="white-space:nowrap">Presented by Echelon LA Metro</span>
+          <span class="brandrow"><img src="images/wordmark-on-dark.png" alt="PickleCue"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Story 2 — the night</span></div>
+      <div class="frame" id="st2">
+        <div class="kick">More than a tournament</div>
+        <div class="spacer"></div>
+        <h2 class="disp t-mid">A night of pickleball &amp; <em>community.</em></h2>
+        <ul class="list" style="margin-top:72px">
+          <li>Pro coaching on court all evening</li>
+          <li>Beginner basics clinic</li>
+          <li>Awards &amp; raffle prizes</li>
+          <li>Welcome bags &amp; refreshments</li>
+          <li>Networking mixer</li>
+        </ul>
+        <div class="spacer"></div>
+        <p class="note" style="margin:0 0 40px">All proceeds support The Salvation Army's Los Angeles-area programs.</p>
+        <div class="foot"><span>Echelon LA Metro</span><span class="brandrow"><img src="images/wordmark-on-light.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Story 3 — no partner needed</span></div>
+      <div class="frame" id="st3">
+        <div class="kick">Everyone is welcome</div>
+        <div class="spacer"></div>
+        <h2 class="disp t-mid">No partner? No <em>problem.</em></h2>
+        <p class="sub" style="margin-top:64px">Register solo and the organizers will pair you by skill level — or bring your own partner.</p>
+        <p class="sub" style="margin-top:44px">Mixed doubles, beginner through advanced.</p>
+        <div class="spacer"></div>
+        <div class="foot"><span>Echelon LA Metro</span><span class="brandrow"><img src="images/wordmark-on-light.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Story 4 — early-bird CTA</span></div>
+      <div class="frame dark" id="st4">
+        <div class="kick">Early-bird registration</div>
+        <div class="spacer"></div>
+        <h2 class="disp t-mid">Come play.<br><em>Do good.</em></h2>
+        <div class="prices" style="margin-top:64px">
+          <div class="price">
+            <span class="col"><span class="lbl">Players</span><span class="was">regularly $100</span></span>
+            <span class="amt">$60</span>
+          </div>
+          <div class="price">
+            <span class="col"><span class="lbl">General admission</span><span class="was">regularly $75</span></span>
+            <span class="amt">$45</span>
+          </div>
+        </div>
+        <p class="note" style="margin:40px 0 0">Early-bird pricing — limited time.</p>
+        <div class="spacer"></div>
+        <div class="meta" style="margin-bottom:40px">
+          August 29 · Rancho Palos Verdes<br>@echelonlosangeles
+        </div>
+        <div class="foot"><span>Register — link below</span><span class="brandrow"><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* Preview-only page. PNG export is done by tests/export-stories.mjs — see
+   tests/export-carousel.mjs for why in-page rasterisation is not used. */
+</script>
+</body>
+</html>

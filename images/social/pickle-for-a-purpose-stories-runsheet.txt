@@ -1,0 +1,23 @@
+PICKLE FOR A PURPOSE — STORIES RUN SHEET
+(post only after organizer approval + signed agreement)
+
+Post in this order, same session:
+
+1. story1 — "Registration is open"
+   Sticker: none needed. Tag @echelonlosangeles (small, corner).
+2. story2 — "A night of pickleball & community"
+   No stickers; let the list read.
+3. story3 — "No partner? No problem."
+   Optional poll sticker ("Playing?  Yes / Watching") placed in the empty
+   lower third — keeps it inside the safe zone.
+4. story4 — "Come play. Do good."
+   REQUIRED: link sticker → https://www.picklecue.com/go/pickle-for-a-purpose
+   (www subdomain on purpose — apex redirect is broken for universal links).
+   Place the sticker under "Register — link below". Tag @echelonlosangeles.
+
+Feed post (the 4-slide carousel) goes up first; stories the same day.
+Caption: images/social/pickle-for-a-purpose-caption.txt
+Bio link during the campaign: https://www.picklecue.com/go/pickle-for-a-purpose
+
+Do not add an early-bird end date to any story until the official
+registration page publishes one (Aug 10 is tentative per the organizers).
