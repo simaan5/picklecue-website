@@ -9,156 +9,161 @@
   <style>
     /* ------------------------------------------------------------------
        INTERNAL TOOL — not linked from the site, noindex.
-       Renders four 1080x1080 Instagram slides. Click "Download all" (or use
-       the per-slide buttons) to export PNGs at full resolution.
+       Renders four 1080x1080 Instagram slides in the CAMPAIGN design
+       language (dark forest canvas, lime accent, Instrument Sans) —
+       matching the event page. Export: `npm run export:carousel`.
 
-       NOTE ON LOGOS: no Echelon or Salvation Army logo is used here. Their
-       marks require written permission. Organization names appear as plain
-       text only, which is nominative use. Do not add logo files to this page
-       until permission is confirmed in writing.
+       NOTE ON LOGOS: no Echelon or Salvation Army logo. Organization
+       names are plain text only. Do not add third-party logo files.
        ------------------------------------------------------------------ */
     :root{
-      --paper:#F4F1EA; --paper-2:#EAE5D9;
-      --ink:#0C0F12; --ink-soft:#3D4248; --ink-mute:#6E7278;
-      --court:#4F7942;
-      --rule:rgba(12,15,18,0.12); --rule-strong:rgba(12,15,18,0.28);
-      --f-display:'Fraunces',Georgia,serif;
+      --bg:#0C110E; --card:#141B16;
+      --ink:#F4F7F2; --soft:#C3CDC4; --mute:#95A29A;
+      --lime:#BFE84F;
+      --rule:rgba(235,255,235,0.10); --rule-strong:rgba(235,255,235,0.22);
       --f-body:'Instrument Sans',-apple-system,sans-serif;
-      --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:#1A1F23;color:#EDE9DF;font-family:var(--f-body);padding:28px}
+    body{margin:0;background:#1A1F23;color:var(--ink);font-family:var(--f-body);padding:28px}
     .toolbar{position:sticky;top:0;z-index:10;background:#1A1F23;padding:12px 0 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(237,233,223,.14);margin-bottom:26px}
-    .toolbar h1{font-family:var(--f-display);font-weight:500;font-size:1.3rem;margin:0 16px 0 0}
-    button{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:11px 18px;border-radius:999px;border:1px solid rgba(237,233,223,.3);background:transparent;color:#EDE9DF;cursor:pointer}
-    button.primary{background:#EDE9DF;color:#0C0F12;border-color:#EDE9DF;font-weight:600}
-    button:hover{opacity:.85}
-    .hint{font-size:12px;color:#8A9097;font-family:var(--f-mono);letter-spacing:.06em}
+    .toolbar h1{font-weight:650;font-size:1.2rem;margin:0 16px 0 0}
+    .hint{font-size:12px;color:#8A9097;letter-spacing:.02em}
     .sheet{display:flex;flex-wrap:wrap;gap:26px}
-    .slot{display:flex;flex-direction:column;gap:10px}
-    .slot > .cap{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A9097;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .slot{display:flex;flex-direction:column;gap:10px;width:454px;height:475px}
+    .slot > .cap{font-size:12px;letter-spacing:.06em;color:#8A9097}
 
-    /* Slides are authored at exactly 1080x1080 and visually scaled down for
-       preview only. Export reads the un-scaled node. */
+    /* Slides authored at exactly 1080x1080, scaled for preview only. */
     .slide{
       width:1080px;height:1080px;flex:none;position:relative;overflow:hidden;
-      background:var(--paper);color:var(--ink);
-      padding:96px;display:flex;flex-direction:column;
+      background:
+        radial-gradient(110% 80% at 82% -8%, rgba(191,232,79,0.06), transparent 55%),
+        var(--bg);
+      color:var(--ink);padding:92px;display:flex;flex-direction:column;
       transform:scale(.42);transform-origin:top left;
     }
-    .slot{width:454px;height:475px}
-    .slide::after{
-      content:"";position:absolute;inset:0;pointer-events:none;
-      background-image:radial-gradient(circle at 1px 1px, rgba(12,15,18,0.05) 1px, transparent 0);
-      background-size:4px 4px;mix-blend-mode:multiply;
-    }
-    .slide.dark{background:#0F1214;color:#EDE9DF;--ink:#EDE9DF;--ink-soft:#B8BEC5;--ink-mute:#8A9097;--rule:rgba(237,233,223,.14);--rule-strong:rgba(237,233,223,.3)}
-    .slide.dark::after{mix-blend-mode:screen;background-image:radial-gradient(circle at 1px 1px, rgba(237,233,223,0.05) 1px, transparent 0)}
 
-    .kick{font-family:var(--f-mono);font-size:22px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute);display:flex;align-items:center;gap:18px}
-    .kick::before{content:"";width:54px;height:2px;background:var(--rule-strong)}
-    .disp{font-family:var(--f-display);font-weight:500;letter-spacing:-.025em;line-height:.98;font-variation-settings:"opsz" 144,"SOFT" 20;margin:0}
-    .s1-title{font-size:132px}
-    .s-title{font-size:86px}
-    em{font-style:italic;color:var(--court);font-weight:400;font-variation-settings:"opsz" 144,"SOFT" 100}
-    .slide.dark em{color:#8FBF7F}
+    .badge{align-self:flex-start;display:inline-flex;align-items:center;padding:14px 26px;border:2px solid rgba(191,232,79,0.5);border-radius:999px;font-size:26px;font-weight:500;color:var(--lime);background:rgba(12,17,14,0.55);white-space:nowrap}
+    .kick{font-size:26px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+    .disp{font-weight:650;letter-spacing:-.025em;line-height:1.0;margin:0;color:var(--ink)}
+    .t-hero{font-size:118px}
+    .t-mid{font-size:88px}
     .spacer{flex:1}
-    .meta{font-family:var(--f-mono);font-size:26px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);line-height:1.9}
-    .foot{border-top:2px solid var(--rule);padding-top:30px;font-family:var(--f-mono);font-size:20px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
-    ul.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:26px}
-    ul.list li{font-size:42px;line-height:1.25;color:var(--ink-soft);display:flex;gap:24px;align-items:baseline}
-    ul.list li::before{content:"";width:14px;height:14px;flex:none;border-radius:50%;background:var(--court);transform:translateY(-6px)}
-    .prices{display:flex;gap:28px;margin-top:14px}
-    .price{flex:1;border:2px solid var(--rule-strong);border-radius:24px;padding:40px 36px}
-    .price .lbl{font-family:var(--f-mono);font-size:20px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
-    .price .was{display:block;font-family:var(--f-mono);font-size:15px;letter-spacing:.06em;color:var(--ink-mute);margin-top:9px;text-transform:uppercase}
-.price .amt{font-family:var(--f-display);font-size:104px;font-weight:500;line-height:1;display:block;margin-top:14px;letter-spacing:-.03em}
-    .note{font-size:30px;color:var(--ink-soft);line-height:1.5;max-width:26ch}
+    .meta{font-size:32px;font-weight:500;color:var(--ink);line-height:1.65}
+    .meta .dim{color:var(--soft)}
+    .foot{border-top:2px solid var(--rule);padding-top:30px;font-size:21px;font-weight:500;color:var(--mute);display:flex;justify-content:space-between;align-items:center;gap:20px}
+    .foot .org{white-space:nowrap}
     .brandrow{display:flex;align-items:center;gap:14px;white-space:nowrap}
     .brandrow img{height:38px;width:auto;display:block}
     .brandrow img.mark{height:46px;width:46px;border-radius:11px}
+    ul.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:30px}
+    ul.list li{font-size:42px;font-weight:500;line-height:1.25;color:var(--ink);display:flex;gap:24px;align-items:baseline}
+    ul.list li::before{content:"";width:13px;height:13px;flex:none;border-radius:50%;background:var(--lime);transform:translateY(-5px)}
+    .note{font-size:28px;color:var(--soft);line-height:1.5;max-width:34ch}
+
+    /* Slide 1: photo background with legibility gradient */
+    #s1{padding:0}
+    #s1 .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center}
+    #s1 .scrim{position:absolute;inset:0;background:
+      linear-gradient(180deg, rgba(12,17,14,0.55) 0%, rgba(12,17,14,0.12) 38%, rgba(12,17,14,0.82) 78%, rgba(12,17,14,0.94) 100%)}
+    #s1 .content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding:92px}
+
+    /* Slide 4 pricing */
+    .prices{display:flex;gap:26px;margin-top:8px}
+    .price{flex:1;background:var(--card);border:2px solid var(--rule);border-radius:26px;padding:38px 36px}
+    .price .lbl{display:block;font-size:30px;font-weight:600;color:var(--ink)}
+    .price .amt{display:block;font-size:96px;font-weight:650;line-height:1;color:var(--lime);margin:14px 0 4px;letter-spacing:-0.02em}
+    .price .amt small{font-size:28px;font-weight:500;color:var(--soft);margin-left:10px;letter-spacing:0}
+    .price .was{display:block;font-size:26px;color:var(--soft);margin-top:14px;padding-top:14px;border-top:2px solid var(--rule)}
+    .cta-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:14px;padding:26px 44px;border-radius:999px;background:var(--lime);color:#0C110E;font-size:34px;font-weight:650}
+    .handle{font-size:30px;font-weight:500;color:var(--soft)}
   </style>
 </head>
 <body>
   <div class="toolbar">
     <h1>Pickle for a Purpose — carousel</h1>
-    <span class="hint">1080 × 1080 · brand fonts · no third-party logos &nbsp;—&nbsp; export with <code style="color:#EDE9DF">npm run export:carousel</code></span>
+    <span class="hint">1080 × 1080 · campaign design · no third-party logos &nbsp;—&nbsp; export with <code style="color:#EDE9DF">npm run export:carousel</code></span>
   </div>
 
   <div class="sheet" id="sheet">
 
     <div class="slot">
-      <div class="cap"><span>Slide 1 — hook</span></div>
-      <div class="slide dark" id="s1">
-        <div class="kick">Charity Pickleball Tournament</div>
-        <div class="spacer"></div>
-        <h2 class="disp s1-title">Pickle<br>for a <em>Purpose.</em></h2>
-        <div class="spacer"></div>
-        <div class="meta">
-          Saturday, August 29 · 5–8 PM<br>
-          Peninsula Racquet Club · Rancho Palos Verdes
-        </div>
-        <div class="foot" style="margin-top:40px;font-size:17px">
-          <span style="white-space:nowrap">Organized by Echelon LA Metro</span>
-          <span class="brandrow">Supported by
-            <img class="mark" src="images/app-icon-512.png" alt="">
-            <img src="images/wordmark-on-dark.png" alt="PickleCue">
-          </span>
+      <div class="cap"><span>Slide 1 — hero (tag @echelonlosangeles on this slide in the app)</span></div>
+      <div class="slide" id="s1">
+        <img class="bg" src="images/p4p-hero-golden.jpg" alt="">
+        <div class="scrim"></div>
+        <div class="content">
+          <span class="badge">Community event supported by PickleCue</span>
+          <div class="spacer"></div>
+          <h2 class="disp t-hero">Pickle for<br>a Purpose</h2>
+          <p class="meta" style="margin:34px 0 0">
+            Saturday, August 29, 2026 &middot; 5&ndash;8&nbsp;PM<br>
+            <span class="dim">Peninsula Racquet Club &middot; Rancho Palos Verdes</span>
+          </p>
+          <div class="foot" style="margin-top:44px">
+            <span class="org">Organized by Echelon LA Metro</span>
+            <span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="slot">
-      <div class="cap"><span>Slide 2 — who it's for</span></div>
+      <div class="cap"><span>Slide 2 — who can play</span></div>
       <div class="slide" id="s2">
-        <div class="kick">Everyone is welcome</div>
-        <div class="spacer"></div>
-        <h2 class="disp s-title">Play for something <em>bigger.</em></h2>
-        <ul class="list" style="margin-top:56px">
-          <li>Mixed doubles, beginner through advanced</li>
-          <li>Register solo and we'll pair you — or bring a partner</li>
-          <li>Pro coaching on court all evening</li>
-          <li>Basics clinic if you're new to the game</li>
+        <div class="kick">Who can play</div>
+        <h2 class="disp t-mid" style="margin-top:26px">All levels.<br>One purpose.</h2>
+        <ul class="list" style="margin-top:60px">
+          <li>Mixed doubles</li>
+          <li>Beginner through advanced</li>
+          <li>Register solo or bring a partner</li>
+          <li>Pro coaching</li>
+          <li>Beginner clinic</li>
         </ul>
         <div class="spacer"></div>
-        <div class="foot"><span>Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-light.png" alt="PickleCue"></span></div>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
       </div>
     </div>
 
     <div class="slot">
-      <div class="cap"><span>Slide 3 — the night</span></div>
+      <div class="cap"><span>Slide 3 — what's included</span></div>
       <div class="slide" id="s3">
-        <div class="kick">More than a tournament</div>
-        <div class="spacer"></div>
-        <h2 class="disp s-title">A night of pickleball &amp; <em>community.</em></h2>
-        <ul class="list" style="margin-top:56px">
-          <li>Awards for 1st, 2nd, 3rd &amp; Top Fundraising Team</li>
-          <li>Raffle prizes throughout the night</li>
-          <li>Welcome bag and refreshments</li>
-          <li>Networking reception after play</li>
+        <div class="kick">What&rsquo;s included</div>
+        <h2 class="disp t-mid" style="margin-top:26px">A night of pickleball &amp; community.</h2>
+        <ul class="list" style="margin-top:54px;gap:26px">
+          <li>Awards</li>
+          <li>Raffle prizes</li>
+          <li>Welcome bag</li>
+          <li>Light snacks &amp; non-alcoholic beverages</li>
+          <li>Networking mixer</li>
         </ul>
         <div class="spacer"></div>
-        <p class="note" style="margin:0 0 30px">All proceeds support The Salvation Army's Los Angeles-area programs.</p>
-        <div class="foot"><span>Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-light.png" alt="PickleCue"></span></div>
+        <p class="note" style="margin:0 0 30px">Proceeds support Salvation Army LA Metro programs serving local communities.</p>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
       </div>
     </div>
 
     <div class="slot">
       <div class="cap"><span>Slide 4 — CTA</span></div>
-      <div class="slide dark" id="s4">
-        <div class="kick">Early-bird registration</div>
-        <div class="spacer"></div>
-        <h2 class="disp s-title">Come play. <em>Do good.</em></h2>
-        <div class="prices" style="margin-top:54px">
-          <div class="price"><span class="lbl">Players</span><span class="amt">$60</span><span class="was">regularly $100</span></div>
-          <div class="price"><span class="lbl">General admission</span><span class="amt">$45</span><span class="was">regularly $75</span></div>
+      <div class="slide" id="s4">
+        <div class="kick">Early-bird pricing</div>
+        <h2 class="disp t-mid" style="margin-top:26px">Ready to play?</h2>
+        <div class="prices" style="margin-top:52px">
+          <div class="price">
+            <span class="lbl">Players</span>
+            <span class="amt">$60<small>early bird</small></span>
+            <span class="was">Regularly $100</span>
+          </div>
+          <div class="price">
+            <span class="lbl">General admission</span>
+            <span class="amt">$45<small>early bird</small></span>
+            <span class="was">Regularly $75</span>
+          </div>
         </div>
-        <p class="note" style="margin:26px 0 0">Early-bird pricing — limited time.</p>
+        <p class="note" style="margin:30px 0 0">Early-bird pricing available for a limited time.</p>
         <div class="spacer"></div>
-        <div class="meta" style="margin-bottom:34px">
-          Peninsula Racquet Club<br>Rancho Palos Verdes · August 29<br>@echelonlosangeles
-        </div>
-        <div class="foot"><span>Register — link in bio</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
+        <div class="cta-pill">Register now &mdash; link in bio</div>
+        <p class="handle" style="margin:26px 0 34px">@echelonlosangeles</p>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
       </div>
     </div>
 
