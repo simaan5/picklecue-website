@@ -33,8 +33,8 @@
   <link rel="stylesheet" href="/fonts.css">
   <link rel="stylesheet" href="/assets/site.css">
   <script defer src="/assets/site.js"></script>
-  <title>Pickle for a Purpose · Charity Pickleball Tournament · Aug 29, 2026</title>
-  <meta name="description" content="Echelon LA Metro's first annual charity pickleball tournament, benefiting The Salvation Army's Los Angeles-area programs. Saturday, August 29, 2026, 5–8 PM at Peninsula Racquet Club, Rancho Palos Verdes.">
+  <title>Pickle for a Purpose | PickleCue Community</title>
+  <meta name="description" content="Join Echelon LA Metro’s Pickle for a Purpose charity pickleball tournament on August 29 in Rancho Palos Verdes, supported through community promotion by PickleCue.">
   <link rel="canonical" href="https://www.picklecue.com/events/pickle-for-a-purpose/">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
@@ -43,11 +43,11 @@
   <meta property="og:url" content="https://www.picklecue.com/events/pickle-for-a-purpose/">
   <meta property="og:title" content="Pickle for a Purpose · Charity Pickleball Tournament">
   <meta property="og:description" content="Mixed doubles for every skill level. Saturday, August 29, 2026 at Peninsula Racquet Club. All proceeds support The Salvation Army's Los Angeles-area programs.">
-  <meta property="og:image" content="https://www.picklecue.com/images/og-image.png">
+  <meta property="og:image" content="https://www.picklecue.com/images/social/pickle-for-a-purpose-s1.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pickle for a Purpose · Charity Pickleball Tournament">
   <meta name="twitter:description" content="Mixed doubles for every skill level. August 29, 2026 · Rancho Palos Verdes.">
-  <meta name="twitter:image" content="https://www.picklecue.com/images/og-image.png">
+  <meta name="twitter:image" content="https://www.picklecue.com/images/social/pickle-for-a-purpose-s1.png">
 
   <!-- Event structured data. Organizer is Echelon LA Metro — PickleCue is NOT the
        organizer and must not be listed as one. Offers reflect only the early-bird
@@ -56,7 +56,7 @@
   {
     "@context": "https://schema.org",
     "@type": "SportsEvent",
-    "name": "Pickle for a Purpose — Charity Pickleball Tournament",
+    "name": "Pickle for a Purpose",
     "description": "Echelon LA Metro's first annual charity pickleball tournament. Mixed doubles, beginner through advanced, benefiting The Salvation Army's Los Angeles-area programs.",
     "startDate": "2026-08-29T17:00:00-07:00",
     "endDate": "2026-08-29T20:00:00-07:00",
@@ -98,38 +98,94 @@
   }
   </script>
 
+  <!-- ======================================================================
+       EVENT DATA — SINGLE SOURCE OF TRUTH (static site: update HERE first,
+       then propagate to the listed spots; grep the value to find them)
+
+         title                      Pickle for a Purpose
+         slug                       pickle-for-a-purpose
+         supportLabel               Community event supported by PickleCue
+         organizer                  Echelon LA Metro
+         date                       Saturday, August 29, 2026
+         startTime / endTime        5:00 PM / 8:00 PM (America/Los_Angeles)
+         venue                      Peninsula Racquet Club
+         streetAddress              30850 Hawthorne Blvd
+         city / state               Rancho Palos Verdes / CA
+         registrationURL            /go/pickle-for-a-purpose  (302 -> official
+                                    give-sc.salvationarmy.org page + UTM; the
+                                    target lives in /_redirects)
+         playerEarlyBird / regular  $60 / $100
+         admissionEarlyBird / reg   $45 / $75
+         tentativeEarlyBirdDeadline Aug 10  (TENTATIVE - never render as firm)
+
+       Appears in: this page, /community.html (featured card), /index.html
+       (03.5 Community chapter), JSON-LD above, IG assets in /images/social.
+       ====================================================================== -->
   <style>
     /* Page styles — shared shell in /assets/site.css. Tokens keep the page
        correct in both themes. */
-    .wrap{max-width:920px;margin:0 auto;padding-top:28px;padding-bottom:28px}
+    .wrap{max-width:var(--page-max);margin:0 auto;padding-top:28px;padding-bottom:28px}
+    .measure{max-width:920px;margin-left:auto;margin-right:auto}
     .k{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-family:var(--f-mono)}
-    h1{font-family:var(--f-display);font-weight:500;font-size:clamp(2rem,5vw + 0.4rem,3.9rem);line-height:1.04;margin:.24em 0;letter-spacing:-0.02em}
+    h1{font-family:var(--f-display);font-weight:500;font-size:clamp(2rem,4.4vw + 0.4rem,3.9rem);line-height:1.04;margin:.24em 0;letter-spacing:-0.02em}
     h2{font-family:var(--f-display);font-weight:500;font-size:1.45rem;margin-top:1.7em}
-    .hero{padding:42px 0 26px;border-bottom:1px solid var(--rule)}
     .sub{color:var(--ink-soft);max-width:68ch}
-    .lede{font-size:1.12rem;color:var(--ink-soft);max-width:64ch;margin-top:.6em}
+    .lede{font-size:1.12rem;color:var(--ink-soft);max-width:46ch;margin-top:.6em}
     .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border:1px solid var(--rule-strong);border-radius:999px;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:26px 0}
-    .card{background:var(--paper-2);padding:18px;border:1px solid var(--rule);border-radius:12px}
-    .card strong{display:block;margin-bottom:.35em}
-    .card p{margin:0;color:var(--ink-soft);font-size:.95rem}
-    .facts{display:grid;gap:0;margin:26px 0;border:1px solid var(--rule);border-radius:12px;overflow:hidden}
-    .fact{display:grid;grid-template-columns:minmax(96px,148px) 1fr;gap:16px;padding:15px 18px;border-bottom:1px solid var(--rule);align-items:baseline}
-    .fact:last-child{border-bottom:0}
-    .fact dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
-    .fact dd{margin:0;color:var(--ink)}
-    .fact dd small{display:block;color:var(--ink-mute);font-size:.86rem;margin-top:2px}
-    .price-row{display:flex;flex-wrap:wrap;gap:14px;margin:22px 0}
-    .price{flex:1 1 200px;background:var(--paper-2);border:1px solid var(--rule);border-radius:12px;padding:18px}
-    .price .amt{font-family:var(--f-display);font-size:2.1rem;font-weight:500;line-height:1;display:block;margin:.18em 0}
+
+    /* Split hero — copy left, photograph right; photo spans both rows so the
+       CTA sits under the facts on desktop. Mobile stacks badge > headline >
+       copy > facts > photo > CTA (the brief's hierarchy). */
+    .hero-split{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,6fr);grid-template-areas:"copy photo" "cta photo";column-gap:clamp(28px,5vw,64px);row-gap:0;align-items:start;padding:42px 0 34px;border-bottom:1px solid var(--rule)}
+    .hero-copy{grid-area:copy;min-width:0}
+    .hero-cta{grid-area:cta;align-self:end}
+    .hero-photo{grid-area:photo;margin:0;min-width:0}
+    .hero-photo img{width:100%;height:100%;max-height:640px;object-fit:cover;border-radius:18px;border:1px solid var(--rule)}
+    @media (max-width:899px){
+      .hero-split{display:block;padding-top:30px}
+      .hero-photo{margin:22px 0 0}
+      .hero-photo img{max-height:420px}
+      .hero-cta{margin-top:20px}
+    }
+
+    .factlist{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+    .factlist li{display:flex;gap:13px;align-items:flex-start;color:var(--ink)}
+    .factlist svg{flex:none;width:21px;height:21px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin-top:2px}
+    .factlist small{display:block;color:var(--ink-mute);font-size:.88rem;margin-top:2px}
+
+    /* What to expect — compact equal-height icon cards */
+    .xgrid{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(4,minmax(0,1fr))}
+    @media (max-width:1000px){.xgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (max-width:700px){.xgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .xcard{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:20px 14px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;min-height:108px;justify-content:flex-start}
+    .xcard svg{width:26px;height:26px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+    .xcard span{font-size:.94rem;line-height:1.3;color:var(--ink)}
+
+    /* Pricing */
+    .price-row{display:grid;gap:14px;margin:22px 0;grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width:900px){.price-row{grid-template-columns:1fr 1fr}.price-deadline{grid-column:1 / -1}}
+    @media (max-width:560px){.price-row{grid-template-columns:1fr}.price-deadline{grid-column:auto}}
+    .price{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:20px}
     .price .lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
-    .price .note{color:var(--ink-soft);font-size:.9rem;margin:.4em 0 0}
+    .price .amt{font-family:var(--f-display);font-size:2.3rem;font-weight:500;line-height:1;display:inline-block;margin:.22em 0 0}
+    .price .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--court);margin-left:8px}
+    .price .was{display:block;color:var(--ink-mute);font-size:.9rem;margin-top:9px;padding-top:9px;border-top:1px solid var(--rule)}
+    .price-deadline{display:flex;gap:13px;align-items:center;color:var(--ink-soft)}
+    .price-deadline svg{flex:none;width:22px;height:22px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+    .price-deadline strong{display:block;color:var(--ink);font-weight:600}
+
     .cta{display:inline-flex;align-items:center;gap:9px;margin-top:6px;padding:13px 22px;border-radius:999px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:600;min-height:44px}
     .cta-ghost{display:inline-flex;align-items:center;gap:9px;margin-top:6px;padding:13px 22px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--ink);text-decoration:none;font-weight:600;min-height:44px}
+    .cta:hover{background:var(--court);color:#0C0F12}
+    .cta-ghost:hover{border-color:var(--court)}
     .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:16px}
     .disclaimer{margin-top:18px;padding:15px 17px;border-left:2px solid var(--rule-strong);color:var(--ink-mute);font-size:.9rem;max-width:70ch}
-    ul.plain{color:var(--ink-soft);max-width:64ch;padding-left:1.1em}
-    ul.plain li{margin:.35em 0}
+
+    @media (prefers-reduced-motion:no-preference){
+      .hero-copy,.hero-photo,.hero-cta{animation:rise .5s ease both}
+      .hero-photo{animation-delay:.08s}
+      @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    }
   </style>
 </head>
 <body>
@@ -188,84 +244,98 @@
   </div>
 
   <main class="wrap page" id="main">
-    <section class="hero">
-      <p class="badge">Community event supported by PickleCue</p>
-      <h1>Pickle for a Purpose</h1>
-      <p class="lede">Pickleball, community, and a cause worth playing for. PickleCue is proud to support Echelon&nbsp;LA&nbsp;Metro's first annual charity pickleball tournament, benefiting The Salvation Army's programs across Los Angeles County.</p>
-      <div class="cta-row">
-        <a class="cta" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="p4p_hero_register">
-          Register for the tournament
+    <section class="hero-split" aria-labelledby="p4p-title">
+      <div class="hero-copy">
+        <p class="badge">Community event supported by PickleCue</p>
+        <h1 id="p4p-title">Pickle for a Purpose</h1>
+        <p class="lede">PickleCue is helping spotlight a community event that brings players together and supports a local cause.</p>
+        <ul class="factlist">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+            <span>Saturday, August 29, 2026</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+            <span>5&ndash;8&nbsp;PM</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>
+            <span>Peninsula Racquet Club<small>30850 Hawthorne Blvd, Rancho Palos Verdes, CA</small></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
+            <span>Event organizer: Echelon LA Metro</span>
+          </li>
+        </ul>
+      </div>
+      <figure class="hero-photo">
+        <picture>
+          <source type="image/webp" srcset="/images/p4p-hero-court-sm.webp 620w, /images/p4p-hero-court.webp 1000w" sizes="(max-width: 899px) 92vw, 44vw">
+          <img src="/images/p4p-hero-court.jpg" srcset="/images/p4p-hero-court-sm.jpg 620w, /images/p4p-hero-court.jpg 1000w" sizes="(max-width: 899px) 92vw, 44vw" width="1000" height="1209" alt="Pickleball court at dusk, palm trees behind the fence line" decoding="async">
+        </picture>
+      </figure>
+      <div class="hero-cta cta-row">
+        <a class="cta" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="hero">
+          Register
           <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
         </a>
-        <a class="cta-ghost" href="#details">Event details</a>
+        <a class="cta-ghost" href="#expect">Event details</a>
       </div>
     </section>
 
-    <section id="details">
-      <h2>The details</h2>
-      <dl class="facts">
-        <div class="fact"><dt>When</dt><dd>Saturday, August 29, 2026 · 5:00–8:00&nbsp;PM</dd></div>
-        <div class="fact"><dt>Where</dt><dd>Peninsula Racquet Club<small>30850 Hawthorne Blvd, Rancho Palos Verdes, CA</small></dd></div>
-        <div class="fact"><dt>Parking</dt><dd>Free, off Crestmont Lane</dd></div>
-        <div class="fact"><dt>Format</dt><dd>Mixed doubles<small>Beginner through advanced — register solo and be paired, or bring your own partner</small></dd></div>
-        <div class="fact"><dt>Benefiting</dt><dd>The Salvation Army LA Metro<small>Food assistance, housing support, youth and senior services across Los Angeles County</small></dd></div>
-      </dl>
+    <section id="expect" class="measure" aria-labelledby="expect-title">
+      <h2 id="expect-title">What to expect</h2>
+      <ul class="xgrid">
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8.2" cy="8.6" rx="4.2" ry="5" transform="rotate(-30 8.2 8.6)"/><path d="M11 13.2 14 18"/><ellipse cx="15.8" cy="8.6" rx="4.2" ry="5" transform="rotate(30 15.8 8.6)"/><path d="M13 13.2 10 18"/></svg><span>Mixed doubles</span></li>
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-5M10 20v-9M15 20V7M20 20V4"/></svg><span>All skill levels</span></li>
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="8.5" r="3.2"/><path d="M3.8 19.5a5.7 5.7 0 0 1 11.4 0M18 8v6M15 11h6"/></svg><span>Register solo or bring a partner</span></li>
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 2.8 8.2 12 12.4l9.2-4.2L12 4Z"/><path d="M6.4 10.4V15c0 1.4 2.5 2.9 5.6 2.9s5.6-1.5 5.6-2.9v-4.6M21.2 8.2V13"/></svg><span>Pro coaching</span></li>
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20v-7M12 13c0-3-1.6-5.4-5.5-5.6.2 3.8 2.4 5.6 5.5 5.6ZM12 11c0-2.6 1.4-4.7 4.9-4.9-.2 3.4-2.1 4.9-4.9 4.9Z"/></svg><span>Beginner clinic</span></li>
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5.5a4 4 0 0 1-8 0V4ZM8 6H5.2A2.7 2.7 0 0 0 8 9.8M16 6h2.8A2.7 2.7 0 0 1 16 9.8M12 13.5V17M8.5 20h7M10 17h4"/></svg><span>Awards &amp; raffle</span></li>
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.4" cy="8.8" r="3"/><circle cx="16.4" cy="9.8" r="2.4"/><path d="M3.4 19.4a5.2 5.2 0 0 1 10 0M13.8 19.4a4.4 4.4 0 0 1 6.8-3.2"/></svg><span>Networking mixer</span></li>
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9h10l-1.2 11H8.2L7 9ZM7.6 13h8.8M13.4 9l2-5.5"/></svg><span>Light snacks &amp; non&#8209;alcoholic beverages</span></li>
+      </ul>
+      <p class="sub" style="margin-top:18px">You don&rsquo;t need a partner and you don&rsquo;t need experience &mdash; register on your own and the organizers will pair you by skill level, or bring someone along. Player registration includes club access, pro coaching during the event, the beginner clinic, rental paddles and balls, a welcome bag, medal eligibility, refreshments, and the networking mixer. General admission includes club access, beginner instruction, courtside spectator access, a welcome bag, refreshments, and the mixer.</p>
     </section>
 
-    <section>
-      <h2>Everyone is welcome</h2>
-      <p class="sub">You don't need a partner and you don't need experience. Register on your own and the organizers will pair you up, or bring someone along. There's a basics clinic for anyone newer to the game, and pro coaching on court throughout the evening.</p>
-      <div class="grid">
-        <article class="card"><strong>On the court</strong><p>Mixed doubles across every skill level, with professional coaching and a beginner basics clinic.</p></article>
-        <article class="card"><strong>Off the court</strong><p>A networking reception, raffle prizes throughout the night, and a welcome bag for every attendee.</p></article>
-        <article class="card"><strong>Awards</strong><p>Recognition for 1st, 2nd and 3rd place — plus a Top Fundraising Team award.</p></article>
-      </div>
-      <p class="sub">Player registration includes club access, pro coaching during the event, the beginner clinic, rental paddles and balls, a welcome bag, medal eligibility, refreshments, and the networking mixer. General admission includes club access, beginner instruction, courtside spectator access, a welcome bag, refreshments, and the mixer.</p>
-    </section>
-
-    <section>
-      <h2>Early-bird registration</h2>
+    <section class="measure" aria-labelledby="pricing-title">
+      <h2 id="pricing-title">Early-bird pricing</h2>
       <div class="price-row">
         <div class="price">
-          <span class="lbl">Player registration</span>
-          <span class="amt">$60</span>
-          <p class="note">Regularly $100. Play in the mixed-doubles tournament.</p>
+          <span class="lbl">Players</span>
+          <div><span class="amt">$60</span><span class="tag">early bird</span></div>
+          <span class="was">Regularly $100</span>
         </div>
         <div class="price">
           <span class="lbl">General admission</span>
-          <span class="amt">$45</span>
-          <p class="note">Regularly $75. Come to watch, mingle, and support the cause.</p>
+          <div><span class="amt">$45</span><span class="tag">early bird</span></div>
+          <span class="was">Regularly $75</span>
+        </div>
+        <div class="price price-deadline">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+          <span><strong>Tentative early-bird deadline: Aug&nbsp;10</strong>Early-bird pricing is available for a limited time.</span>
         </div>
       </div>
       <!-- Regular prices ($100 / $75) verified 2026-08-08 against the official
-           registration page's embedded event JSON. The early-bird END DATE is
-           still not published there and the organizers describe Aug 10 as
-           tentative - do NOT publish a hard deadline until it appears on the
-           official page. -->
-      <p class="sub">Early-bird pricing is available for a limited time. All proceeds go to Salvation Army LA Metro programs.</p>
+           registration page's embedded event JSON. The Aug 10 deadline is
+           TENTATIVE per the organizers and must never be rendered as a firm
+           date until the official page publishes one. -->
+      <p class="sub">All proceeds go to Salvation Army LA Metro programs.</p>
       <div class="cta-row">
-        <a class="cta" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="p4p_pricing_register">
+        <a class="cta" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="pricing">
           Register for Pickle for a Purpose
           <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
         </a>
       </div>
-      <p class="disclaimer">This event is organized by Echelon&nbsp;LA&nbsp;Metro in support of The Salvation Army. Registration, payments, refunds, and event operations are managed entirely by the event organizers. PickleCue is supporting the event through community promotion.</p>
+      <p class="disclaimer">PickleCue is supporting this event through community promotion. This event is organized by Echelon&nbsp;LA&nbsp;Metro. Registration, payment, event operations, policies, and attendance are handled by the event organizer.</p>
     </section>
 
-    <section>
-      <h2>About Echelon LA Metro</h2>
-      <p class="sub">Echelon LA Metro is the young-professionals chapter of The Salvation Army in Los Angeles — a group of people in their 20s and 30s who love this city and want to give back to it. Pickle for a Purpose is their first annual charity pickleball tournament. Follow the organizers on Instagram: <a href="https://www.instagram.com/echelonlosangeles/" rel="noopener">@echelonlosangeles</a>.</p>
+    <section class="measure" aria-labelledby="about-title">
+      <h2 id="about-title">About Echelon LA Metro</h2>
+      <p class="sub">Echelon LA Metro is the young-professionals chapter of The Salvation Army in Los Angeles &mdash; a group of people in their 20s and 30s who love this city and want to give back to it. Pickle for a Purpose is their first annual charity pickleball tournament. Follow the organizers on Instagram: <a href="https://www.instagram.com/echelonlosangeles/" rel="noopener">@echelonlosangeles</a>.</p>
     </section>
 
-    <section>
-      <h2>Running an event of your own?</h2>
-      <p class="sub">PickleCue helps clubs, nonprofits, and tournament directors organize games, leagues, and tournaments — and reach the players nearby who want to show up. If you're planning something for your community, we'd love to hear about it.</p>
-      <div class="cta-row">
-        <a class="cta-ghost" href="/community.html" data-track="cta_click" data-cta="p4p_community">See how PickleCue supports the community</a>
-      </div>
-    </section>
-
-    <p class="k" style="margin-top:38px"><a href="/community.html">← Back to Community</a></p>
+    <p class="k measure" style="margin-top:38px"><a href="/community.html">&larr; Back to Community</a></p>
   </main>
 
   <footer class="colophon-mini" role="contentinfo" style="border-top:1px solid var(--rule); padding:28px 0 calc(28px + env(safe-area-inset-bottom)); font-family:var(--f-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-mute);">
@@ -279,5 +349,24 @@
       </div>
     </div>
   </footer>
+  <script>
+    /* Lightweight analytics - same pattern as the homepage: queues to
+       window.dataLayer (GA4 reads it; consent gating in /assets/consent.js).
+       Register CTAs carry event_slug + placement per the campaign spec. */
+    window.dataLayer = window.dataLayer || [];
+    window.track = function (name, props) {
+      try { window.dataLayer.push({ event: name, ts: Date.now(), ...(props || {}) }); } catch (_) {}
+    };
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest('[data-track]');
+      if (!el) return;
+      window.track(el.getAttribute('data-track'), {
+        cta: el.getAttribute('data-cta') || null,
+        href: el.getAttribute('href') || null,
+        event_slug: el.getAttribute('data-event-slug') || undefined,
+        placement: el.getAttribute('data-placement') || undefined
+      });
+    });
+  </script>
 </body>
 </html>

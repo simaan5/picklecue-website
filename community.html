@@ -68,6 +68,9 @@
     .fineprint{color:var(--ink-mute);font-size:.82rem;line-height:1.55;max-width:64ch;margin:16px 0 0}
     ul.plain{color:var(--ink-soft);max-width:64ch;padding-left:1.1em}
     ul.plain li{margin:.4em 0}
+      .evfacts{list-style:none;margin:10px 0 6px;padding:0;display:flex;flex-direction:column;gap:8px}
+    .evfacts li{display:flex;gap:10px;align-items:center;color:var(--ink-soft);font-size:.97rem}
+    .evfacts svg{flex:none;width:18px;height:18px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
   </style>
 </head>
 <body>
@@ -128,8 +131,8 @@
   <main class="wrap page" id="main">
     <section class="hero">
       <p class="k">PickleCue in the community</p>
-      <h1>Pickleball that brings people together.</h1>
-      <p class="lede">Pickleball is more than a game. It's a way to build friendships, support real causes, and strengthen a neighborhood. PickleCue supports clubs, nonprofits, tournament organizers, and community leaders doing exactly that.</p>
+      <h1>PickleCue in the Community</h1>
+      <p class="lede">PickleCue supports clubs, nonprofits, organizers, and local communities using pickleball to bring people together on and off the court.</p>
     </section>
 
     <section>
@@ -139,11 +142,14 @@
       <article class="event">
         <span class="badge">Community event supported by PickleCue</span>
         <h3>Pickle for a Purpose</h3>
-        <p class="when">Saturday, August 29, 2026 · Rancho Palos Verdes</p>
+        <ul class="evfacts">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Saturday, August 29, 2026 &middot; 5&ndash;8&nbsp;PM</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>Peninsula Racquet Club &middot; Rancho Palos Verdes, CA</li>
+        </ul>
         <p>Echelon LA Metro's first annual charity pickleball tournament, benefiting The Salvation Army's food assistance, housing, youth, and senior programs across Los Angeles County. Mixed doubles, beginner through advanced.</p>
         <div class="cta-row">
           <a class="cta" href="/events/pickle-for-a-purpose/" data-track="cta_click" data-cta="community_p4p_view">View event</a>
-          <a class="cta-ghost" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_p4p_register">Register</a>
+          <a class="cta-ghost" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="community_card">Register</a>
         </div>
         <p class="fineprint">Organized by Echelon LA Metro in support of The Salvation Army. Registration, payments, and event operations are handled by the organizers — PickleCue is helping promote it.</p>
       </article>
@@ -191,5 +197,24 @@
       </div>
     </div>
   </footer>
+  <script>
+    /* Lightweight analytics - same pattern as the homepage: queues to
+       window.dataLayer (GA4 reads it; consent gating in /assets/consent.js).
+       Register CTAs carry event_slug + placement per the campaign spec. */
+    window.dataLayer = window.dataLayer || [];
+    window.track = function (name, props) {
+      try { window.dataLayer.push({ event: name, ts: Date.now(), ...(props || {}) }); } catch (_) {}
+    };
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest('[data-track]');
+      if (!el) return;
+      window.track(el.getAttribute('data-track'), {
+        cta: el.getAttribute('data-cta') || null,
+        href: el.getAttribute('href') || null,
+        event_slug: el.getAttribute('data-event-slug') || undefined,
+        placement: el.getAttribute('data-placement') || undefined
+      });
+    });
+  </script>
 </body>
 </html>

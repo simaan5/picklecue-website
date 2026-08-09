@@ -1514,14 +1514,14 @@
                 <article style="margin-top:34px;background:var(--paper-2);border:1px solid var(--rule);border-radius:16px;padding:clamp(22px,3vw,34px)">
                     <span style="display:inline-flex;align-items:center;padding:5px 12px;border:1px solid var(--rule-strong);border-radius:999px;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)">Community event supported by PickleCue</span>
                     <h3 style="font-family:var(--f-display);font-weight:500;font-size:clamp(1.7rem,3.4vw,2.5rem);letter-spacing:-0.02em;line-height:1.08;margin:.45em 0 .1em">Pickle for a Purpose</h3>
-                    <p style="font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin:0">August 29 &middot; Rancho Palos Verdes</p>
+                    <p style="font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin:0">August 29 &middot; 5&ndash;8&nbsp;PM &middot; Rancho Palos Verdes</p>
                     <p style="max-width:60ch;color:var(--ink-soft);margin:.9em 0 0;line-height:1.65">Echelon LA Metro's first annual charity pickleball tournament, benefiting The Salvation Army's Los Angeles-area programs. Mixed doubles, beginner through advanced &mdash; register solo and be paired, or bring your own partner.</p>
                     <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px">
                         <a href="/events/pickle-for-a-purpose/" class="btn-pill" data-track="cta_click" data-cta="home_p4p_view">
                             View event
                             <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
                         </a>
-                        <a href="/go/pickle-for-a-purpose" style="display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--ink);text-decoration:none;font-weight:600;min-height:44px" data-track="cta_click" data-cta="home_p4p_register">Register now</a>
+                        <a href="/go/pickle-for-a-purpose" style="display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--ink);text-decoration:none;font-weight:600;min-height:44px" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="home_card">Register now</a>
                     </div>
                     <p style="color:var(--ink-mute);font-size:.82rem;line-height:1.55;max-width:64ch;margin:18px 0 0">Organized by Echelon LA Metro in support of The Salvation Army. Registration, payments, and event operations are handled by the organizers &mdash; PickleCue is helping promote it.</p>
                 </article>
@@ -1678,7 +1678,9 @@
             if (!el) return;
             window.track(el.getAttribute('data-track'), {
                 cta: el.getAttribute('data-cta') || null,
-                href: el.getAttribute('href') || null
+                href: el.getAttribute('href') || null,
+                event_slug: el.getAttribute('data-event-slug') || undefined,
+                placement: el.getAttribute('data-placement') || undefined
             });
         });
 
