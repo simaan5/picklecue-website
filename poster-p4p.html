@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pickle for a Purpose — Instagram carousel export</title>
+  <link rel="stylesheet" href="/fonts.css">
+  <style>
+    /* ------------------------------------------------------------------
+       INTERNAL TOOL — not linked from the site, noindex.
+       Renders four 1080x1350 (4:5 feed) Instagram slides in the CAMPAIGN design
+       language (dark forest canvas, lime accent, Instrument Sans) —
+       matching the event page. Export: `npm run export:carousel`.
+
+       NOTE ON LOGOS: no Echelon or Salvation Army logo. Organization
+       names are plain text only. Do not add third-party logo files.
+       ------------------------------------------------------------------ */
+    :root{
+      --bg:#0C110E; --card:#141B16;
+      --ink:#F4F7F2; --soft:#C3CDC4; --mute:#95A29A;
+      --lime:#BFE84F;
+      --rule:rgba(235,255,235,0.10); --rule-strong:rgba(235,255,235,0.22);
+      --f-body:'Instrument Sans',-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#1A1F23;color:var(--ink);font-family:var(--f-body);padding:28px}
+    .toolbar{position:sticky;top:0;z-index:10;background:#1A1F23;padding:12px 0 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(237,233,223,.14);margin-bottom:26px}
+    .toolbar h1{font-weight:650;font-size:1.2rem;margin:0 16px 0 0}
+    .hint{font-size:12px;color:#8A9097;letter-spacing:.02em}
+    .sheet{display:flex;flex-wrap:wrap;gap:26px}
+    .slot{display:flex;flex-direction:column;gap:10px;width:454px;height:590px}
+    .slot > .cap{font-size:12px;letter-spacing:.06em;color:#8A9097}
+
+    /* Slides authored at exactly 1080x1080, scaled for preview only. */
+    .slide{
+      width:1080px;height:1350px;flex:none;position:relative;overflow:hidden;
+      background:
+        radial-gradient(110% 80% at 82% -8%, rgba(191,232,79,0.06), transparent 55%),
+        var(--bg);
+      color:var(--ink);padding:92px;display:flex;flex-direction:column;
+      transform:scale(.42);transform-origin:top left;
+    }
+
+    .badge{align-self:flex-start;display:inline-flex;align-items:center;padding:14px 26px;border:2px solid rgba(191,232,79,0.5);border-radius:999px;font-size:26px;font-weight:500;color:var(--lime);background:rgba(12,17,14,0.55);white-space:nowrap}
+    .kick{font-size:26px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+    .disp{font-weight:650;letter-spacing:-.025em;line-height:1.0;margin:0;color:var(--ink)}
+    .t-hero{font-size:118px}
+    .t-mid{font-size:88px}
+    .spacer{flex:1}
+    .meta{font-size:32px;font-weight:500;color:var(--ink);line-height:1.65}
+    .meta .dim{color:var(--soft)}
+    .foot{border-top:2px solid var(--rule);padding-top:30px;font-size:21px;font-weight:500;color:var(--mute);display:flex;justify-content:space-between;align-items:center;gap:20px}
+    .foot .org{white-space:nowrap}
+    .brandrow{display:flex;align-items:center;gap:14px;white-space:nowrap}
+    .brandrow img{height:29px;width:auto;display:block}
+    .brandrow img.mark{height:36px;width:36px;border-radius:9px}
+    ul.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:38px}
+    ul.list li{font-size:42px;font-weight:500;line-height:1.25;color:var(--ink);display:flex;gap:24px;align-items:baseline}
+    ul.list li::before{content:"";width:13px;height:13px;flex:none;border-radius:50%;background:var(--lime);transform:translateY(-5px)}
+    .note{font-size:28px;color:var(--soft);line-height:1.5;max-width:34ch}
+
+    /* Slide 1: photo background with legibility gradient */
+    #s1{padding:0}
+    #s1 .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center}
+    #s1 .scrim{position:absolute;inset:0;background:
+      linear-gradient(180deg, rgba(12,17,14,0.55) 0%, rgba(12,17,14,0.12) 38%, rgba(12,17,14,0.82) 78%, rgba(12,17,14,0.94) 100%)}
+    #s1 .content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding:92px}
+
+    /* Slide 4 pricing */
+    .prices{display:flex;gap:26px;margin-top:8px}
+    .price{flex:1;background:var(--card);border:2px solid var(--rule);border-radius:26px;padding:38px 36px}
+    .price .lbl{display:block;font-size:30px;font-weight:600;color:var(--ink)}
+    .price .amt{display:block;font-size:96px;font-weight:650;line-height:1;color:var(--lime);margin:14px 0 4px;letter-spacing:-0.02em}
+    .price .amt small{font-size:28px;font-weight:500;color:var(--soft);margin-left:10px;letter-spacing:0}
+    .price .was{display:block;font-size:26px;color:var(--soft);margin-top:14px;padding-top:14px;border-top:2px solid var(--rule)}
+    .cta-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:14px;padding:26px 44px;border-radius:999px;background:var(--lime);color:#0C110E;font-size:34px;font-weight:650}
+    .handle{font-size:30px;font-weight:500;color:var(--soft)}
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h1>Pickle for a Purpose — carousel</h1>
+    <span class="hint">1080 × 1350 (4:5 feed) · campaign design · no third-party logos &nbsp;—&nbsp; export with <code style="color:#EDE9DF">npm run export:carousel</code></span>
+  </div>
+
+  <div class="sheet" id="sheet">
+
+    <div class="slot">
+      <div class="cap"><span>Slide 1 — hero (tag @echelonlosangeles on this slide in the app)</span></div>
+      <div class="slide" id="s1">
+        <img class="bg" src="images/p4p-hero-golden.jpg" alt="">
+        <div class="scrim"></div>
+        <div class="content">
+          <span class="badge">Community event supported by PickleCue</span>
+          <div class="spacer"></div>
+          <h2 class="disp t-hero">Pickle for<br>a Purpose</h2>
+          <p class="meta" style="margin:34px 0 0">
+            Saturday, August 29, 2026 &middot; 5&ndash;8&nbsp;PM<br>
+            <span class="dim">Peninsula Racquet Club &middot; Rancho Palos Verdes</span>
+          </p>
+          <div class="foot" style="margin-top:44px">
+            <span class="org">Organized by Echelon LA Metro</span>
+            <span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Slide 2 — who can play</span></div>
+      <div class="slide" id="s2">
+        <div class="kick">Who can play</div>
+        <h2 class="disp t-mid" style="margin-top:26px">All levels.<br>One purpose.</h2>
+        <ul class="list" style="margin-top:60px">
+          <li>Mixed doubles</li>
+          <li>Beginner through advanced</li>
+          <li>Register solo or bring a partner</li>
+          <li>Pro coaching</li>
+          <li>Beginner clinic</li>
+        </ul>
+        <div class="spacer"></div>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Slide 3 — what's included</span></div>
+      <div class="slide" id="s3">
+        <div class="kick">What&rsquo;s included</div>
+        <h2 class="disp t-mid" style="margin-top:26px">A night of pickleball &amp; community.</h2>
+        <ul class="list" style="margin-top:54px;gap:26px">
+          <li>Awards</li>
+          <li>Raffle prizes</li>
+          <li>Welcome bag</li>
+          <li>Light snacks &amp; non-alcoholic beverages</li>
+          <li>Networking mixer</li>
+        </ul>
+        <div class="spacer"></div>
+        <p class="note" style="margin:0 0 30px">Proceeds support Salvation Army LA Metro programs serving local communities.</p>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Slide 4 — CTA</span></div>
+      <div class="slide" id="s4">
+        <div class="kick">Early-bird pricing</div>
+        <h2 class="disp t-mid" style="margin-top:26px">Ready to play?</h2>
+        <div class="prices" style="margin-top:52px">
+          <div class="price">
+            <span class="lbl">Players</span>
+            <span class="amt">$60<small>early bird</small></span>
+            <span class="was">Regularly $100</span>
+          </div>
+          <div class="price">
+            <span class="lbl">General admission</span>
+            <span class="amt">$45<small>early bird</small></span>
+            <span class="was">Regularly $75</span>
+          </div>
+        </div>
+        <p class="note" style="margin:30px 0 0">Early-bird pricing available for a limited time.</p>
+        <div class="spacer"></div>
+        <div class="cta-pill">Register now &mdash; link in bio</div>
+        <p class="handle" style="margin:26px 0 34px">@echelonlosangeles</p>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* Preview-only page. PNG export is done by tests/export-carousel.mjs, which
+   drives a real browser (see the note in that file for why in-page
+   foreignObject rasterisation is not used). */
+</script>
+</body>
+</html>

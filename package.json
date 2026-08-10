@@ -3,7 +3,8 @@
   "private": true,
   "description": "Static site + Cloudflare Pages Functions (league link pages, OG image generation).",
   "scripts": {
-    "test": "node tests/responsive.test.mjs"
+    "test": "node tests/responsive.test.mjs",
+    "export:carousel": "node tests/export-carousel.mjs"
   },
   "dependencies": {
     "workers-og": "^0.0.25"

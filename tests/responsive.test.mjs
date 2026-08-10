@@ -18,7 +18,8 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PAGES = [
   'index.html', 'privacy.html', 'terms.html', 'support.html',
   'organizer-templates.html', 'players.html', 'organizers.html',
-  'clubs.html', '404.html',
+  'clubs.html', '404.html', 'community.html',
+  'events/pickle-for-a-purpose/index.html',
 ];
 const WIDTHS = [320, 344, 360, 375, 390, 393, 402, 414, 430, 768, 820, 1024, 1280, 1440];
 const MOBILE_MAX = 860;           // shell breakpoint: <=860 burger, >=861 desktop nav

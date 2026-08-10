@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pickle for a Purpose — Instagram stories export</title>
+  <link rel="stylesheet" href="/fonts.css">
+  <style>
+    /* INTERNAL TOOL — 1080x1920 story frames in the campaign design
+       (dark forest, lime, Instrument Sans), matching the carousel.
+       Safe zones: content inside 280px top / 380px bottom padding.
+       Export: `node tests/export-stories.mjs`. No third-party logos. */
+    :root{
+      --bg:#0C110E; --card:#141B16;
+      --ink:#F4F7F2; --soft:#C3CDC4; --mute:#95A29A;
+      --lime:#BFE84F;
+      --rule:rgba(235,255,235,0.10);
+      --f-body:'Instrument Sans',-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#1A1F23;color:var(--ink);font-family:var(--f-body);padding:28px}
+    .toolbar{position:sticky;top:0;z-index:10;background:#1A1F23;padding:12px 0 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(237,233,223,.14);margin-bottom:26px}
+    .toolbar h1{font-weight:650;font-size:1.2rem;margin:0 16px 0 0}
+    .hint{font-size:12px;color:#8A9097}
+    .sheet{display:flex;flex-wrap:wrap;gap:26px}
+    .slot{display:flex;flex-direction:column;gap:10px;width:410px;height:750px}
+    .slot > .cap{font-size:12px;color:#8A9097}
+    .frame{
+      width:1080px;height:1920px;flex:none;position:relative;overflow:hidden;
+      background:radial-gradient(110% 60% at 82% -6%, rgba(191,232,79,0.06), transparent 55%), var(--bg);
+      color:var(--ink);padding:280px 100px 380px;display:flex;flex-direction:column;
+      transform:scale(.38);transform-origin:top left;
+    }
+    .badge{align-self:flex-start;display:inline-flex;align-items:center;padding:16px 30px;border:2px solid rgba(191,232,79,0.5);border-radius:999px;font-size:30px;font-weight:500;color:var(--lime);background:rgba(12,17,14,0.55);white-space:nowrap}
+    .kick{font-size:28px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+    .disp{font-weight:650;letter-spacing:-.025em;line-height:1.02;margin:0;color:var(--ink)}
+    .t-hero{font-size:132px}
+    .t-mid{font-size:104px}
+    .spacer{flex:1}
+    .meta{font-size:34px;font-weight:500;color:var(--ink);line-height:1.7}
+    .meta .dim{color:var(--soft)}
+    .sub{font-size:44px;font-weight:500;color:var(--soft);line-height:1.5;max-width:24ch;margin:0}
+    .foot{border-top:2px solid var(--rule);padding-top:34px;font-size:23px;font-weight:500;color:var(--mute);display:flex;justify-content:space-between;align-items:center;gap:20px}
+    .foot .org{white-space:nowrap}
+    .brandrow{display:flex;align-items:center;gap:14px;white-space:nowrap}
+    .brandrow img{height:30px;width:auto;display:block}
+    .brandrow img.mark{height:38px;width:38px;border-radius:9px}
+    ul.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:36px}
+    ul.list li{font-size:48px;font-weight:500;line-height:1.25;color:var(--ink);display:flex;gap:26px;align-items:baseline}
+    ul.list li::before{content:"";width:15px;height:15px;flex:none;border-radius:50%;background:var(--lime);transform:translateY(-5px)}
+    .note{font-size:32px;color:var(--soft);line-height:1.5;max-width:28ch}
+    #st1{padding:0}
+    #st1 .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:64% center}
+    #st1 .scrim{position:absolute;inset:0;background:linear-gradient(180deg, rgba(12,17,14,0.6) 0%, rgba(12,17,14,0.15) 34%, rgba(12,17,14,0.85) 74%, rgba(12,17,14,0.95) 100%)}
+    #st1 .content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding:280px 100px 380px}
+    .prices{display:flex;flex-direction:column;gap:28px;margin-top:14px}
+    .price{background:var(--card);border:2px solid var(--rule);border-radius:28px;padding:40px 44px;display:flex;align-items:baseline;justify-content:space-between;gap:24px}
+    .price .col{display:flex;flex-direction:column;gap:8px}
+    .price .lbl{font-size:32px;font-weight:600;color:var(--ink)}
+    .price .was{font-size:26px;color:var(--soft)}
+    .price .amt{font-size:104px;font-weight:650;line-height:1;color:var(--lime);letter-spacing:-0.02em}
+    .cta-pill{align-self:flex-start;display:inline-flex;align-items:center;padding:28px 48px;border-radius:999px;background:var(--lime);color:#0C110E;font-size:36px;font-weight:650}
+    .handle{font-size:32px;font-weight:500;color:var(--soft)}
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h1>Pickle for a Purpose — stories</h1>
+    <span class="hint">1080 × 1920 · campaign design · IG-safe zones · export with <code style="color:#EDE9DF">node tests/export-stories.mjs</code></span>
+  </div>
+
+  <div class="sheet" id="sheet">
+
+    <div class="slot">
+      <div class="cap"><span>Story 1 — announcement (post right after the carousel)</span></div>
+      <div class="frame" id="st1">
+        <img class="bg" src="images/p4p-hero-golden.jpg" alt="">
+        <div class="scrim"></div>
+        <div class="content">
+          <span class="badge">Community event supported by PickleCue</span>
+          <div class="spacer"></div>
+          <div class="kick" style="margin-bottom:26px">Registration open</div>
+          <h2 class="disp t-hero">Pickle for<br>a Purpose</h2>
+          <p class="meta" style="margin:40px 0 0">
+            Saturday, August 29, 2026 &middot; 5&ndash;8&nbsp;PM<br>
+            <span class="dim">Peninsula Racquet Club &middot; Rancho Palos Verdes</span>
+          </p>
+          <div class="foot" style="margin-top:48px">
+            <span class="org">Organized by Echelon LA Metro</span>
+            <span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Story 2 — the night</span></div>
+      <div class="frame" id="st2">
+        <div class="kick">What&rsquo;s included</div>
+        <h2 class="disp t-mid" style="margin-top:30px">A night of pickleball &amp; community.</h2>
+        <ul class="list" style="margin-top:70px">
+          <li>Pro coaching &amp; beginner clinic</li>
+          <li>Awards &amp; raffle prizes</li>
+          <li>Welcome bags</li>
+          <li>Snacks &amp; non-alcoholic drinks</li>
+          <li>Networking mixer</li>
+        </ul>
+        <div class="spacer"></div>
+        <p class="note" style="margin:0 0 40px">Proceeds support Salvation Army LA Metro programs serving local communities.</p>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Story 3 — no partner needed</span></div>
+      <div class="frame" id="st3">
+        <div class="kick">Everyone is welcome</div>
+        <h2 class="disp t-mid" style="margin-top:30px">No partner?<br>No problem.</h2>
+        <p class="sub" style="margin-top:64px">Register solo and the organizers will pair you by skill level &mdash; or bring a partner.</p>
+        <p class="sub" style="margin-top:44px">Mixed doubles, beginner through advanced.</p>
+        <div class="spacer"></div>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="cap"><span>Story 4 — CTA (add the LINK STICKER under the pill)</span></div>
+      <div class="frame" id="st4">
+        <div class="kick">Early-bird pricing</div>
+        <h2 class="disp t-mid" style="margin-top:30px">Ready to play?</h2>
+        <div class="prices" style="margin-top:60px">
+          <div class="price">
+            <span class="col"><span class="lbl">Players</span><span class="was">Regularly $100</span></span>
+            <span class="amt">$60</span>
+          </div>
+          <div class="price">
+            <span class="col"><span class="lbl">General admission</span><span class="was">Regularly $75</span></span>
+            <span class="amt">$45</span>
+          </div>
+        </div>
+        <p class="note" style="margin:36px 0 0">Early-bird pricing available for a limited time.</p>
+        <div class="spacer"></div>
+        <div class="cta-pill">Register &mdash; tap the link below</div>
+        <p class="handle" style="margin:28px 0 40px">@echelonlosangeles</p>
+        <div class="foot"><span class="org">Organized by Echelon LA Metro</span><span class="brandrow"><img class="mark" src="images/app-icon-512.png" alt=""><img src="images/wordmark-on-dark.png" alt="PickleCue"></span></div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* Preview-only page. PNG export via tests/export-stories.mjs. */
+</script>
+</body>
+</html>

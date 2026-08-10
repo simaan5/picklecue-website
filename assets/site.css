@@ -1,3 +1,5 @@
+.masthead-nav a[aria-current="page"] { color: var(--court); text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1.5px; }
+
 /* =========================================================================
    PickleCue — shared site shell (tokens, masthead, mobile menu, footer)
    One source of truth for every marketing/legal page. Page-specific styles

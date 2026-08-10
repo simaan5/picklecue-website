@@ -1,0 +1,36 @@
+PICKLE FOR A PURPOSE — POSTING RUN SHEET
+(post only after organizer approval + signed agreement)
+
+FEED POST (4-slide carousel, 1080x1350 4:5, campaign design):
+1. Upload the s1-s4 files (4:5 feed exports) in order - do NOT
+   upload the story files to the feed.
+2. Caption: images/social/pickle-for-a-purpose-caption.txt
+3. TAG @echelonlosangeles directly on slide 1 (photo tag).
+4. Send a COLLABORATOR INVITATION to @echelonlosangeles on the post -
+   if they accept, the post appears on both profiles and combines
+   engagement. (Better than a plain tag; fall back to the tag if their
+   account cannot accept.)
+5. Set the post LOCATION to Peninsula Racquet Club (or Rancho Palos
+   Verdes if the venue is not in Instagram's location list).
+6. Bio link during the campaign:
+   https://www.picklecue.com/go/pickle-for-a-purpose
+   (www subdomain on purpose - apex universal links are broken)
+
+STORIES (post immediately after the carousel, same session):
+1. story1 - announcement. Tag @echelonlosangeles (small, corner).
+2. story2 - what's included.
+3. story3 - "No partner? No problem." Optional poll sticker in the
+   lower third, inside the safe zone.
+4. story4 - CTA. REQUIRED: add Instagram's LINK STICKER pointing to
+   https://www.picklecue.com/go/pickle-for-a-purpose and place it
+   directly under the "Register - tap the link below" pill. The link
+   sticker sends people straight to registration instead of making
+   them hunt in the bio.
+
+WORDING RULES (approved, do not vary):
+- "Community event supported by PickleCue" - exact.
+- "Organized by Echelon LA Metro" - never "hosted by"/"presented by".
+- NO "official partner", NO "Salvation Army partner", NO PickleCue x
+  Salvation Army logo treatment, no third-party logos anywhere.
+- Do NOT publish an early-bird end date (Aug 10 is tentative). Update
+  the story/caption once the organizers confirm a firm date.
