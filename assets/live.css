@@ -301,16 +301,15 @@ body.bv-tv .cb-score { font-size: 44px; }
    existing bracket rule (cards, connectors, seeds, avatars, champion,
    standings) re-skins itself — light/dark site theme has no effect here,
    exactly like the app's fixed-dark tournament screens. ---- */
-.bvx {
-    --paper: #10150F; --paper-2: #1A211C;
-    --ink: #F2F5EF; --ink-soft: #C6CEC4; --ink-mute: #92A094;
-    --rule: rgba(255,255,255,0.09); --rule-strong: rgba(255,255,255,0.2);
-    --court: #3EDC85; --live: #3EDC85;
-    background: radial-gradient(circle at 88% -4%, rgba(62,220,133,0.16), transparent 42%), #10150F;
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 20px;
-    padding: 14px 14px 18px;
-}
+/* NOTE (Stage 2): a first `.bvx { ... }` token block used to sit here. It was
+   unreachable dead cascade state: the later `.bvx` block (the BracketCanvasView
+   1:1 port, below) declares every property this one did, at identical
+   specificity, so nothing here ever applied. Verified in-browser before
+   removal - every effective .bvx token resolved to the later block
+   (--paper #050707, --court #00C27A, --live #A7FF5C), and border,
+   border-radius and padding were byte-identical between the two. Removing it
+   is a visual no-op; keeping it meant anyone reading this file saw green
+   #3EDC85 and a #10150F backdrop that the page never used. */
 .bvx .bv-card { border-radius: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); animation: bvxIn 0.45s var(--ease) both; }
 .bvx .bv-tappable { transition: transform 0.18s var(--ease), border-color 0.18s var(--ease), box-shadow 0.18s var(--ease); }
 .bvx .bv-tappable:hover { transform: translateY(-2px); border-color: var(--court); box-shadow: 0 8px 20px rgba(0,0,0,0.45), 0 0 0 1px rgba(62,220,133,0.4); }

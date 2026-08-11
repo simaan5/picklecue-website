@@ -31,6 +31,17 @@
     <style>
         /* Print-first poster: always light/paper so it prints clean. */
         :root {
+            /* Stage 2 note: this page is deliberately STANDALONE. It links only
+               /fonts.css, never /assets/site.css, so it does not consume the
+               canonical token layer and these five values are not a stale copy
+               of it. The Stage 2 inventory first flagged --rule 0.14 as
+               replication drift against the shared 0.12; that was a false
+               positive, since there is no shared token here to drift from.
+               0.14 is retained: this artefact is printed, where a 0.12 hairline
+               washes out, and --rule draws the card outline, the QR box and the
+               dashed sponsor divider. Over --paper the two resolve to #D4D1CC
+               and #D8D6D0, a 13/765 delta. If this page is ever migrated onto
+               site.css, revisit this line deliberately rather than by sweep. */
             --paper: #F4F1EA; --ink: #0C0F12; --ink-soft: #3D4248; --ink-mute: #6E7278;
             --rule: rgba(12,15,18,0.14); --court: #2E5E4E;
             --f-display: 'Fraunces', Georgia, serif;

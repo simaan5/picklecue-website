@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" style="color-scheme: light dark;">
 <head>
+    <meta charset="UTF-8">
 <!-- Google tag (gtag.js) with Consent Mode v2 -->
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -22,7 +23,6 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XCV417L0J8"></script>
 <script defer src="/assets/consent.js"></script>
 
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <!-- Apply saved theme before first paint to prevent a light/dark flash -->
@@ -105,30 +105,21 @@
            BEFORE this block so page rules keep override priority.
            ===================================================================== */
         :root {
-            --paper:      #F4F1EA;   /* canvas */
-            --paper-2:    #EAE5D9;   /* subtle card fill */
-            --ink:        #0C0F12;   /* primary type */
-            --ink-soft:   #3D4248;   /* secondary type */
-            --ink-mute:   #6E7278;   /* caption / meta */
-            --rule:       rgba(12,15,18,0.12);
-            --rule-strong:rgba(12,15,18,0.28);
-            --court:      #2E5E4E;   /* deep forest — primary brand */
-            --court-deep: #1F4538;
-            --citron:     #C8E04E;   /* high-voltage highlight */
-            --clay:       #D3511A;   /* warm signal (rare) */
+            /* Stage 2: this block used to re-declare the whole primitive
+               palette, and because it loads AFTER /assets/site.css it silently
+               won. That is how the palette drifted between six files, and it
+               is why the AA contrast fix had to land here as well as in the
+               canonical layer. Only genuinely page-specific values remain;
+               everything else is inherited from site.css.                  */
 
-            --f-display:  'Fraunces', 'Fraunces Fallback', 'Iowan Old Style', Georgia, serif;
-            --f-body:     'Instrument Sans', 'Instrument Sans Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-            --f-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-
-            --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
-            --page-max:   1240px;
-            --gutter:     clamp(20px, 4vw, 44px);
-
-            /* Theme-dependent values, driven by tokens so manual theme toggle works */
+            /* Page-specific: the homepage grain treatment. */
             --grain-blend: multiply;
             --grain-dot:   rgba(12,15,18,0.035);
-            --masthead-bg: rgba(244,241,234,0.88);
+
+            /* Local alias kept because homepage rules already consume this
+               name; it points at the canonical primitive rather than
+               repeating the hex.                                           */
+            --court-deep: var(--green-950);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -521,7 +512,13 @@
         .pitch-body p strong { color: var(--ink); font-weight: 600; }
         .persona-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            /* Asymmetric on purpose. Equal thirds implied three equivalent
+               audiences; players is the broadest, so it holds a tall dominant
+               cell while organizers and clubs stack beside it. */
+            grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+            grid-template-areas:
+                "players organizers"
+                "players clubs";
             gap: 0;
             border-top: 1px solid var(--rule-strong);
             border-bottom: 1px solid var(--rule-strong);
@@ -535,6 +532,19 @@
             border-right: 1px solid var(--rule);
         }
         .persona-card:last-child { border-right: 0; }
+        .persona-card--players    { grid-area: players; }
+        .persona-card--organizers { grid-area: organizers; border-right: 0; border-bottom: 1px solid var(--rule); }
+        .persona-card--clubs      { grid-area: clubs; border-right: 0; }
+        .persona-card--players h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+        .persona-card--players p  { font-size: 16px; max-width: 34ch; }
+        @media (max-width: 760px) {
+            .persona-grid {
+                grid-template-columns: minmax(0, 1fr);
+                grid-template-areas: "players" "organizers" "clubs";
+            }
+            .persona-card { border-right: 0; border-bottom: 1px solid var(--rule); }
+            .persona-card--clubs { border-bottom: 0; }
+        }
         .persona-card h3 { font-size: clamp(1.2rem, 1.9vw, 1.45rem); }
         .persona-card p { color: var(--ink-soft); font-size: 15px; line-height: 1.58; }
         .persona-card a {
@@ -549,6 +559,17 @@
             padding-bottom: 2px;
         }
         .persona-card a:hover { color: var(--ink); }
+
+        /* Dominant-cell weighting. Declared AFTER the generic .persona-card
+           rules on purpose: `.persona-card--players h3` and `.persona-card h3`
+           have identical specificity (0,1,1), so source order decides. Placed
+           earlier, these silently lost - the heading stayed 23.2px and the link
+           kept margin-top:auto, stranding it 160px below the copy in a cell
+           that spans two rows. */
+        .persona-card--players    { padding: clamp(28px, 4vw, 44px); }
+        .persona-card--players h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+        .persona-card--players p  { font-size: 16px; max-width: 34ch; }
+        .persona-card--players a  { margin-top: 4px; }
 
 
         /* =====================================================================
@@ -732,12 +753,20 @@
             right: -48px; top: 50%;
             transform: translateY(-50%);
             display: flex; flex-direction: column;
-            gap: 10px;
+            /* Was 10px. The dots now carry 8px padding a side, so the visual
+               rhythm is preserved without the targets overlapping. */
+            gap: 0;
         }
         .reel-dot {
+            /* 8px visual dot inside a 24x24 target. WCAG 2.5.8 wants 24x24
+               minimum; these were 8x8. content-box + background-clip keeps the
+               dot the same size on screen while the padding becomes touchable
+               area rather than painted area. */
+            box-sizing: content-box;
             width: 8px; height: 8px; border-radius: 50%;
             background: var(--rule-strong);
-            border: 0; padding: 0;
+            background-clip: content-box;
+            border: 0; padding: 8px;
             cursor: pointer;
             transition: background 0.2s var(--ease), transform 0.2s var(--ease);
         }
@@ -995,95 +1024,6 @@
             .hero h1 .mark::before { inset: 82% -2px 4% -2px; }
         }
 
-        /* =====================================================================
-           Waitlist popup (lazy, one-shot)
-           ===================================================================== */
-        .popup-backdrop {
-            position: fixed; inset: 0;
-            background: rgba(12, 15, 18, 0.55);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            z-index: 500;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s var(--ease);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .popup-backdrop[data-open="true"] {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .popup-card {
-            position: relative;
-            width: 100%;
-            max-width: 480px;
-            background: var(--paper);
-            border: 1px solid var(--rule-strong);
-            border-radius: 24px;
-            padding: clamp(32px, 5vw, 48px);
-            box-shadow: 0 40px 80px -30px rgba(12,15,18,0.6);
-            transform: translateY(12px) scale(0.98);
-            opacity: 0;
-            transition: transform 0.45s var(--ease), opacity 0.35s var(--ease);
-        }
-        .popup-backdrop[data-open="true"] .popup-card {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-        }
-        .popup-card::before {
-            content: "";
-            position: absolute;
-            inset: 0 0 auto 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--court) 0%, var(--citron) 100%);
-            border-radius: 24px 24px 0 0;
-        }
-        .popup-close {
-            position: absolute;
-            top: 16px; right: 16px;
-            width: 36px; height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            color: var(--ink-mute);
-            background: transparent;
-            font-family: var(--f-mono);
-            font-size: 18px;
-            line-height: 1;
-            transition: background 0.2s var(--ease), color 0.2s var(--ease);
-        }
-        .popup-close:hover { background: var(--paper-2); color: var(--ink); }
-        .popup-card .kicker { margin-bottom: 18px; }
-        .popup-card h2 {
-            font-family: var(--f-display);
-            font-size: clamp(1.6rem, 3.2vw, 2.2rem);
-            font-weight: 500;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            color: var(--ink);
-            font-variation-settings: "opsz" 72, "SOFT" 30;
-            margin-bottom: 14px;
-            max-width: 18ch;
-        }
-        .popup-card h2 em {
-            font-style: italic;
-            color: var(--court);
-            font-weight: 400;
-            font-variation-settings: "opsz" 72, "SOFT" 100;
-        }
-        .popup-card p.lede-sm {
-            color: var(--ink-soft);
-            font-size: 15.5px;
-            line-height: 1.55;
-            margin-bottom: 24px;
-            max-width: 40ch;
-        }
-        .popup-card .waitlist-form { max-width: none; }
-        .popup-card .waitlist-note { margin-top: 14px; }
 
         /* =====================================================================
            Theming — system preference + manual override via data-theme
@@ -1093,35 +1033,17 @@
 
         /* Dark token set — applied when system prefers dark AND user hasn't
            forced light, OR when user has forced dark. */
+        /* Stage 2: the dark palette is owned by /assets/site.css. Only the
+           homepage-specific grain values are overridden here. */
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
-                --paper:      #0F1214;
-                --paper-2:    #1A1F23;
-                --ink:        #EDE9DF;
-                --ink-soft:   #B8BEC5;
-                --ink-mute:   #8A9097;
-                --rule:       rgba(237,233,223,0.12);
-                --rule-strong:rgba(237,233,223,0.28);
-                --court:      #6FB39B;
-                --clay:       #F08250;
                 --grain-blend: screen;
                 --grain-dot:   rgba(237,233,223,0.045);
-                --masthead-bg: rgba(15,18,20,0.82);
             }
         }
         :root[data-theme="dark"] {
-            --paper:      #0F1214;
-            --paper-2:    #1A1F23;
-            --ink:        #EDE9DF;
-            --ink-soft:   #B8BEC5;
-            --ink-mute:   #8A9097;
-            --rule:       rgba(237,233,223,0.12);
-            --rule-strong:rgba(237,233,223,0.28);
-            --court:      #6FB39B;
-            --clay:       #F08250;
             --grain-blend: screen;
             --grain-dot:   rgba(237,233,223,0.045);
-            --masthead-bg: rgba(15,18,20,0.82);
         }
 
         /* Dark-mode specific tweaks that aren't just token swaps */
@@ -1133,11 +1055,9 @@
             :root:not([data-theme="light"]) .hero h1 .mark::before { opacity: 0.7; }
             :root:not([data-theme="light"]) .catalog-num { color: var(--citron); }
             :root:not([data-theme="light"]) .waitlist-form { background: var(--paper-2); }
-            :root:not([data-theme="light"]) .popup-backdrop { background: rgba(0,0,0,0.65); }
         }
         :root[data-theme="dark"] .catalog-num { color: var(--citron); }
         :root[data-theme="dark"] .waitlist-form { background: var(--paper-2); }
-        :root[data-theme="dark"] .popup-backdrop { background: rgba(0,0,0,0.65); }
 
     </style>
     <!-- Fonts: self-hosted, preload the two critical latin subsets -->
@@ -1152,8 +1072,8 @@
         <div class="page masthead-row">
             <a href="/" class="masthead-logo" aria-label="PickleCue home">
                 <img src="images/app-icon-120.png" alt="" width="30" height="30" aria-hidden="true">
-                <img class="masthead-wordmark wm-light" src="images/wordmark-on-light.png" alt="" height="21" aria-hidden="true">
-                <img class="masthead-wordmark wm-dark" src="images/wordmark-on-dark.png" alt="" height="21" aria-hidden="true">
+                <img class="masthead-wordmark wm-light" src="images/wordmark-on-light.png" alt="" width="126" height="21" aria-hidden="true">
+                <img class="masthead-wordmark wm-dark" src="images/wordmark-on-dark.png" alt="" width="124" height="21" aria-hidden="true">
             </a>
             <nav aria-label="Primary">
                 <ul class="masthead-nav">
@@ -1205,26 +1125,6 @@
         </nav>
     </div>
 
-    <!-- Waitlist popup (lazy — 10s delay, shown at most once per browser) -->
-    <div class="popup-backdrop" id="waitlistPopup" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-hidden="true">
-        <div class="popup-card">
-            <button type="button" class="popup-close" id="popupClose" aria-label="Close">✕</button>
-            <span class="kicker no-rule">One-time invite</span>
-            <h2 id="popupTitle">First in line, <em>at launch.</em></h2>
-            <p class="lede-sm">PickleCue is coming soon to iOS. Join the waitlist and we&rsquo;ll email you the day it goes live. One email. No spam.</p>
-            <form class="waitlist-form" id="waitlistFormPopup" novalidate aria-label="Join the waitlist (popup)">
-                <label class="kicker" for="waitlist-email-popup" style="position:absolute;left:-9999px;">Email address</label>
-                <input type="email" id="waitlist-email-popup" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgPopup" />
-                <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true" />
-                <button type="submit" class="btn-pill" data-track="cta_click" data-cta="popup_waitlist">
-                    Notify me
-                    <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
-                </button>
-            </form>
-            <p class="waitlist-msg" id="waitlistMsgPopup" role="status" aria-live="polite"></p>
-            <p class="waitlist-note">Unsubscribe in one click. Privacy policy applies.</p>
-        </div>
-    </div>
 
     <main id="main">
 
@@ -1287,7 +1187,6 @@
         <section class="chapter" id="pitch" aria-label="What PickleCue is">
             <div class="page">
                 <div class="chapter-head">
-                    <span class="kicker">01 / What it is</span>
                     <h2>A single, quiet home for every part of the game.</h2>
                 </div>
                 <div class="pitch-grid">
@@ -1306,21 +1205,20 @@
         <section class="chapter" id="personas" aria-label="Who PickleCue is for">
             <div class="page">
                 <div class="chapter-head">
-                    <span class="kicker">01.5 / Who it is for</span>
                     <h2>Choose your lane: player, organizer, or club.</h2>
                 </div>
                 <div class="persona-grid">
-                    <article class="persona-card">
+                    <article class="persona-card persona-card--players">
                         <h3>For players</h3>
                         <p>Find courts, join games, and keep match history without juggling group chats and notes.</p>
                         <a href="players.html">See player page</a>
                     </article>
-                    <article class="persona-card">
+                    <article class="persona-card persona-card--organizers">
                         <h3>For organizers</h3>
                         <p>Run leagues and tournaments with cleaner standings, bracket workflows, and communication.</p>
                         <a href="organizers.html">See organizer page</a>
                     </article>
-                    <article class="persona-card">
+                    <article class="persona-card persona-card--clubs">
                         <h3>For clubs &amp; venues</h3>
                         <p>Give your community one operational home for open play, events, and recurring participation.</p>
                         <a href="clubs.html">See club page</a>
@@ -1332,12 +1230,10 @@
         <section class="chapter" id="features" aria-label="Features">
             <div class="page">
                 <div class="chapter-head">
-                    <span class="kicker">02 / Features</span>
                     <h2>Built for every way the game actually gets played.</h2>
                 </div>
                 <div class="catalog">
                     <article class="catalog-item">
-                        <span class="catalog-num">01</span>
                         <div>
                             <h3>Courts, everywhere you play.</h3>
                             <p>A verified U.S. map of 22,000+ public and private courts — surface, lights, open-play schedule, amenities, reviews. Search, filter, and navigate in a tap. Global coverage is on the way.</p>
@@ -1349,7 +1245,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">02</span>
                         <div>
                             <h3>Games, organized without a group chat.</h3>
                             <p>Post an open game, set skill and capacity, and let players RSVP. Waitlists, check-ins, and reminders handled. Keep it public or invite-only.</p>
@@ -1361,7 +1256,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">03</span>
                         <div>
                             <h3>Leagues that run themselves.</h3>
                             <p>Round robin, ladder, team play — your league, your rules. Standings, stats, and schedules update automatically as matches come in.</p>
@@ -1373,7 +1267,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">04</span>
                         <div>
                             <h3>Tournaments with real brackets.</h3>
                             <p>Single and double elimination brackets you can share with a link. Live scoring, seeding, and a share page that works even if your players don&rsquo;t have the app.</p>
@@ -1385,7 +1278,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">05</span>
                         <div>
                             <h3>A personal match log.</h3>
                             <p>Log a score in seconds. Track your match history, partners, opponents, and venues. Opt in to DUPR or keep it all private — your call.</p>
@@ -1397,7 +1289,6 @@
                         </div>
                     </article>
                     <article class="catalog-item">
-                        <span class="catalog-num">06</span>
                         <div>
                             <h3>Safety &amp; privacy, by design.</h3>
                             <p>Block, mute, report. Private profiles. Location precision you control. No ads, no tracking, no data for sale — ever. See the privacy policy for specifics.</p>
@@ -1416,66 +1307,66 @@
         <section class="chapter" id="reel" aria-label="See it in motion">
             <div class="page">
                 <div class="chapter-head">
-                    <span class="kicker">03 / In motion</span>
+                    <span class="kicker">In motion</span>
                     <h2>Scroll through it. Each clip is a different part of the app.</h2>
                 </div>
                 <div class="reel-grid">
                     <div class="reel-captions" id="reelCaps">
                         <article class="reel-cap is-active" data-idx="0">
-                            <span class="kicker">Clip 01 · Courts</span>
+                            <span class="kicker">Courts</span>
                             <h3>Find a court in <em>seconds.</em></h3>
                             <p>A live map of 22,000+ U.S. courts. Filter by surface, lights, indoor vs. outdoor, open-play schedule. Tap for directions and reviews.</p>
                         </article>
                         <article class="reel-cap" data-idx="1">
-                            <span class="kicker">Clip 02 · Games</span>
+                            <span class="kicker">Games</span>
                             <h3>Post an open game.</h3>
                             <p>Set skill, capacity, and visibility. Friends see it first, or go fully public. Waitlists and check-ins handled automatically.</p>
                         </article>
                         <article class="reel-cap" data-idx="2">
-                            <span class="kicker">Clip 03 · Leagues</span>
+                            <span class="kicker">Leagues</span>
                             <h3>Run a season <em>without a spreadsheet.</em></h3>
                             <p>Round robin, ladder, or team play. Standings recompute the instant a match is logged. Export anytime.</p>
                         </article>
                         <article class="reel-cap" data-idx="3">
-                            <span class="kicker">Clip 04 · Tournaments</span>
+                            <span class="kicker">Tournaments</span>
                             <h3>A real bracket, live.</h3>
                             <p>Single or double elim. Share a public bracket link — your players don&rsquo;t even need the app to follow along.</p>
                         </article>
                         <article class="reel-cap" data-idx="4">
-                            <span class="kicker">Clip 05 · Matches</span>
+                            <span class="kicker">Matches</span>
                             <h3>Log a score in under <em>ten seconds.</em></h3>
                             <p>A tight score keypad, opponents auto-completed from your network, history that stays clean and searchable.</p>
                         </article>
                         <article class="reel-cap" data-idx="5">
-                            <span class="kicker">Clip 06 · Privacy</span>
+                            <span class="kicker">Privacy</span>
                             <h3>Safety first, as a feature.</h3>
                             <p>Private profiles, location precision you control, one-tap block and report. No ads, ever. No data for sale.</p>
                         </article>
                     </div>
                     <div class="reel-stage">
-                        <div class="reel-phone" aria-hidden="true">
-                            <div class="reel-phone-screen">
-                                <video class="reel-video is-active" data-idx="0" muted loop playsinline preload="metadata" poster="videos/01-courts.jpg">
+                        <div class="reel-phone">
+                            <div class="reel-phone-screen" aria-hidden="true">
+                                <video tabindex="-1" class="reel-video is-active" data-idx="0" muted loop playsinline preload="metadata" poster="videos/01-courts.jpg">
                                     <source src="videos/01-courts.webm" type="video/webm">
                                     <source src="videos/01-courts.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="1" muted loop playsinline preload="none" poster="videos/02-games.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="1" muted loop playsinline preload="none" poster="videos/02-games.jpg">
                                     <source src="videos/02-games.webm" type="video/webm">
                                     <source src="videos/02-games.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="2" muted loop playsinline preload="none" poster="videos/03-leagues.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="2" muted loop playsinline preload="none" poster="videos/03-leagues.jpg">
                                     <source src="videos/03-leagues.webm" type="video/webm">
                                     <source src="videos/03-leagues.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="3" muted loop playsinline preload="none" poster="videos/04-tournaments.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="3" muted loop playsinline preload="none" poster="videos/04-tournaments.jpg">
                                     <source src="videos/04-tournaments.webm" type="video/webm">
                                     <source src="videos/04-tournaments.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="4" muted loop playsinline preload="none" poster="videos/05-matches.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="4" muted loop playsinline preload="none" poster="videos/05-matches.jpg">
                                     <source src="videos/05-matches.webm" type="video/webm">
                                     <source src="videos/05-matches.mp4" type="video/mp4">
                                 </video>
-                                <video class="reel-video" data-idx="5" muted loop playsinline preload="none" poster="videos/06-privacy.jpg">
+                                <video tabindex="-1" class="reel-video" data-idx="5" muted loop playsinline preload="none" poster="videos/06-privacy.jpg">
                                     <source src="videos/06-privacy.webm" type="video/webm">
                                     <source src="videos/06-privacy.mp4" type="video/mp4">
                                 </video>
@@ -1484,7 +1375,7 @@
                                     <span>Preview clips coming soon</span>
                                 </div>
                             </div>
-                            <div class="reel-dots" role="tablist" aria-label="Reel navigation">
+                            <div class="reel-dots" role="group" aria-label="Choose a clip">
                                 <button class="reel-dot is-active" data-idx="0" aria-label="Show clip 1"></button>
                                 <button class="reel-dot" data-idx="1" aria-label="Show clip 2"></button>
                                 <button class="reel-dot" data-idx="2" aria-label="Show clip 3"></button>
@@ -1568,7 +1459,6 @@
         <section class="chapter" id="faq" aria-label="Frequently asked questions">
             <div class="page">
                 <div class="chapter-head">
-                    <span class="kicker">04 / Questions</span>
                     <h2>Anything worth knowing before launch.</h2>
                 </div>
                 <div class="faq-list">
@@ -1615,7 +1505,7 @@
         <!-- ================ Closing CTA ================ -->
         <section class="closing" id="waitlist" aria-label="Join the waitlist">
             <div class="page">
-                <span class="kicker">05 / Launch edition</span>
+                <span class="kicker">Launch edition</span>
                 <h2>Be first on the court, <em>at launch.</em></h2>
                 <p class="lede">One email the day PickleCue is live on the App Store. Maybe a short note or two between now and then — never more.</p>
                 <form class="waitlist-form" id="waitlistFormClose" novalidate aria-label="Join the waitlist (closing)">
@@ -1664,6 +1554,14 @@
                         <li><a href="#features">Features</a></li>
                         <li><a href="demo/">Demo</a></li>
                         <li><a href="#waitlist">Waitlist</a></li>
+                        <!-- Persona pages were reachable only from the slide-out
+                             menu and the #personas section. Linking them here
+                             gives them a sitewide, always-visible entry point
+                             without adding items to the masthead, which has to
+                             stay on one line under 80px. -->
+                        <li><a href="players.html">For players</a></li>
+                        <li><a href="organizers.html">For organizers</a></li>
+                        <li><a href="clubs.html">For clubs &amp; venues</a></li>
                     </ul>
                 </div>
                 <div>
@@ -1687,7 +1585,7 @@
             </div>
             <div class="colophon-base">
                 <span>&copy; 2026 PickleCue. All rights reserved.</span>
-                <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="made_by_anstelias" aria-label="Made by Anstelias — anstelias.com">
+                <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" data-track="cta_click" data-cta="made_by_anstelias">
                     <span>Made by</span>
                     <img src="images/anstelias-logo.png" alt="" aria-hidden="true" width="40" height="40">
                     <span>Anstelias Technology</span>
@@ -1894,93 +1792,6 @@
             });
         })();
 
-        /* ---- Waitlist popup: show once (scroll-intent or time fallback), never again for this browser ---- */
-        (function () {
-            var STORAGE_KEY = 'pc_waitlist_popup_v1';
-            var FALLBACK_DELAY_MS = 20000;
-            var SCROLL_RATIO_TRIGGER = 0.45;
-
-            function seen() {
-                try { return !!localStorage.getItem(STORAGE_KEY); }
-                catch (_) { return false; }
-            }
-            function markSeen(reason) {
-                try { localStorage.setItem(STORAGE_KEY, reason || 'closed'); }
-                catch (_) { /* private mode — popup simply won't persist its dismissal */ }
-            }
-
-            var popup = document.getElementById('waitlistPopup');
-            if (!popup) return;
-            var closeBtn  = document.getElementById('popupClose');
-            var popupForm = document.getElementById('waitlistFormPopup');
-            var popupMsg  = document.getElementById('waitlistMsgPopup');
-            var popupInput = document.getElementById('waitlist-email-popup');
-            var lastFocus = null;
-
-            function open() {
-                if (seen()) return;
-                // Don't interrupt if user is already at a waitlist form
-                if (location.hash === '#waitlist') return;
-                lastFocus = document.activeElement;
-                popup.setAttribute('data-open', 'true');
-                popup.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-                window.track('waitlist_popup_shown', {});
-                // Delay focus so the entrance animation isn't jarring
-                setTimeout(function () { popupInput.focus(); }, 350);
-            }
-            function close(reason) {
-                popup.setAttribute('data-open', 'false');
-                popup.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-                markSeen(reason || 'closed');
-                if (reason) window.track('waitlist_popup_closed', { reason: reason });
-                if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (_) {} }
-            }
-
-            // Dismiss paths
-            closeBtn.addEventListener('click', function () { close('x'); });
-            popup.addEventListener('click', function (e) {
-                if (e.target === popup) close('backdrop');
-            });
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && popup.getAttribute('data-open') === 'true') close('esc');
-            });
-
-            // On successful submit, also mark seen + auto-close after a beat
-            popupForm.addEventListener('submit', function () {
-                var observer = new MutationObserver(function () {
-                    if (popupMsg.classList.contains('is-success')) {
-                        markSeen('signed_up');
-                        setTimeout(function () { close(null); }, 1800);
-                        observer.disconnect();
-                    }
-                });
-                observer.observe(popupMsg, { attributes: true, attributeFilter: ['class'] });
-            });
-
-            // Schedule: show on meaningful scroll depth, with a timed fallback.
-            if (!seen()) {
-                var shown = false;
-                function maybeOpen() {
-                    if (shown || seen()) return;
-                    shown = true;
-                    open();
-                }
-                function onScroll() {
-                    var doc = document.documentElement;
-                    var depth = (window.scrollY + window.innerHeight) / Math.max(doc.scrollHeight, 1);
-                    if (depth >= SCROLL_RATIO_TRIGGER) {
-                        window.removeEventListener('scroll', onScroll);
-                        clearTimeout(fallbackTimer);
-                        setTimeout(maybeOpen, 700);
-                    }
-                }
-
-                var fallbackTimer = setTimeout(maybeOpen, FALLBACK_DELAY_MS);
-                window.addEventListener('scroll', onScroll, { passive: true });
-            }
-        })();
     </script>
     <!-- Cloudflare Web Analytics -->
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "52751bf5bb9b42f4b7e20ccaab706ab5"}'></script>
