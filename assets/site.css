@@ -99,15 +99,29 @@ html, body { max-width: 100%; overflow-x: clip; }
 }
 .masthead-logo img { width: 30px; height: 30px; border-radius: 6px; }
 .masthead-logo img.masthead-wordmark { height: 21px; width: auto; display: block; }
-.masthead-logo img.wm-dark { display: none; }
+/* Wordmark appearance pair, for the masthead AND the colophon. Both selectors
+   are listed explicitly rather than collapsing to `img.wm-*`: the generic form
+   is specificity (0,1,1) and would lose to `.masthead-logo img.masthead-wordmark`
+   above (0,2,1), rendering BOTH wordmarks stacked in the header. */
+.masthead-logo img.wm-dark,
+.colophon-brand img.wm-dark { display: none; }
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .masthead-logo img.wm-light { display: none; }
-    :root:not([data-theme="light"]) .masthead-logo img.wm-dark  { display: block; }
+    :root:not([data-theme="light"]) .masthead-logo img.wm-light,
+    :root:not([data-theme="light"]) .colophon-brand img.wm-light { display: none; }
+    :root:not([data-theme="light"]) .masthead-logo img.wm-dark,
+    :root:not([data-theme="light"]) .colophon-brand img.wm-dark  { display: block; }
 }
-:root[data-theme="dark"] .masthead-logo img.wm-light { display: none; }
-:root[data-theme="dark"] .masthead-logo img.wm-dark  { display: block; }
-:root[data-theme="light"] .masthead-logo img.wm-light { display: block; }
-:root[data-theme="light"] .masthead-logo img.wm-dark  { display: none; }
+:root[data-theme="dark"] .masthead-logo img.wm-light,
+:root[data-theme="dark"] .colophon-brand img.wm-light { display: none; }
+:root[data-theme="dark"] .masthead-logo img.wm-dark,
+:root[data-theme="dark"] .colophon-brand img.wm-dark  { display: block; }
+:root[data-theme="light"] .masthead-logo img.wm-light,
+:root[data-theme="light"] .colophon-brand img.wm-light { display: block; }
+:root[data-theme="light"] .masthead-logo img.wm-dark,
+:root[data-theme="light"] .colophon-brand img.wm-dark  { display: none; }
+
+/* Colophon wordmark: replaces the plain <h3> text lockup. */
+.colophon-brand h3 img.colophon-wordmark { height: 26px; width: auto; }
 
 .masthead-nav { display: flex; gap: 32px; list-style: none; }
 .masthead-nav a {
