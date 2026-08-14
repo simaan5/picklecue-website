@@ -1,7 +1,7 @@
 /go/pickle-for-a-purpose https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563?utm_source=picklecue&utm_medium=referral&utm_campaign=pickle-for-a-purpose-2026 302
 /community/pickle-for-a-purpose /events/pickle-for-a-purpose/ 301
 
-/keepscore/* /keepscore.html 200
+/keepscore/* /keepscore/ 200
 
 https://picklecue.com/.well-known/* /.well-known/:splat 200
 https://picklecue.com/* https://www.picklecue.com/:splat 301
