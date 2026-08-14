@@ -441,13 +441,13 @@
         }
 
         /* Hero entrance animation */
-        .fade-rise { opacity: 0; transform: translateY(16px); animation: fadeRise 0.8s var(--ease) forwards; }
+        .fade-rise { animation: fadeRise 0.8s var(--ease) backwards; }
         .d-1 { animation-delay: 0.05s; }
         .d-2 { animation-delay: 0.15s; }
         .d-3 { animation-delay: 0.25s; }
         .d-4 { animation-delay: 0.38s; }
         .d-5 { animation-delay: 0.52s; }
-        @keyframes fadeRise { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeRise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
         /* =====================================================================
            Stats strip
