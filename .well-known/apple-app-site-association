@@ -1,20 +1,21 @@
-{                                                                                                                                                                                               
-    "applinks": {                                           
-      "apps": [],                                                                                                                                                                                 
-      "details": [                                          
-        {
-          "appID": "GJ9L423898.com.andrewsimaan.PickleCue",
-          "paths": [                                                                                                                                                                              
-            "/t/*",
-            "/l/*",                                                                                                                                                                               
-            "/bracket/*",                                   
-            "/game/*",                                                                                                                                                                            
-            "/court/*",
-            "/chat/*",                                                                                                                                                                            
-            "/profile/*",                                   
-            "/match/*"
-          ]                                                                                                                                                                                       
-        }
-      ]                                                                                                                                                                                           
-    }                                                       
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "GJ9L423898.com.andrewsimaan.PickleCue",
+        "paths": [
+          "/t/*",
+          "/l/*",
+          "/bracket/*",
+          "/game/*",
+          "/court/*",
+          "/chat/*",
+          "/profile/*",
+          "/match/*",
+          "/keepscore/*"
+        ]
+      }
+    ]
   }
+}
