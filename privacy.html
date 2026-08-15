@@ -211,7 +211,7 @@
                 <span class="kicker">Legal · Document 01</span>
                 <h1>Privacy, <em>by design.</em></h1>
                 <div class="article-meta">
-                    <span><b>Effective</b>July 21, 2026</span>
+                    <span><b>Effective</b>August 15, 2026</span>
                     <span><b>Jurisdiction</b>United States · GDPR · CCPA</span>
                     <span><b>Contact</b><a href="mailto:privacy@picklecue.com">privacy@picklecue.com</a></span>
                 </div>
@@ -293,7 +293,8 @@
                 <h2 id="collect">Information the App Collects</h2>
                 <h3>Information you provide</h3>
                 <ul>
-                    <li><strong>Account Information</strong>: Email address, display name, username, and profile photo or emoji avatar.</li>
+                    <li><strong>Account Information</strong>: Email address, display name, username, and profile photo or emoji avatar. If you sign in with Apple or Google, we receive your name and email address from that provider.</li>
+                    <li><strong>Event Registrations and Waivers</strong>: When you register for a tournament, league, or other organized event, we collect the registration details you provide (such as name, email, phone number, and an optional rating ID) and any liability waiver acknowledgment (your name and the time you signed). Some events allow registration without a PickleCue account, in which case an email address is required.</li>
                     <li><strong>Profile Data</strong>: Skill level, bio, play preferences, and home city you choose to share.</li>
                     <li><strong>Game Data</strong>: Games you create, join, or participate in, including RSVPs and waitlists.</li>
                     <li><strong>Match History</strong>: Scores, match results, and performance statistics you log.</li>
@@ -309,13 +310,17 @@
                     <li><strong>Location Data</strong>: With your permission, we collect precise location (latitude and longitude) to show nearby courts, games, leagues, and weather conditions.</li>
                     <li><strong>Usage Data</strong>: App interactions, features used, search queries, and session duration.</li>
                     <li><strong>Crash and Performance Data</strong>: Error logs, crash reports, and performance metrics to improve stability.</li>
-                    <li><strong>Purchase Data</strong>: Your subscription tier and the Apple transaction identifier for a PickleCue Pro purchase. All payment is processed by Apple &mdash; we never receive or store your card details.</li>
+                    <li><strong>Purchase Data</strong>: Your subscription tier and the Apple transaction identifier for a PickleCue Pro purchase. When you subscribe, we attach a random account identifier (your PickleCue account UUID) to the Apple transaction and keep a record linking the subscription to your account, so the subscription works only on the account that purchased it. All payment is processed by Apple &mdash; we never receive or store your card details.</li>
                     <li><strong>Reputation</strong>: Trust and reputation signals derived from your play history and peer interactions.</li>
                 </ul>
                 <h3>Device permissions</h3>
                 <ul>
                     <li><strong>Calendar</strong>: If you enable &ldquo;Auto-sync games to calendar,&rdquo; PickleCue adds and updates events for the games you join in your device calendar. These events are written directly on your device via Apple&rsquo;s EventKit and are <strong>never transmitted to our servers or any third party</strong>. Calendar access is optional and can be revoked at any time in iOS Settings.</li>
                     <li><strong>Notifications</strong>: With your permission, we store a device token to send push notifications about your games, messages, and updates. You can disable notifications at any time in iOS Settings.</li>
+                    <li><strong>Live Activities</strong>: If you use lock-screen live scoreboards, we store an Apple Live Activity token to update the scoreboard on your lock screen and Dynamic Island during a match. Tokens are deactivated when the match ends.</li>
+                    <li><strong>Camera</strong>: With your permission, used to take photos for your profile and court submissions. Camera access is optional.</li>
+                    <li><strong>Photo Library</strong>: With your permission, used to choose a profile photo and to save QR codes or invite images you create. Photo access is optional.</li>
+                    <li><strong>Face ID</strong>: If you enable the optional app lock, Face ID is used to unlock PickleCue. Biometric authentication is performed entirely by iOS on your device &mdash; we never receive or store biometric data.</li>
                     <li><strong>Contacts</strong>: If you use &ldquo;Invite Friends&rdquo; and grant Contacts access, PickleCue matches your address book on your device to help you find friends and send SMS invitations. <strong>Your contacts are processed on your device and are never uploaded to our servers or shared.</strong> Contacts access is optional.</li>
                     <li><strong>Emergency Contacts</strong>: If you add emergency contacts, their name and phone number are stored <strong>only on your device</strong> and are never transmitted to us or any third party.</li>
                 </ul>
@@ -377,6 +382,7 @@
                 <p>We do not sell your personal information. We may share information with:</p>
                 <ul>
                     <li><strong>Other Users</strong>: Your profile, match history, and reputation are visible to other players based on your privacy settings.</li>
+                    <li><strong>Live Scores and Spectators</strong>: When you play in a live-scored game, tournament, or league, your display name or team label, avatar, and scores are shown in real time to participants and spectators &mdash; in the app, on lock-screen Live Activities, and on live score web pages that can be opened via share links or QR codes by people who do not have a PickleCue account. Live updates stop when the match ends.</li>
                     <li><strong>Service Providers</strong>: The third-party services listed above.</li>
                     <li><strong>Legal Requirements</strong>: When required by law or to protect our rights.</li>
                     <li><strong>Business Transfers</strong>: If we merge with or are acquired by another company.</li>
@@ -410,7 +416,8 @@
                     <li>Your profile is immediately removed.</li>
                     <li>Your match participation and personal data are deleted. Matches, games, or leagues you shared with other players remain visible to them, but without your identity attached.</li>
                     <li>Your messages are deleted.</li>
-                    <li>Your push notification tokens are deleted.</li>
+                    <li>Your push notification and Live Activity tokens are deleted.</li>
+                    <li>The record linking a PickleCue Pro subscription to your account is released. If your Apple subscription is still active, you can re-associate it with a new account later by restoring purchases (the purchase is verified with Apple before any re-association).</li>
                     <li>Groups, leagues, or tournaments you created that still have other members are transferred to another member rather than deleted, so those communities continue to function.</li>
                     <li>Your data is purged from our systems within 30 days.</li>
                 </ul>
@@ -438,7 +445,7 @@
                     <li><strong>Support</strong>: <a href="mailto:support@picklecue.com">support@picklecue.com</a></li>
                 </ul>
 
-                <p><em>This privacy policy is effective as of July 21, 2026.</em></p>
+                <p><em>This privacy policy is effective as of August 15, 2026.</em></p>
 
                 <a href="/" class="back">Back to PickleCue</a>
             </article>
