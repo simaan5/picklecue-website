@@ -71,10 +71,23 @@ for (const pageName of PAGES) {
     const m = await page.evaluate(() => ({
       scrollWidth: document.documentElement.scrollWidth,
       innerWidth: window.innerWidth,
-      wordmark: !!document.querySelector('.masthead-logo img.masthead-wordmark, .masthead-logo img.wm-light'),
+      // Two shells are in play: the legacy pages use .masthead-logo + .btn-pill,
+      // the V2 pages use a .brand lockup + .btn-primary. Accept either, so the
+      // suite covers both instead of silently skipping the newer one.
+      wordmark: !!document.querySelector('.masthead-logo img.masthead-wordmark, .masthead-logo img.wm-light, .masthead .brand'),
       burger: (e => e ? getComputedStyle(e).display !== 'none' : null)(document.querySelector('.masthead-burger')),
-      nav: (e => e ? getComputedStyle(e).display !== 'none' : null)(document.querySelector('.masthead-nav')),
-      headerCta: (e => e ? getComputedStyle(e).display !== 'none' : null)(document.querySelector('.masthead .btn-pill:not(.btn-discord)')),
+      // "Visible" means it actually occupies space and offers reachable links.
+      // Some shells keep the <nav> displayed but hide every link inside it, so
+      // reading display alone reports a desktop nav that no one can see.
+      nav: (e => {
+        if (!e) return null;
+        if (getComputedStyle(e).display === 'none') return false;
+        const r = e.getBoundingClientRect();
+        if (r.width === 0 || r.height === 0) return false;
+        return [...e.querySelectorAll('a')].some(a =>
+          getComputedStyle(a).display !== 'none' && a.getBoundingClientRect().width > 0);
+      })(document.querySelector('.masthead-nav, .masthead nav[aria-label="Primary"]')),
+      headerCta: (e => e ? getComputedStyle(e).display !== 'none' : null)(document.querySelector('.masthead .btn-pill:not(.btn-discord), .masthead .btn-primary')),
       menuHidden: (e => e ? e.hidden : null)(document.getElementById('siteMenu')),
       tocOpen: (e => e ? e.open : null)(document.querySelector('details.article-toc')),
     }));
@@ -104,17 +117,20 @@ for (const pageName of PAGES) {
       await page.waitForTimeout(400);
       const menu = await page.evaluate(() => {
         const el = document.getElementById('siteMenu');
-        const cta = el.querySelector('.btn-pill');
-        const r = cta.getBoundingClientRect();
+        const cta = el.querySelector('.btn-pill, .btn-primary');
+        const r = cta && cta.getBoundingClientRect();
         return {
           open: !el.hidden,
           expanded: document.querySelector('.masthead-burger').getAttribute('aria-expanded'),
-          ctaInside: r.top >= 0 && r.left >= 0 && r.right <= window.innerWidth && r.bottom <= el.getBoundingClientRect().bottom,
+          hasCta: !!cta,
+          ctaInside: !!r && r.top >= 0 && r.left >= 0 && r.right <= window.innerWidth
+            && r.bottom <= el.getBoundingClientRect().bottom,
           scrollable: el.scrollHeight <= el.clientHeight || getComputedStyle(el).overflowY === 'auto',
         };
       });
       check(menu.open, `${tag}: menu did not open`);
       check(menu.expanded === 'true', `${tag}: aria-expanded not true`);
+      check(menu.hasCta, `${tag}: mobile menu has no primary CTA`);
       check(menu.ctaInside, `${tag}: menu CTA outside viewport/menu`);
       check(menu.scrollable, `${tag}: menu content can clip without scrolling`);
       await page.keyboard.press('Escape');

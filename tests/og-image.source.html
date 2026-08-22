@@ -1,0 +1,41 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<!-- Source for images/og-image.png. Render at 1200x630 @2x with
+     Chrome (see tests/render-og.mjs) and downscale with LANCZOS.
+     Serve the site on :8899 first so the fonts resolve. -->
+<link rel="stylesheet" href="http://localhost:8899/fonts.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{
+    background:#061811;
+    background-image:
+      radial-gradient(760px 460px at 82% 18%, rgba(86,211,100,.16), transparent 62%),
+      radial-gradient(620px 400px at 6% 96%, rgba(216,243,90,.12), transparent 60%);
+    font-family:'Instrument Sans',-apple-system,sans-serif;
+    color:#EDF3EC; display:flex; flex-direction:column;
+    justify-content:center; padding:0 84px 96px; position:relative;
+  }
+  .brand{display:flex;align-items:center;gap:18px;margin-bottom:44px}
+  .brand img{width:64px;height:64px}
+  .brand span{font-weight:700;font-size:38px;letter-spacing:-.02em}
+  .brand .cue{color:#56D364}
+  h1{font-weight:800;font-size:76px;line-height:1.03;letter-spacing:-.04em;max-width:15ch}
+  h1 .accent{color:#56D364}
+  p{margin-top:28px;font-weight:450;font-size:26px;line-height:1.45;color:#B9CBBF;max-width:38ch}
+  .foot{position:absolute;left:84px;bottom:52px;display:flex;align-items:center;gap:18px;
+    font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:.16em;
+    text-transform:uppercase;color:#9BB0A2}
+  .dot{width:5px;height:5px;border-radius:50%;background:#D8F35A}
+  .rule{position:absolute;left:0;right:0;bottom:0;height:6px;
+    background:linear-gradient(90deg,#1F5D43,#56D364 46%,#D8F35A)}
+</style></head><body>
+  <div class="brand">
+    <img src="http://localhost:8899/images/email/cuemark.png" alt="">
+    <span>Pickle<span class="cue">Cue</span></span>
+  </div>
+  <h1>Every court.<br>Every game.<br><span class="accent">One place.</span></h1>
+  <p>Find where to play, fill the court, run the league, and remember every match.</p>
+  <div class="foot"><span>22k+ courts</span><span class="dot"></span><span>Native iOS</span><span class="dot"></span><span>picklecue.com</span></div>
+  <div class="rule"></div>
+</body></html>
