@@ -743,8 +743,10 @@ html.js .reveal.in{ opacity:1; transform:none; }
     .hero-inner{ grid-template-columns:minmax(0,1fr); min-height:0; padding-bottom:72px; }
     .theater{ min-height:0; margin-top:36px; }
     .phone{ margin:0 auto; transform:none; }
-    .float-game{ right:auto; left:-8px; bottom:60px; width:212px; }
-    .float-score{ right:-8px; top:24px; width:212px; }
+    /* Decorative UI cards are desktop-only: at phone widths they sat on top
+       of the device and buried the product video. The app tour already shows
+       live scores and open games inside the app itself. */
+    .float-game, .float-score{ display:none; }
     .stage{ grid-template-columns:1fr; gap:48px; }
     .stage-device{ order:-1; }
     .bento{ grid-template-columns:1fr; }
