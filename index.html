@@ -285,9 +285,17 @@ a{ color:inherit; }
     max-width:var(--wrap); margin:0 auto; padding:0 32px;
     height:76px; display:flex; align-items:center; gap:36px;
 }
-.brand{ display:flex; align-items:center; gap:12px; text-decoration:none; font:700 23px/1 var(--f); letter-spacing:-.02em; }
-.brand img{ width:42px; height:42px; }
-.brand .cue{ color:var(--court-fg); }
+.brand{ display:flex; align-items:center; gap:12px; text-decoration:none; }
+.brand .brand-mark{ width:42px; height:42px; }
+/* The header used to set "PickleCue" as live text, so the C in "Cue" was an
+   Instrument Sans glyph with none of the wordmark's notch. Use the real
+   wordmark. Both originals are drawn for light grounds, so the dark surface
+   needs the knockout variant. Selectors are kept at matching specificity so
+   the theme rule wins and both never render stacked. */
+.brand .brand-wordmark{ height:24px; width:auto; display:block; }
+.brand .brand-wordmark.wm-dark{ display:none; }
+:root[data-theme="dark"] .brand .brand-wordmark.wm-light{ display:none; }
+:root[data-theme="dark"] .brand .brand-wordmark.wm-dark{ display:block; }
 .masthead nav{ display:flex; gap:32px; margin-left:auto; }
 .masthead nav a{
     font:500 15.5px/1 var(--f); text-decoration:none; color:var(--ink-soft);
@@ -881,9 +889,10 @@ document.documentElement.classList.add('js');
 <!-- ================= Masthead ================= -->
 <header class="masthead" id="masthead">
     <div class="masthead-inner">
-        <a class="brand" href="/">
-            <img src="/images/email/cuemark.png" alt="" width="42" height="42">
-            <span>Pickle<span class="cue">Cue</span></span>
+        <a class="brand" href="/" aria-label="PickleCue — home">
+            <img class="brand-mark" src="/images/email/cuemark.png" alt="" width="42" height="42">
+            <img class="brand-wordmark wm-light" src="/images/wordmark-on-light.png" alt="" width="1137" height="190">
+            <img class="brand-wordmark wm-dark" src="/images/wordmark-on-dark.png" alt="" width="744" height="126">
         </a>
         <nav aria-label="Primary">
             <a href="#product">Product</a>

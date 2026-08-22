@@ -48,8 +48,8 @@
     <meta name="theme-color" content="#F7F7F2">
 
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="stylesheet" href="/assets/site-v2.css?v=20260822b">
-    <script defer src="/assets/site-v2.js?v=20260822b"></script>
+    <link rel="stylesheet" href="/assets/site-v2.css?v=20260822c">
+    <script defer src="/assets/site-v2.js?v=20260822c"></script>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
 </head>
@@ -70,9 +70,10 @@ document.documentElement.classList.add('js');
 
 <header class="masthead">
     <div class="masthead-inner">
-        <a class="brand" href="/">
-            <img src="/images/email/cuemark.png" alt="" width="42" height="42">
-            <span>Pickle<span class="cue">Cue</span></span>
+        <a class="brand" href="/" aria-label="PickleCue — home">
+            <img class="brand-mark" src="/images/email/cuemark.png" alt="" width="42" height="42">
+            <img class="brand-wordmark wm-light" src="/images/wordmark-on-light.png" alt="" width="1137" height="190">
+            <img class="brand-wordmark wm-dark" src="/images/wordmark-on-dark.png" alt="" width="744" height="126">
         </a>
         <nav aria-label="Primary">
             <a href="/#product">Product</a>
