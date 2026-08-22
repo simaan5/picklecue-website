@@ -7,3 +7,8 @@ videos/raw/*.mp4
 # Dependencies (playwright-core for responsive tests)
 node_modules/
 package-lock.json
+
+# Marketing capture masters (1320x2868 PNGs, ~35 MB) — regenerable from the
+# deterministic capture runner + Maya snapshot. Provenance manifest and contact
+# sheet are tracked; the web-delivered webp derivatives live in images/app/.
+website-marketing/masters/

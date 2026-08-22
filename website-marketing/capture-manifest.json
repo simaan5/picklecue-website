@@ -1,0 +1,429 @@
+{
+  "generated": "2026-08-21",
+  "device": "iPhone 17 Pro Max sim",
+  "theme": "dark",
+  "world": "-marketingCapture maya-la-v1 -qaTheme default -appThemeMode 2",
+  "captures": [
+    {
+      "id": "courts-detail",
+      "group": "courts",
+      "file": "masters/courts-detail.png",
+      "route_args": "-previewMarketing courtDetail",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "dfae99aeb6e6423b2bf3be547357b1e169a5f643686a1d6f8e33423c19ed9ed7",
+      "approved": false,
+      "used_on": [
+        "index:story:courts"
+      ]
+    },
+    {
+      "id": "courts-discovery",
+      "group": "courts",
+      "file": "masters/courts-discovery.png",
+      "route_args": "-previewMainTab -startTab courts -CourtsPreviewState discovery",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "03ceb21a7f5c2c277a30b4566eda5bd2e4765d80d4d19fa89b3ffd927c6d9ac6",
+      "approved": false,
+      "used_on": [
+        "index:stage:find"
+      ]
+    },
+    {
+      "id": "courts-allcourts",
+      "group": "courts",
+      "file": "masters/courts-allcourts.png",
+      "route_args": "-previewMainTab -startTab courts -CourtsPreviewState allCourts",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "e2051e7fdcb6826b1a6921a92295f86021393c4bfc41bf7daf017a594958e449",
+      "approved": false,
+      "used_on": [
+        "index:roles:club"
+      ]
+    },
+    {
+      "id": "game-detail",
+      "group": "play",
+      "file": "masters/game-detail.png",
+      "route_args": "-previewPlay -previewPlayScreen detailFull",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "6fab086eb20a8e3a069b6b98379be4fa07e057e050edb024b82e6bb8ee5ed5aa",
+      "approved": false,
+      "used_on": [
+        "index:stage:play"
+      ]
+    },
+    {
+      "id": "game-roster",
+      "group": "play",
+      "file": "masters/game-roster.png",
+      "route_args": "-previewPlay -previewPlayScreen players",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "2eebbcd99d7bc06ea3537c4f8e74be3ee9c0644283d2440e5daa826c9222520a",
+      "approved": false,
+      "used_on": []
+    },
+    {
+      "id": "game-join",
+      "group": "play",
+      "file": "masters/game-join.png",
+      "route_args": "-previewPlay -previewPlayScreen join",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "7d27d622737a4d803adcf9a86464a6aeb3b345709ee2b9d665c989281d31a46b",
+      "approved": false,
+      "used_on": [
+        "index:story:play"
+      ]
+    },
+    {
+      "id": "logmatch-complete",
+      "group": "scoring",
+      "file": "masters/logmatch-complete.png",
+      "route_args": "-previewLogMatch complete",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "efa16823628d20975ce4c9dc8faa5665de0ae86e6ff5d4f2b31c4563efd8bfe5",
+      "approved": false,
+      "used_on": [
+        "index:story:matches"
+      ]
+    },
+    {
+      "id": "match-result",
+      "group": "matches",
+      "file": "masters/match-result.png",
+      "route_args": "-previewMarketing matchDetail -marketingMatchID a11a0004-1a5e-4000-8a00-000000000013",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "a5fb88695e8a471a03e9745cfacb681d3dae8c60223153869f514bae0d01ca79",
+      "approved": false,
+      "used_on": [
+        "index:story:matches"
+      ]
+    },
+    {
+      "id": "home-progress",
+      "group": "matches",
+      "file": "masters/home-progress.png",
+      "route_args": "-previewMarketing recentResults -homeScrollTo progress",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "58a38c283d3fb0392f3a5ba2cc646607db44d4405fdcc1c80cf767e638d99d3d",
+      "approved": false,
+      "used_on": []
+    },
+    {
+      "id": "leagues-hub",
+      "group": "leagues",
+      "file": "masters/leagues-hub.png",
+      "route_args": "-previewLeagues",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "8ea3c077eced8649599d62b054c4ca18866cd8ca6a0209972298069e49652fa5",
+      "approved": false,
+      "used_on": [
+        "index:story:leagues"
+      ]
+    },
+    {
+      "id": "league-detail",
+      "group": "leagues",
+      "file": "masters/league-detail.png",
+      "route_args": "-previewLeagues -previewLeagueScreen detail",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "75f85de5a711bccf7a212fd7c11f6f3863ee8522fdb469e3f14ef841088e91fb",
+      "approved": false,
+      "used_on": []
+    },
+    {
+      "id": "league-members",
+      "group": "leagues",
+      "file": "masters/league-members.png",
+      "route_args": "-previewLeagues -previewLeagueScreen members",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "f79eee2b787737a9b1f2525d09e0172ffe0415ec93693cd7aa43cadf7becf45a",
+      "approved": false,
+      "used_on": []
+    },
+    {
+      "id": "league-standings-champion",
+      "group": "leagues",
+      "file": "masters/league-standings-champion.png",
+      "route_args": "-previewLeagues -previewLeagueScreen standings -marketingLeagueID a11a0006-1a5e-4000-8a00-000000000001",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "9bb1ec2b5784d2adab187ed94b17f8859621837e6fd93d28d4079c792c408165",
+      "approved": false,
+      "used_on": [
+        "index:story:leagues"
+      ]
+    },
+    {
+      "id": "tournaments-hub",
+      "group": "tournaments",
+      "file": "masters/tournaments-hub.png",
+      "route_args": "-previewTournaments -tournamentFilter mine",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "dbe71ba32897451d7ef2ec569620fc3038153947b90e14e8856319ed8acb2a8b",
+      "approved": false,
+      "used_on": []
+    },
+    {
+      "id": "tournament-detail",
+      "group": "tournaments",
+      "file": "masters/tournament-detail.png",
+      "route_args": "-previewTournaments -previewTournamentScreen detail",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "3dc5ffd65768041e9aab7922d9371627a84d1bfda2d5df0343fa065b281092a4",
+      "approved": false,
+      "used_on": [
+        "index:wow:tournaments"
+      ]
+    },
+    {
+      "id": "tournament-players",
+      "group": "tournaments",
+      "file": "masters/tournament-players.png",
+      "route_args": "-previewTournaments -previewTournamentScreen players",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "753f5f2f60cc6e10b2599f0a4b08709f1122996a2252a6b397df9066f6919035",
+      "approved": false,
+      "used_on": []
+    },
+    {
+      "id": "bracket-champion",
+      "group": "tournaments",
+      "file": "masters/bracket-champion.png",
+      "route_args": "-previewTournaments -previewTournamentScreen bracket -marketingTournamentID a11a0008-1a5e-4000-8a00-000000000003",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "fa39281216b2f951326898cf5daae51d438aa6d4590ddb9bda22b28e07c4ea7e",
+      "approved": false,
+      "used_on": [
+        "index:wow:tournaments"
+      ]
+    },
+    {
+      "id": "bracket-double-elim",
+      "group": "tournaments",
+      "file": "masters/bracket-double-elim.png",
+      "route_args": "-previewTournaments -previewTournamentScreen bracket -marketingTournamentID a11a0008-1a5e-4000-8a00-000000000005",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "f0c76a8c7cd81e2291dac9e784fa051bb4f466e03dd05da4a2483f71512b4113",
+      "approved": false,
+      "used_on": []
+    },
+    {
+      "id": "chat-inbox",
+      "group": "social",
+      "file": "masters/chat-inbox.png",
+      "route_args": "-previewMarketing chat",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "2c51ad608b4729fb2fb197f70befb0889ba2e2314b826d10bc4a47b59c865aaa",
+      "approved": false,
+      "used_on": [
+        "index:story:social"
+      ]
+    },
+    {
+      "id": "notifications",
+      "group": "native-ios",
+      "file": "masters/notifications.png",
+      "route_args": "-previewMarketing notifications",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "1136076b6dcd18419f99526efdd80d1b6b15e051dcb06125bf5dcd1234125e82",
+      "approved": false,
+      "used_on": [
+        "index:native"
+      ]
+    },
+    {
+      "id": "hub-drawer",
+      "group": "native-ios",
+      "file": "masters/hub-drawer.png",
+      "route_args": "-previewMarketing drawer",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "5b222c89809c66addbc6e0f37abbbab1ccb341f44c55717cec9535a37d30e4cc",
+      "approved": false,
+      "used_on": [
+        "index:native"
+      ]
+    },
+    {
+      "id": "dynamic-island",
+      "group": "native-ios",
+      "file": "masters/dynamic-island.png",
+      "route_args": "-previewMarketing liveActivity island",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "a3184beccb02938b5f10ff487b195f00f423d91a9bc5bf8cf808f1fbaeeb7abf",
+      "approved": false,
+      "used_on": [
+        "index:native (crop + lightbox full)"
+      ]
+    },
+    {
+      "id": "organizer-center",
+      "group": "organizers",
+      "file": "masters/organizer-center.png",
+      "route_args": "-previewMarketing organizer -qaProMode",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "a95da6fdaad44dfb29ad813ee8839b1517d6e2e2253de04551457dbc6fcf857e",
+      "approved": false,
+      "used_on": [
+        "index:roles:organizer"
+      ]
+    },
+    {
+      "id": "s1-play-open-games",
+      "group": "play",
+      "file": "masters/s1-play-open-games.png",
+      "route_args": "-previewPlay -previewPlayScreen main",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "f22495d13223ee00f719c5dcaeb2d0cbfd11f37ce64543eb6ca3a848735c4d48",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": [
+        "index:story:play"
+      ]
+    },
+    {
+      "id": "s2-live-scoring",
+      "group": "scoring",
+      "file": "masters/s2-live-scoring.png",
+      "route_args": "-previewLogMatch live",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "f166ccbe671a4e3bf70bfeb04c8c786d4ad78afbb001fe15c485becfb811e293",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": [
+        "index:stage:score"
+      ]
+    },
+    {
+      "id": "s3a-courts-pinfocus",
+      "group": "courts",
+      "file": "masters/s3a-courts-pinfocus.png",
+      "route_args": "-previewMainTab -startTab courts -CourtsPreviewState pinFocus",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "f60da34d451e52e477a52dca9535e40827478377b02fd0d2a7b0d9a7d922d965",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": [
+        "index:hero"
+      ]
+    },
+    {
+      "id": "s4-bracket-summer-smash",
+      "group": "tournaments",
+      "file": "masters/s4-bracket-summer-smash.png",
+      "route_args": "-previewTournaments bracket (Summer Smash, in progress)",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "e454ebe917aa4d812d9f385428248974e698bc6c5ec174b7f9da37198ae581f1",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": [
+        "index:stage:compete"
+      ]
+    },
+    {
+      "id": "s5b-league-standings",
+      "group": "leagues",
+      "file": "masters/s5b-league-standings.png",
+      "route_args": "-previewLeagues standings (City Lights S4, active)",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "83a1f40073626ab51a6a29aa150d495f0995cbd8e16ba039523f3d2dc41a51cf",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": []
+    },
+    {
+      "id": "s6-player-stats",
+      "group": "matches",
+      "file": "masters/s6-player-stats.png",
+      "route_args": "-previewMarketing playerStats",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "9b8e0fd89fe1a47a88ad09d519c2174236d47aeb226d2c34050f3613edbb97fa",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": [
+        "index:stage:remember"
+      ]
+    },
+    {
+      "id": "s7-lock-screen",
+      "group": "native-ios",
+      "file": "masters/s7-lock-screen.png",
+      "route_args": "-previewMarketing liveActivity",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "a79b619a2b662e07186a79b860707ce3ecead35932f05a56a944048c30f02469",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": [
+        "index:native"
+      ]
+    },
+    {
+      "id": "s8-chat-thread",
+      "group": "social",
+      "file": "masters/s8-chat-thread.png",
+      "route_args": "-previewMarketing chatThread",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "e61e0f7f30b477dab4d02c3f7bd6ce9c3f6c39e683a80eca9d11ca5f695f01fe",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": [
+        "index:story:social"
+      ]
+    },
+    {
+      "id": "s9-week-schedule",
+      "group": "matches",
+      "file": "masters/s9-week-schedule.png",
+      "route_args": "-previewMarketing schedule",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "f790045c3ce4417affb7088c599ce9a456d3547c9e96bf0c4324e767e06cee79",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": []
+    },
+    {
+      "id": "s10-home-dashboard",
+      "group": "home",
+      "file": "masters/s10-home-dashboard.png",
+      "route_args": "-previewMarketing home",
+      "resolution": "1320x2868",
+      "theme": "dark",
+      "sha256": "238a4412c1169b85d5168db26f5a225cc2edec6a3237a83faf43b943cf8d2796",
+      "approved": true,
+      "source": "deck-v4 raw (build 213)",
+      "used_on": [
+        "index:roles:player"
+      ]
+    }
+  ]
+}

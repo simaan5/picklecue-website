@@ -1,0 +1,91 @@
+/* ============================================================
+   PickleCue V2 skin for legacy content pages.
+   Loads AFTER assets/site.css. Retunes the existing token set to
+   the V2 palette and typography so community / support / legal
+   pages match the redesigned site without touching their markup.
+   ============================================================ */
+
+:root{
+    --paper:       #F7F7F2;
+    --paper-2:     #FFFFFF;
+    --ink:         #0E1B14;
+    --ink-soft:    #43564B;
+    --ink-mute:    #66766B;
+    --rule:        rgba(14,27,20,.12);
+    --rule-strong: rgba(14,27,20,.26);
+    --court:       #1F5D43;
+    --citron:      #D8F35A;
+    --masthead-bg: rgba(247,247,242,.88);
+    /* V2 is sans-only: retire the display serif everywhere */
+    --f-display:   'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+
+@media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+        --paper:       #071A12;
+        --paper-2:     #0C2419;
+        --ink:         #EDF3EC;
+        --ink-soft:    #B9CBBF;
+        --ink-mute:    #8FA697;
+        --rule:        rgba(237,243,236,.14);
+        --rule-strong: rgba(237,243,236,.28);
+        --court:       #56D364;
+        --masthead-bg: rgba(7,26,18,.88);
+    }
+}
+:root[data-theme="dark"]{
+    --paper:       #071A12;
+    --paper-2:     #0C2419;
+    --ink:         #EDF3EC;
+    --ink-soft:    #B9CBBF;
+    --ink-mute:    #8FA697;
+    --rule:        rgba(237,243,236,.14);
+    --rule-strong: rgba(237,243,236,.28);
+    --court:       #56D364;
+    --masthead-bg: rgba(7,26,18,.88);
+}
+
+/* Display type: V2 weight and tracking, no serif */
+h1, h2, h3, .hero h1, .event h3{
+    font-family: var(--f-display);
+    font-weight: 800;
+    letter-spacing: -.03em;
+}
+h1{ line-height:1.05; }
+h2{ line-height:1.1; }
+
+/* Primary action pill matches the V2 electric CTA */
+.btn-pill, .cta{
+    background: var(--citron) !important;
+    color: #061811 !important;
+    border-radius: 999px !important;
+    font-weight: 600;
+    border: 0 !important;
+    transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s cubic-bezier(.16,1,.3,1);
+    box-shadow: 0 10px 28px rgba(31,93,67,.2);
+}
+.btn-pill:hover, .cta:hover{
+    background: var(--citron) !important;
+    color: #061811 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 38px rgba(31,93,67,.26);
+}
+.cta-ghost{
+    border-radius:999px !important;
+    border:1.5px solid var(--rule-strong) !important;
+    color: var(--ink) !important;
+}
+.cta-ghost:hover{ border-color: var(--ink) !important; }
+
+/* Cards and surfaces */
+.card, .event, .panel, .faq-item{
+    border-radius: 20px !important;
+    border-color: var(--rule) !important;
+    background: var(--paper-2);
+}
+
+/* Kickers / eyebrows use the brand green */
+.k, .kicker, .badge{ color: var(--court); }
+
+/* Links inside prose */
+main a:not(.btn-pill):not(.cta):not(.cta-ghost):not(.masthead-nav a){ color: var(--court); }

@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" style="color-scheme: light dark;">
+<html lang="en">
 <head>
 <!-- Google tag (gtag.js) with Consent Mode v2 -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  // Region-scoped defaults: EEA + UK + CH require prior opt-in (GDPR/ePrivacy);
-  // everywhere else analytics is granted by default. Must run BEFORE gtag.js.
   gtag('consent', 'default', {
     analytics_storage: 'granted',
     ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied'
@@ -22,126 +20,205 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XCV417L0J8"></script>
 <script defer src="/assets/consent.js"></script>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
-  <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
-  <link rel="preload" href="/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/fonts.css">
-  <link rel="stylesheet" href="/assets/site.css?v=20260812b">
-  <script defer src="/assets/site.js"></script>
-  <title>PickleCue for Clubs & Venues · One home for your community</title>
-  <meta name="description" content="PickleCue for clubs and venues: manage open play, member coordination, events, and communication in one place.">
-  <link rel="canonical" href="https://www.picklecue.com/clubs.html">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png?v=20260812b">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png?v=20260812b">
-  <style>
-    /* Page styles — shared shell in /assets/site.css. Tokens keep the page
-       correct in both themes. */
-    .wrap{max-width:920px;margin:0 auto;padding-top:28px;padding-bottom:28px}
-    .k{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-family:var(--f-mono)}
-    h1{font-family:var(--f-display);font-weight:500;font-size:clamp(1.9rem,5vw + 0.4rem,3.8rem);line-height:1.05;margin:.3em 0;letter-spacing:-0.02em}
-    h2{font-family:var(--f-display);font-weight:500;font-size:1.45rem;margin-top:1.6em}
-    .hero{padding:42px 0 24px;border-bottom:1px solid var(--rule)}
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:28px 0}
-    .card{background:var(--paper-2);padding:18px;border:1px solid var(--rule);border-radius:12px}
-    .cta{display:inline-flex;align-items:center;margin-top:14px;padding:12px 20px;border-radius:999px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:600;min-height:44px}
-    .sub{color:var(--ink-soft);max-width:68ch}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>PickleCue for Clubs and Venues. One home for your community.</title>
+    <meta name="description" content="Give your members one place for open play, leagues, tournaments, and communication. Built for clubs, venues, and community programs.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.picklecue.com/clubs.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.picklecue.com/clubs.html">
+    <meta property="og:title" content="PickleCue for Clubs and Venues. One home for your community.">
+    <meta property="og:description" content="Give your members one place for open play, leagues, tournaments, and communication. Built for clubs, venues, and community programs.">
+    <meta property="og:image" content="https://www.picklecue.com/images/og-image.png?v=20260821">
+    <meta property="og:site_name" content="PickleCue">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PickleCue for Clubs and Venues. One home for your community.">
+    <meta name="twitter:description" content="Give your members one place for open play, leagues, tournaments, and communication. Built for clubs, venues, and community programs.">
+    <meta name="twitter:image" content="https://www.picklecue.com/images/og-image.png?v=20260821">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=20260812b">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=20260812b">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20260812b">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#F7F7F2">
+
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="/assets/site-v2.css?v=20260821">
+    <script defer src="/assets/site-v2.js?v=20260821"></script>
 </head>
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+    try {
+        var saved = localStorage.getItem('pc_theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.style.colorScheme = theme;
+    } catch(_){}
+})();
+</script>
 
-  <header class="masthead" role="banner">
-    <div class="page masthead-row">
-      <a href="/" class="masthead-logo" aria-label="PickleCue home">
-        <img src="images/app-icon-120.png?v=20260812b" alt="" width="30" height="30" aria-hidden="true">
-        <img class="masthead-wordmark wm-light" src="images/wordmark-on-light.png?v=20260812b" alt="" height="21" aria-hidden="true">
-        <img class="masthead-wordmark wm-dark" src="images/wordmark-on-dark.png?v=20260812b" alt="" height="21" aria-hidden="true">
-      </a>
-      <nav aria-label="Primary">
-        <ul class="masthead-nav">
-          <li><a href="/#pitch">What it is</a></li>
-          <li><a href="/#features">Features</a></li>
-          <li><a href="demo/">Demo</a></li>
-          <li><a href="support.html">Support</a></li>
-        </ul>
-      </nav>
-      <div class="masthead-actions">
-      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme" title="Toggle theme">
-        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-      <a href="/#waitlist" class="btn-pill" data-track="cta_click" data-cta="clubs_nav_waitlist">
-        Get early access
-        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
-      </a>
-      <button type="button" class="masthead-burger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu"><span></span></button>
-      </div>
+<header class="masthead">
+    <div class="masthead-inner">
+        <a class="brand" href="/">
+            <img src="/images/email/cuemark.png" alt="" width="42" height="42">
+            <span>Pickle<span class="cue">Cue</span></span>
+        </a>
+        <nav aria-label="Primary">
+            <a href="/#product">Product</a>
+            <a href="/players.html">Players</a>
+            <a href="/organizers.html">Organizers</a>
+            <a href="/community.html">Community</a>
+            <a href="/demo/">Live demo</a>
+        </nav>
+        <button class="theme-toggle" id="themeToggle" aria-label="Switch between light and dark mode">
+            <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <a class="btn btn-primary" href="#waitlist" data-track="cta_click" data-cta="nav_waitlist">Join the waitlist</a>
+        <button class="masthead-burger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
+            <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><path d="M1 1h18M1 7h18M1 13h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
     </div>
-  </header>
+</header>
 
-  <div class="site-menu" id="siteMenu" hidden>
-    <button type="button" class="site-menu-close" aria-label="Close menu">Close ✕</button>
-    <nav aria-label="Site menu">
-      <ul>
-        <li><a href="/#pitch">What it is</a></li>
-        <li><a href="/#features">Features</a></li>
-        <li><a href="demo/">Demo</a></li>
-        <li class="site-menu-minor"><a href="players.html">For players</a></li>
-        <li class="site-menu-minor"><a href="organizers.html">For organizers</a></li>
-        <li class="site-menu-minor"><a href="clubs.html">For clubs &amp; venues</a></li>
-        <li class="site-menu-minor"><a href="support.html">Support</a></li>
-        <li class="site-menu-minor"><a href="https://discord.gg/YvfgkFGVxd" target="_blank" rel="noopener noreferrer">Discord</a></li>
-        <li class="site-menu-minor"><a href="privacy.html">Privacy</a></li>
-        <li class="site-menu-minor"><a href="terms.html">Terms</a></li>
-      </ul>
-      <a href="/#waitlist" class="btn-pill" data-track="cta_click" data-cta="mobile_waitlist">
-        Get early access
-        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
-      </a>
+<div class="site-menu" id="siteMenu" hidden>
+    <button class="site-menu-close" aria-label="Close menu">&times;</button>
+    <nav aria-label="Mobile">
+        <a href="/#product">Product</a>
+        <a href="/players.html">Players</a>
+        <a href="/organizers.html">Organizers</a>
+        <a href="/clubs.html">Clubs</a>
+        <a href="/community.html">Community</a>
+        <a href="/demo/">Live demo</a>
     </nav>
-  </div>
+    <a class="btn btn-primary" href="#waitlist">Join the waitlist</a>
+</div>
 
-  <main class="wrap page" id="main">
-    <section class="hero">
-      <p class="k">PickleCue for clubs & venues</p>
-      <h1>Build a healthier local pickleball community.</h1>
-      <p class="sub">Give members one clear place for open play, club games, announcements, and events. PickleCue helps clubs run smoother while improving player experience.</p>
-      <a class="cta" href="mailto:feedback@picklecue.com?subject=Club%20partner%20interest">Become a launch partner</a>
-    </section>
-
-    <section>
-      <h2>What clubs get</h2>
-      <div class="grid">
-        <article class="card"><strong>Open-play clarity</strong><p>Publish schedules and availability so members know where and when to show up.</p></article>
-        <article class="card"><strong>Events that fill faster</strong><p>Leagues, ladders, and tournaments promoted where your players already coordinate.</p></article>
-        <article class="card"><strong>Community health tools</strong><p>Safer profiles, moderation controls, and communication channels built for real-world clubs.</p></article>
-      </div>
-    </section>
-
-    <section>
-      <h2>Who this is for</h2>
-      <p class="sub">Private clubs, public facilities, and growing pickleball communities that want fewer coordination headaches and stronger repeat participation.</p>
-      <a class="cta" href="/#waitlist">Get early access</a>
-    </section>
-
-    <p class="k" style="margin-top:38px"><a href="/">← Back to PickleCue homepage</a></p>
-  </main>
-
-  <footer class="colophon-mini" role="contentinfo" style="border-top:1px solid var(--rule); padding:28px 0 calc(28px + env(safe-area-inset-bottom)); font-family:var(--f-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-mute);">
-    <div class="page" style="display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap;">
-      <span>&copy; 2026 PickleCue</span>
-      <div style="display:flex; gap:28px; flex-wrap:wrap;">
-        <a href="privacy.html" style="color:var(--ink-soft);">Privacy</a>
-        <a href="terms.html" style="color:var(--ink-soft);">Terms</a>
-        <a href="support.html" style="color:var(--ink-soft);">Support</a>
-        <a href="/#waitlist" style="color:var(--ink-soft);">Waitlist</a>
-      </div>
+<section class="page-hero">
+    <div class="wrap">
+        <p class="kicker reveal">PickleCue for clubs and venues</p>
+        <h1 class="reveal">Give your community<br>one place to play.</h1>
+        <p class="sub reveal">Your courts, your recurring play, your seasons, and your members in one app they will actually use.</p>
+        <div class="actions reveal">
+            <a class="btn btn-primary" href="#waitlist" data-track="cta_click" data-cta="clubs_hero">Join the waitlist
+                <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a class="btn btn-ghost" href="/demo/">Live demo</a>
+        </div>
     </div>
-  </footer>
+</section>
+
+<section class="sec sec-alt">
+    <div class="wrap">
+        <h2 class="reveal">Built for the way clubs run</h2>
+        <div class="cards">
+            <article class="card reveal"><h3>Your courts, listed properly</h3><p>Amenities, surface, indoor or outdoor, and access details, so new players find you and know what to expect.</p></article>
+            <article class="card reveal"><h3>Recurring play, handled</h3><p>Post open play and weekly sessions once. Members RSVP, join waitlists, and check in themselves.</p></article>
+            <article class="card reveal"><h3>Seasons and events</h3><p>Run member leagues and club tournaments with standings and brackets that update themselves.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="sec">
+    <div class="wrap">
+        <div class="split">
+            <div class="split-copy reveal">
+                <p class="kicker">Discovery</p>
+                <h2 style="margin-top:16px">Players find you before they arrive.</h2>
+                <p class="lede">Your venue appears in court search with the details that matter, plus directions, reviews, and the games happening there.</p>
+            </div>
+            <div><button class="device reveal" data-full="/images/app/courts-allcourts-full.webp" aria-label="View Court explorer with nearby venues full size"><img src="/images/app/courts-allcourts.webp" alt="Court explorer with nearby venues" loading="lazy"></button></div>
+        </div>
+    </div>
+</section>
+
+<section class="sec">
+    <div class="wrap">
+        <div class="split flip">
+            <div class="split-copy reveal">
+                <p class="kicker">Membership</p>
+                <h2 style="margin-top:16px">Know who is in your league.</h2>
+                <p class="lede">Member rosters, roles, and season status in one view, without a spreadsheet or a sign-up sheet on the fence.</p>
+            </div>
+            <div><button class="device reveal" data-full="/images/app/league-members-full.webp" aria-label="View League member roster full size"><img src="/images/app/league-members.webp" alt="League member roster" loading="lazy"></button></div>
+        </div>
+    </div>
+</section>
+
+<section class="sec">
+    <div class="wrap">
+        <div class="split">
+            <div class="split-copy reveal">
+                <p class="kicker">Seasons</p>
+                <h2 style="margin-top:16px">Standings your members check all week.</h2>
+                <p class="lede">Every result updates the table. Members follow the race, and your season ends with a champion, not a debate.</p>
+            </div>
+            <div><button class="device reveal" data-full="/images/app/league-standings-champion-full.webp" aria-label="View League standings with champion full size"><img src="/images/app/league-standings-champion.webp" alt="League standings with champion" loading="lazy"></button></div>
+        </div>
+    </div>
+</section>
+
+<section class="page-cta" id="waitlist">
+    <img class="page-cta-mark" src="/images/email/cuemark.png" alt="" aria-hidden="true">
+    <div class="page-cta-inner">
+        <h2 class="reveal">Bring your club onto PickleCue.</h2>
+        <p class="reveal">Join the waitlist and we will reach out about club and venue features.</p>
+        <form class="waitlist-form reveal" data-waitlist data-msg="waitlistMsg" novalidate aria-label="Join the waitlist">
+            <label for="waitlist-email" style="position:absolute;left:-9999px;">Email address</label>
+            <input type="email" id="waitlist-email" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsg">
+            <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
+            <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="clubs">Join the waitlist</button>
+        </form>
+        <p class="waitlist-msg" id="waitlistMsg" role="status" aria-live="polite"></p>
+        <p class="cta-note reveal"><span>Free core app</span><span>No ads</span><span>Native iOS</span></p>
+    </div>
+</section>
+
+<footer class="site-foot">
+    <div class="foot-inner">
+        <div class="foot-brand">
+            <img src="/images/wordmark-on-dark.png" alt="PickleCue">
+            <p>All the pickleball. One elegant app.</p>
+        </div>
+        <div class="foot-col">
+            <h4>Product</h4>
+            <a href="/#product">Product</a>
+            <a href="/demo/">Live demo</a>
+            <a href="/support.html">Support</a>
+        </div>
+        <div class="foot-col">
+            <h4>For you</h4>
+            <a href="/players.html">Players</a>
+            <a href="/organizers.html">Organizers</a>
+            <a href="/clubs.html">Clubs</a>
+            <a href="/community.html">Community</a>
+        </div>
+        <div class="foot-col">
+            <h4>Legal</h4>
+            <a href="/privacy.html">Privacy policy</a>
+            <a href="/terms.html">Terms of service</a>
+        </div>
+    </div>
+    <div class="foot-base">
+        <span>&copy; 2026 PickleCue. All rights reserved.</span>
+        <div class="foot-social">
+            <a href="https://www.instagram.com/picklecueapp" rel="noopener" target="_blank">Instagram</a>
+            <a href="https://www.tiktok.com/@picklecue" rel="noopener" target="_blank">TikTok</a>
+            <a href="https://www.youtube.com/@picklecue" rel="noopener" target="_blank">YouTube</a>
+            <a href="https://x.com/PickleCueApp" rel="noopener" target="_blank">X</a>
+            <a href="https://discord.gg/YvfgkFGVxd" rel="noopener" target="_blank">Discord</a>
+        </div>
+    </div>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Screenshot preview">
+    <button class="lightbox-close" aria-label="Close preview">&times;</button>
+    <img alt="Full-size app screenshot">
+</div>
 </body>
 </html>
