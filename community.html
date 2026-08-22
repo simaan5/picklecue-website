@@ -48,24 +48,15 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <style>
-    /* Campaign design language - always-dark app-brand palette; see the
-       event page for the full rationale. */
-    :root, :root[data-theme="light"], :root[data-theme="dark"]{
-      --paper:#0C110E; --paper-2:#141B16;
-      --ink:#F4F7F2; --ink-soft:#C3CDC4; --ink-mute:#95A29A;
-      --rule:rgba(235,255,235,0.09); --rule-strong:rgba(235,255,235,0.20);
-      --court:#BFE84F; --card-rule:rgba(235,255,235,0.10);
-      --masthead-bg:rgba(12,17,14,0.86);
-    }
-    html{color-scheme:dark}
+    /* Follows the sitewide V2 theme (light/dark toggle). The former
+       always-dark campaign lock hid the theme toggle and pinned this page
+       to one palette; the shared tokens now drive it like every other page. */
     body{background:
-      radial-gradient(120% 90% at 85% -10%, rgba(191,232,79,0.05), transparent 55%),
+      radial-gradient(120% 90% at 85% -10%, rgba(31,93,67,0.05), transparent 55%),
       var(--paper)}
-    .theme-toggle{display:none!important}
-    .masthead-logo img.wm-light{display:none!important}
-    .masthead-logo img.wm-dark{display:block!important}
-    :root .btn-pill{background:var(--ink);color:#0C110E}
-    :root .btn-pill:hover{background:#fff;color:#0C110E}
+    :root[data-theme="dark"] body{background:
+      radial-gradient(120% 90% at 85% -10%, rgba(216,243,90,0.06), transparent 55%),
+      var(--paper)}
 
     .wrap{max-width:960px;margin:0 auto;padding-top:24px;padding-bottom:44px}
     .k{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);font-family:var(--f-mono)}
