@@ -31,8 +31,8 @@
   <link rel="preload" href="/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/fonts.css">
-  <link rel="stylesheet" href="/assets/site.css?v=20260812b">
-    <link rel="stylesheet" href="/assets/site-v2-skin.css?v=20260821">
+  <link rel="stylesheet" href="/assets/site.css?v=20260822a">
+    <link rel="stylesheet" href="/assets/site-v2-skin.css?v=20260822a">
   <script defer src="/assets/site.js"></script>
   <title>Community · PickleCue supports clubs, nonprofits &amp; local events</title>
   <meta name="description" content="PickleCue supports clubs, nonprofits, tournament organizers, and community leaders using pickleball to create connection and local impact.">
@@ -94,6 +94,8 @@
     .evfacts li{display:flex;gap:12px;align-items:center;color:var(--ink);font-size:1.0625rem}
     .evfacts svg{flex:none;width:21px;height:21px;stroke:var(--court);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
   </style>
+    <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
+.site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
