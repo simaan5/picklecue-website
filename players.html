@@ -46,12 +46,13 @@
     <meta name="theme-color" content="#F7F7F2">
 
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="stylesheet" href="/assets/site-v2.css?v=20260822a">
-    <script defer src="/assets/site-v2.js?v=20260822a"></script>
+    <link rel="stylesheet" href="/assets/site-v2.css?v=20260822b">
+    <script defer src="/assets/site-v2.js?v=20260822b"></script>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <script>
 document.documentElement.classList.add('js');
 (function(){
@@ -88,6 +89,8 @@ document.documentElement.classList.add('js');
         </button>
     </div>
 </header>
+
+<main id="main">
 
 <div class="site-menu" id="siteMenu" hidden>
     <button class="site-menu-close" aria-label="Close menu">&times;</button>
@@ -134,7 +137,7 @@ document.documentElement.classList.add('js');
                 <h2 style="margin-top:16px">Join before the last spot goes.</h2>
                 <p class="lede">Every open game shows the level, the format, the venue, and exactly how many spots are left. See who is already in before you commit.</p>
             </div>
-            <div><button class="device reveal" data-full="/images/app/s1-play-open-games-full.webp" aria-label="View Open games near you with skill levels and spots left full size"><img src="/images/app/s1-play-open-games.webp" alt="Open games near you with skill levels and spots left" loading="lazy"></button></div>
+            <div><button class="device reveal" data-full="/images/app/s1-play-open-games-full.webp" aria-label="View Open games near you with skill levels and spots left full size"><img src="/images/app/s1-play-open-games.webp" alt="Open games near you with skill levels and spots left" loading="lazy" width="760" height="1651"></button></div>
         </div>
     </div>
 </section>
@@ -147,7 +150,7 @@ document.documentElement.classList.add('js');
                 <h2 style="margin-top:16px">See who you are playing with.</h2>
                 <p class="lede">Player rosters, RSVPs, and check-ins for every game, so nobody is guessing who is showing up.</p>
             </div>
-            <div><button class="device reveal" data-full="/images/app/game-roster-full.webp" aria-label="View Game roster with RSVPs and check-ins full size"><img src="/images/app/game-roster.webp" alt="Game roster with RSVPs and check-ins" loading="lazy"></button></div>
+            <div><button class="device reveal" data-full="/images/app/game-roster-full.webp" aria-label="View Game roster with RSVPs and check-ins full size"><img src="/images/app/game-roster.webp" alt="Game roster with RSVPs and check-ins" loading="lazy" width="760" height="1651"></button></div>
         </div>
     </div>
 </section>
@@ -160,13 +163,13 @@ document.documentElement.classList.add('js');
                 <h2 style="margin-top:16px">Every match remembers itself.</h2>
                 <p class="lede">Match history, win rate, current streak, and recent form. Your whole season in one place.</p>
             </div>
-            <div><button class="device reveal" data-full="/images/app/s6-player-stats-full.webp" aria-label="View Player stats with match history and win rate full size"><img src="/images/app/s6-player-stats.webp" alt="Player stats with match history and win rate" loading="lazy"></button></div>
+            <div><button class="device reveal" data-full="/images/app/s6-player-stats-full.webp" aria-label="View Player stats with match history and win rate full size"><img src="/images/app/s6-player-stats.webp" alt="Player stats with match history and win rate" loading="lazy" width="760" height="1651"></button></div>
         </div>
     </div>
 </section>
 
 <section class="page-cta" id="waitlist">
-    <img class="page-cta-mark" src="/images/email/cuemark.png" alt="" aria-hidden="true">
+    <img class="page-cta-mark" src="/images/email/cuemark.png" alt="" aria-hidden="true" width="512" height="512">
     <div class="page-cta-inner">
         <h2 class="reveal">Your next game is closer than you think.</h2>
         <p class="reveal">Join the waitlist and we will email you the day PickleCue is live on the App Store.</p>
@@ -181,27 +184,29 @@ document.documentElement.classList.add('js');
     </div>
 </section>
 
+</main>
+
 <footer class="site-foot">
     <div class="foot-inner">
         <div class="foot-brand">
-            <img src="/images/wordmark-on-dark.png" alt="PickleCue">
+            <img src="/images/wordmark-on-dark.png" alt="PickleCue" width="744" height="126">
             <p>All the pickleball. One elegant app.</p>
         </div>
         <div class="foot-col">
-            <h4>Product</h4>
+            <h3>Product</h3>
             <a href="/#product">Product</a>
             <a href="/demo/">Live demo</a>
             <a href="/support.html">Support</a>
         </div>
         <div class="foot-col">
-            <h4>For you</h4>
+            <h3>For you</h3>
             <a href="/players.html">Players</a>
             <a href="/organizers.html">Organizers</a>
             <a href="/clubs.html">Clubs</a>
             <a href="/community.html">Community</a>
         </div>
         <div class="foot-col">
-            <h4>Legal</h4>
+            <h3>Legal</h3>
             <a href="/privacy.html">Privacy policy</a>
             <a href="/terms.html">Terms of service</a>
         </div>

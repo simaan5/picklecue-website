@@ -9,7 +9,7 @@
     --card:       #FFFFFF;
     --ink:        #0E1B14;
     --ink-soft:   #43564B;
-    --ink-mute:   #66766B;
+    --ink-mute:   #5F6F64;
     --night:      #061811;
     --night-card: #0C2419;
     --paper-on-night: #EDF3EC;
@@ -46,7 +46,10 @@ body{
     -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     overflow-x:hidden;
 }
-img,video{ max-width:100%; display:block; }
+img,video{ max-width:100%; display:block; height:auto; }
+/* height:auto lets the intrinsic width/height attributes reserve the right
+   box before an image loads (no layout shift) without the attribute height
+   overriding a CSS-scaled width. Specific rules still win over this one. */
 a{ color:inherit; }
 .wrap{ max-width:var(--wrap); margin:0 auto; padding:0 32px; }
 .wrap-tight{ max-width:var(--wrap-tight); margin:0 auto; padding:0 32px; }
@@ -215,7 +218,7 @@ footer.site-foot{ background:var(--night); color:var(--mute-on-night); border-to
 }
 .foot-brand img{ height:40px; width:auto; }
 .foot-brand p{ margin-top:18px; font:450 16px/1.55 var(--f); max-width:26ch; }
-.foot-col h4{ font:600 14px/1 var(--f); letter-spacing:.12em; text-transform:uppercase; color:var(--paper-on-night); margin-bottom:22px; }
+.foot-col h3{ font:600 14px/1 var(--f); letter-spacing:.12em; text-transform:uppercase; color:var(--paper-on-night); margin-bottom:22px; }
 .foot-col a{ display:block; font:450 16.5px/2.3 var(--f); color:var(--mute-on-night); text-decoration:none; }
 .foot-col a:hover{ color:var(--electric); }
 .foot-base{
@@ -225,7 +228,9 @@ footer.site-foot{ background:var(--night); color:var(--mute-on-night); border-to
     font:450 14.5px/1.4 var(--f);
 }
 .foot-social{ display:flex; gap:22px; }
-.foot-social a{ color:var(--mute-on-night); text-decoration:none; font:500 15px/1 var(--f); }
+.foot-social a{ color:var(--mute-on-night); text-decoration:none; font:500 15px/1 var(--f);
+    display:inline-flex; align-items:center; justify-content:center;
+    min-height:24px; min-width:24px; padding:5px 0; }
 .foot-social a:hover{ color:var(--electric); }
 
 /* Lightbox */
@@ -288,3 +293,12 @@ html.js .reveal.in{ opacity:1; transform:none; }
     .waitlist-form .btn{ width:100%; justify-content:center; }
     .page-hero .actions .btn{ width:100%; justify-content:center; }
 }
+
+/* Skip link: keyboard users must be able to bypass the masthead nav. */
+.skip-link{
+    position:absolute; left:12px; top:-64px; z-index:200;
+    padding:12px 20px; border-radius:999px; font:600 15px/1 var(--f);
+    background:var(--ink); color:var(--paper); text-decoration:none;
+    transition:top .2s var(--ease);
+}
+.skip-link:focus-visible{ top:12px; outline:3px solid var(--court); outline-offset:2px; }

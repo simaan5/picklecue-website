@@ -46,12 +46,13 @@
     <meta name="theme-color" content="#F7F7F2">
 
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="stylesheet" href="/assets/site-v2.css?v=20260822a">
-    <script defer src="/assets/site-v2.js?v=20260822a"></script>
+    <link rel="stylesheet" href="/assets/site-v2.css?v=20260822b">
+    <script defer src="/assets/site-v2.js?v=20260822b"></script>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <script>
 document.documentElement.classList.add('js');
 (function(){
@@ -88,6 +89,8 @@ document.documentElement.classList.add('js');
         </button>
     </div>
 </header>
+
+<main id="main">
 
 <div class="site-menu" id="siteMenu" hidden>
     <button class="site-menu-close" aria-label="Close menu">&times;</button>
@@ -134,7 +137,7 @@ document.documentElement.classList.add('js');
                 <h2 style="margin-top:16px">Players find you before they arrive.</h2>
                 <p class="lede">Your venue appears in court search with the details that matter, plus directions, reviews, and the games happening there.</p>
             </div>
-            <div><button class="device reveal" data-full="/images/app/courts-allcourts-full.webp" aria-label="View Court explorer with nearby venues full size"><img src="/images/app/courts-allcourts.webp" alt="Court explorer with nearby venues" loading="lazy"></button></div>
+            <div><button class="device reveal" data-full="/images/app/courts-allcourts-full.webp" aria-label="View Court explorer with nearby venues full size"><img src="/images/app/courts-allcourts.webp" alt="Court explorer with nearby venues" loading="lazy" width="760" height="1651"></button></div>
         </div>
     </div>
 </section>
@@ -147,7 +150,7 @@ document.documentElement.classList.add('js');
                 <h2 style="margin-top:16px">Know who is in your league.</h2>
                 <p class="lede">Member rosters, roles, and season status in one view, without a spreadsheet or a sign-up sheet on the fence.</p>
             </div>
-            <div><button class="device reveal" data-full="/images/app/league-members-full.webp" aria-label="View League member roster full size"><img src="/images/app/league-members.webp" alt="League member roster" loading="lazy"></button></div>
+            <div><button class="device reveal" data-full="/images/app/league-members-full.webp" aria-label="View League member roster full size"><img src="/images/app/league-members.webp" alt="League member roster" loading="lazy" width="760" height="1651"></button></div>
         </div>
     </div>
 </section>
@@ -160,13 +163,13 @@ document.documentElement.classList.add('js');
                 <h2 style="margin-top:16px">Standings your members check all week.</h2>
                 <p class="lede">Every result updates the table. Members follow the race, and your season ends with a champion, not a debate.</p>
             </div>
-            <div><button class="device reveal" data-full="/images/app/league-standings-champion-full.webp" aria-label="View League standings with champion full size"><img src="/images/app/league-standings-champion.webp" alt="League standings with champion" loading="lazy"></button></div>
+            <div><button class="device reveal" data-full="/images/app/league-standings-champion-full.webp" aria-label="View League standings with champion full size"><img src="/images/app/league-standings-champion.webp" alt="League standings with champion" loading="lazy" width="760" height="1651"></button></div>
         </div>
     </div>
 </section>
 
 <section class="page-cta" id="waitlist">
-    <img class="page-cta-mark" src="/images/email/cuemark.png" alt="" aria-hidden="true">
+    <img class="page-cta-mark" src="/images/email/cuemark.png" alt="" aria-hidden="true" width="512" height="512">
     <div class="page-cta-inner">
         <h2 class="reveal">Bring your club onto PickleCue.</h2>
         <p class="reveal">Join the waitlist and we will reach out about club and venue features.</p>
@@ -181,27 +184,29 @@ document.documentElement.classList.add('js');
     </div>
 </section>
 
+</main>
+
 <footer class="site-foot">
     <div class="foot-inner">
         <div class="foot-brand">
-            <img src="/images/wordmark-on-dark.png" alt="PickleCue">
+            <img src="/images/wordmark-on-dark.png" alt="PickleCue" width="744" height="126">
             <p>All the pickleball. One elegant app.</p>
         </div>
         <div class="foot-col">
-            <h4>Product</h4>
+            <h3>Product</h3>
             <a href="/#product">Product</a>
             <a href="/demo/">Live demo</a>
             <a href="/support.html">Support</a>
         </div>
         <div class="foot-col">
-            <h4>For you</h4>
+            <h3>For you</h3>
             <a href="/players.html">Players</a>
             <a href="/organizers.html">Organizers</a>
             <a href="/clubs.html">Clubs</a>
             <a href="/community.html">Community</a>
         </div>
         <div class="foot-col">
-            <h4>Legal</h4>
+            <h3>Legal</h3>
             <a href="/privacy.html">Privacy policy</a>
             <a href="/terms.html">Terms of service</a>
         </div>

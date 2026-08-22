@@ -6,5 +6,32 @@
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; font-src 'self'; connect-src 'self' https://uejmhtdfbqbotvbqvfja.supabase.co wss://uejmhtdfbqbotvbqvfja.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; font-src 'self'; media-src 'self'; connect-src 'self' https://uejmhtdfbqbotvbqvfja.supabase.co wss://uejmhtdfbqbotvbqvfja.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+
+# HTML must always revalidate. A stale HTML document pins the old ?v= query on
+# every stylesheet and script, which is how a shipped CSS fix can stay invisible
+# for hours. Revalidating the document costs one 304 and makes deploys instant.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Content-hashed filenames. Safe to pin for a year.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Referenced with an explicit ?v= cache-busting query, so a new HTML document
+# always requests a new URL.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Media is replaced by hand rather than by version bump, so keep the window
+# short enough that a corrected asset reaches everyone within a month.
+/images/*
+  Cache-Control: public, max-age=2592000
+
+/videos/*
+  Cache-Control: public, max-age=2592000
