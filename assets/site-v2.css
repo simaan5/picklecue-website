@@ -116,6 +116,7 @@ section[id]{ scroll-margin-top:96px; }
 :root[data-theme="dark"] .theme-toggle .sun{ display:block; }
 :root[data-theme="dark"] .theme-toggle .moon{ display:none; }
 
+.site-menu[hidden]{ display:none; }
 .site-menu{
     position:fixed; inset:0; z-index:80; background:var(--night);
     color:var(--paper-on-night); display:flex; flex-direction:column; padding:28px;
