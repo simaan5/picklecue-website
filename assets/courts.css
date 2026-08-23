@@ -267,3 +267,39 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
     .cmap-tools .cmap-btn:nth-child(2){ display:none; }
     .cmap-card{ max-width:70%; }
 }
+
+/* ---------- interactive map upgrade ---------- */
+/* maplibre-gl.css is injected at runtime, so it lands AFTER this file and its
+   `.maplibregl-map{position:relative}` beat a single-class rule here. The
+   container collapsed to 0 height and the map painted nothing. Two classes
+   wins. */
+.cmap > .cmap-live{ position:absolute; inset:0; opacity:0; transition:opacity .45s ease; }
+.cmap[data-live] .cmap-live{ opacity:1; }
+.cmap[data-live] > svg{ visibility:hidden; }
+.cmap[data-live] .cmap-ui{ display:none; }   /* real controls replace the mock chrome */
+.cmap[data-live] .cmap-note{ z-index:2; pointer-events:none; }
+.cmap .maplibregl-ctrl-attrib{ font:450 11px/1.4 var(--f); }
+.cmap .maplibregl-popup-content{ border-radius:14px; padding:14px 16px;
+    background:var(--paper-2); color:var(--ink); font:450 14px/1.45 var(--f);
+    box-shadow:0 14px 40px rgba(6,24,17,.28); }
+.cmap .maplibregl-popup-content strong{ display:block; font:700 15px/1.3 var(--f);
+    margin-bottom:6px; }
+.cmap .maplibregl-popup-content span{ display:block; color:var(--ink-mute); font-size:13px; }
+.cmap .maplibregl-popup-content a{ display:inline-flex; align-items:center; min-height:24px;
+    margin-top:9px; color:var(--court-fg); font-weight:600; text-decoration:none; }
+.cmap .maplibregl-popup-content a:hover{ text-decoration:underline; text-underline-offset:3px; }
+.cmap .maplibregl-popup-close-button{ width:28px; height:28px; font-size:17px; color:var(--ink-mute); }
+@media (prefers-reduced-motion: reduce){ .cmap-live{ transition:none; } }
+
+/* Legend + credit sit over a light basemap once the map upgrades, so they need
+   their own surface rather than inheriting colours meant for the dark SVG. */
+.cmap-note{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.cmap[data-live] .cmap-note{ left:12px; right:12px; bottom:10px; padding:8px 12px;
+    border-radius:10px; background:rgba(6,24,17,.80); backdrop-filter:blur(6px); }
+.cmap-credit{ margin-left:auto; color:#8FA697; font:450 11.5px/1.4 var(--f); }
+.cmap-credit a{ color:#B9CBBF; text-decoration:none; }
+.cmap-credit a:hover{ text-decoration:underline; }
+@media (max-width:620px){ .cmap-credit{ margin-left:0; width:100%; } }
+/* MapLibre's zoom control sits bottom-right; keep the credit clear of it. */
+.cmap[data-live] .cmap-note{ right:64px; }
+@media (max-width:620px){ .cmap[data-live] .cmap-note{ right:12px; padding-bottom:46px; } }

@@ -12,8 +12,8 @@ from pathlib import Path
 
 from gate import BANNED_STATS, display_label
 from icons import STAT_ICON, icon
-from shell import (attribution, courts, crumbs, esc, map_chrome, page, plot,
-                   slugify)
+from shell import (MAP_CREDIT, attribution, courts, crumbs, esc, map_chrome,
+                   map_payload, page, plot, slugify)
 
 SITE = Path("/Volumes/Mini Drive 2/Xcode Projects/picklecue-website")
 OUT = SITE  # prototypes land at the web root as _courts-*.html, noindex
@@ -109,10 +109,10 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
   {stat_block(stats)}
 </section>
 
-<section class="cmap" aria-label="Court locations">{svg}{map_chrome(total)}
+<section class="cmap" aria-label="Court locations" data-courtmap="{map_payload(rows, base)}">{svg}{map_chrome(total)}
   <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
   <span><i class="dot-p"></i>Club or paid</span>
-  <span class="cmap-count">{plotted} of {total} mapped</span></p></section>
+  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 
 <section class="csec"><h2>Venues with the most courts</h2>
   <p class="cnote">These publish a court count, so you know what you are turning up to.</p>
@@ -357,10 +357,10 @@ def build_state_from(state, sf, rows, out, indexable=False):
   {stat_block(stats)}
 </section>
 
-<section class="cmap" aria-label="Courts across {esc(sf)}">{svg}{map_chrome(total)}
+<section class="cmap" aria-label="Courts across {esc(sf)}" data-courtmap="{map_payload(rows)}">{svg}{map_chrome(total)}
   <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
   <span><i class="dot-p"></i>Club or paid</span>
-  <span class="cmap-count">{plotted} of {total} mapped</span></p></section>
+  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 
 <section class="csec"><h2>Cities with the most courts</h2>
   <p class="cnote">Every city we have court records for in {esc(sf)}.</p>

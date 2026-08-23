@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   rebuild:
@@ -46,16 +47,38 @@ jobs:
           done
           echo "Gate holds. $(find courts -name '*.html' | wc -l) pages generated."
 
-      - name: Commit only if something actually changed
+      - name: Summarise what changed
+        id: diff
         run: |
-          git config user.name  "picklecue-bot"
-          git config user.email "bot@picklecue.com"
           if git diff --quiet -- courts sitemap.xml; then
-            echo "No court data changed this week. Nothing to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No court data changed this week."
             exit 0
           fi
-          git add courts sitemap.xml
-          # NO [skip ci] here. That flag suppresses the deploy workflow, which
-          # would commit fresh pages that never reach production.
-          git commit -m "courts: weekly rebuild from live data"
-          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          {
+            echo "pages_changed=$(git diff --name-only -- courts | wc -l | tr -d ' ')"
+            echo "pages_added=$(git ls-files --others --exclude-standard courts | wc -l | tr -d ' ')"
+            echo "courts_total=$(grep -o 'COURTS' -c courts/us/texas/austin.html || true)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open a pull request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: courts/weekly-rebuild
+          delete-branch: true
+          add-paths: |
+            courts
+            sitemap.xml
+          commit-message: "courts: weekly rebuild from live data"
+          title: "courts: weekly rebuild from live data"
+          body: |
+            Automated weekly regeneration of the court pages from live Supabase.
+
+            - ${{ steps.diff.outputs.pages_changed }} page(s) modified
+            - ${{ steps.diff.outputs.pages_added }} page(s) added
+
+            The publication gate ran as a build step and passed: no
+            PlayPickleball-sourced venue names and no unbacked claims appear in
+            the generated output. Merging deploys these pages.

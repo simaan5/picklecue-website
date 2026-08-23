@@ -97,6 +97,7 @@ def head(title, desc, canonical, extra_ld=None, indexable=False):
 <link rel="stylesheet" href="/assets/site-v2.css?v=20260822c">
 <link rel="stylesheet" href="/assets/courts.css?v=2">
 <script defer src="/assets/site-v2.js?v=20260822c"></script>
+<script defer src="/assets/courtmap.js?v=1"></script>
 <style>.site-menu[hidden],.lightbox[hidden]{{display:none !important}}</style>
 <script>(function(){{try{{var t=localStorage.getItem('pc_theme');
 var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -216,6 +217,32 @@ def plot(rows, vw=1100, maxh=470, r=7, focus=None, cluster_px=34):
 
     return (f'<svg viewBox="0 0 {vw} {vh}" role="img" aria-label="Court locations">'
             f'<g class="g">{grid}</g>{"".join(marks)}</svg>'), len(pts)
+
+
+def map_payload(rows, city_base=""):
+    """Real coordinates for the interactive layer. Same numbers the SVG plots."""
+    pts, lats, lngs = [], [], []
+    for r in rows:
+        la, ln = r.get("lat"), r.get("lng")
+        if la is None or ln is None:
+            continue
+        lats.append(la); lngs.append(ln)
+        pts.append([round(la, 5), round(ln, 5), r.get("label") or "Pickleball courts",
+                    f"{city_base}/{slugify(r['slug'])}" if city_base and r.get("slug") else "",
+                    1 if r.get("is_free") else 0, r.get("court_count") or 0])
+    if not pts:
+        return ""
+    payload = {"points": pts, "s": min(lats), "n": max(lats),
+               "w": min(lngs), "e": max(lngs)}
+    return html.escape(json.dumps(payload, separators=(",", ":")), quote=True)
+
+
+MAP_CREDIT = (
+    '<span class="cmap-credit">'
+    '<a href="https://openfreemap.org" rel="noopener">OpenFreeMap</a> '
+    '&copy; <a href="https://www.openmaptiles.org/" rel="noopener">OpenMapTiles</a>, '
+    'data from <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>'
+    '</span>')
 
 
 def map_chrome(count, noun="courts"):

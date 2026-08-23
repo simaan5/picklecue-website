@@ -8,7 +8,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()
   Cross-Origin-Opener-Policy: same-origin
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; font-src 'self'; media-src 'self'; connect-src 'self' https://uejmhtdfbqbotvbqvfja.supabase.co wss://uejmhtdfbqbotvbqvfja.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; child-src 'self' blob:; img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://tiles.openfreemap.org; font-src 'self'; media-src 'self'; connect-src 'self' https://tiles.openfreemap.org https://uejmhtdfbqbotvbqvfja.supabase.co wss://uejmhtdfbqbotvbqvfja.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
 # HTML must always revalidate. A stale HTML document pins the old ?v= query on
 # every stylesheet and script, which is how a shipped CSS fix can stay invisible
