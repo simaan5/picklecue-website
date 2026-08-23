@@ -15,6 +15,11 @@
     --paper-on-night: #EDF3EC;
     --mute-on-night:  #9BB0A2;
     --court:      #1F5D43;
+    /* --court is the solid fill (white text sits on it and must stay dark).
+       --court-fg is the accent used AS a foreground, so it inverts for dark.
+       Without this pair, an accent used as text measures 2.32:1 on the dark
+       ground. Mirrors the token in index.html. */
+    --court-fg:   #1F5D43;
     --cue:        #56D364;
     --electric:   #D8F35A;
     --line:       rgba(14,27,20,.12);
@@ -32,6 +37,7 @@
     --ink:        #EDF3EC;
     --ink-soft:   #B9CBBF;
     --ink-mute:   #8FA697;
+    --court-fg:   #56D364;
     --line:       rgba(237,243,236,.14);
     --night:      #040F0A;
     --night-card: #0C2419;
@@ -157,7 +163,7 @@ section[id]{ scroll-margin-top:96px; }
       radial-gradient(700px 460px at 2% 90%, rgba(216,243,90,.08), transparent 60%);
 }
 .page-hero .wrap{ position:relative; }
-.kicker{ font:600 13px/1 var(--f-mono); letter-spacing:.16em; text-transform:uppercase; color:var(--court); }
+.kicker{ font:600 13px/1 var(--f-mono); letter-spacing:.16em; text-transform:uppercase; color:var(--court-fg); }
 :root[data-theme="dark"] .kicker{ color:var(--cue); }
 .page-hero h1{ margin-top:18px; font:800 clamp(42px,5.4vw,72px)/1.04 var(--f); letter-spacing:-.035em; max-width:16ch; }
 .page-hero .sub{ margin-top:22px; font:450 20px/1.55 var(--f); color:var(--ink-soft); max-width:52ch; }
@@ -267,7 +273,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
 .prose p{ margin-bottom:16px; }
 .prose ul, .prose ol{ margin:0 0 18px 22px; }
 .prose li{ margin-bottom:8px; }
-.prose a{ color:var(--court); }
+.prose a{ color:var(--court-fg); }
 :root[data-theme="dark"] .prose a{ color:var(--cue); }
 .prose strong{ color:var(--ink); }
 .prose table{ width:100%; border-collapse:collapse; margin:18px 0 24px; }
