@@ -248,7 +248,7 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page(f"All pickleball courts in {city}, {sf} | PickleCue",
                       f"Browse all {total} pickleball courts in {city}, {sf}. Filter by cost, "
-                      f"search by name or street.", f"{base}/all", body, ld,
+                      f"search by name or street.", base, body, ld,
                       indexable), encoding="utf-8")
     return p
 

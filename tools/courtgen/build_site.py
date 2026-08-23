@@ -144,8 +144,33 @@ def main():
                                  indexable=a.index, us=False))
 
     p_meth = P.build_methodology_to(len(rows), len(eligible),
-                                    ROOT / "methodology.html")
+                                    ROOT / "methodology.html", indexable=a.index)
     written.append(p_meth)
+
+    # ---- sitemap ----------------------------------------------------------
+    # Only what is indexable goes in. Court detail pages are noindex, so listing
+    # them would ask Google to crawl 2,149 pages it is told to ignore.
+    if a.index:
+        urls = ["/courts", "/courts/us", "/courts/methodology"]
+        urls += [f"/courts/us/{S.slugify(STATES[st])}" for st in sorted(by_state)]
+        urls += [f"/courts/us/{S.slugify(STATES[st])}/{S.slugify(ct)}"
+                 for (st, ct) in sorted(eligible)]
+        frag = "\n".join(
+            f"  <url>\n    <loc>https://www.picklecue.com{u}</loc>\n"
+            f"    <changefreq>monthly</changefreq>\n"
+            f"    <priority>{'0.7' if u.count('/') <= 3 else '0.6'}</priority>\n  </url>"
+            for u in urls)
+        sm = SITE / "sitemap.xml"
+        txt = sm.read_text(encoding="utf-8")
+        start, end = "<!-- courts:start -->", "<!-- courts:end -->"
+        block = f"{start}\n{frag}\n  {end}"
+        if start in txt:
+            import re as _re
+            txt = _re.sub(_re.escape(start) + r".*?" + _re.escape(end), block, txt, flags=_re.S)
+        else:
+            txt = txt.replace("</urlset>", f"  {block}\n</urlset>")
+        sm.write_text(txt, encoding="utf-8")
+        print(f"  sitemap: {len(urls)} court URLs written")
 
     total_kb = sum(p.stat().st_size for p in written) // 1024
     print(f"  wrote {len(written)} pages, {total_kb:,} KB total")

@@ -1,0 +1,61 @@
+name: Rebuild court pages
+
+# Court data changes in the app (new submissions, corrections, OSM imports) but
+# these pages are generated at build time, so without this they would freeze at
+# whenever someone last ran the generator by hand.
+on:
+  schedule:
+    - cron: "17 9 * * 1"        # Mondays 09:17 UTC
+  workflow_dispatch:            # and on demand
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Regenerate every court page from live data
+        working-directory: tools/courtgen
+        run: python3 build_site.py --index
+
+      - name: Verify the publication gate held
+        run: |
+          set -e
+          # Two thirds of the courts table was scraped from PlayPickleball and
+          # must never reach a public page. If any of these venue names appear,
+          # the gate has been bypassed and we must not commit.
+          for name in "Austin Tennis & Pickleball Center" "TownLake YMCA" "East Communities YMCA"; do
+            if grep -rqF "$name" courts/; then
+              echo "PUBLICATION GATE BREACH: '$name' found in generated pages."
+              exit 1
+            fi
+          done
+          # Claims that have no backing data must not appear either.
+          for term in "Player verified" "Open daily"; do
+            if grep -rqF "$term" courts/; then
+              echo "CLAIM GATE BREACH: '$term' found in generated pages."
+              exit 1
+            fi
+          done
+          echo "Gate holds. $(find courts -name '*.html' | wc -l) pages generated."
+
+      - name: Commit only if something actually changed
+        run: |
+          git config user.name  "picklecue-bot"
+          git config user.email "bot@picklecue.com"
+          if git diff --quiet -- courts sitemap.xml; then
+            echo "No court data changed this week. Nothing to commit."
+            exit 0
+          fi
+          git add courts sitemap.xml
+          # NO [skip ci] here. That flag suppresses the deploy workflow, which
+          # would commit fresh pages that never reach production.
+          git commit -m "courts: weekly rebuild from live data"
+          git push
