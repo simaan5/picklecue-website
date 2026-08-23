@@ -45,7 +45,35 @@ jobs:
               exit 1
             fi
           done
-          echo "Gate holds. $(find courts -name '*.html' | wc -l) pages generated."
+
+          # ODbL attribution is a CONDITION of using OpenStreetMap data, not a
+          # nicety, and the OSM Foundation's guidelines ask for a real link in
+          # browsable media rather than prose naming the licence. Every single
+          # generated page must carry both links. This is asserted by count,
+          # not by sampling: a template edit that drops the credit from one
+          # page type would otherwise ship silently, which is exactly how the
+          # text-only version survived on 2,358 pages before.
+          TOTAL=$(find courts -name '*.html' | wc -l | tr -d ' ')
+          for token in "openstreetmap.org/copyright" "opendatacommons.org/licenses/odbl"; do
+            HAVE=$(grep -rl "$token" courts/ --include='*.html' | wc -l | tr -d ' ')
+            if [ "$HAVE" != "$TOTAL" ]; then
+              echo "ATTRIBUTION GATE BREACH: only $HAVE of $TOTAL pages link $token."
+              exit 1
+            fi
+          done
+
+          # The notices page must exist and must still embed real licence text,
+          # because MapLibre (BSD-3) and the OFL fonts require us to ship it.
+          for f in licenses.html assets/vendor/LICENSE-maplibre.txt \
+                   assets/vendor/LICENSE-lucide.txt fonts/LICENSE-fraunces.txt \
+                   fonts/LICENSE-instrument-sans.txt fonts/LICENSE-jetbrains-mono.txt; do
+            if [ ! -s "$f" ]; then
+              echo "LICENCE GATE BREACH: $f is missing or empty."
+              exit 1
+            fi
+          done
+
+          echo "Gate holds. $TOTAL pages generated, all attributed."
 
       - name: Summarise what changed
         id: diff

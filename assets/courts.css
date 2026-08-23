@@ -303,3 +303,39 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 /* MapLibre's zoom control sits bottom-right; keep the credit clear of it. */
 .cmap[data-live] .cmap-note{ right:64px; }
 @media (max-width:620px){ .cmap[data-live] .cmap-note{ right:12px; padding-bottom:46px; } }
+
+/* ── Third-party notices (/licenses.html) ───────────────────────────────────
+   BSD-3 and ISC both require the licence text to travel with what we ship, and
+   OFL requires it to travel with the font files. Collapsed by default because
+   five full licences is 400+ lines of legal boilerplate that nobody scrolls,
+   but each one is one click and one Ctrl-F away, and the same texts also ship
+   as plain files next to the assets they cover. */
+/* Matched to the 54ch measure the surrounding prose uses. Left to span the
+   full wrap, the space-between summary threw the licence badge and the +/-
+   halfway across an empty page, detached from the text they belong to. */
+.lic{ border-top:1px solid var(--rule); max-width:58ch; }
+.lic:last-of-type{ border-bottom:1px solid var(--rule); }
+.lic > summary{ display:flex; align-items:baseline; justify-content:space-between;
+    gap:16px; cursor:pointer; list-style:none; padding:18px 2px;
+    font:600 17px/1.3 var(--f); color:var(--ink); min-height:24px; }
+.lic > summary::-webkit-details-marker{ display:none; }
+.lic > summary span{ font:500 13px/1 var(--f-mono); color:var(--ink-mute);
+    white-space:nowrap; }
+.lic > summary::after{ content:"+"; font:400 20px/1 var(--f); color:var(--ink-mute);
+    order:3; }
+.lic[open] > summary::after{ content:"\2212"; }
+.lic > summary:hover{ color:var(--court-fg); }
+.lic > summary:focus-visible{ outline:2px solid var(--court-fg); outline-offset:3px;
+    border-radius:6px; }
+.lic .cnote{ margin:0 0 14px; }
+/* Licence texts are hard-wrapped at 80 columns by their authors. Preserve that
+   and let the box scroll rather than reflowing legal text into a soup. */
+.lictext{ margin:0 0 22px; padding:16px 18px; border-radius:12px;
+    background:var(--paper-2); border:1px solid var(--rule);
+    font:400 12.5px/1.6 var(--f-mono); color:var(--ink-soft);
+    white-space:pre-wrap; overflow-x:auto; max-height:22em; }
+@media (max-width:640px){
+  .lic > summary{ flex-wrap:wrap; }
+  .lic > summary span{ flex-basis:100%; }
+  .lictext{ font-size:11.5px; }
+}

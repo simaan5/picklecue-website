@@ -435,11 +435,24 @@ def build_methodology_to(total_pub, cities_pub, out, indexable=False):
   and the correction is reviewed before it goes live.</p>
 </section>
 
-<section class="csec"><h2>Licensing</h2>
-  <p class="cnote">Court locations include data from OpenStreetMap contributors,
-  available under the <a href="https://opendatacommons.org/licenses/odbl/">Open
+<section class="csec"><h2>Licensing and attribution</h2>
+  <p class="cnote">Court locations include data &copy;
+  <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap
+  contributors</a>, available under the
+  <a href="https://opendatacommons.org/licenses/odbl/" rel="noopener">Open
   Database License (ODbL)</a>. OpenStreetMap is a trademark of the OpenStreetMap
   Foundation, and this site is not endorsed by or affiliated with it.</p>
+
+  <p class="cnote">The map is rendered by
+  <a href="https://maplibre.org" rel="noopener">MapLibre GL JS</a> (BSD 3-Clause)
+  over vector tiles from <a href="https://openfreemap.org" rel="noopener">OpenFreeMap</a>,
+  built with <a href="https://www.openmaptiles.org/" rel="noopener">OpenMapTiles</a>
+  from that same OpenStreetMap data. Loading the map sends a request from your
+  browser to OpenFreeMap, so your IP address reaches them; the
+  <a href="/privacy.html">privacy policy</a> says what that does and does not
+  involve. Icons are from <a href="https://lucide.dev" rel="noopener">Lucide</a>
+  (ISC). Full licence texts for everything this site redistributes are on the
+  <a href="/licenses.html">third-party notices</a> page.</p>
 </section>
 
 <section class="ccta"><div><h2>Found something wrong?</h2>

@@ -20,9 +20,20 @@ NOT publishable until someone confirms the licence and adds it here.
 PUBLISHABLE_SOURCES = ("osm", "user")
 
 # ODbL requires attribution wherever OSM-derived data is publicly used.
+#
+# The OSM Foundation's attribution guidelines are more specific than "say the
+# words". For browsable electronic media they ask for the credit
+# "(c) OpenStreetMap contributors" and for that credit to be a LINK to
+# openstreetmap.org/copyright, plus an indication of the licence. Plain prose
+# naming ODbL — which is what this used to be — satisfies the spirit and fails
+# the letter. Both links are now real anchors, and they appear on every
+# generated page, not only the ones that happen to carry a map.
 ODBL_ATTRIBUTION = (
-    "Court locations include data from OpenStreetMap contributors, available "
-    "under the Open Database License (ODbL)."
+    'Court locations include data &copy; '
+    '<a href="https://www.openstreetmap.org/copyright" rel="noopener">'
+    'OpenStreetMap contributors</a>, available under the '
+    '<a href="https://opendatacommons.org/licenses/odbl/" rel="noopener">'
+    'Open Database License (ODbL)</a>.'
 )
 
 # Stats we are allowed to render, and why. A stat is only listed here if the
