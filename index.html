@@ -871,6 +871,214 @@ html.js .reveal.in{ opacity:1; transform:none; }
     .waitlist-form input[type="email"]{ padding:16px 18px; }
     .waitlist-form .btn{ width:100%; justify-content:center; }
 }
+
+/* ===================== Product storyline =====================
+   Sections 01-11. Everything here is scoped to .story / .proof-* / .flow /
+   .turn / .spectate / .final-* so it cannot collide with the older rules
+   above, which own the hero, masthead and footer.
+
+   Colours come from the tokens already defined on :root (and redefined for
+   dark), so these sections follow the theme without a second palette. */
+
+/* ---- capability proof strip: capabilities, never counts ---- */
+.proof-strip{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--card);
+}
+.proof-list{
+    list-style:none; margin:0 auto; padding:18px 24px;
+    max-width:var(--wrap); display:flex; flex-wrap:wrap;
+    align-items:center; justify-content:center; gap:10px 30px;
+}
+.proof-list li{
+    font-family:var(--f-mono); font-size:11.5px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--ink-mute);
+    display:flex; align-items:center; gap:11px; white-space:nowrap;
+}
+.proof-list li::before{
+    content:""; width:5px; height:5px; border-radius:50%;
+    background:var(--court-fg); flex:0 0 auto;
+}
+
+/* ---- the alternating story sections ---- */
+.story{ padding:96px 24px; }
+.story-alt{ background:var(--card); }
+.story-inner{
+    max-width:var(--wrap-tight); margin:0 auto;
+    display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center;
+}
+/* Alternate which side the art sits on, so the page does not march. */
+.story:nth-of-type(even) .story-inner > .story-copy{ order:2; }
+
+.story-kicker{
+    font-family:var(--f-mono); font-size:11.5px; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--court-fg); margin:0 0 14px;
+}
+.story-copy h2{
+    font-size:clamp(1.9rem,3.4vw,2.7rem); line-height:1.08;
+    letter-spacing:-.028em; margin:0 0 16px; text-wrap:balance;
+}
+.story-copy > p{
+    color:var(--ink-soft); font-size:1.06rem; line-height:1.6;
+    margin:0 0 22px; max-width:52ch;
+}
+.story-points{ list-style:none; margin:0; padding:0; display:grid; gap:11px; }
+.story-points li{
+    position:relative; padding-left:26px; color:var(--ink-soft);
+    font-size:.98rem; line-height:1.5;
+}
+.story-points li::before{
+    content:""; position:absolute; left:0; top:.52em;
+    width:11px; height:7px; border-left:2px solid var(--court-fg);
+    border-bottom:2px solid var(--court-fg); transform:rotate(-45deg);
+}
+
+/* ---- artwork ---- */
+.story-art{ margin:0; display:flex; justify-content:center; align-items:flex-end; gap:0; }
+.art-phone{
+    width:100%; max-width:330px; height:auto; display:block;
+    border-radius:22px; border:1px solid var(--line);
+    background:var(--card);
+    box-shadow:0 26px 60px -28px rgba(6,24,17,.42);
+}
+.art-solo{ max-width:400px; }
+.art-pair .art-phone{ max-width:290px; }
+.art-pair .art-offset{ margin-left:-64px; margin-bottom:44px; position:relative; z-index:2; }
+.art-photo{
+    width:100%; max-width:340px; height:auto; display:block;
+    border-radius:22px; object-fit:cover; aspect-ratio:3/4;
+    border:1px solid var(--line);
+    box-shadow:0 26px 60px -28px rgba(6,24,17,.42);
+}
+
+/* ---- the turn into the organizer product ---- */
+.turn{ background:var(--night); color:var(--paper-on-night); padding:104px 24px; text-align:center; }
+.turn-inner{ max-width:900px; margin:0 auto; }
+.turn-kicker{
+    font-family:var(--f-mono); font-size:11.5px; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--mute-on-night); margin:0 0 18px;
+}
+.turn-h{
+    font-size:clamp(2rem,4.4vw,3.2rem); line-height:1.08;
+    letter-spacing:-.03em; margin:0 0 18px; text-wrap:balance;
+}
+.accent-cue{ color:var(--cue); }
+.turn-sub{ color:var(--mute-on-night); font-size:1.08rem; margin:0; }
+
+/* ---- full-width sections (control room, lifecycle, spectators) ---- */
+.story-wide{ padding:96px 24px; }
+.story-wide-inner{ max-width:var(--wrap-tight); margin:0 auto; }
+.story-copy-center{ text-align:center; max-width:760px; margin:0 auto 44px; }
+.story-copy-center > p{ margin-left:auto; margin-right:auto; }
+.story-shot{ margin:0 0 40px; }
+.story-shot img{
+    width:100%; height:auto; display:block; border-radius:16px;
+    border:1px solid var(--line); background:var(--card);
+    box-shadow:0 34px 80px -40px rgba(6,24,17,.46);
+}
+
+.feature-row{
+    list-style:none; margin:0; padding:0;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:26px;
+}
+.feature-row li{ display:flex; flex-direction:column; gap:5px; }
+.feature-row b{ font-size:.98rem; }
+.feature-row span{ color:var(--ink-mute); font-size:.9rem; line-height:1.5; }
+
+/* ---- the six-step lifecycle ---- */
+.flow{
+    list-style:none; margin:0; padding:0;
+    /* Six steps: three columns reads as 3+3. An auto-fit track would give
+       4+2 at this width and leave a hole in the sequence. */
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:38px 28px;
+    counter-reset:flow;
+}
+.flow > li{ display:flex; flex-direction:column; }
+.flow figure{ margin:0 0 16px; }
+.flow img{
+    width:100%; height:250px; object-fit:cover; object-position:top center;
+    display:block; border-radius:13px; border:1px solid var(--line);
+    background:var(--card); box-shadow:0 18px 40px -24px rgba(6,24,17,.4);
+}
+.flow-step{
+    font-family:var(--f-mono); font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--court-fg); margin:0 0 5px;
+}
+.flow-t{ font-weight:600; margin:0 0 5px; font-size:1rem; }
+.flow-d{ color:var(--ink-mute); font-size:.89rem; line-height:1.5; margin:0; }
+
+/* ---- spectators (dark) ---- */
+.story-dark{ background:var(--night); color:var(--paper-on-night); }
+.story-dark .story-kicker{ color:var(--cue); }
+.story-dark .story-copy > p{ color:var(--mute-on-night); }
+.spectate{
+    display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+    gap:42px; align-items:center; margin-bottom:44px;
+}
+.spectate figure{ margin:0; }
+.spectate img{
+    width:100%; height:auto; display:block; border-radius:14px;
+    border:1px solid var(--line-night);
+    box-shadow:0 28px 66px -34px rgba(0,0,0,.7);
+}
+.spectate figcaption{
+    margin-top:11px; font-family:var(--f-mono); font-size:10.5px;
+    letter-spacing:.13em; text-transform:uppercase; color:var(--mute-on-night);
+    text-align:center;
+}
+.spectate-phones{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:start; }
+.feature-row-dark b{ color:var(--paper-on-night); }
+.feature-row-dark span{ color:var(--mute-on-night); }
+
+/* ---- final CTA ---- */
+.final-cta{ background:var(--night); color:var(--paper-on-night); padding:104px 24px; text-align:center; }
+.final-inner{ max-width:660px; margin:0 auto; }
+.final-cta h2{
+    font-size:clamp(2rem,4.2vw,2.9rem); letter-spacing:-.03em;
+    margin:0 0 14px; line-height:1.08;
+}
+.final-cta > .final-inner > p{ color:var(--mute-on-night); font-size:1.05rem; margin:0 0 26px; }
+.final-note{
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--mute-on-night); margin:20px 0 0;
+}
+.proof-list-dark{ border-top:1px solid var(--line-night); margin-top:34px; padding-top:26px; }
+.proof-list-dark li{ color:var(--mute-on-night); }
+.proof-list-dark li::before{ background:var(--cue); }
+
+/* ---- responsive ---- */
+@media (max-width:980px){
+    .spectate{ grid-template-columns:1fr; gap:34px; }
+}
+@media (max-width:860px){
+    .story, .story-wide{ padding:68px 20px; }
+    .story-inner{ grid-template-columns:1fr; gap:38px; }
+    /* On one column the art must always follow its copy, so the order
+       swapping used on wide screens has to be undone. */
+    .story:nth-of-type(even) .story-inner > .story-copy{ order:0; }
+    .story-copy h2{ font-size:1.72rem; }
+    .art-pair .art-phone{ max-width:225px; }
+    .art-pair .art-offset{ margin-left:-46px; margin-bottom:30px; }
+    .art-solo{ max-width:300px; }
+    .turn, .final-cta{ padding:72px 20px; }
+    .flow img{ height:190px; }
+    .flow{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:30px 20px; }
+}
+@media (max-width:520px){
+    .proof-list{ gap:9px 18px; padding:15px 18px; }
+    .proof-list li{ font-size:10.5px; }
+    .spectate-phones{ gap:10px; }
+    /* Two 225px phones overlapped by 46px measure 404px, which is wider than
+       a 402pt phone — the overlapping pair has to shrink, not just the page
+       padding. Measured: .art-offset reached right=431 at 402px wide. */
+    .art-pair .art-phone{ max-width:172px; }
+    .art-pair .art-offset{ margin-left:-38px; margin-bottom:22px; }
+    .art-photo{ max-width:200px; }
+}
+@media (prefers-reduced-motion:reduce){
+    .story *, .flow *{ animation:none !important; transition:none !important; }
+}
 </style>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
@@ -937,9 +1145,9 @@ document.documentElement.classList.add('js');
     <div class="hero-bg"></div>
     <div class="hero-inner">
         <div>
-            <p class="hero-proof rise">22k+ courts</p>
-            <h1 class="rise rise-1">Every court.<br>Every game.<br><span class="accent">One place.</span></h1>
-            <p class="hero-sub rise rise-2">Find where to play, fill the court, run the league, and remember every match.</p>
+            <p class="hero-proof rise">Native iOS · Free core app</p>
+            <h1 class="rise rise-1">Find your court.<br>Find your game.<br><span class="accent">One place.</span></h1>
+            <p class="hero-sub rise rise-2">A native iPhone app for players, a control room for organizers, and a live page anyone can open — no app, no account.</p>
             <form class="waitlist-form waitlist-light rise rise-3" id="waitlistFormHero" novalidate aria-label="Join the waitlist">
                 <label for="waitlist-email-hero" style="position:absolute;left:-9999px;">Email address</label>
                 <input type="email" id="waitlist-email-hero" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgHero">
@@ -964,332 +1172,287 @@ document.documentElement.classList.add('js');
                     </video>
                 </div>
             </div>
-            <aside class="float-card float-game" aria-hidden="true">
-                <p class="float-kicker">Open game</p>
-                <p class="float-title">Intermediate Doubles</p>
-                <p class="float-meta">Tonight, 7:00 PM</p>
-                <div class="float-people">
-                    <img src="/images/app/avatar_001_sky_visor_smash.webp" alt="" width="96" height="96">
-                    <img src="/images/app/avatar_005_pink_wink_spin.webp" alt="" width="96" height="96">
-                    <img src="/images/app/avatar_012_teal_shades_power.webp" alt="" width="96" height="96">
-                    <span>3 of 4 in</span>
-                </div>
-                <span class="float-cta">Join game</span>
-            </aside>
-            <aside class="float-card float-score" aria-hidden="true">
-                <p class="float-kicker"><span class="live-dot"></span>Live score</p>
-                <div class="score-row leading">
-                    <span class="score-side">
-                        <span class="score-avs">
-                            <img src="/images/app/avatar_001_sky_visor_smash.webp" alt="" width="96" height="96">
-                            <img src="/images/app/avatar_012_teal_shades_power.webp" alt="" width="96" height="96">
-                        </span>
-                        <span class="score-team">Reyes / Tran</span>
-                    </span>
-                    <span class="score-pts" id="scoreA">5</span>
-                </div>
-                <div class="score-row">
-                    <span class="score-side">
-                        <span class="score-avs">
-                            <img src="/images/app/avatar_005_pink_wink_spin.webp" alt="" width="96" height="96">
-                            <img src="/images/app/avatar_016_aqua_net_ninja.webp" alt="" width="96" height="96">
-                        </span>
-                        <span class="score-team">Okafor / Bell</span>
-                    </span>
-                    <span class="score-pts" id="scoreB">4</span>
-                </div>
-            </aside>
         </div>
     </div>
 </section>
 
-<!-- ================= Trust strip ================= -->
-<section class="trust" aria-label="PickleCue at a glance">
-    <div class="trust-inner">
-        <div class="trust-item reveal"><p class="trust-num">22k+</p><p class="trust-label">Courts, growing every week</p></div>
-        <div class="trust-item reveal"><p class="trust-num">50</p><p class="trust-label">States covered, coast to coast</p></div>
-        <div class="trust-item reveal"><p class="trust-num">Native</p><p class="trust-label">Built for iPhone, fast and private</p></div>
-        <div class="trust-item reveal"><p class="trust-num">No ads</p><p class="trust-label">No data sold. Ever.</p></div>
-    </div>
+<!-- ============ Capability proof strip ============
+     Capabilities, not counts. Every item here is a shipped surface with a
+     screenshot further down the page to back it up. -->
+<section class="proof-strip" aria-label="What PickleCue does today">
+    <ul class="proof-list">
+        <li>Native iPhone app</li>
+        <li>Live scores &amp; brackets</li>
+        <li>Organizer control room</li>
+        <li>No login for spectators</li>
+        <li>QR + short codes</li>
+        <li>Live Activities</li>
+    </ul>
 </section>
 
-<!-- ================= The whole game, connected ================= -->
-<section class="connected" id="product">
-    <div class="wrap">
-        <h2 class="reveal">The whole game, connected.</h2>
-        <p class="sub reveal">One thread runs from finding a court to remembering the match. Follow it.</p>
-        <div class="stage reveal">
-            <div class="stage-list" role="tablist" aria-label="Product stages">
-                <button class="stage-item active" role="tab" aria-selected="true" data-shot="0">
-                    <span class="stage-word">Find</span>
-                    <span class="stage-cap">Thousands of courts with the details that matter: surface, lights, open play.</span>
-                </button>
-                <button class="stage-item" role="tab" aria-selected="false" data-shot="1">
-                    <span class="stage-word">Play</span>
-                    <span class="stage-cap">Open games with RSVPs, waitlists, and check-ins. No group-chat chaos.</span>
-                </button>
-                <button class="stage-item" role="tab" aria-selected="false" data-shot="2">
-                    <span class="stage-word">Score</span>
-                    <span class="stage-cap">Live scoring everyone can follow, on the court and off it.</span>
-                </button>
-                <button class="stage-item" role="tab" aria-selected="false" data-shot="3">
-                    <span class="stage-word">Compete</span>
-                    <span class="stage-cap">Leagues and tournaments with real brackets and live results.</span>
-                </button>
-                <button class="stage-item" role="tab" aria-selected="false" data-shot="4">
-                    <span class="stage-word">Remember</span>
-                    <span class="stage-cap">Every match, every stat, your whole story.</span>
-                </button>
-            </div>
-            <div class="stage-device" id="stageDevice" role="button" tabindex="0" aria-label="View this screen full size" style="cursor:zoom-in">
-                <div class="stage-screen" id="stageScreen">
-                    <img src="/images/app/courts-discovery.webp" alt="Court discovery screen" class="show" width="760" height="1651">
-                    <img src="/images/app/game-detail.webp" alt="Game detail with roster" loading="lazy" width="760" height="1651">
-                    <img src="/images/app/s2-live-scoring.webp" alt="Live scoring screen" loading="lazy" width="760" height="1651">
-                    <img src="/images/app/s4-bracket-summer-smash.webp" alt="Tournament bracket screen" loading="lazy" width="760" height="1651">
-                    <img src="/images/app/s6-player-stats.webp" alt="Player stats screen" loading="lazy" width="760" height="1651">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div id="product"></div>
 
-<!-- ================= Story: Courts ================= -->
-<section class="story">
+<!-- ================= 1. DISCOVER ================= -->
+<section class="story" id="discover">
     <div class="story-inner">
-        <div class="story-copy reveal">
-            <p class="story-kicker">Courts</p>
-            <h2>Know the court before you get there.</h2>
-            <p>Surface, lights, indoor or out, and how many courts are waiting. Directions, check-ins, and reviews included.</p>
-            <span class="stat-chip"><b>22k+</b><span>courts</span></span>
+        <div class="story-copy">
+            <p class="story-kicker">01 — Discover</p>
+            <h2>Start with somewhere to play.</h2>
+            <p>A searchable map of public courts across the country, with the detail that decides whether you drive there: surface, lights, nets, indoor or out, and what other players said.</p>
+            <ul class="story-points">
+                <li>Filter by what actually matters — lights, indoor, surface</li>
+                <li>Save your regular courts and set a home court</li>
+                <li>Court reviews and photos from players who show up</li>
+            </ul>
         </div>
-        <div class="story-media reveal">
-            <button class="mini-phone" data-full="/images/app/courts-detail-live-full.webp" aria-label="View court detail full size">
-                <img src="/images/app/courts-detail-live.webp" alt="Court detail with live weather, directions, chat, check-in, and reviews" loading="lazy" width="760" height="1652">
-            </button>
-        </div>
+        <figure class="story-art art-pair">
+            <img class="art-phone" src="/images/web/ios-courts-map.webp" srcset="/images/web/ios-courts-map-sm.webp 620w, /images/web/ios-courts-map.webp 1100w" sizes="(max-width:760px) 88vw, 30vw" alt="The PickleCue courts map, showing nearby pickleball courts with a selected court card." loading="lazy" decoding="async">
+            <img class="art-phone art-offset" src="/images/app/courts-detail.webp" alt="A court detail screen showing surface, lights, hours and player reviews." loading="lazy" decoding="async">
+        </figure>
     </div>
 </section>
 
-<!-- ================= Story: Play ================= -->
-<section class="story flip">
+<!-- ================= 2. PLAY ================= -->
+<section class="story story-alt" id="play">
     <div class="story-inner">
-        <div class="story-copy reveal">
-            <p class="story-kicker">Open games</p>
-            <h2>Fill the court. Anytime.</h2>
-            <p>Post a game, set the level, and watch the spots fill. RSVPs, waitlists, and reminders handled.</p>
+        <div class="story-copy">
+            <p class="story-kicker">02 — Play</p>
+            <h2>Fill the court without the group chat.</h2>
+            <p>Post an open game or join one. Everyone sees the same roster, the same time, and the same court — so nobody turns up to a game that quietly fell apart.</p>
+            <ul class="story-points">
+                <li>Open games with RSVPs and a waitlist</li>
+                <li>A roster everyone can see before they drive over</li>
+                <li>Check people in when they arrive</li>
+            </ul>
         </div>
-        <div class="story-media reveal">
-            <button class="mini-phone" data-full="/images/app/s1-play-open-games-full.webp" aria-label="View open games full size">
-                <img src="/images/app/s1-play-open-games.webp" alt="Open games near you with skill levels and spots left" loading="lazy" width="760" height="1651">
-            </button>
-            <button class="side-card mini-phone" data-full="/images/app/game-join-full.webp" aria-label="View join game sheet full size">
-                <img src="/images/app/game-join.webp" alt="Join game sheet" loading="lazy" width="760" height="1651">
-            </button>
-        </div>
+        <figure class="story-art art-pair">
+            <img class="art-phone" src="/images/web/ios-roster.webp" srcset="/images/web/ios-roster-sm.webp 620w, /images/web/ios-roster.webp 1100w" sizes="(max-width:760px) 88vw, 30vw" alt="A game roster in the PickleCue app showing the players who have joined." loading="lazy" decoding="async">
+            <img class="art-phone art-offset" src="/images/app/s1-play-open-games.webp" alt="A list of open pickleball games with times, courts and how many spots are left." loading="lazy" decoding="async">
+        </figure>
     </div>
 </section>
 
-<!-- ================= Story: Matches ================= -->
-<section class="story story-band">
+<!-- ================= 3. SCORE ================= -->
+<section class="story" id="score">
     <div class="story-inner">
-        <div class="story-copy reveal">
-            <p class="story-kicker">Match history</p>
-            <h2>Your matches remember themselves.</h2>
-            <p>Final scores, streaks, and every stat, saved the moment you finish.</p>
+        <div class="story-copy">
+            <p class="story-kicker">03 — Score</p>
+            <h2>Keep score. Everyone watches it move.</h2>
+            <p>Score a match from your phone and the number changes everywhere at once — on the other players' phones, on the public event page, and on the board at the venue.</p>
+            <ul class="story-points">
+                <li>Point-by-point scoring with undo</li>
+                <li>Every change written to a tamper-proof audit log</li>
+                <li>Spectators follow along without installing anything</li>
+            </ul>
         </div>
-        <div class="duo reveal">
-            <button class="mini-phone" data-full="/images/app/logmatch-complete-full.webp" aria-label="View match completion full size">
-                <img src="/images/app/logmatch-complete.webp" alt="You won 3 to 1 match completion screen" loading="lazy" width="760" height="1651">
-            </button>
-            <button class="mini-phone" data-full="/images/app/match-result-full.webp" aria-label="View match result full size">
-                <img src="/images/app/match-result.webp" alt="Verified match result 13 to 11" loading="lazy" width="760" height="1651">
-            </button>
-        </div>
+        <figure class="story-art">
+            <img class="art-phone art-solo" src="/images/web/ios-scoring-crop.webp" srcset="/images/web/ios-scoring-crop-sm.webp 620w, /images/web/ios-scoring-crop.webp 1100w" sizes="(max-width:760px) 88vw, 34vw" alt="Live scoring in the PickleCue app, showing a match score mid-game." loading="lazy" decoding="async">
+        </figure>
     </div>
 </section>
 
-<!-- ================= Story: Leagues ================= -->
-<section class="story">
+<!-- ================= 4. REMEMBER ================= -->
+<section class="story story-alt" id="remember">
     <div class="story-inner">
-        <div class="story-copy reveal">
-            <p class="story-kicker">Leagues</p>
-            <h2>Run the season without a spreadsheet.</h2>
-            <p>Standings update themselves. Schedules stay current. Champions crown themselves.</p>
+        <div class="story-copy">
+            <p class="story-kicker">04 — Remember</p>
+            <h2>Every match becomes your record.</h2>
+            <p>Scores you log become a history you can actually read — who you played, how it went, and how you are trending over a season instead of a night.</p>
+            <ul class="story-points">
+                <li>Full match history with scores and partners</li>
+                <li>Win-loss record and streaks, derived from real matches</li>
+                <li>Results both sides can verify</li>
+            </ul>
         </div>
-        <div class="story-media reveal">
-            <button class="mini-phone" data-full="/images/app/league-standings-champion-full.webp" aria-label="View completed league standings full size">
-                <img src="/images/app/league-standings-champion.webp" alt="Completed league standings with champion" loading="lazy" width="760" height="1651">
-            </button>
-            <button class="side-card mini-phone" data-full="/images/app/leagues-hub-full.webp" aria-label="View leagues hub full size">
-                <img src="/images/app/leagues-hub.webp" alt="Leagues hub" loading="lazy" width="760" height="1651">
-            </button>
-        </div>
+        <figure class="story-art art-pair">
+            <img class="art-phone" src="/images/web/ios-match-history.webp" srcset="/images/web/ios-match-history-sm.webp 620w, /images/web/ios-match-history.webp 1100w" sizes="(max-width:760px) 88vw, 30vw" alt="Match history in the PickleCue app, listing recent matches with scores." loading="lazy" decoding="async">
+            <img class="art-phone art-offset" src="/images/web/ios-player-stats.webp" alt="Player statistics showing win-loss record and recent form." loading="lazy" decoding="async">
+        </figure>
     </div>
 </section>
 
-<!-- ================= Tournaments wow ================= -->
-<section class="wow">
-    <div class="wow-inner">
-        <p class="story-kicker reveal">Tournaments</p>
-        <h2 class="reveal">From first serve to final bracket.</h2>
-        <p class="reveal">Run the event, advance winners, and give everyone one place to follow along. Single or double elimination, live.</p>
-        <div class="wow-media reveal">
-            <button class="mini-phone primary" data-full="/images/app/bracket-champion-full.webp" aria-label="View completed bracket full size">
-                <img src="/images/app/bracket-champion.webp" alt="Completed tournament bracket with champion" loading="lazy" width="760" height="1651">
-            </button>
-            <button class="mini-phone secondary" data-full="/images/app/tournament-detail-full.webp" aria-label="View tournament hub full size">
-                <img src="/images/app/tournament-detail.webp" alt="Tournament detail hub" loading="lazy" width="760" height="1651">
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- ================= Story: Social ================= -->
-<section class="story">
+<!-- ================= 5. COMPETE ================= -->
+<section class="story" id="compete">
     <div class="story-inner">
-        <div class="story-copy reveal">
-            <p class="story-kicker">Messaging</p>
-            <h2>Your pickleball people, in one place.</h2>
-            <p>Game chats, league threads, and direct messages. The plan and the trash talk, together.</p>
+        <div class="story-copy">
+            <p class="story-kicker">05 — Compete</p>
+            <h2>Leagues and tournaments that keep themselves current.</h2>
+            <p>Standings recalculate as results land. Brackets advance the winner for you. Nobody maintains a spreadsheet between rounds.</p>
+            <ul class="story-points">
+                <li>Single and double elimination, plus round robin</li>
+                <li>League standings with win %, points for and against</li>
+                <li>Brackets that fill themselves in as matches finish</li>
+            </ul>
         </div>
-        <div class="duo reveal">
-            <button class="mini-phone" data-full="/images/app/chat-inbox-full.webp" aria-label="View messages inbox full size">
-                <img src="/images/app/chat-inbox.webp" alt="Messages inbox" loading="lazy" width="760" height="1651">
-            </button>
-            <button class="mini-phone" data-full="/images/app/s8-chat-thread-full.webp" aria-label="View chat thread full size">
-                <img src="/images/app/s8-chat-thread.webp" alt="Group chat thread" loading="lazy" width="760" height="1651">
-            </button>
-        </div>
+        <figure class="story-art art-pair">
+            <img class="art-phone" src="/images/web/ios-bracket-crop.webp" srcset="/images/web/ios-bracket-crop-sm.webp 620w, /images/web/ios-bracket-crop.webp 1100w" sizes="(max-width:760px) 88vw, 30vw" alt="A tournament bracket in the PickleCue app." loading="lazy" decoding="async">
+            <img class="art-phone art-offset" src="/images/web/ios-standings.webp" alt="League standings showing wins, losses and win percentage." loading="lazy" decoding="async">
+        </figure>
     </div>
 </section>
 
-<!-- ================= Native iOS ================= -->
-<section class="native">
-    <div class="native-inner">
-        <p class="story-kicker reveal">Built for iPhone</p>
-        <h2 class="reveal">The match stays with you.</h2>
-        <p class="reveal">Live scores on your Lock Screen and in the Dynamic Island. Reminders that arrive before the first serve.</p>
-        <button class="island-crop reveal" data-full="/images/app/dynamic-island-full.webp" aria-label="View Dynamic Island full size">
-            <img src="/images/app/dynamic-island-crop.webp" alt="Live score in the Dynamic Island" loading="lazy" width="900" height="286">
-        </button>
-        <div class="native-row reveal">
-            <button class="mini-phone" data-full="/images/app/s7-lock-screen-full.webp" aria-label="View Lock Screen Live Activity full size">
-                <img src="/images/app/s7-lock-screen.webp" alt="Live Activity on the Lock Screen" loading="lazy" width="760" height="1651">
-            </button>
-            <button class="mini-phone" data-full="/images/app/notifications-full.webp" aria-label="View notifications full size">
-                <img src="/images/app/notifications.webp" alt="Notifications list" loading="lazy" width="760" height="1651">
-            </button>
-            <button class="mini-phone" data-full="/images/app/hub-drawer-full.webp" aria-label="View hub drawer full size">
-                <img src="/images/app/hub-drawer.webp" alt="Hub drawer navigation" loading="lazy" width="760" height="1651">
-            </button>
-        </div>
+<!-- ============ Transition into the organizer product ============ -->
+<section class="turn">
+    <div class="turn-inner">
+        <p class="turn-kicker">And when you are the one running it</p>
+        <h2 class="turn-h">The app is for playing.<br><span class="accent-cue">The web is for running the whole thing.</span></h2>
+        <p class="turn-sub">Open a browser on a laptop at the desk. Same event, same data, same second.</p>
     </div>
 </section>
 
-<!-- ================= Roles showcase ================= -->
-<section class="roles">
-    <div class="roles-inner">
-        <div class="reveal">
-            <h2>Whatever your game is, it has a home here.</h2>
-            <div class="role-list" role="tablist" aria-label="Choose your role">
-                <button class="role-item active" role="tab" aria-selected="true" data-role="0">
-                    <span class="role-word">Player</span>
-                    <span class="role-desc">Find your next game. Meet your people. Keep every match.</span>
-                    <a class="role-link" href="/players.html">Explore the player experience
-                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-                </button>
-                <button class="role-item" role="tab" aria-selected="false" data-role="1">
-                    <span class="role-word">Organizer</span>
-                    <span class="role-desc">Run the competition. Lose the spreadsheet.</span>
-                    <a class="role-link" href="/organizers.html">Explore organizer tools
-                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-                </button>
-                <button class="role-item" role="tab" aria-selected="false" data-role="2">
-                    <span class="role-word">Club</span>
-                    <span class="role-desc">Give your community one place to play.</span>
-                    <a class="role-link" href="/clubs.html">Explore club features
-                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-                </button>
+<!-- ================= 6. RUN THE WHOLE EVENT ================= -->
+<section class="story story-wide" id="organizer">
+    <div class="story-wide-inner">
+        <div class="story-copy story-copy-center">
+            <p class="story-kicker">06 — Run the whole event</p>
+            <h2>The control room.</h2>
+            <p>Every match on one screen. Update a live score, correct a finished one, hand a court to a scorekeeper, print the QR, export the day — without leaving the page.</p>
+        </div>
+        <figure class="story-shot">
+            <img src="/images/web/org-control-room.webp" srcset="/images/web/org-control-room-sm.webp 760w, /images/web/org-control-room.webp 1600w" sizes="(max-width:900px) 94vw, 1100px" alt="The PickleCue organizer control room: a list of matches with live scores, controls to update or complete each one, and buttons for the live page, scorekeeper mode, QR posters and CSV export." loading="lazy" decoding="async">
+        </figure>
+        <ul class="feature-row">
+            <li><b>Match control</b><span>Update, complete, or correct any match</span></li>
+            <li><b>Scorekeepers</b><span>Hand a court to staff without giving up organizer access</span></li>
+            <li><b>Player book</b><span>Everyone who has ever registered, with no-shows tracked</span></li>
+            <li><b>CSV export</b><span>Take the whole event with you</span></li>
+        </ul>
+    </div>
+</section>
+
+<!-- ================= 7. REGISTRATION → CHAMPION ================= -->
+<section class="story story-alt" id="lifecycle">
+    <div class="story-wide-inner">
+        <div class="story-copy story-copy-center">
+            <p class="story-kicker">07 — From registration to champion</p>
+            <h2>One event, end to end.</h2>
+            <p>Registration, waiver, partner pairing, check-in, scoring, bracket, result. Each step is a real screen in the shipping product — these are captures of it, not drawings of it.</p>
+        </div>
+        <ol class="flow">
+            <li>
+                <figure><img src="/images/web/step-reg-form.webp" srcset="/images/web/step-reg-form-sm.webp 620w, /images/web/step-reg-form.webp 1200w" sizes="(max-width:760px) 80vw, 22vw" alt="The public registration form for an event, asking for name, email, skill level and partner." loading="lazy" decoding="async"></figure>
+                <p class="flow-step">Step 1</p><p class="flow-t">They register</p>
+                <p class="flow-d">From a link or a QR code. No account required.</p>
+            </li>
+            <li>
+                <figure><img src="/images/web/step-reg-waiver.webp" srcset="/images/web/step-reg-waiver-sm.webp 620w, /images/web/step-reg-waiver.webp 1200w" sizes="(max-width:760px) 80vw, 22vw" alt="The waiver text shown inside the registration form with a field to sign by typing a full name." loading="lazy" decoding="async"></figure>
+                <p class="flow-step">Step 2</p><p class="flow-t">They sign the waiver</p>
+                <p class="flow-d">Signed as part of registering, and recorded against it.</p>
+            </li>
+            <li>
+                <figure><img src="/images/web/step-reg-partner.webp" srcset="/images/web/step-reg-partner-sm.webp 620w, /images/web/step-reg-partner.webp 1200w" sizes="(max-width:760px) 80vw, 22vw" alt="The partner section of the registration form, with options for having a partner or needing one." loading="lazy" decoding="async"></figure>
+                <p class="flow-step">Step 3</p><p class="flow-t">Partners get paired</p>
+                <p class="flow-d">Bring one, or sign up solo and get matched at the desk.</p>
+            </li>
+            <li>
+                <figure><img src="/images/web/step-org-checkin.webp" srcset="/images/web/step-org-checkin-sm.webp 620w, /images/web/step-org-checkin.webp 1200w" sizes="(max-width:760px) 80vw, 22vw" alt="The check-in desk showing teams ready to play, teams still owing a waiver, and check-in controls." loading="lazy" decoding="async"></figure>
+                <p class="flow-step">Step 4</p><p class="flow-t">You check them in</p>
+                <p class="flow-d">Search a name, mark them in. Missing waivers are flagged.</p>
+            </li>
+            <li>
+                <figure><img src="/images/web/org-scorekeeper-pad.webp" srcset="/images/web/org-scorekeeper-pad-sm.webp 760w, /images/web/org-scorekeeper-pad.webp 1600w" sizes="(max-width:760px) 80vw, 22vw" alt="The scorekeeper scoring pad with large plus and minus buttons for each team and a submit control." loading="lazy" decoding="async"></figure>
+                <p class="flow-step">Step 5</p><p class="flow-t">Staff score the courts</p>
+                <p class="flow-d">Big buttons, undo, and a court-scoped view.</p>
+            </li>
+            <li>
+                <figure><img src="/images/web/live-bracket.webp" srcset="/images/web/live-bracket-sm.webp 760w, /images/web/live-bracket.webp 1600w" sizes="(max-width:760px) 80vw, 22vw" alt="A completed tournament bracket on the public live page, with the champion highlighted." loading="lazy" decoding="async"></figure>
+                <p class="flow-step">Step 6</p><p class="flow-t">You get a champion</p>
+                <p class="flow-d">The bracket advanced itself the whole way there.</p>
+            </li>
+        </ol>
+    </div>
+</section>
+
+<!-- ================= 8. NO APP? NO PROBLEM ================= -->
+<section class="story story-dark" id="spectators">
+    <div class="story-wide-inner">
+        <div class="story-copy story-copy-center">
+            <p class="story-kicker">08 — No app? No problem.</p>
+            <h2>Scan the code. You are in.</h2>
+            <p>Most people at an event will never install anything. They get a real page anyway — the schedule, their next match, the live score, and the bracket.</p>
+        </div>
+        <div class="spectate">
+            <figure class="spectate-poster">
+                <img src="/images/web/org-qr-poster.webp" srcset="/images/web/org-qr-poster-sm.webp 760w, /images/web/org-qr-poster.webp 1600w" sizes="(max-width:900px) 90vw, 44vw" alt="The organizer QR code and poster panel, generating a printable code and a short link for the event." loading="lazy" decoding="async">
+                <figcaption>Print it, tape it to the desk.</figcaption>
+            </figure>
+            <div class="spectate-phones">
+                <figure><img src="/images/web/reg-event-home.webp" srcset="/images/web/reg-event-home-sm.webp 760w, /images/web/reg-event-home.webp 1600w" sizes="(max-width:760px) 42vw, 15vw" alt="The public event page on a phone, showing the event details and tabs." loading="lazy" decoding="async"><figcaption>The event page</figcaption></figure>
+                <figure><img src="/images/web/mkt-whats-next.webp" srcset="/images/web/mkt-whats-next-sm.webp 760w, /images/web/mkt-whats-next.webp 1600w" sizes="(max-width:760px) 42vw, 15vw" alt="The what's next view on a phone: the team is playing now on Court 2 against Blake H. and Drew M., with the live score at 7-5." loading="lazy" decoding="async"><figcaption>Their next match</figcaption></figure>
+                <figure><img src="/images/web/score-live-phone.webp" srcset="/images/web/score-live-phone-sm.webp 760w, /images/web/score-live-phone.webp 1600w" sizes="(max-width:760px) 42vw, 15vw" alt="A live match score on a phone, updating as points are scored." loading="lazy" decoding="async"><figcaption>The live score</figcaption></figure>
             </div>
         </div>
-        <div class="roles-device reveal" id="rolesDevice" role="button" tabindex="0" aria-label="View this screen full size" style="cursor:zoom-in">
-            <div class="stage-screen" id="rolesScreen">
-                <img src="/images/app/s10-home-dashboard.webp" alt="Player home dashboard" class="show" width="760" height="1651">
-                <img src="/images/app/organizer-center.webp" alt="Organizer command center" loading="lazy" width="760" height="1651">
-                <img src="/images/app/courts-allcourts.webp" alt="All courts explorer" loading="lazy" width="760" height="1651">
-            </div>
+        <ul class="feature-row feature-row-dark">
+            <li><b>Short codes</b><span>picklecue.com/e/ABC123 — say it out loud, text it, print it</span></li>
+            <li><b>TV &amp; projector mode</b><span>Put the board on the screen at the venue</span></li>
+            <li><b>Nothing to install</b><span>It is a web page, so it just opens</span></li>
+        </ul>
+    </div>
+</section>
+
+<!-- ================= 9. BUILT FOR iPHONE ================= -->
+<section class="story" id="iphone">
+    <div class="story-inner">
+        <div class="story-copy">
+            <p class="story-kicker">09 — Built for iPhone</p>
+            <h2>The score, without unlocking your phone.</h2>
+            <p>A live match runs as a Live Activity on the Lock Screen and in the Dynamic Island. Glance down between points; score from there if it is your match.</p>
+            <ul class="story-points">
+                <li>Live Activity on the Lock Screen and Dynamic Island</li>
+                <li>Push notifications when a game fills or a match is called</li>
+                <li>Built in SwiftUI for iOS — not a wrapped website</li>
+            </ul>
         </div>
+        <figure class="story-art">
+            <img class="art-phone art-solo" src="/images/web/ios-live-activity.webp" srcset="/images/web/ios-live-activity-sm.webp 620w, /images/web/ios-live-activity.webp 1100w" sizes="(max-width:760px) 88vw, 34vw" alt="A PickleCue Live Activity on the iPhone Lock Screen showing a live game at match point with the score and court." loading="lazy" decoding="async">
+        </figure>
     </div>
 </section>
 
-<!-- ================= Community ================= -->
-<section class="community">
-    <img class="community-mark" src="/images/email/cuemark.png" alt="" aria-hidden="true" width="512" height="512">
-    <div class="wrap">
-        <h2 class="reveal">More than a game.</h2>
-        <p class="reveal">Pickle for a Purpose is how PickleCue supports people using pickleball to strengthen their communities, from charity tournaments to youth programs.</p>
-        <a class="reveal" href="/community.html">See what the community is building
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    </div>
-</section>
-
-<!-- ================= FAQ ================= -->
-<section class="faq">
-    <div class="wrap-tight">
-        <h2 class="reveal">Frequently asked questions</h2>
-        <div class="faq-grid reveal">
-            <div>
-                <details>
-                    <summary>When does PickleCue launch?</summary>
-                    <p>PickleCue for iOS is in final App Review. Join the waitlist and we will email you the day it is live on the App Store.</p>
-                </details>
-                <details>
-                    <summary>Is PickleCue free?</summary>
-                    <p>Yes. Finding courts, joining games, logging matches, and messaging are free. An optional subscription, PickleCue Pro, adds organizer tools like unlimited game creation, leagues, and tournaments.</p>
-                </details>
-                <details>
-                    <summary>Which devices does it run on?</summary>
-                    <p>PickleCue is a native iPhone app for iOS 18 and later, and it runs on iPad too.</p>
-                </details>
-            </div>
-            <div>
-                <details>
-                    <summary>Do you show ads or sell my data?</summary>
-                    <p>No ads, no data sold, no tracking across apps. Read the full <a href="/privacy.html">privacy policy</a>.</p>
-                </details>
-                <details>
-                    <summary>Do organizers need Pro?</summary>
-                    <p>Creating leagues and tournaments is part of PickleCue Pro. Players join games, leagues, and tournaments for free.</p>
-                </details>
-                <details>
-                    <summary>Can spectators follow matches without the app?</summary>
-                    <p>Yes. Live scores and brackets have share pages that open in any browser. Try the <a href="/demo/">live demo</a>.</p>
-                </details>
-            </div>
+<!-- ================= 10. COMMUNITY ================= -->
+<section class="story story-alt" id="community">
+    <div class="story-inner">
+        <div class="story-copy">
+            <p class="story-kicker">10 — Community</p>
+            <h2>The point is the people on the court.</h2>
+            <p>Message the players you met, keep a group together across a season, and turn a one-off game into a regular one. The software is only there to get you back on the court.</p>
+            <ul class="story-points">
+                <li>Direct messages and event chat</li>
+                <li>Friends, and a weekly view of what you have on</li>
+                <li>Block, report and privacy controls that are easy to find</li>
+            </ul>
         </div>
+        <figure class="story-art art-pair">
+            <img class="art-photo" src="/images/p4p-hero-golden.webp" alt="Players on an outdoor pickleball court in late afternoon light." loading="lazy" decoding="async">
+            <img class="art-phone art-offset" src="/images/web/ios-chat-thread.webp" srcset="/images/web/ios-chat-thread-sm.webp 620w, /images/web/ios-chat-thread.webp 1100w" sizes="(max-width:760px) 60vw, 22vw" alt="A chat thread in the PickleCue app between players organising a game." loading="lazy" decoding="async">
+        </figure>
     </div>
 </section>
 
-<!-- ================= Final CTA ================= -->
-<section class="final" id="early-access">
-    <img class="final-mark" src="/images/email/cuemark.png" alt="" aria-hidden="true" width="512" height="512">
+<!-- ================= 11. FINAL CTA ================= -->
+<section class="final-cta" id="early-access">
     <div class="final-inner">
-        <p class="kicker reveal">Ready to play?</p>
-        <h2 class="reveal">Your next game is closer than you think.</h2>
-        <p class="sub reveal">Join the waitlist and we will email you the day PickleCue is live.</p>
-        <form class="waitlist-form reveal" id="waitlistForm" novalidate aria-label="Join the waitlist">
-            <label for="waitlist-email" style="position:absolute;left:-9999px;">Email address</label>
-            <input type="email" id="waitlist-email" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsg">
+        <h2>Get on the list.</h2>
+        <p>PickleCue is coming to the App Store. Join the waitlist and we will tell you the day it lands — no other email, ever.</p>
+        <form class="waitlist-form waitlist-dark" id="waitlistFormFinal" novalidate aria-label="Join the waitlist">
+            <label for="waitlist-email-final" style="position:absolute;left:-9999px;">Email address</label>
+            <input type="email" id="waitlist-email-final" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgFinal">
             <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
-            <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="footer_early_access">Join the waitlist</button>
+            <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="final_waitlist">Join the waitlist</button>
         </form>
-        <p class="waitlist-msg" id="waitlistMsg" role="status" aria-live="polite"></p>
-        <p class="final-trust reveal"><span>Free core app</span><span>No ads</span><span>Native iOS</span></p>
+        <p class="waitlist-msg" id="waitlistMsgFinal" role="status" aria-live="polite"></p>
+        <p class="final-note">Free core app · No ads · Organizer tools are part of PickleCue Pro</p>
+        <ul class="proof-list proof-list-dark">
+            <li>Native iPhone app</li>
+            <li>Live scores &amp; brackets</li>
+            <li>Organizer control room</li>
+            <li>No login for spectators</li>
+            <li>QR + short codes</li>
+            <li>Live Activities</li>
+        </ul>
     </div>
 </section>
 
-<!-- ================= Footer ================= -->
 </main>
 
 <footer>

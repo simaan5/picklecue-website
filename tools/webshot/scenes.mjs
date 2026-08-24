@@ -180,6 +180,17 @@ export const SCENES = [
     query: { t: EVENTS.T_MARKETING },
     viewport: 'phone',
   },
+  {
+    id: 'mkt-whats-next',
+    feature: 'What’s next',
+    label: 'Following the team that is on court',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'me' },
+    viewport: 'phone',
+    // Follow the team that is actually mid-match, so the payoff is the live
+    // score rather than a pending fixture.
+    actions: [{ click: 'button[data-me-pick]:has-text("Noah C. / Dakota M.")' }],
+  },
   // ---- live scoring, produced by a real scoring session ------------------
   // Court 2 is genuinely mid-match at 7-5. Every point came from
   // record_score_event (match_started, then point_added per rally) — the same
@@ -214,6 +225,16 @@ export const SCENES = [
     label: 'Bracket filling in as matches finish',
     page: 'live.html',
     query: { t: EVENTS.T_MARKETING, view: 'bracket' },
+    viewport: 'desktop',
+  },
+  // League standings — reachable by URL only since today's live.html fix
+  // (the Standings tab existed but could previously only be tapped).
+  {
+    id: 'league-standings',
+    feature: 'League standings',
+    label: 'Season standings, shareable by link',
+    page: 'live.html',
+    query: { l: '053c7938-9ca9-4bfe-b72a-a17387907571', view: 'standings' },
     viewport: 'desktop',
   },
   {

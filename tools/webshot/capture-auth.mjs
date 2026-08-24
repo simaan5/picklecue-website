@@ -72,6 +72,16 @@ try {
   // ---- event list --------------------------------------------------------
   await shot('org-events');
 
+  // ---- CRM / player book (lives on the list page, across all events) ------
+  const pbList = page.locator('#playerBookBtn');
+  if (await pbList.count()) {
+    await pbList.click();
+    await page.waitForTimeout(1800);
+    await shot('org-player-book');
+    await page.goto(`${site.origin}/organizer.html`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(2000);
+  }
+
   // ---- control room ------------------------------------------------------
   // The event title is a heading, not a control — clicking it does nothing.
   // Open the row's own "Manage" button, scoped to this event's row so a
@@ -118,6 +128,15 @@ try {
   await page.goto(`${site.origin}/scorekeeper.html?t=${EVENT}`, { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(2500);
   await shot('org-scorekeeper');
+
+  // The scoring pad itself is behind the row's Score button — that is the
+  // screen a scorekeeper actually spends the match looking at.
+  const scoreBtn = page.getByRole('button', { name: /^score$/i }).first();
+  if (await scoreBtn.count()) {
+    await scoreBtn.click();
+    await page.waitForTimeout(1600);
+    await shot('org-scorekeeper-pad');
+  }
 } catch (err) {
   failures++;
   console.log(`  FAILED: ${err.message.split('\n')[0]}`);
