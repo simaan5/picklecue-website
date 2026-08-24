@@ -873,211 +873,160 @@ html.js .reveal.in{ opacity:1; transform:none; }
 }
 
 /* ===================== Product storyline =====================
-   Sections 01-11. Everything here is scoped to .story / .proof-* / .flow /
-   .turn / .spectate / .final-* so it cannot collide with the older rules
-   above, which own the hero, masthead and footer.
+   Scoped to .story / .proof-* / .tile* / .shot-* / .strip / .final-* so it
+   cannot collide with the older rules above, which own the hero, masthead and
+   footer. Colours come from the tokens already on :root.
 
-   Colours come from the tokens already defined on :root (and redefined for
-   dark), so these sections follow the theme without a second palette. */
+   RULE: every screenshot is shown COMPLETE. Boxes have a fixed height and the
+   image uses object-fit:contain inside them, so a capture is letterboxed
+   rather than sliced. An earlier pass used object-fit:cover and the shots read
+   as "cut out" — a cropped screenshot also quietly misrepresents the UI. */
 
 /* ---- capability proof strip: capabilities, never counts ---- */
-.proof-strip{
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    background:var(--card);
-}
+.proof-strip{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--card); }
 .proof-list{
-    list-style:none; margin:0 auto; padding:18px 24px;
-    max-width:var(--wrap); display:flex; flex-wrap:wrap;
-    align-items:center; justify-content:center; gap:10px 30px;
+    list-style:none; margin:0 auto; padding:16px 24px; max-width:var(--wrap);
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:9px 28px;
 }
 .proof-list li{
-    font-family:var(--f-mono); font-size:11.5px; letter-spacing:.13em;
-    text-transform:uppercase; color:var(--ink-mute);
-    display:flex; align-items:center; gap:11px; white-space:nowrap;
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.13em; text-transform:uppercase;
+    color:var(--ink-mute); display:flex; align-items:center; gap:10px; white-space:nowrap;
 }
-.proof-list li::before{
-    content:""; width:5px; height:5px; border-radius:50%;
-    background:var(--court-fg); flex:0 0 auto;
-}
+.proof-list li::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--court-fg); flex:0 0 auto; }
 
-/* ---- the alternating story sections ---- */
-.story{ padding:96px 24px; }
+/* ---- sections ---- */
+.story{ padding:78px 24px; }
 .story-alt{ background:var(--card); }
+.story-dark, .story-night{ background:var(--night); color:var(--paper-on-night); }
+.story-night{ background:#04120C; }
+.story-dark .story-kicker, .story-night .story-kicker{ color:var(--cue); }
+.story-dark .story-copy > p, .story-night .story-copy > p{ color:var(--mute-on-night); }
+
 .story-inner{
     max-width:var(--wrap-tight); margin:0 auto;
-    display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center;
+    display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;
 }
-/* Alternate which side the art sits on, so the page does not march. */
-.story:nth-of-type(even) .story-inner > .story-copy{ order:2; }
+.story-wide-inner{ max-width:var(--wrap-tight); margin:0 auto; }
 
 .story-kicker{
-    font-family:var(--f-mono); font-size:11.5px; letter-spacing:.15em;
-    text-transform:uppercase; color:var(--court-fg); margin:0 0 14px;
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--court-fg); margin:0 0 13px;
 }
 .story-copy h2{
-    font-size:clamp(1.9rem,3.4vw,2.7rem); line-height:1.08;
-    letter-spacing:-.028em; margin:0 0 16px; text-wrap:balance;
+    font-size:clamp(1.8rem,3.2vw,2.5rem); line-height:1.08; letter-spacing:-.028em;
+    margin:0 0 14px; text-wrap:balance;
 }
-.story-copy > p{
-    color:var(--ink-soft); font-size:1.06rem; line-height:1.6;
-    margin:0 0 22px; max-width:52ch;
-}
-.story-points{ list-style:none; margin:0; padding:0; display:grid; gap:11px; }
-.story-points li{
-    position:relative; padding-left:26px; color:var(--ink-soft);
-    font-size:.98rem; line-height:1.5;
-}
-.story-points li::before{
-    content:""; position:absolute; left:0; top:.52em;
-    width:11px; height:7px; border-left:2px solid var(--court-fg);
-    border-bottom:2px solid var(--court-fg); transform:rotate(-45deg);
-}
-
-/* ---- artwork ---- */
-.story-art{ margin:0; display:flex; justify-content:center; align-items:flex-end; gap:0; }
-.art-phone{
-    width:100%; max-width:330px; height:auto; display:block;
-    border-radius:22px; border:1px solid var(--line);
-    background:var(--card);
-    box-shadow:0 26px 60px -28px rgba(6,24,17,.42);
-}
-.art-solo{ max-width:400px; }
-.art-pair .art-phone{ max-width:290px; }
-.art-pair .art-offset{ margin-left:-64px; margin-bottom:44px; position:relative; z-index:2; }
-.art-photo{
-    width:100%; max-width:340px; height:auto; display:block;
-    border-radius:22px; object-fit:cover; aspect-ratio:3/4;
-    border:1px solid var(--line);
-    box-shadow:0 26px 60px -28px rgba(6,24,17,.42);
-}
-
-/* ---- the turn into the organizer product ---- */
-.turn{ background:var(--night); color:var(--paper-on-night); padding:104px 24px; text-align:center; }
-.turn-inner{ max-width:900px; margin:0 auto; }
-.turn-kicker{
-    font-family:var(--f-mono); font-size:11.5px; letter-spacing:.15em;
-    text-transform:uppercase; color:var(--mute-on-night); margin:0 0 18px;
-}
-.turn-h{
-    font-size:clamp(2rem,4.4vw,3.2rem); line-height:1.08;
-    letter-spacing:-.03em; margin:0 0 18px; text-wrap:balance;
-}
-.accent-cue{ color:var(--cue); }
-.turn-sub{ color:var(--mute-on-night); font-size:1.08rem; margin:0; }
-
-/* ---- full-width sections (control room, lifecycle, spectators) ---- */
-.story-wide{ padding:96px 24px; }
-.story-wide-inner{ max-width:var(--wrap-tight); margin:0 auto; }
-.story-copy-center{ text-align:center; max-width:760px; margin:0 auto 44px; }
+.story-copy > p{ color:var(--ink-soft); font-size:1.04rem; line-height:1.6; margin:0; max-width:54ch; }
+.story-copy-center{ text-align:center; max-width:720px; margin:0 auto 40px; }
 .story-copy-center > p{ margin-left:auto; margin-right:auto; }
-.story-shot{ margin:0 0 40px; }
-.story-shot img{
-    width:100%; height:auto; display:block; border-radius:16px;
+.accent-cue{ color:var(--cue); }
+
+/* ---- single phone, shown whole ---- */
+.shot-phone{ margin:0; display:flex; justify-content:center; }
+.shot-phone img{
+    width:auto; max-width:100%; max-height:520px; display:block;
+    border-radius:20px; border:1px solid var(--line); background:var(--card);
+    box-shadow:0 26px 60px -30px rgba(6,24,17,.4);
+}
+
+/* ---- two phones side by side, neither clipped ---- */
+.shot-duo{ margin:0; display:flex; justify-content:center; align-items:center; gap:18px; }
+.shot-duo img{
+    width:auto; max-width:calc(50% - 9px); max-height:470px; display:block;
+    border-radius:18px; border:1px solid var(--line); background:var(--card);
+    box-shadow:0 22px 52px -30px rgba(6,24,17,.4);
+}
+
+/* ---- tile grids ---- */
+.tile-grid{ display:grid; gap:22px; }
+.tile-grid-4{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+.tile{ margin:0; display:flex; flex-direction:column; gap:11px; }
+.tile-shot{
+    border-radius:14px; border:1px solid var(--line); background:var(--card);
+    display:flex; align-items:center; justify-content:center; overflow:hidden; padding:10px;
+    box-shadow:0 18px 44px -28px rgba(6,24,17,.38);
+}
+.story-dark .tile-shot, .story-night .tile-shot{
+    background:rgba(255,255,255,.04); border-color:var(--line-night);
+    box-shadow:0 20px 50px -30px rgba(0,0,0,.7);
+}
+.tile-tall{ height:400px; }
+.tile-land{ height:210px; }
+.tile-wide{ height:400px; }
+.tile-shot img{ max-width:100%; max-height:100%; width:auto; height:auto; display:block; object-fit:contain; border-radius:6px; }
+.tile figcaption{ display:flex; flex-direction:column; gap:2px; font-size:.85rem; line-height:1.4; }
+.tile figcaption b{ font-weight:600; }
+.tile figcaption span{ color:var(--ink-mute); font-size:.8rem; }
+.story-dark .tile figcaption b, .story-night .tile figcaption b{ color:var(--paper-on-night); }
+.story-dark .tile figcaption span, .story-night .tile figcaption span{ color:var(--mute-on-night); }
+
+/* ---- one wide browser capture, shown whole ---- */
+.shot-wide{ margin:36px 0 0; }
+.shot-wide img{
+    width:100%; height:auto; display:block; border-radius:15px;
     border:1px solid var(--line); background:var(--card);
-    box-shadow:0 34px 80px -40px rgba(6,24,17,.46);
+    box-shadow:0 34px 78px -42px rgba(6,24,17,.45);
 }
-
-.feature-row{
-    list-style:none; margin:0; padding:0;
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:26px;
-}
-.feature-row li{ display:flex; flex-direction:column; gap:5px; }
-.feature-row b{ font-size:.98rem; }
-.feature-row span{ color:var(--ink-mute); font-size:.9rem; line-height:1.5; }
-
-/* ---- the six-step lifecycle ---- */
-.flow{
-    list-style:none; margin:0; padding:0;
-    /* Six steps: three columns reads as 3+3. An auto-fit track would give
-       4+2 at this width and leave a hole in the sequence. */
-    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:38px 28px;
-    counter-reset:flow;
-}
-.flow > li{ display:flex; flex-direction:column; }
-.flow figure{ margin:0 0 16px; }
-.flow img{
-    width:100%; height:250px; object-fit:cover; object-position:top center;
-    display:block; border-radius:13px; border:1px solid var(--line);
-    background:var(--card); box-shadow:0 18px 40px -24px rgba(6,24,17,.4);
-}
-.flow-step{
-    font-family:var(--f-mono); font-size:10.5px; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--court-fg); margin:0 0 5px;
-}
-.flow-t{ font-weight:600; margin:0 0 5px; font-size:1rem; }
-.flow-d{ color:var(--ink-mute); font-size:.89rem; line-height:1.5; margin:0; }
-
-/* ---- spectators (dark) ---- */
-.story-dark{ background:var(--night); color:var(--paper-on-night); }
-.story-dark .story-kicker{ color:var(--cue); }
-.story-dark .story-copy > p{ color:var(--mute-on-night); }
-.spectate{
-    display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
-    gap:42px; align-items:center; margin-bottom:44px;
-}
-.spectate figure{ margin:0; }
-.spectate img{
-    width:100%; height:auto; display:block; border-radius:14px;
-    border:1px solid var(--line-night);
-    box-shadow:0 28px 66px -34px rgba(0,0,0,.7);
-}
-.spectate figcaption{
-    margin-top:11px; font-family:var(--f-mono); font-size:10.5px;
+.shot-wide-dark img{ border-color:var(--line-night); box-shadow:0 34px 80px -40px rgba(0,0,0,.75); }
+.shot-wide figcaption{
+    margin-top:13px; text-align:center; font-family:var(--f-mono); font-size:10.5px;
     letter-spacing:.13em; text-transform:uppercase; color:var(--mute-on-night);
-    text-align:center;
 }
-.spectate-phones{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:start; }
-.feature-row-dark b{ color:var(--paper-on-night); }
-.feature-row-dark span{ color:var(--mute-on-night); }
+
+/* ---- the end-to-end strip ---- */
+.strip{
+    list-style:none; margin:38px 0 0; padding:0;
+    display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:16px;
+}
+.strip > li{ display:flex; flex-direction:column; gap:9px; }
+.strip-shot{
+    height:180px; border-radius:11px; border:1px solid var(--line-night);
+    background:rgba(255,255,255,.04); display:flex; align-items:center; justify-content:center;
+    overflow:hidden; padding:8px;
+}
+.strip-shot img{ max-width:100%; max-height:100%; width:auto; height:auto; display:block; object-fit:contain; border-radius:4px; }
+.strip-t{
+    margin:0; font-family:var(--f-mono); font-size:10px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--cue); text-align:center;
+}
+.strip-note{
+    margin:26px 0 0; text-align:center; color:var(--mute-on-night); font-size:.95rem;
+}
 
 /* ---- final CTA ---- */
-.final-cta{ background:var(--night); color:var(--paper-on-night); padding:104px 24px; text-align:center; }
-.final-inner{ max-width:660px; margin:0 auto; }
-.final-cta h2{
-    font-size:clamp(2rem,4.2vw,2.9rem); letter-spacing:-.03em;
-    margin:0 0 14px; line-height:1.08;
-}
-.final-cta > .final-inner > p{ color:var(--mute-on-night); font-size:1.05rem; margin:0 0 26px; }
+.final-cta{ background:var(--night); color:var(--paper-on-night); padding:88px 24px; text-align:center; }
+.final-inner{ max-width:640px; margin:0 auto; }
+.final-cta h2{ font-size:clamp(1.9rem,4vw,2.7rem); letter-spacing:-.03em; margin:0 0 13px; line-height:1.08; }
+.final-cta > .final-inner > p{ color:var(--mute-on-night); font-size:1.03rem; margin:0 0 24px; }
 .final-note{
-    font-family:var(--f-mono); font-size:11px; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--mute-on-night); margin:20px 0 0;
+    font-family:var(--f-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--mute-on-night); margin:20px 0 0;
 }
-.proof-list-dark{ border-top:1px solid var(--line-night); margin-top:34px; padding-top:26px; }
-.proof-list-dark li{ color:var(--mute-on-night); }
-.proof-list-dark li::before{ background:var(--cue); }
 
 /* ---- responsive ---- */
-@media (max-width:980px){
-    .spectate{ grid-template-columns:1fr; gap:34px; }
+@media (max-width:1080px){
+    .tile-grid-4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .strip{ grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 @media (max-width:860px){
-    .story, .story-wide{ padding:68px 20px; }
-    .story-inner{ grid-template-columns:1fr; gap:38px; }
-    /* On one column the art must always follow its copy, so the order
-       swapping used on wide screens has to be undone. */
-    .story:nth-of-type(even) .story-inner > .story-copy{ order:0; }
-    .story-copy h2{ font-size:1.72rem; }
-    .art-pair .art-phone{ max-width:225px; }
-    .art-pair .art-offset{ margin-left:-46px; margin-bottom:30px; }
-    .art-solo{ max-width:300px; }
-    .turn, .final-cta{ padding:72px 20px; }
-    .flow img{ height:190px; }
-    .flow{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:30px 20px; }
+    .story{ padding:58px 20px; }
+    .story-inner{ grid-template-columns:1fr; gap:32px; }
+    .story-copy h2{ font-size:1.65rem; }
+    .shot-phone img{ max-height:400px; }
+    .shot-duo img{ max-height:340px; }
+    .tile-tall, .tile-wide{ height:330px; }
+    .tile-land{ height:190px; }
+    .final-cta{ padding:64px 20px; }
 }
-@media (max-width:520px){
-    .proof-list{ gap:9px 18px; padding:15px 18px; }
-    .proof-list li{ font-size:10.5px; }
-    .spectate-phones{ gap:10px; }
-    /* Two 225px phones overlapped by 46px measure 404px, which is wider than
-       a 402pt phone — the overlapping pair has to shrink, not just the page
-       padding. Measured: .art-offset reached right=431 at 402px wide. */
-    .art-pair .art-phone{ max-width:172px; }
-    .art-pair .art-offset{ margin-left:-38px; margin-bottom:22px; }
-    .art-photo{ max-width:200px; }
+@media (max-width:560px){
+    .tile-grid-4{ grid-template-columns:1fr; }
+    .strip{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .tile-tall, .tile-wide{ height:300px; }
+    .proof-list{ gap:8px 16px; padding:14px 16px; }
+    .proof-list li{ font-size:10px; }
 }
 @media (prefers-reduced-motion:reduce){
-    .story *, .flow *{ animation:none !important; transition:none !important; }
+    .story *, .tile *, .strip *{ animation:none !important; transition:none !important; }
 }
 </style>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
@@ -1172,18 +1121,51 @@ document.documentElement.classList.add('js');
                     </video>
                 </div>
             </div>
+            <aside class="float-card float-game" aria-hidden="true">
+                <p class="float-kicker">Open game</p>
+                <p class="float-title">Sunrise Doubles</p>
+                <p class="float-meta">Saturday, 8:00 AM</p>
+                <div class="float-people">
+                    <img src="/images/app/avatar_001_sky_visor_smash.webp" alt="" width="96" height="96">
+                    <img src="/images/app/avatar_005_pink_wink_spin.webp" alt="" width="96" height="96">
+                    <img src="/images/app/avatar_012_teal_shades_power.webp" alt="" width="96" height="96">
+                    <span>3 of 4 in</span>
+                </div>
+                <span class="float-cta">Join game</span>
+            </aside>
+            <aside class="float-card float-score" aria-hidden="true">
+                <p class="float-kicker"><span class="live-dot"></span>Live score</p>
+                <div class="score-row leading">
+                    <span class="score-side">
+                        <span class="score-avs">
+                            <img src="/images/app/avatar_001_sky_visor_smash.webp" alt="" width="96" height="96">
+                            <img src="/images/app/avatar_012_teal_shades_power.webp" alt="" width="96" height="96">
+                        </span>
+                        <span class="score-team">Noah C. / Dakota M.</span>
+                    </span>
+                    <span class="score-pts" id="scoreA">7</span>
+                </div>
+                <div class="score-row">
+                    <span class="score-side">
+                        <span class="score-avs">
+                            <img src="/images/app/avatar_005_pink_wink_spin.webp" alt="" width="96" height="96">
+                            <img src="/images/app/avatar_016_aqua_net_ninja.webp" alt="" width="96" height="96">
+                        </span>
+                        <span class="score-team">Blake H. / Drew M.</span>
+                    </span>
+                    <span class="score-pts" id="scoreB">5</span>
+                </div>
+            </aside>
         </div>
     </div>
 </section>
 
-<!-- ============ Capability proof strip ============
-     Capabilities, not counts. Every item here is a shipped surface with a
-     screenshot further down the page to back it up. -->
+<!-- ============ Capability proof strip — capabilities, never counts ============ -->
 <section class="proof-strip" aria-label="What PickleCue does today">
     <ul class="proof-list">
         <li>Native iPhone app</li>
-        <li>Live scores &amp; brackets</li>
         <li>Organizer control room</li>
+        <li>Live scores &amp; brackets</li>
         <li>No login for spectators</li>
         <li>QR + short codes</li>
         <li>Live Activities</li>
@@ -1192,244 +1174,164 @@ document.documentElement.classList.add('js');
 
 <div id="product"></div>
 
-<!-- ================= 1. DISCOVER ================= -->
-<section class="story" id="discover">
+<!-- ================= 1. Where can I play? ================= -->
+<section class="story">
     <div class="story-inner">
         <div class="story-copy">
-            <p class="story-kicker">01 — Discover</p>
-            <h2>Start with somewhere to play.</h2>
-            <p>A searchable map of public courts across the country, with the detail that decides whether you drive there: surface, lights, nets, indoor or out, and what other players said.</p>
-            <ul class="story-points">
-                <li>Filter by what actually matters — lights, indoor, surface</li>
-                <li>Save your regular courts and set a home court</li>
-                <li>Court reviews and photos from players who show up</li>
-            </ul>
+            <p class="story-kicker">Discover</p>
+            <h2>Where can I play?</h2>
+            <p>A searchable map of public courts, with the detail that decides whether you drive there — surface, lights, indoor or out — and the courts you keep coming back to saved for next time.</p>
         </div>
-        <figure class="story-art art-pair">
-            <img class="art-phone" src="/images/web/ios-courts-map.webp" srcset="/images/web/ios-courts-map-sm.webp 620w, /images/web/ios-courts-map.webp 1100w" sizes="(max-width:760px) 88vw, 30vw" alt="The PickleCue courts map, showing nearby pickleball courts with a selected court card." loading="lazy" decoding="async">
-            <img class="art-phone art-offset" src="/images/app/courts-detail.webp" alt="A court detail screen showing surface, lights, hours and player reviews." loading="lazy" decoding="async">
+        <figure class="shot-phone">
+            <img src="/images/app/s3a-courts-pinfocus.webp" alt="The PickleCue courts map showing nearby pickleball courts with a selected court." loading="lazy" decoding="async">
         </figure>
     </div>
 </section>
 
-<!-- ================= 2. PLAY ================= -->
-<section class="story story-alt" id="play">
+<!-- ================= 2. Who can I play with? ================= -->
+<section class="story story-alt">
     <div class="story-inner">
         <div class="story-copy">
-            <p class="story-kicker">02 — Play</p>
-            <h2>Fill the court without the group chat.</h2>
-            <p>Post an open game or join one. Everyone sees the same roster, the same time, and the same court — so nobody turns up to a game that quietly fell apart.</p>
-            <ul class="story-points">
-                <li>Open games with RSVPs and a waitlist</li>
-                <li>A roster everyone can see before they drive over</li>
-                <li>Check people in when they arrive</li>
-            </ul>
+            <p class="story-kicker">Games</p>
+            <h2>Who can I play with?</h2>
+            <p>Post an open game or join one. Everyone sees the same roster, the same time and the same court — so nobody drives out to a game that quietly fell apart.</p>
         </div>
-        <figure class="story-art art-pair">
-            <img class="art-phone" src="/images/web/ios-roster.webp" srcset="/images/web/ios-roster-sm.webp 620w, /images/web/ios-roster.webp 1100w" sizes="(max-width:760px) 88vw, 30vw" alt="A game roster in the PickleCue app showing the players who have joined." loading="lazy" decoding="async">
-            <img class="art-phone art-offset" src="/images/app/s1-play-open-games.webp" alt="A list of open pickleball games with times, courts and how many spots are left." loading="lazy" decoding="async">
+        <figure class="shot-duo">
+            <img src="/images/app/s1-play-open-games.webp" alt="A list of open pickleball games with times, courts and spots left." loading="lazy" decoding="async">
+            <img src="/images/app/game-roster.webp" alt="A game roster showing the players who have joined." loading="lazy" decoding="async">
         </figure>
     </div>
 </section>
 
-<!-- ================= 3. SCORE ================= -->
-<section class="story" id="score">
-    <div class="story-inner">
-        <div class="story-copy">
-            <p class="story-kicker">03 — Score</p>
-            <h2>Keep score. Everyone watches it move.</h2>
-            <p>Score a match from your phone and the number changes everywhere at once — on the other players' phones, on the public event page, and on the board at the venue.</p>
-            <ul class="story-points">
-                <li>Point-by-point scoring with undo</li>
-                <li>Every change written to a tamper-proof audit log</li>
-                <li>Spectators follow along without installing anything</li>
-            </ul>
-        </div>
-        <figure class="story-art">
-            <img class="art-phone art-solo" src="/images/web/ios-scoring-crop.webp" srcset="/images/web/ios-scoring-crop-sm.webp 620w, /images/web/ios-scoring-crop.webp 1100w" sizes="(max-width:760px) 88vw, 34vw" alt="Live scoring in the PickleCue app, showing a match score mid-game." loading="lazy" decoding="async">
-        </figure>
-    </div>
-</section>
-
-<!-- ================= 4. REMEMBER ================= -->
-<section class="story story-alt" id="remember">
-    <div class="story-inner">
-        <div class="story-copy">
-            <p class="story-kicker">04 — Remember</p>
-            <h2>Every match becomes your record.</h2>
-            <p>Scores you log become a history you can actually read — who you played, how it went, and how you are trending over a season instead of a night.</p>
-            <ul class="story-points">
-                <li>Full match history with scores and partners</li>
-                <li>Win-loss record and streaks, derived from real matches</li>
-                <li>Results both sides can verify</li>
-            </ul>
-        </div>
-        <figure class="story-art art-pair">
-            <img class="art-phone" src="/images/web/ios-match-history.webp" srcset="/images/web/ios-match-history-sm.webp 620w, /images/web/ios-match-history.webp 1100w" sizes="(max-width:760px) 88vw, 30vw" alt="Match history in the PickleCue app, listing recent matches with scores." loading="lazy" decoding="async">
-            <img class="art-phone art-offset" src="/images/web/ios-player-stats.webp" alt="Player statistics showing win-loss record and recent form." loading="lazy" decoding="async">
-        </figure>
-    </div>
-</section>
-
-<!-- ================= 5. COMPETE ================= -->
-<section class="story" id="compete">
-    <div class="story-inner">
-        <div class="story-copy">
-            <p class="story-kicker">05 — Compete</p>
-            <h2>Leagues and tournaments that keep themselves current.</h2>
-            <p>Standings recalculate as results land. Brackets advance the winner for you. Nobody maintains a spreadsheet between rounds.</p>
-            <ul class="story-points">
-                <li>Single and double elimination, plus round robin</li>
-                <li>League standings with win %, points for and against</li>
-                <li>Brackets that fill themselves in as matches finish</li>
-            </ul>
-        </div>
-        <figure class="story-art art-pair">
-            <img class="art-phone" src="/images/web/ios-bracket-crop.webp" srcset="/images/web/ios-bracket-crop-sm.webp 620w, /images/web/ios-bracket-crop.webp 1100w" sizes="(max-width:760px) 88vw, 30vw" alt="A tournament bracket in the PickleCue app." loading="lazy" decoding="async">
-            <img class="art-phone art-offset" src="/images/web/ios-standings.webp" alt="League standings showing wins, losses and win percentage." loading="lazy" decoding="async">
-        </figure>
-    </div>
-</section>
-
-<!-- ============ Transition into the organizer product ============ -->
-<section class="turn">
-    <div class="turn-inner">
-        <p class="turn-kicker">And when you are the one running it</p>
-        <h2 class="turn-h">The app is for playing.<br><span class="accent-cue">The web is for running the whole thing.</span></h2>
-        <p class="turn-sub">Open a browser on a laptop at the desk. Same event, same data, same second.</p>
-    </div>
-</section>
-
-<!-- ================= 6. RUN THE WHOLE EVENT ================= -->
-<section class="story story-wide" id="organizer">
+<!-- ================= 3. Keep every point ================= -->
+<section class="story story-dark" id="scoring">
     <div class="story-wide-inner">
         <div class="story-copy story-copy-center">
-            <p class="story-kicker">06 — Run the whole event</p>
-            <h2>The control room.</h2>
-            <p>Every match on one screen. Update a live score, correct a finished one, hand a court to a scorekeeper, print the QR, export the day — without leaving the page.</p>
+            <p class="story-kicker">Scoring</p>
+            <h2>Keep every point.</h2>
+            <p>Real scoring, live everywhere. One person keeps score and the number moves at the same moment on the players' phones, the spectators' browsers, the board at the venue, and the Lock Screen.</p>
         </div>
-        <figure class="story-shot">
-            <img src="/images/web/org-control-room.webp" srcset="/images/web/org-control-room-sm.webp 760w, /images/web/org-control-room.webp 1600w" sizes="(max-width:900px) 94vw, 1100px" alt="The PickleCue organizer control room: a list of matches with live scores, controls to update or complete each one, and buttons for the live page, scorekeeper mode, QR posters and CSV export." loading="lazy" decoding="async">
+        <div class="tile-grid tile-grid-4">
+            <figure class="tile">
+                <div class="tile-shot tile-land"><img src="/images/web/sc-app.webp" srcset="/images/web/sc-app-sm.webp 640w, /images/web/sc-app.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="Live scoring in the PickleCue iPhone app, mid-game." loading="lazy" decoding="async"></div>
+                <figcaption><b>In the app</b><span>Score from the court</span></figcaption>
+            </figure>
+            <figure class="tile">
+                <div class="tile-shot tile-land"><img src="/images/web/sc-keeper.webp" srcset="/images/web/sc-keeper-sm.webp 640w, /images/web/sc-keeper.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="The web scorekeeper pad with large plus and minus buttons for each team." loading="lazy" decoding="async"></div>
+                <figcaption><b>Scorekeeper</b><span>Staff on a laptop</span></figcaption>
+            </figure>
+            <figure class="tile">
+                <div class="tile-shot tile-land"><img src="/images/web/sc-public.webp" srcset="/images/web/sc-public-sm.webp 640w, /images/web/sc-public.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="The public live event page showing a match in progress at 7-5." loading="lazy" decoding="async"></div>
+                <figcaption><b>Public live page</b><span>No app, no login</span></figcaption>
+            </figure>
+            <figure class="tile">
+                <div class="tile-shot tile-land"><img src="/images/web/ios-live-activity.webp" srcset="/images/web/ios-live-activity-sm.webp 620w, /images/web/ios-live-activity.webp 1100w" sizes="(max-width:860px) 90vw, 21vw" alt="A PickleCue Live Activity on the iPhone Lock Screen at match point." loading="lazy" decoding="async"></div>
+                <figcaption><b>Live Activity</b><span>Without unlocking</span></figcaption>
+            </figure>
+        </div>
+        <figure class="shot-wide shot-wide-dark">
+            <img src="/images/web/sc-tv.webp" srcset="/images/web/sc-tv-sm.webp 760w, /images/web/sc-tv.webp 1600w" sizes="(max-width:900px) 94vw, 1060px" alt="The TV and projector board at the venue, showing all three completed results for the event." loading="lazy" decoding="async">
+            <figcaption>And on the screen at the venue.</figcaption>
         </figure>
-        <ul class="feature-row">
-            <li><b>Match control</b><span>Update, complete, or correct any match</span></li>
-            <li><b>Scorekeepers</b><span>Hand a court to staff without giving up organizer access</span></li>
-            <li><b>Player book</b><span>Everyone who has ever registered, with no-shows tracked</span></li>
-            <li><b>CSV export</b><span>Take the whole event with you</span></li>
-        </ul>
     </div>
 </section>
 
-<!-- ================= 7. REGISTRATION → CHAMPION ================= -->
-<section class="story story-alt" id="lifecycle">
+<!-- ================= 4. What happens afterward? ================= -->
+<section class="story">
     <div class="story-wide-inner">
         <div class="story-copy story-copy-center">
-            <p class="story-kicker">07 — From registration to champion</p>
-            <h2>One event, end to end.</h2>
-            <p>Registration, waiver, partner pairing, check-in, scoring, bracket, result. Each step is a real screen in the shipping product — these are captures of it, not drawings of it.</p>
+            <p class="story-kicker">After the match</p>
+            <h2>What happens afterward?</h2>
+            <p>Scores become a record you can actually read, and leagues and tournaments keep themselves current — standings recalculate, brackets advance the winner for you.</p>
         </div>
-        <ol class="flow">
+        <div class="tile-grid tile-grid-4">
+            <figure class="tile">
+                <div class="tile-shot tile-tall"><img src="/images/app/match-result.webp" alt="Match history listing recent matches with scores." loading="lazy" decoding="async"></div>
+                <figcaption><b>Match history</b><span>Every match you log</span></figcaption>
+            </figure>
+            <figure class="tile">
+                <div class="tile-shot tile-tall"><img src="/images/app/s6-player-stats.webp" alt="Player statistics showing win-loss record and recent form." loading="lazy" decoding="async"></div>
+                <figcaption><b>Your record</b><span>Trends, not one night</span></figcaption>
+            </figure>
+            <figure class="tile">
+                <div class="tile-shot tile-tall"><img src="/images/app/s5b-league-standings.webp" alt="League standings with wins, losses and win percentage." loading="lazy" decoding="async"></div>
+                <figcaption><b>League standings</b><span>Recalculated as results land</span></figcaption>
+            </figure>
+            <figure class="tile">
+                <div class="tile-shot tile-tall"><img src="/images/app/s4-bracket-summer-smash.webp" alt="A tournament bracket in the PickleCue app." loading="lazy" decoding="async"></div>
+                <figcaption><b>Brackets</b><span>Single, double, round robin</span></figcaption>
+            </figure>
+        </div>
+    </div>
+</section>
+
+<!-- ================= 5. Organizer reveal ================= -->
+<section class="story story-night" id="organizer">
+    <div class="story-wide-inner">
+        <div class="story-copy story-copy-center">
+            <p class="story-kicker">Organizers</p>
+            <h2>Can it run the <span class="accent-cue">entire event</span>?</h2>
+            <p>Open a laptop at the desk. Every match on one screen — update a live score, correct a finished one, hand a court to a scorekeeper, print the QR, export the day.</p>
+        </div>
+        <figure class="shot-wide shot-wide-dark">
+            <img src="/images/web/org-control-room.webp" srcset="/images/web/org-control-room-sm.webp 760w, /images/web/org-control-room.webp 1600w" sizes="(max-width:900px) 94vw, 1120px" alt="The PickleCue organizer control room: every match with live scores, controls to update, complete or correct each one, and buttons for the live page, scorekeeper mode, QR posters and CSV export." loading="lazy" decoding="async">
+        </figure>
+        <ol class="strip">
             <li>
-                <figure><img src="/images/web/step-reg-form.webp" srcset="/images/web/step-reg-form-sm.webp 620w, /images/web/step-reg-form.webp 1200w" sizes="(max-width:760px) 80vw, 22vw" alt="The public registration form for an event, asking for name, email, skill level and partner." loading="lazy" decoding="async"></figure>
-                <p class="flow-step">Step 1</p><p class="flow-t">They register</p>
-                <p class="flow-d">From a link or a QR code. No account required.</p>
+                <div class="strip-shot"><img src="/images/web/step-reg-form.webp" srcset="/images/web/step-reg-form-sm.webp 620w, /images/web/step-reg-form.webp 1200w" sizes="(max-width:860px) 44vw, 15vw" alt="The public registration form for an event." loading="lazy" decoding="async"></div>
+                <p class="strip-t">Register</p>
             </li>
             <li>
-                <figure><img src="/images/web/step-reg-waiver.webp" srcset="/images/web/step-reg-waiver-sm.webp 620w, /images/web/step-reg-waiver.webp 1200w" sizes="(max-width:760px) 80vw, 22vw" alt="The waiver text shown inside the registration form with a field to sign by typing a full name." loading="lazy" decoding="async"></figure>
-                <p class="flow-step">Step 2</p><p class="flow-t">They sign the waiver</p>
-                <p class="flow-d">Signed as part of registering, and recorded against it.</p>
+                <div class="strip-shot"><img src="/images/web/step-reg-waiver.webp" srcset="/images/web/step-reg-waiver-sm.webp 620w, /images/web/step-reg-waiver.webp 1200w" sizes="(max-width:860px) 44vw, 15vw" alt="The waiver text and signature field inside the registration form." loading="lazy" decoding="async"></div>
+                <p class="strip-t">Sign the waiver</p>
             </li>
             <li>
-                <figure><img src="/images/web/step-reg-partner.webp" srcset="/images/web/step-reg-partner-sm.webp 620w, /images/web/step-reg-partner.webp 1200w" sizes="(max-width:760px) 80vw, 22vw" alt="The partner section of the registration form, with options for having a partner or needing one." loading="lazy" decoding="async"></figure>
-                <p class="flow-step">Step 3</p><p class="flow-t">Partners get paired</p>
-                <p class="flow-d">Bring one, or sign up solo and get matched at the desk.</p>
+                <div class="strip-shot"><img src="/images/web/step-reg-partner.webp" srcset="/images/web/step-reg-partner-sm.webp 620w, /images/web/step-reg-partner.webp 1200w" sizes="(max-width:860px) 44vw, 15vw" alt="The partner section of the registration form." loading="lazy" decoding="async"></div>
+                <p class="strip-t">Pair partners</p>
             </li>
             <li>
-                <figure><img src="/images/web/step-org-checkin.webp" srcset="/images/web/step-org-checkin-sm.webp 620w, /images/web/step-org-checkin.webp 1200w" sizes="(max-width:760px) 80vw, 22vw" alt="The check-in desk showing teams ready to play, teams still owing a waiver, and check-in controls." loading="lazy" decoding="async"></figure>
-                <p class="flow-step">Step 4</p><p class="flow-t">You check them in</p>
-                <p class="flow-d">Search a name, mark them in. Missing waivers are flagged.</p>
+                <div class="strip-shot"><img src="/images/web/step-org-checkin.webp" srcset="/images/web/step-org-checkin-sm.webp 620w, /images/web/step-org-checkin.webp 1200w" sizes="(max-width:860px) 44vw, 15vw" alt="The check-in desk showing teams ready and teams still owing a waiver." loading="lazy" decoding="async"></div>
+                <p class="strip-t">Check in</p>
             </li>
             <li>
-                <figure><img src="/images/web/org-scorekeeper-pad.webp" srcset="/images/web/org-scorekeeper-pad-sm.webp 760w, /images/web/org-scorekeeper-pad.webp 1600w" sizes="(max-width:760px) 80vw, 22vw" alt="The scorekeeper scoring pad with large plus and minus buttons for each team and a submit control." loading="lazy" decoding="async"></figure>
-                <p class="flow-step">Step 5</p><p class="flow-t">Staff score the courts</p>
-                <p class="flow-d">Big buttons, undo, and a court-scoped view.</p>
-            </li>
-            <li>
-                <figure><img src="/images/web/live-bracket.webp" srcset="/images/web/live-bracket-sm.webp 760w, /images/web/live-bracket.webp 1600w" sizes="(max-width:760px) 80vw, 22vw" alt="A completed tournament bracket on the public live page, with the champion highlighted." loading="lazy" decoding="async"></figure>
-                <p class="flow-step">Step 6</p><p class="flow-t">You get a champion</p>
-                <p class="flow-d">The bracket advanced itself the whole way there.</p>
+                <div class="strip-shot"><img src="/images/web/mkt-bracket-champion.webp" srcset="/images/web/mkt-bracket-champion-sm.webp 760w, /images/web/mkt-bracket-champion.webp 1600w" sizes="(max-width:860px) 44vw, 15vw" alt="The completed bracket with the champion highlighted." loading="lazy" decoding="async"></div>
+                <p class="strip-t">Champion</p>
             </li>
         </ol>
+        <p class="strip-note">Registration, waiver, pairing, check-in, scoring, bracket, champion — one event, end to end.</p>
     </div>
 </section>
 
-<!-- ================= 8. NO APP? NO PROBLEM ================= -->
-<section class="story story-dark" id="spectators">
+<!-- ================= 6. Public live ================= -->
+<section class="story story-alt" id="spectators">
     <div class="story-wide-inner">
         <div class="story-copy story-copy-center">
-            <p class="story-kicker">08 — No app? No problem.</p>
-            <h2>Scan the code. You are in.</h2>
-            <p>Most people at an event will never install anything. They get a real page anyway — the schedule, their next match, the live score, and the bracket.</p>
+            <p class="story-kicker">Spectators</p>
+            <h2>Can everyone follow without installing anything?</h2>
+            <p>Most people at an event will never install an app. Print the QR, or say the short code out loud. They get the schedule, their next match, the live score and the bracket — in a browser.</p>
         </div>
-        <div class="spectate">
-            <figure class="spectate-poster">
-                <img src="/images/web/org-qr-poster.webp" srcset="/images/web/org-qr-poster-sm.webp 760w, /images/web/org-qr-poster.webp 1600w" sizes="(max-width:900px) 90vw, 44vw" alt="The organizer QR code and poster panel, generating a printable code and a short link for the event." loading="lazy" decoding="async">
-                <figcaption>Print it, tape it to the desk.</figcaption>
+        <div class="tile-grid tile-grid-4">
+            <figure class="tile">
+                <div class="tile-shot tile-land"><img src="/images/web/sp-qr.webp" srcset="/images/web/sp-qr-sm.webp 640w, /images/web/sp-qr.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="The organizer QR panel showing a speakable short link, a staff claim code, and a printable QR for the live event page." loading="lazy" decoding="async"></div>
+                <figcaption><b>QR + short code</b><span>picklecue.com/e/FUDMRD</span></figcaption>
             </figure>
-            <div class="spectate-phones">
-                <figure><img src="/images/web/reg-event-home.webp" srcset="/images/web/reg-event-home-sm.webp 760w, /images/web/reg-event-home.webp 1600w" sizes="(max-width:760px) 42vw, 15vw" alt="The public event page on a phone, showing the event details and tabs." loading="lazy" decoding="async"><figcaption>The event page</figcaption></figure>
-                <figure><img src="/images/web/mkt-whats-next.webp" srcset="/images/web/mkt-whats-next-sm.webp 760w, /images/web/mkt-whats-next.webp 1600w" sizes="(max-width:760px) 42vw, 15vw" alt="The what's next view on a phone: the team is playing now on Court 2 against Blake H. and Drew M., with the live score at 7-5." loading="lazy" decoding="async"><figcaption>Their next match</figcaption></figure>
-                <figure><img src="/images/web/score-live-phone.webp" srcset="/images/web/score-live-phone-sm.webp 760w, /images/web/score-live-phone.webp 1600w" sizes="(max-width:760px) 42vw, 15vw" alt="A live match score on a phone, updating as points are scored." loading="lazy" decoding="async"><figcaption>The live score</figcaption></figure>
-            </div>
+            <figure class="tile">
+                <div class="tile-shot tile-land"><img src="/images/web/sp-event.webp" srcset="/images/web/sp-event-sm.webp 640w, /images/web/sp-event.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="The public event page header with the event name, format and sponsor." loading="lazy" decoding="async"></div>
+                <figcaption><b>The event page</b><span>Opens in any browser</span></figcaption>
+            </figure>
+            <figure class="tile">
+                <div class="tile-shot tile-land"><img src="/images/web/sp-next.webp" srcset="/images/web/sp-next-sm.webp 640w, /images/web/sp-next.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="A player's next match: playing now on Court 2 against Blake H. and Drew M. at 7-5." loading="lazy" decoding="async"></div>
+                <figcaption><b>Their next match</b><span>Court, opponent, score</span></figcaption>
+            </figure>
+            <figure class="tile">
+                <div class="tile-shot tile-land"><img src="/images/web/sp-results.webp" srcset="/images/web/sp-results-sm.webp 640w, /images/web/sp-results.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="Final results with a champion graphic to download, share results, and the most-wins table." loading="lazy" decoding="async"></div>
+                <figcaption><b>Results &amp; recap</b><span>Champion graphic to share</span></figcaption>
+            </figure>
         </div>
-        <ul class="feature-row feature-row-dark">
-            <li><b>Short codes</b><span>picklecue.com/e/ABC123 — say it out loud, text it, print it</span></li>
-            <li><b>TV &amp; projector mode</b><span>Put the board on the screen at the venue</span></li>
-            <li><b>Nothing to install</b><span>It is a web page, so it just opens</span></li>
-        </ul>
     </div>
 </section>
 
-<!-- ================= 9. BUILT FOR iPHONE ================= -->
-<section class="story" id="iphone">
-    <div class="story-inner">
-        <div class="story-copy">
-            <p class="story-kicker">09 — Built for iPhone</p>
-            <h2>The score, without unlocking your phone.</h2>
-            <p>A live match runs as a Live Activity on the Lock Screen and in the Dynamic Island. Glance down between points; score from there if it is your match.</p>
-            <ul class="story-points">
-                <li>Live Activity on the Lock Screen and Dynamic Island</li>
-                <li>Push notifications when a game fills or a match is called</li>
-                <li>Built in SwiftUI for iOS — not a wrapped website</li>
-            </ul>
-        </div>
-        <figure class="story-art">
-            <img class="art-phone art-solo" src="/images/web/ios-live-activity.webp" srcset="/images/web/ios-live-activity-sm.webp 620w, /images/web/ios-live-activity.webp 1100w" sizes="(max-width:760px) 88vw, 34vw" alt="A PickleCue Live Activity on the iPhone Lock Screen showing a live game at match point with the score and court." loading="lazy" decoding="async">
-        </figure>
-    </div>
-</section>
-
-<!-- ================= 10. COMMUNITY ================= -->
-<section class="story story-alt" id="community">
-    <div class="story-inner">
-        <div class="story-copy">
-            <p class="story-kicker">10 — Community</p>
-            <h2>The point is the people on the court.</h2>
-            <p>Message the players you met, keep a group together across a season, and turn a one-off game into a regular one. The software is only there to get you back on the court.</p>
-            <ul class="story-points">
-                <li>Direct messages and event chat</li>
-                <li>Friends, and a weekly view of what you have on</li>
-                <li>Block, report and privacy controls that are easy to find</li>
-            </ul>
-        </div>
-        <figure class="story-art art-pair">
-            <img class="art-photo" src="/images/p4p-hero-golden.webp" alt="Players on an outdoor pickleball court in late afternoon light." loading="lazy" decoding="async">
-            <img class="art-phone art-offset" src="/images/web/ios-chat-thread.webp" srcset="/images/web/ios-chat-thread-sm.webp 620w, /images/web/ios-chat-thread.webp 1100w" sizes="(max-width:760px) 60vw, 22vw" alt="A chat thread in the PickleCue app between players organising a game." loading="lazy" decoding="async">
-        </figure>
-    </div>
-</section>
-
-<!-- ================= 11. FINAL CTA ================= -->
+<!-- ================= Final CTA ================= -->
 <section class="final-cta" id="early-access">
     <div class="final-inner">
         <h2>Get on the list.</h2>
@@ -1442,14 +1344,6 @@ document.documentElement.classList.add('js');
         </form>
         <p class="waitlist-msg" id="waitlistMsgFinal" role="status" aria-live="polite"></p>
         <p class="final-note">Free core app · No ads · Organizer tools are part of PickleCue Pro</p>
-        <ul class="proof-list proof-list-dark">
-            <li>Native iPhone app</li>
-            <li>Live scores &amp; brackets</li>
-            <li>Organizer control room</li>
-            <li>No login for spectators</li>
-            <li>QR + short codes</li>
-            <li>Live Activities</li>
-        </ul>
     </div>
 </section>
 

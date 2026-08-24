@@ -24,7 +24,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright-core';
 import { fileURLToPath } from 'node:url';
 import { serveSite } from './lib.mjs';
-import { EVENTS } from './scenes.mjs';
+import { EVENTS, ALLOWED_EVENT_IDS } from './scenes.mjs';
 
 const EMAIL = process.env.PC_CAPTURE_EMAIL;
 const PASSWORD = process.env.PC_CAPTURE_PASSWORD;
@@ -68,6 +68,26 @@ try {
   // Signed in when the organizer's event list replaces the auth card.
   await page.locator('#pcAuthEmail').waitFor({ state: 'detached', timeout: 30000 });
   await page.waitForTimeout(1500);
+
+  // ---- contamination guard ----------------------------------------------
+  //
+  // The marketing account must hold ONLY marketing events. If a real
+  // customer's event ever lands on it, this run would photograph that
+  // customer's roster, registrations and scores. So check before capturing
+  // anything, and refuse — do not rely on anyone remembering the rule.
+  const listed = await page.$$eval('button[data-open]', (els) =>
+    els.map((e) => e.dataset.open));
+  const unexpected = listed
+    .map((v) => String(v).split(':')[1])
+    .filter((id) => id && !ALLOWED_EVENT_IDS.has(id));
+  if (unexpected.length) {
+    throw new Error(
+      `refusing to capture: the marketing account holds ${unexpected.length} ` +
+      `event(s) not on the allowlist (${unexpected.join(', ')}). Move them off ` +
+      `this account, or add them to ALLOWED_EVENT_IDS deliberately.`,
+    );
+  }
+  console.log(`  allowlist ok — ${listed.length} event(s), all marketing`);
 
   // ---- event list --------------------------------------------------------
   await shot('org-events');

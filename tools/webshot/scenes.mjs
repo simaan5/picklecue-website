@@ -38,6 +38,26 @@ export const EVENTS = {
 /** Short code for T_MARKETING, issued by get_or_create_short_code. */
 export const MARKETING_CODE = 'FUDMRD';
 
+/**
+ * The ONLY events this pipeline may ever capture.
+ *
+ * The marketing organizer is a dedicated account that must never hold a real
+ * customer's event. That rule cannot depend on everyone remembering it, so it
+ * is enforced: an authenticated capture asserts the account's event list
+ * contains nothing outside this set and REFUSES to run otherwise, rather than
+ * quietly photographing a stranger's tournament.
+ *
+ * Adding an id here is a deliberate act. If a capture fails because of this
+ * check, the right response is almost always to move the unexpected event off
+ * the marketing account — not to widen the list.
+ */
+export const ALLOWED_EVENT_IDS = new Set([
+  EVENTS.T_MARKETING,   // Foothill Fall Shootout — the dedicated capture event
+  EVENTS.T_DONE,        // Citrus Belt Championship
+  EVENTS.T_REG,         // Fontana Park Open
+  EVENTS.T_LIVE,        // Cucamonga Peak Classic
+]);
+
 /** Desktop is the marketing hero size; phone proves the same page on a court. */
 export const VIEWPORTS = {
   // `viewport` must stay nested — Playwright ignores top-level width/height
@@ -227,6 +247,52 @@ export const SCENES = [
     query: { t: EVENTS.T_MARKETING, view: 'bracket' },
     viewport: 'desktop',
   },
+  // ---- the ending, from the same event ----------------------------------
+  // Played out through the real scorekeeper UI: SF2 finished 11-7, the final
+  // 11-9. The live 7-5 scenes above stay frozen at the genuine mid-match
+  // moment — that is the point of recording fixtures rather than re-querying.
+  {
+    id: 'mkt-results',
+    feature: 'Results / champion',
+    label: 'Every result, once it is over',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'results' },
+    viewport: 'desktop',
+  },
+  {
+    id: 'mkt-bracket-champion',
+    feature: 'Results / champion',
+    label: 'The completed bracket and its champion',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'bracket' },
+    viewport: 'desktop',
+  },
+  {
+    id: 'mkt-results-phone',
+    feature: 'Results / champion',
+    label: 'Results on a phone',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'results' },
+    viewport: 'phone',
+  },
+  {
+    id: 'mkt-tv-final',
+    feature: 'TV / projector board',
+    label: 'The board once the event is done',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, display: 'tv' },
+    viewport: 'desktop',
+  },
+  {
+    id: 'mkt-champion-me',
+    feature: 'Results / champion',
+    label: 'A player finds out they won it',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'me' },
+    viewport: 'phone',
+    actions: [{ click: 'button[data-me-pick]:has-text("Maya R. / Emma L.")' }],
+  },
+
   // League standings — reachable by URL only since today's live.html fix
   // (the Standings tab existed but could previously only be tapped).
   {
