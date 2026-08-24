@@ -762,7 +762,11 @@ a{ color:inherit; }
 footer{ background:var(--night); color:var(--mute-on-night); border-top:1px solid var(--line-night); }
 .foot-inner{
     max-width:var(--wrap); margin:0 auto; padding:96px 32px 64px;
-    display:grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap:48px;
+    /* Brand + FOUR link columns. Four tracks for five children left Legal
+       with nowhere to go, so it wrapped onto its own row. Homepage keeps
+       its own inlined copy of this rule -- it does not load site-v2.css --
+       so the shared fix had to be applied here too. */
+    display:grid; grid-template-columns: 1.7fr repeat(4, minmax(0, 1fr)); gap:40px;
 }
 .foot-brand img{ height:44px; width:auto; }
 .foot-brand p{ margin-top:18px; font:450 16px/1.55 var(--f); max-width:26ch; }
