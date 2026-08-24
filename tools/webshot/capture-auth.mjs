@@ -23,7 +23,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright-core';
 import { fileURLToPath } from 'node:url';
-import { serveSite } from './lib.mjs';
+import { serveSite, waitForVisualReady } from './lib.mjs';
 import { EVENTS, ALLOWED_EVENT_IDS } from './scenes.mjs';
 
 const EMAIL = process.env.PC_CAPTURE_EMAIL;
@@ -49,8 +49,8 @@ let failures = 0;
 
 const shot = async (id, opts = {}) => {
   const file = fileURLToPath(new URL(`./out/${id}.png`, import.meta.url));
-  await page.waitForTimeout(500);
-  await page.screenshot({ path: file, fullPage: opts.fullPage !== false });
+  await waitForVisualReady(page);
+  await page.screenshot({ path: file, fullPage: opts.fullPage !== false, animations: 'disabled' });
   shots.push(id);
   console.log(`  ${id.padEnd(24)} OK`);
 };

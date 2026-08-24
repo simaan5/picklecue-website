@@ -280,6 +280,60 @@ export async function runActions(page, actions) {
 }
 
 /**
+ * Wait until the page has actually finished painting, instead of sleeping.
+ *
+ * WHY: the champion card animates in with `champPop 0.6s`. Captures used a
+ * flat 400ms settle, so the screenshot landed mid-fade and the card came out
+ * blank — it looked like a broken product surface when the product was fine.
+ * A fixed sleep is always either too short (this) or wasted time.
+ *
+ * Three deterministic signals, all of which must settle:
+ *   1. webfonts loaded — otherwise text reflows after the shot
+ *   2. every image decoded — a half-loaded avatar is an empty circle
+ *   3. every FINITE animation finished — infinite ones (the live pulse) are
+ *      excluded deliberately, because waiting on those never returns
+ *
+ * Then two animation frames, so the final state is committed to a paint.
+ */
+export async function waitForVisualReady(page, { timeout = 8000 } = {}) {
+  await page.evaluate(async (deadline) => {
+    const cap = (p) => Promise.race([p, new Promise((r) => setTimeout(r, deadline))]);
+
+    await cap(document.fonts ? document.fonts.ready : Promise.resolve());
+
+    await cap(Promise.all(
+      [...document.images]
+        .filter((img) => !img.complete)
+        .map((img) => new Promise((res) => {
+          img.addEventListener('load', res, { once: true });
+          img.addEventListener('error', res, { once: true });
+        })),
+    ));
+
+    const finite = document.getAnimations().filter((a) => {
+      try { return a.effect.getTiming().iterations !== Infinity; } catch { return false; }
+    });
+    await cap(Promise.all(finite.map((a) => a.finished.catch(() => {}))));
+
+    // The live pages show "Connecting" until their own ping succeeds, then
+    // flip to "Live". That ping runs over REST, which the capture fixtures
+    // serve, so the page genuinely reaches Live — it is a race, not a fake.
+    // Some captures were landing before the flip and shipping a header that
+    // read CONNECTING, which makes a working product look broken. Wait for it
+    // rather than forcing the label.
+    const label = document.getElementById('connLabel');
+    if (label) {
+      const settled = Date.now() + Math.min(deadline, 5000);
+      while (/connecting/i.test(label.textContent || '') && Date.now() < settled) {
+        await new Promise((r) => setTimeout(r, 100));
+      }
+    }
+
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  }, timeout);
+}
+
+/**
  * Re-assert every typed value immediately before the screenshot.
  *
  * runActions checks each step when it happens, which is not enough: a repaint

@@ -17,7 +17,7 @@
 import { mkdir, writeFile, readFile, readdir } from 'node:fs/promises';
 import { chromium } from 'playwright-core';
 import { fileURLToPath } from 'node:url';
-import { serveSite, fixtureKey, sha256, runActions, verifyActions, SUPABASE_HOST } from './lib.mjs';
+import { serveSite, fixtureKey, sha256, runActions, verifyActions, waitForVisualReady, SUPABASE_HOST } from './lib.mjs';
 import { SCENES, VIEWPORTS } from './scenes.mjs';
 
 const OUT = new URL('./out/', import.meta.url);
@@ -87,7 +87,8 @@ for (const scene of scenes) {
     // exactly how a stale capture survives a redesign.
     await runActions(page, scene.actions);
 
-    await page.waitForTimeout(400); // fonts + avatar images settle
+    // Deterministic: fonts loaded, images decoded, finite animations finished.
+    await waitForVisualReady(page);
 
     if (missing.length) throw new Error(`unfixtured request: ${[...new Set(missing)].join(', ')}`);
 
@@ -95,7 +96,15 @@ for (const scene of scenes) {
     await verifyActions(page, scene.actions);
 
     const file = fileURLToPath(new URL(`./out/${scene.id}.png`, import.meta.url));
-    await page.screenshot({ path: file, fullPage: scene.viewport !== 'phone' });
+    // animations:'disabled' fast-forwards every CSS animation to its FINISHED
+    // state, so an entrance animation (champPop 0.6s on the champion card)
+    // cannot be caught mid-fade. Headless does not advance animations
+    // reliably, so waiting alone is not enough.
+    await page.screenshot({
+      path: file,
+      fullPage: scene.viewport !== 'phone',
+      animations: 'disabled',
+    });
     const h = (await page.title()) || '';
     manifest.push({ id: scene.id, feature: scene.feature, label: scene.label,
                     viewport: scene.viewport, page: scene.page, title: h });
