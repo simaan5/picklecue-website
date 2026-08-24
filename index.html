@@ -25,7 +25,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>PickleCue. Find your court. Find your game. One place.</title>
 
-    <meta name="description" content="PickleCue is the all-in-one pickleball app for iOS. Find courts, fill games, run leagues and tournaments, and remember every match. Join the waitlist.">
+    <meta name="description" content="PickleCue is the all-in-one pickleball app for iPhone. Find courts, fill games, run leagues and tournaments, and remember every match. Free on the App Store in the United States.">
     <meta name="author" content="PickleCue">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.picklecue.com/">
@@ -116,7 +116,7 @@
         "@type": "FAQPage",
         "mainEntity": [
             { "@type": "Question", "name": "When does PickleCue launch?",
-              "acceptedAnswer": { "@type": "Answer", "text": "PickleCue for iOS is in final App Review. Join the waitlist and we will email you the day it is live on the App Store." } },
+              "acceptedAnswer": { "@type": "Answer", "text": "PickleCue is available now on the App Store, free on iPhone. It is currently available in the United States, with more countries coming soon." } },
             { "@type": "Question", "name": "Is PickleCue free?",
               "acceptedAnswer": { "@type": "Answer", "text": "Yes. Finding courts, joining games, logging matches, and messaging are free. An optional subscription, PickleCue Pro, adds organizer tools like unlimited game creation, leagues, and tournaments." } },
             { "@type": "Question", "name": "Which devices does it run on?",
@@ -1028,6 +1028,34 @@ html.js .reveal.in{ opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce){
     .story *, .tile *, .strip *{ animation:none !important; transition:none !important; }
 }
+
+/* ---- App Store CTA + international waitlist -------------------------------
+   Apple's official badge, self-hosted. Their identity guidelines require a
+   40px minimum height and clear space of 1/4 the badge height; 60px tall with
+   the margin below satisfies both. The app is US-only today (verified against
+   Apple's lookup API), so non-US visitors get a real action instead of a
+   dead end. */
+.appstore-badge{ display:inline-block; line-height:0; border-bottom:0 !important;
+    margin:6px 15px 6px 0; transition:transform .2s var(--ease); }
+.appstore-badge img{ width:180px; height:60px; display:block; }
+.appstore-badge:hover{ transform:translateY(-2px); }
+.appstore-badge:focus-visible{ outline:2px solid var(--cue); outline-offset:5px; border-radius:12px; }
+.store-note{ margin:12px 0 0; font-size:.95rem; line-height:1.55; color:var(--ink-mute); }
+.store-note strong{ font-weight:650; color:var(--ink-soft); }
+.store-note a{ color:var(--court-fg); }
+.final-cta .store-note{ color:var(--mute-on-night); }
+.final-cta .store-note strong{ color:var(--paper-on-night); }
+
+.intl-cta{ margin-top:44px; padding-top:34px; border-top:1px solid var(--line-night); }
+.intl-cta h3{ font-size:1.12rem; margin:0 0 8px; letter-spacing:-.01em; }
+.intl-cta > p{ color:var(--mute-on-night); font-size:.97rem; line-height:1.6;
+    margin:0 auto 20px; max-width:46ch; }
+@media (prefers-reduced-motion:reduce){ .appstore-badge{ transition:none; } }
+@media (max-width:520px){
+    .appstore-badge img{ width:152px; height:51px; }
+    .intl-cta{ margin-top:34px; padding-top:26px; }
+}
+
 </style>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
@@ -1067,7 +1095,7 @@ document.documentElement.classList.add('js');
             <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         </button>
-        <a class="btn btn-primary" href="#early-access" data-track="cta_click" data-cta="nav_early_access">Join the waitlist</a>
+        <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" data-track="cta_click" data-cta="nav_early_access">Download on iPhone</a>
         <button class="masthead-burger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
             <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><path d="M1 1h18M1 7h18M1 13h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
@@ -1086,7 +1114,7 @@ document.documentElement.classList.add('js');
         <a href="/community.html">Community</a>
         <a href="/demo/">Live demo</a>
     </nav>
-    <a class="btn btn-primary" href="#early-access">Join the waitlist</a>
+    <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
 </div>
 
 <!-- ================= Hero ================= -->
@@ -1097,13 +1125,8 @@ document.documentElement.classList.add('js');
             <p class="hero-proof rise">Native iOS · Free core app</p>
             <h1 class="rise rise-1">Find your court.<br>Find your game.<br><span class="accent">One place.</span></h1>
             <p class="hero-sub rise rise-2">A native iPhone app for players, a control room for organizers, and a live page anyone can open — no app, no account.</p>
-            <form class="waitlist-form waitlist-light rise rise-3" id="waitlistFormHero" novalidate aria-label="Join the waitlist">
-                <label for="waitlist-email-hero" style="position:absolute;left:-9999px;">Email address</label>
-                <input type="email" id="waitlist-email-hero" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgHero">
-                <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
-                <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="hero_waitlist">Join the waitlist</button>
-            </form>
-            <p class="waitlist-msg waitlist-msg-light" id="waitlistMsgHero" role="status" aria-live="polite"></p>
+            <a class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" data-track="cta_click" data-cta="hero" aria-label="Download PickleCue on the App Store"><img src="/images/badges/app-store-badge.svg" alt="Download on the App Store" width="180" height="60" decoding="async"></a>
+                <p class="store-note">Free on iPhone · Available in the <strong>United States</strong><br>Not in the US? <a href="#early-access">Get notified when we launch in your country →</a></p>
             <div class="hero-ctas rise rise-4">
                 <a class="hero-secondary" href="/demo/" data-track="cta_click" data-cta="hero_demo">
                     Or explore the live demo
@@ -1334,16 +1357,22 @@ document.documentElement.classList.add('js');
 <!-- ================= Final CTA ================= -->
 <section class="final-cta" id="early-access">
     <div class="final-inner">
-        <h2>Get on the list.</h2>
-        <p>PickleCue is coming to the App Store. Join the waitlist and we will tell you the day it lands — no other email, ever.</p>
-        <form class="waitlist-form waitlist-dark" id="waitlistFormFinal" novalidate aria-label="Join the waitlist">
-            <label for="waitlist-email-final" style="position:absolute;left:-9999px;">Email address</label>
-            <input type="email" id="waitlist-email-final" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgFinal">
-            <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
-            <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="final_waitlist">Join the waitlist</button>
-        </form>
-        <p class="waitlist-msg" id="waitlistMsgFinal" role="status" aria-live="polite"></p>
+        <h2>Get PickleCue.</h2>
+        <p>Out now on the App Store — free on iPhone, in the United States.</p>
+        <a class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" data-track="cta_click" data-cta="final" aria-label="Download PickleCue on the App Store"><img src="/images/badges/app-store-badge.svg" alt="Download on the App Store" width="180" height="60" decoding="async"></a>
         <p class="final-note">Free core app · No ads · Organizer tools are part of PickleCue Pro</p>
+
+        <div class="intl-cta">
+            <h3>Not in the United States yet?</h3>
+            <p>PickleCue is rolling out to more countries. Leave your email and we will tell you the day it reaches yours — nothing else, ever.</p>
+            <form class="waitlist-form waitlist-dark" id="waitlistFormIntl" novalidate aria-label="Get notified when PickleCue launches in your country">
+                <label for="waitlist-email-intl" style="position:absolute;left:-9999px;">Email address</label>
+                <input type="email" id="waitlist-email-intl" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgIntl">
+                <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
+                <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="intl_waitlist">Notify me</button>
+            </form>
+            <p class="waitlist-msg" id="waitlistMsgIntl" role="status" aria-live="polite"></p>
+        </div>
     </div>
 </section>
 
@@ -1598,7 +1627,7 @@ document.documentElement.classList.add('js');
     /* Waitlist */
     var SUPABASE_URL  = 'https://uejmhtdfbqbotvbqvfja.supabase.co';
     var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlam1odGRmYnFib3R2YnF2ZmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyMjYzMjAsImV4cCI6MjA4MjgwMjMyMH0.oSZlTczSfIe1Jls0DSG6br1pVLKZ1F6e_DOPgndPdOc';
-    function wireWaitlist(formId, msgId, ctaName){
+    function wireWaitlist(formId, msgId, ctaName, source){
         var form = document.getElementById(formId);
         var msg = document.getElementById(msgId);
         if (!form || !msg) return;
@@ -1626,7 +1655,7 @@ document.documentElement.classList.add('js');
                     'Content-Type': 'application/json',
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ email: email, source: 'website' })
+                body: JSON.stringify({ email: email, source: source || 'website' })
             }).then(function(r){
                 if (r.ok || r.status === 409){
                     window.track('waitlist_success', { existing: r.status === 409, form: ctaName });
@@ -1645,8 +1674,8 @@ document.documentElement.classList.add('js');
             });
         });
     }
-    wireWaitlist('waitlistFormHero', 'waitlistMsgHero', 'hero');
-    wireWaitlist('waitlistForm', 'waitlistMsg', 'footer');
+
+    wireWaitlist('waitlistFormIntl', 'waitlistMsgIntl', 'intl', 'website-intl');
 })();
 </script>
 
