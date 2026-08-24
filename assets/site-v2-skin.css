@@ -307,3 +307,13 @@ footer.site-foot{ background:var(--night); color:var(--mute-on-night); border-to
 .masthead a, .masthead .brand,
 .site-menu a, .site-menu-close,
 .site-foot a, .foot-social a, .foot-col a, .foot-brand a{ border-bottom:0; }
+
+/* V2 makes the masthead `position:fixed`, which takes it out of flow; the V2
+   pages pay that back with `.page-hero{ padding: calc(76px + 96px) ... }`.
+   These legacy pages have no .page-hero — their first section's padding was
+   written for site.css's `position:sticky` masthead, which occupies flow space.
+   Importing the fixed rule slid their hero underneath it: /community's kicker
+   rendered at y=68 with the masthead's bottom edge at y=77, i.e. behind it.
+   The masthead looks identical either way; only flow differs. Keep it sticky
+   here rather than retro-fitting hero padding onto four pages. */
+.masthead{ position:sticky; }
