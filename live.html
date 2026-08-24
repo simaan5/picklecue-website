@@ -74,7 +74,7 @@
         var eventId = tid || lid;
         var main = document.getElementById('main');
         var snap = null;
-        var activeTab = ['bracket', 'courts', 'me', 'register', 'results'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
+        var activeTab = ['bracket', 'courts', 'me', 'register', 'results', 'standings'].indexOf(params.get('view')) !== -1 ? params.get('view') : 'matches';
         var regInfo = null, regResult = null, myReg = null, waiver = null;
         var mePid = null;
         if (params.get('display') === 'tv') document.body.classList.add('bv-tv');
@@ -217,6 +217,7 @@
 
             if (activeTab === 'bracket' && !(kind === 't' && window.PCBracket.supports(snap))) activeTab = 'matches';
             if (activeTab === 'courts' && !matches.some(function (m) { return m.court; })) activeTab = 'matches';
+            if (activeTab === 'standings' && isT) activeTab = 'matches';
             if (activeTab === 'results') {
                 html += resultsView(matches, members || [], nameMap, isT);
             } else if (activeTab === 'register') {

@@ -37,7 +37,14 @@ const ORIGIN = "https://www.picklecue.com";
 const CODE_RE = /^[A-Z2-9]{6}$/;
 // Only these reach the redirect; anything else is dropped rather than
 // concatenated into a URL.
-const VIEWS = new Set(["results", "bracket", "courts", "standings", "next"]);
+//
+// This list is not decorative — it must equal the set live.html actually
+// accepts (its activeTab line). A view name that is not in live.html's own
+// list is silently rewritten to "matches" there, so forwarding one produces a
+// redirect that quietly lands on the wrong tab.
+const VIEWS = new Set([
+  "bracket", "courts", "me", "register", "results", "standings",
+]);
 
 function esc(v) {
   return String(v).replace(/[&<>"']/g, (c) => ({
@@ -134,7 +141,9 @@ export async function onRequestGet({ params, request }) {
   const incoming = new URL(request.url).searchParams;
   const view = incoming.get("view");
   if (view && VIEWS.has(view)) target.searchParams.set("view", view);
-  if (incoming.get("display") === "1") target.searchParams.set("display", "1");
+  // TV/projector mode is display=tv, not a boolean — live.html tests the
+  // literal string ("if (params.get('display') === 'tv')").
+  if (incoming.get("display") === "tv") target.searchParams.set("display", "tv");
 
   return new Response(null, {
     status: 302,

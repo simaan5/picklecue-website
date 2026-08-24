@@ -1,0 +1,68 @@
+{
+  "_doc": [
+    "Identity map for web marketing captures.",
+    "",
+    "The live pages read production Supabase. Production rows carry the display",
+    "names of real dev and personal accounts (including the owner's own). Those",
+    "names must never appear in marketing material, so every recorded response is",
+    "rewritten through this map before it is committed as a fixture.",
+    "",
+    "The cast is NOT invented here. It is the same 19-person world the iOS",
+    "screenshots use (qa/marketing-account/capture-snapshot.json in the PickleCue",
+    "repo), so a viewer who sees the app screenshots and the web screenshots sees",
+    "one coherent scene instead of two unrelated sets of strangers.",
+    "",
+    "Event names follow qa/marketing-account/NAMING.md: Inland Empire geography,",
+    "no QA/Demo/Test strings, no 'PickleCue' in a fictional event name. The",
+    "production rows still carry superseded LA-world names; they are renamed here",
+    "rather than in the database, because the database is production."
+  ],
+
+  "people": {
+    "PickleCue Demo": { "name": "Maya R.",   "avatar_id": "avatar_008_orange_freckle_pop" },
+    "Sarah K.":       { "name": "Emma L.",   "avatar_id": "avatar_021_crimson_smash_point" },
+    "Marcus T.":      { "name": "Noah C.",   "avatar_id": "avatar_035_honey_gold_grip" },
+    "Steph":          { "name": "Dakota M.", "avatar_id": "avatar_029_peach_friendly_rally" },
+    "Janeth":         { "name": "Sofia M.",  "avatar_id": "avatar_028_violet_game_face" },
+    "Andrew":         { "name": "Alex T.",   "avatar_id": "avatar_026_charcoal_focused_finn" },
+    "Maya Chen":      { "name": "Jordan K.", "avatar_id": "avatar_022_sandstone_calm_serve" },
+    "Ira Patel":      { "name": "Devon T.",  "avatar_id": "avatar_031_copper_spin_shot" }
+  },
+
+  "events": {
+    "Westside Championship":   "Citrus Belt Championship",
+    "Santa Monica Summer Slam": "Fontana Park Open",
+    "Sunset Courts Open":       "Cucamonga Peak Classic"
+  },
+
+  "_places_doc": [
+    "Venue and place names that appear OUTSIDE the event title — most often in",
+    "an event description. These are a separate map because rewriting the event",
+    "name alone leaves the venue behind: 'Sunset Courts Open' became 'Cucamonga",
+    "Peak Classic' while its description still read 'at Sunset Courts'.",
+    "Replacement is longest-match-first, so the event name wins over the venue",
+    "fragment inside it."
+  ],
+  "places": {
+    "Sunset Courts": "Cucamonga Peak Courts",
+    "Westside": "Foothill",
+    "Santa Monica": "Rancho Cucamonga"
+  },
+
+  "_banned": [
+    "QA", "Test", "Demo", "Seed", "Fixture", "E2E", "Sample", "Example",
+    "Lorem", "TBD", "Untitled", "🧪"
+  ],
+
+  "_banned_doc": [
+    "Fragments that must never survive into a fixture. Unlike the maps above",
+    "these are not rewritten — their presence FAILS the run, because a fragment",
+    "we did not anticipate means the scrub is incomplete rather than wrong.",
+    "The geography list is the superseded LA marketing world plus the non-SoCal",
+    "names NAMING.md bans outright."
+  ],
+  "_banned_fragments": [
+    "Westside", "Santa Monica", "Sunset Courts", "Venice", "City Lights",
+    "Bay City", "Austin", "Oakland", "Nashville"
+  ]
+}
