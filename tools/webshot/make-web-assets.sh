@@ -40,10 +40,10 @@ pair /tmp/_s3.png step-reg-partner 1200 620
 pair /tmp/_s4.png step-org-checkin 1200 620
 
 # ---- scoring tiles: one consistent landscape aspect ------------------------
-magick "$DECK/s2-live-scoring.png"    -crop 1320x880+0+430   +repage /tmp/_c1.png
+magick "$DECK/s2-live-scoring.png"    -crop 1320x1130+0+380  +repage /tmp/_c1.png
 magick "$O/org-scorekeeper-pad.png"   -crop 2020x640+430+390 +repage /tmp/_c2.png
 magick "$O/score-live-desktop.png"    -crop 1000x310+420+820 +repage /tmp/_c3.png
-magick "$O/mkt-tv-final.png"          -crop 2880x800+0+60    +repage /tmp/_c4.png
+magick "$O/mkt-tv-final.png"          -crop 2200x700+340+40  +repage /tmp/_c4.png
 pair /tmp/_c1.png sc-app    1200 640
 pair /tmp/_c2.png sc-keeper 1200 640
 pair /tmp/_c3.png sc-public 1200 640
