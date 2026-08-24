@@ -134,7 +134,7 @@
     <link rel="preload" as="font" type="font/woff2" crossorigin
           href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="preload" as="image" href="/videos/hero/app-sequence-poster.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="/videos/hero/app-tour-poster.jpg">
 
 <style>
 /* ============================================================
@@ -1115,17 +1115,9 @@ document.documentElement.classList.add('js');
         <div class="theater rise rise-3">
             <div class="phone">
                 <div class="phone-screen">
-                    <video id="heroVideo" autoplay muted loop playsinline preload="metadata"
-                           poster="/videos/hero/app-sequence-poster.jpg"
-                           aria-label="A PickleCue product sequence: finding a court on the map, an open game nearby, joining it, the match starting with live scoring, and the score appearing on the public live page."
-                           data-hero-video
-                           data-desktop-mp4="/videos/hero/app-sequence.mp4"
-                           data-mobile-mp4="/videos/hero/app-sequence-mobile.mp4">
-                        <!-- MP4 first: at these settings h264 came out SMALLER than
-                             VP9 (931KB vs 1078KB), so the first supported source
-                             should be the cheaper one. Sources are attached by
-                             script so a phone never downloads the desktop file and
-                             reduced-motion never downloads a video at all. -->
+                    <video autoplay muted loop playsinline preload="auto" poster="/videos/hero/app-tour-poster.jpg" aria-label="A tour through PickleCue: home, courts, court details, tournaments, leagues, and your profile" data-hero-video>
+                        <source src="/videos/hero/app-tour.webm" type="video/webm">
+                        <source src="/videos/hero/app-tour.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
@@ -1659,21 +1651,16 @@ document.documentElement.classList.add('js');
 </script>
 
 <script>
-/* Hero video: choose the right file, and do not load one at all when the
-   visitor asked for reduced motion — the poster already tells the story. */
+/* Respect prefers-reduced-motion: do not autoplay the hero for visitors
+   who asked for less motion. The poster still tells the story. */
 (function () {
-    var v = document.getElementById('heroVideo');
+    var v = document.querySelector("[data-hero-video]");
     if (!v) return;
-    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { v.removeAttribute('autoplay'); v.removeAttribute('loop'); return; }
-    var small = window.matchMedia && matchMedia('(max-width: 760px)').matches;
-    var src = v.getAttribute(small ? 'data-mobile-mp4' : 'data-desktop-mp4');
-    var s = document.createElement('source');
-    s.type = 'video/mp4'; s.src = src;
-    v.appendChild(s);
-    v.load();
-    var play = v.play();
-    if (play && play.catch) play.catch(function () { /* poster stands in */ });
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        v.removeAttribute("autoplay");
+        v.removeAttribute("loop");
+        v.pause();
+    }
 }());
 </script>
 </body>
