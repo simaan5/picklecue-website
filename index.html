@@ -116,7 +116,7 @@
         "@type": "FAQPage",
         "mainEntity": [
             { "@type": "Question", "name": "When does PickleCue launch?",
-              "acceptedAnswer": { "@type": "Answer", "text": "PickleCue is available now on the App Store, free on iPhone. It is currently available in the United States, with more countries coming soon." } },
+              "acceptedAnswer": { "@type": "Answer", "text": "PickleCue is available now on the App Store, free on iPhone. It is currently available in the United States, and more countries are on the way." } },
             { "@type": "Question", "name": "Is PickleCue free?",
               "acceptedAnswer": { "@type": "Answer", "text": "Yes. Finding courts, joining games, logging matches, and messaging are free. An optional subscription, PickleCue Pro, adds organizer tools like unlimited game creation, leagues, and tournaments." } },
             { "@type": "Question", "name": "Which devices does it run on?",
@@ -1056,6 +1056,32 @@ html.js .reveal.in{ opacity:1; transform:none; }
     .intl-cta{ margin-top:34px; padding-top:26px; }
 }
 
+
+/* ---- International notify prompt ---------------------------------------- */
+.geo-modal{ position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:24px; }
+.geo-modal[hidden]{ display:none; }
+.geo-backdrop{ position:absolute; inset:0; background:rgba(4,14,10,.62); backdrop-filter:blur(3px); }
+.geo-card{
+    position:relative; width:min(460px,100%); background:var(--night); color:var(--paper-on-night);
+    border:1px solid var(--line-night); border-radius:22px; padding:34px 30px 26px; text-align:center;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.7);
+    animation:geoIn .32s var(--ease) both;
+}
+@keyframes geoIn{ from{ opacity:0; transform:translateY(14px) scale(.98) } to{ opacity:1; transform:none } }
+.geo-kicker{ font-family:var(--f-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--cue); margin:0 0 12px; }
+.geo-card h2{ font-size:1.42rem; line-height:1.18; letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance; }
+.geo-card > p{ color:var(--mute-on-night); font-size:.97rem; line-height:1.6; margin:0 auto 20px; max-width:40ch; }
+.geo-close{ position:absolute; top:12px; right:14px; background:none; border:0; color:var(--mute-on-night);
+    font-size:26px; line-height:1; cursor:pointer; padding:6px 10px; border-radius:8px; }
+.geo-close:hover{ color:var(--paper-on-night); }
+.geo-dismiss{ display:block; margin:16px auto 0; background:none; border:0; cursor:pointer;
+    color:var(--mute-on-night); font-size:.86rem; text-decoration:underline; text-underline-offset:3px; }
+.geo-dismiss:hover{ color:var(--paper-on-night); }
+.geo-close:focus-visible, .geo-dismiss:focus-visible{ outline:2px solid var(--cue); outline-offset:3px; }
+@media (prefers-reduced-motion:reduce){ .geo-card{ animation:none; } }
+@media (max-width:520px){ .geo-card{ padding:30px 22px 22px; border-radius:18px; } }
+
 </style>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
@@ -1676,6 +1702,7 @@ document.documentElement.classList.add('js');
     }
 
     wireWaitlist('waitlistFormIntl', 'waitlistMsgIntl', 'intl', 'website-intl');
+    wireWaitlist('waitlistFormGeo', 'waitlistMsgGeo', 'geo', 'website-intl');
 })();
 </script>
 
@@ -1690,6 +1717,98 @@ document.documentElement.classList.add('js');
         v.removeAttribute("loop");
         v.pause();
     }
+}());
+</script>
+
+<!-- International notify prompt. Shown ONLY to visitors Cloudflare places
+     outside the US, at most once, and never after it is dismissed. -->
+<div class="geo-modal" id="geoModal" hidden role="dialog" aria-modal="true"
+     aria-labelledby="geoModalTitle" aria-describedby="geoModalBody">
+    <div class="geo-backdrop" data-geo-close></div>
+    <div class="geo-card" role="document">
+        <button class="geo-close" type="button" data-geo-close aria-label="Close">&times;</button>
+        <p class="geo-kicker" id="geoModalFlag">Hello from <span data-geo-country>your country</span></p>
+        <h2 id="geoModalTitle">PickleCue isn&rsquo;t in your App Store yet.</h2>
+        <p id="geoModalBody">We launched on iPhone in the United States first. Leave your email and
+           we&rsquo;ll tell you the day PickleCue reaches your country &mdash; nothing else, ever.</p>
+        <form class="waitlist-form waitlist-dark" id="waitlistFormGeo" novalidate
+              aria-label="Get notified when PickleCue launches in your country">
+            <label for="waitlist-email-geo" style="position:absolute;left:-9999px;">Email address</label>
+            <input type="email" id="waitlist-email-geo" name="email" placeholder="Your email address"
+                   required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgGeo">
+            <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
+            <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="geo_waitlist">Notify me</button>
+        </form>
+        <p class="waitlist-msg" id="waitlistMsgGeo" role="status" aria-live="polite"></p>
+        <button class="geo-dismiss" type="button" data-geo-close>No thanks &mdash; just browsing</button>
+    </div>
+</div>
+
+<script>
+/* International notify prompt.
+   Shown only to visitors Cloudflare places outside the US, at most once, and
+   never again once dismissed or submitted. Fails silently and shows nothing if
+   the country cannot be determined — a US visitor must never see this, and an
+   unplaceable visitor should not be nagged. */
+(function () {
+    var KEY = 'pc_geo_prompt_v1';
+    var modal = document.getElementById('geoModal');
+    if (!modal) return;
+    try { if (localStorage.getItem(KEY)) return; } catch (_) { return; }
+
+    var lastFocus = null;
+    function close(remember) {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        if (remember !== false) { try { localStorage.setItem(KEY, '1'); } catch (_) {} }
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function open(country) {
+        var label = modal.querySelector('[data-geo-country]');
+        if (label && country) label.textContent = country;
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        var input = document.getElementById('waitlist-email-geo');
+        if (input) setTimeout(function () { input.focus(); }, 120);
+    }
+
+    modal.addEventListener('click', function (e) {
+        if (e.target.closest('[data-geo-close]')) close();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) close();
+    });
+    // Keep focus inside the dialog while it is open.
+    modal.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab' || modal.hidden) return;
+        var f = modal.querySelectorAll('button, input:not([tabindex="-1"]), a[href]');
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    var COUNTRY_NAMES = {
+        GB:'the UK', CA:'Canada', AU:'Australia', NZ:'New Zealand', IE:'Ireland',
+        DE:'Germany', FR:'France', ES:'Spain', IT:'Italy', NL:'the Netherlands',
+        SE:'Sweden', NO:'Norway', DK:'Denmark', FI:'Finland', PL:'Poland',
+        JP:'Japan', KR:'Korea', SG:'Singapore', IN:'India', BR:'Brazil',
+        MX:'Mexico', ZA:'South Africa', AE:'the UAE', CH:'Switzerland', AT:'Austria'
+    };
+
+    fetch('/api/geo', { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) {
+            if (!d || !d.country || d.country === 'US') return;  // fail closed
+            setTimeout(function () { open(COUNTRY_NAMES[d.country] || 'your country'); }, 2600);
+        })
+        .catch(function () { /* no country, no prompt */ });
+
+    var f = document.getElementById('waitlistFormGeo');
+    if (f) f.addEventListener('submit', function () {
+        try { localStorage.setItem(KEY, '1'); } catch (_) {}
+    });
 }());
 </script>
 </body>
