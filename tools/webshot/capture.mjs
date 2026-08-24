@@ -17,7 +17,7 @@
 import { mkdir, writeFile, readFile, readdir } from 'node:fs/promises';
 import { chromium } from 'playwright-core';
 import { fileURLToPath } from 'node:url';
-import { serveSite, fixtureKey, sha256, SUPABASE_HOST } from './lib.mjs';
+import { serveSite, fixtureKey, sha256, runActions, verifyActions, SUPABASE_HOST } from './lib.mjs';
 import { SCENES, VIEWPORTS } from './scenes.mjs';
 
 const OUT = new URL('./out/', import.meta.url);
@@ -85,17 +85,14 @@ for (const scene of scenes) {
     // A click that changes nothing must FAIL, not quietly produce a duplicate
     // of the pre-click screenshot. A selector that silently stops matching is
     // exactly how a stale capture survives a redesign.
-    for (const step of scene.actions || []) {
-      const before = await page.locator('#main').innerHTML();
-      if (step.click) await page.locator(step.click).first().click();
-      await page.waitForTimeout(300);
-      const after = await page.locator('#main').innerHTML();
-      if (before === after) throw new Error(`action changed nothing: ${JSON.stringify(step)}`);
-    }
+    await runActions(page, scene.actions);
 
     await page.waitForTimeout(400); // fonts + avatar images settle
 
     if (missing.length) throw new Error(`unfixtured request: ${[...new Set(missing)].join(', ')}`);
+
+    // The screenshot is only trustworthy if the state we typed is still there.
+    await verifyActions(page, scene.actions);
 
     const file = fileURLToPath(new URL(`./out/${scene.id}.png`, import.meta.url));
     await page.screenshot({ path: file, fullPage: scene.viewport !== 'phone' });

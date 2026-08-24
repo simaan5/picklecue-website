@@ -21,7 +21,7 @@ import { chromium } from 'playwright-core';
 import { readFile } from 'node:fs/promises';
 import {
   serveSite, fixtureKey, skeleton, scrub, alignAvatars, assertClean, sha256,
-  SUPABASE_HOST,
+  runActions, SUPABASE_HOST,
 } from './lib.mjs';
 import { SCENES, VIEWPORTS } from './scenes.mjs';
 
@@ -64,6 +64,7 @@ for (const scene of scenes) {
   try {
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
     // Give realtime/late RPCs a beat to land before we stop listening.
+    await runActions(page, scene.actions);
     await page.waitForTimeout(1200);
 
     if (!exchanges.size) throw new Error('no Supabase exchanges recorded');

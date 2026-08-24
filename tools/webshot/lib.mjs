@@ -203,3 +203,100 @@ export function assertClean(text, personas, label) {
 export function sha256(s) {
   return createHash('sha256').update(s).digest('hex');
 }
+
+/* ---------------------------------------------------------------- actions */
+
+/**
+ * Drive the real page for scenes whose payoff state is only reachable by using
+ * it — filling the registration form, choosing a partner mode, signing the
+ * waiver field.
+ *
+ * Every step asserts it actually did something. A selector that silently stops
+ * matching after a redesign would otherwise produce a screenshot of the
+ * PREVIOUS state, which is the quiet way a capture library starts lying.
+ */
+export async function runActions(page, actions) {
+  if (!actions || !actions.length) return;
+
+  // Wait for the page to stop re-rendering before touching it.
+  //
+  // live.html paints from the snapshot, then repaints when the registration
+  // info and waiver arrive — and each repaint replaces #main's innerHTML,
+  // wiping anything already typed. Filling too early passes its own assertion
+  // and is then silently erased, producing a screenshot of an EMPTY form.
+  // Observed exactly that on reg-waiver. So: settle first.
+  // First wait for every element the actions touch to exist. On the
+  // registration form #rWaiverSig is the LAST thing rendered, because it only
+  // appears once the waiver has loaded — so its presence marks the final
+  // repaint rather than an intermediate one.
+  for (const step of actions) {
+    const sel = step.fill || step.select || step.scrollTo || step.click;
+    if (sel && sel.startsWith('#')) {
+      await page.locator(sel).first().waitFor({ state: 'attached', timeout: 10000 });
+    }
+  }
+
+  // Then require the DOM to hold still. One matching pair is not enough — the
+  // page can be quiet between two async repaints.
+  let last = null, stable = 0;
+  for (let i = 0; i < 40 && stable < 3; i++) {
+    const now = await page.locator('#main').innerHTML();
+    stable = (now === last && now.length) ? stable + 1 : 0;
+    last = now;
+    await page.waitForTimeout(150);
+  }
+
+  for (const step of actions || []) {
+    if (step.click) {
+      const before = await page.locator('#main').innerHTML();
+      await page.locator(step.click).first().click();
+      await page.waitForTimeout(300);
+      if (await page.locator('#main').innerHTML() === before) {
+        throw new Error(`click changed nothing: ${step.click}`);
+      }
+    } else if (step.fill) {
+      const el = page.locator(step.fill).first();
+      await el.waitFor({ state: 'visible', timeout: 5000 });
+      await el.fill(step.text);
+      if (await el.inputValue() !== step.text) {
+        throw new Error(`fill did not stick: ${step.fill}`);
+      }
+    } else if (step.select) {
+      const el = page.locator(step.select).first();
+      await el.waitFor({ state: 'visible', timeout: 5000 });
+      await el.selectOption(step.value);
+      if (await el.inputValue() !== step.value) {
+        throw new Error(`select did not stick: ${step.select}=${step.value}`);
+      }
+      // The partner-name field is revealed by a change handler.
+      await page.waitForTimeout(200);
+    } else if (step.scrollTo) {
+      await page.locator(step.scrollTo).first().scrollIntoViewIfNeeded();
+      await page.waitForTimeout(200);
+    } else {
+      throw new Error(`unknown action: ${JSON.stringify(step)}`);
+    }
+  }
+}
+
+/**
+ * Re-assert every typed value immediately before the screenshot.
+ *
+ * runActions checks each step when it happens, which is not enough: a repaint
+ * afterwards can wipe the form and the capture still "succeeds", shipping a
+ * picture of an empty form as though it were a filled one. This is the check
+ * that makes the screenshot itself trustworthy.
+ */
+export async function verifyActions(page, actions) {
+  for (const step of actions || []) {
+    const sel = step.fill || step.select;
+    if (!sel) continue;
+    const want = step.fill ? step.text : step.value;
+    const got = await page.locator(sel).first().inputValue();
+    if (got !== want) {
+      throw new Error(
+        `state lost before screenshot: ${sel} is "${got}", expected "${want}"`,
+      );
+    }
+  }
+}

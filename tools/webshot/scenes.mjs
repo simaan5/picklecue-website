@@ -22,7 +22,21 @@ export const EVENTS = {
   T_DONE: 'c1000001-0000-4000-8000-000000000002',
   T_REG: 'c1000001-0000-4000-8000-000000000001',
   T_LIVE: '81d8ca16-fa8d-41e9-a445-133f968da32d',
+
+  // Dedicated marketing event, reserved id block c1000002-* (c1000001-* is the
+  // superseded LA world). "Foothill Fall Shootout" — doubles, registration
+  // open, waiver required, partner pairing on, waitlist explicitly DISABLED so
+  // the unproven auto-promotion feature cannot appear in any capture.
+  //
+  // Every row under it was produced by the real production RPCs
+  // (register_for_event, pair_registrations, sign_event_waiver,
+  // set_check_in_status, get_or_create_short_code) — not hand-written.
+  // Provenance: qa/marketing-account/FOOTHILL-FALL-SHOOTOUT.md in the app repo.
+  T_MARKETING: 'c1000002-0000-4000-8000-000000000001',
 };
+
+/** Short code for T_MARKETING, issued by get_or_create_short_code. */
+export const MARKETING_CODE = 'FUDMRD';
 
 /** Desktop is the marketing hero size; phone proves the same page on a court. */
 export const VIEWPORTS = {
@@ -107,6 +121,99 @@ export const SCENES = [
     label: 'Teams and seeds',
     page: 'live.html',
     query: { t: EVENTS.T_DONE, view: 'players' },
+    viewport: 'desktop',
+  },
+  // ---- Foothill Fall Shootout — registration → waiver → pairing ----------
+  {
+    id: 'reg-form',
+    feature: 'Registration',
+    label: 'Register — no account needed',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'register' },
+    viewport: 'phone',
+  },
+  {
+    id: 'reg-waiver',
+    feature: 'Waiver',
+    label: 'Sign the waiver as you register',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'register' },
+    viewport: 'phone',
+    // Fill the real form. The waiver body and signature field are part of it,
+    // so this frames the waiver rather than inventing a separate screen.
+    actions: [
+      { fill: '#rName', text: 'Frankie K.' },
+      { fill: '#rEmail', text: 'frankie@example.com' },
+      { fill: '#rSkill', text: '3.5' },
+      { select: '#rPartnerMode', value: 'needed' },
+      { fill: '#rWaiverSig', text: 'Frankie K.' },
+      { scrollTo: '#rWaiverSig' },
+    ],
+  },
+  {
+    id: 'reg-partner',
+    feature: 'Partner pairing',
+    label: 'Have a partner, or find one',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'register' },
+    viewport: 'phone',
+    actions: [
+      { fill: '#rName', text: 'Frankie K.' },
+      { select: '#rPartnerMode', value: 'complete' },
+      { fill: '#rPartnerName', text: 'Cruz T.' },
+      { scrollTo: '#rPartnerMode' },
+    ],
+  },
+  {
+    id: 'reg-roster',
+    feature: 'Registration',
+    label: 'Teams, seeds and who still needs a partner',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'players' },
+    viewport: 'desktop',
+  },
+  {
+    id: 'reg-event-home',
+    feature: 'Registration',
+    label: 'Event page with registration open',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING },
+    viewport: 'phone',
+  },
+  // ---- live scoring, produced by a real scoring session ------------------
+  // Court 2 is genuinely mid-match at 7-5. Every point came from
+  // record_score_event (match_started, then point_added per rally) — the same
+  // RPC the scorekeeper page calls. No score was written to the table directly.
+  {
+    id: 'score-live-phone',
+    feature: 'Live scoring',
+    label: 'A match in progress, 7-5',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING },
+    viewport: 'phone',
+  },
+  {
+    id: 'score-live-desktop',
+    feature: 'Live scoring',
+    label: 'Live now, plus what is coming up',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING },
+    viewport: 'desktop',
+  },
+  {
+    id: 'score-live-tv',
+    feature: 'TV / projector board',
+    label: 'Venue board with a live score',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, display: 'tv' },
+    viewport: 'desktop',
+  },
+  {
+    id: 'score-bracket',
+    feature: 'Tournament bracket',
+    label: 'Bracket filling in as matches finish',
+    page: 'live.html',
+    query: { t: EVENTS.T_MARKETING, view: 'bracket' },
     viewport: 'desktop',
   },
   {
