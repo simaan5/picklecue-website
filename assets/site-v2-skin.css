@@ -89,3 +89,221 @@ h2{ line-height:1.1; }
 
 /* Links inside prose */
 main a:not(.btn-pill):not(.cta):not(.cta-ghost):not(.masthead-nav a){ color: var(--court); }
+
+
+/* ============================================================
+   V2 CHROME for the legacy content pages (community, support,
+   terms, privacy).
+
+   The skin above retuned this template's TOKENS so the palette and
+   type already matched V2 — but the markup still shipped the old
+   masthead (4 nav links, boxed app-icon logo) and the `colophon`
+   footer, so these pages read as a different site. Worse, the old
+   nav had no Courts and no Organizers link at all: from /support you
+   could not reach either section.
+
+   These rules are lifted verbatim from assets/site-v2.css so the two
+   cannot drift in appearance, and the markup in those four pages is
+   switched to the V2 masthead / site-menu / site-foot to match.
+
+   Loaded here rather than by pulling in the whole of site-v2.css,
+   because these pages' inline CSS is written against site.css tokens
+   (--f-body, --f-display, --rule, --rule-strong, --paper-2) that V2
+   does not define. Swapping the stylesheet wholesale would leave the
+   page bodies unstyled.
+   ============================================================ */
+
+:root{
+    --cue:            #56D364;
+    --electric:       #D8F35A;
+    --f:              'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --line:           rgba(14,27,20,.12);
+    --line-night:     rgba(237,243,236,.15);
+    --mute-on-night:  #9BB0A2;
+    --night:          #061811;
+    --paper-on-night: #EDF3EC;
+    --wrap:           1340px;
+}
+@media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --line: rgba(237,243,236,.14); --night: #040F0A; }
+}
+:root[data-theme="dark"]{ --line: rgba(237,243,236,.14); --night: #040F0A; }
+
+/* ============================================================
+   PickleCue V2 shared shell.
+   Tokens, masthead, footer, buttons, typography, theme toggle.
+   Used by every page except index (which inlines the same system).
+   ============================================================ */
+
+:root{
+    --paper:      #F7F7F2;
+    --card:       #FFFFFF;
+    --ink:        #0E1B14;
+    --ink-soft:   #43564B;
+    --ink-mute:   #5F6F64;
+    --night:      #061811;
+    --night-card: #0C2419;
+    --paper-on-night: #EDF3EC;
+    --mute-on-night:  #9BB0A2;
+    --court:      #1F5D43;
+    /* --court is the solid fill (white text sits on it and must stay dark).
+       --court-fg is the accent used AS a foreground, so it inverts for dark.
+       Without this pair, an accent used as text measures 2.32:1 on the dark
+       ground. Mirrors the token in index.html. */
+    --court-fg:   #1F5D43;
+    --cue:        #56D364;
+    --electric:   #D8F35A;
+    --line:       rgba(14,27,20,.12);
+    --line-night: rgba(237,243,236,.15);
+    --r-card: 20px;
+    --f: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --f-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+    --wrap: 1340px;
+    --wrap-tight: 1240px;
+    --ease: cubic-bezier(.16,1,.3,1);
+}
+/* Buttons */
+.btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font:600 17px/1 var(--f); text-decoration:none; cursor:pointer;
+    border-radius:999px; padding:18px 32px; border:0; white-space:nowrap;
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.btn:active{ transform:translateY(1px) scale(.985); }
+.btn-primary{ background:var(--electric); color:var(--night); box-shadow:0 12px 34px rgba(31,93,67,.24); }
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 44px rgba(31,93,67,.3); }
+.btn-primary svg{ transition:transform .25s var(--ease); }
+.btn-primary:hover svg{ transform:translateX(3px); }
+.btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid rgba(14,27,20,.25); }
+:root[data-theme="dark"] .btn-ghost{ border-color:rgba(237,243,236,.28); }
+.btn-ghost:hover{ border-color:var(--ink); transform:translateY(-2px); }
+/* Masthead */
+.masthead{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:transparent; border-bottom:1px solid transparent;
+    transition: background .3s var(--ease), border-color .3s var(--ease);
+}
+.masthead.scrolled{
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom-color:var(--line);
+}
+.masthead-inner{
+    max-width:var(--wrap); margin:0 auto; padding:0 32px;
+    height:76px; display:flex; align-items:center; gap:36px;
+}
+.brand{ display:flex; align-items:center; gap:12px; text-decoration:none; }
+.brand .brand-mark{ width:42px; height:42px; }
+/* The header used to set "PickleCue" as live text, so the C in "Cue" was an
+   Instrument Sans glyph with none of the wordmark's notch. Use the real
+   wordmark. Both originals are drawn for light grounds, so the dark surface
+   needs the knockout variant. Selectors are kept at matching specificity so
+   the theme rule wins and both never render stacked. */
+.brand .brand-wordmark{ height:24px; width:auto; display:block; }
+.brand .brand-wordmark.wm-dark{ display:none; }
+:root[data-theme="dark"] .brand .brand-wordmark.wm-light{ display:none; }
+:root[data-theme="dark"] .brand .brand-wordmark.wm-dark{ display:block; }
+.masthead nav{ display:flex; gap:32px; margin-left:auto; }
+.masthead nav a{
+    font:500 15.5px/1 var(--f); text-decoration:none; color:var(--ink-soft);
+    padding:8px 2px; position:relative; transition:color .2s var(--ease);
+}
+.masthead nav a::after{
+    content:""; position:absolute; left:0; right:100%; bottom:2px; height:2px;
+    background:var(--court); transition:right .25s var(--ease);
+}
+:root[data-theme="dark"] .masthead nav a::after{ background:var(--cue); }
+.masthead nav a:hover{ color:var(--ink); }
+.masthead nav a:hover::after{ right:0; }
+.masthead nav a[aria-current="page"]{ color:var(--ink); }
+.masthead nav a[aria-current="page"]::after{ right:0; }
+.masthead .btn{ padding:13px 24px; font-size:15px; }
+.masthead-burger{ display:none; }
+.theme-toggle{
+    width:42px; height:42px; border-radius:50%; display:grid; place-items:center;
+    background:none; border:1.5px solid var(--line); color:var(--ink-soft);
+    cursor:pointer; margin-left:6px; flex:0 0 auto;
+    transition: border-color .2s var(--ease), color .2s var(--ease);
+}
+.theme-toggle:hover{ border-color:var(--ink); color:var(--ink); }
+.theme-toggle .sun{ display:none; }
+:root[data-theme="dark"] .theme-toggle .sun{ display:block; }
+:root[data-theme="dark"] .theme-toggle .moon{ display:none; }
+.site-menu[hidden]{ display:none; }
+.site-menu{
+    position:fixed; inset:0; z-index:80; background:var(--night);
+    color:var(--paper-on-night); display:flex; flex-direction:column; padding:28px;
+    opacity:0; transition:opacity .28s var(--ease);
+}
+.site-menu.is-open{ opacity:1; }
+.site-menu-close{
+    align-self:flex-end; background:none; border:1.5px solid var(--line-night);
+    color:var(--paper-on-night); border-radius:999px; width:48px; height:48px;
+    font-size:22px; cursor:pointer;
+}
+.site-menu nav{ display:flex; flex-direction:column; gap:10px; margin:auto 0; }
+.site-menu nav a{ font:700 38px/1.3 var(--f); letter-spacing:-.02em; text-decoration:none; padding:8px 0; }
+.site-menu nav a:hover{ color:var(--electric); }
+.site-menu .btn{ align-self:flex-start; }
+/* Footer */
+footer.site-foot{ background:var(--night); color:var(--mute-on-night); border-top:1px solid var(--line-night); }
+.foot-inner{
+    max-width:var(--wrap); margin:0 auto; padding:88px 32px 56px;
+    /* Brand + FOUR link columns (Product, Courts, For you, Legal). The track
+       count has to match the child count: this said `2fr 1fr 1fr 1fr` when the
+       Courts column was added, so Legal had no track left and wrapped onto its
+       own row under the wordmark. `repeat(4, ...)` keeps it honest, and
+       minmax(0,1fr) stops a long label like "Third-party notices" from forcing
+       a column wider than its share. */
+    display:grid; grid-template-columns: 1.7fr repeat(4, minmax(0, 1fr)); gap:40px;
+}
+.foot-brand img{ height:40px; width:auto; }
+.foot-brand p{ margin-top:18px; font:450 16px/1.55 var(--f); max-width:26ch; }
+.foot-col h3{ font:600 14px/1 var(--f); letter-spacing:.12em; text-transform:uppercase; color:var(--paper-on-night); margin-bottom:22px; }
+.foot-col a{ display:block; font:450 16.5px/2.3 var(--f); color:var(--mute-on-night); text-decoration:none; }
+.foot-col a:hover{ color:var(--electric); }
+.foot-base{
+    max-width:var(--wrap); margin:0 auto; padding:28px 32px;
+    border-top:1px solid var(--line-night);
+    display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
+    font:450 14.5px/1.4 var(--f);
+}
+.foot-social{ display:flex; gap:22px; }
+.foot-social a{ color:var(--mute-on-night); text-decoration:none; font:500 15px/1 var(--f);
+    display:inline-flex; align-items:center; justify-content:center;
+    min-height:24px; min-width:24px; padding:5px 0; }
+.foot-social a:hover{ color:var(--electric); }
+@media (max-width:1120px){
+    .foot-inner{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width:860px){
+    .masthead nav, .masthead .btn{ display:none; }
+    .masthead-burger{
+        display:grid; place-items:center; margin-left:auto;
+        width:46px; height:46px; background:none; border:1.5px solid rgba(14,27,20,.25);
+        border-radius:12px; cursor:pointer; color:var(--ink);
+    }
+    :root[data-theme="dark"] .masthead-burger{ border-color:rgba(237,243,236,.28); }
+    .theme-toggle{ margin-left:auto; margin-right:10px; }
+    .foot-inner{ grid-template-columns:1fr; gap:40px; }
+    .waitlist-form .btn{ width:100%; justify-content:center; }
+    .page-hero .actions .btn{ width:100%; justify-content:center; }
+}
+/* Skip link: keyboard users must be able to bypass the masthead nav. */
+.skip-link{
+    position:absolute; left:12px; top:-64px; z-index:200;
+    padding:12px 20px; border-radius:999px; font:600 15px/1 var(--f);
+    background:var(--ink); color:var(--paper); text-decoration:none;
+    transition:top .2s var(--ease);
+}
+
+/* These pages style prose links with `a{ border-bottom:1px solid currentColor }`
+   in their own inline <style>, which is right for a legal document body but
+   also drew a rule under every masthead, menu and footer link once the V2
+   chrome moved in. Class specificity (0,1,1) beats the bare element selector
+   (0,0,1) regardless of source order, so the chrome opts out here rather than
+   the pages having to change their prose styling. */
+.masthead a, .masthead .brand,
+.site-menu a, .site-menu-close,
+.site-foot a, .foot-social a, .foot-col a, .foot-brand a{ border-bottom:0; }

@@ -131,7 +131,7 @@ FOOTER = """<footer class="site-foot"><div class="foot-inner">
 <div class="foot-col"><h3>Product</h3><a href="/#product">Product</a><a href="/demo/">Live demo</a></div>
 <div class="foot-col"><h3>For you</h3><a href="/players.html">Players</a><a href="/organizers.html">Organizers</a><a href="/clubs.html">Clubs</a></div>
 <div class="foot-col"><h3>Courts</h3><a href="/courts">All courts</a><a href="/courts/methodology">How we count</a></div>
-<div class="foot-col"><h3>Legal</h3><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/licenses.html">Notices</a><a href="/support.html">Support</a></div>
+<div class="foot-col"><h3>Legal</h3><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/licenses.html">Notices</a><a href="#cookie-preferences">Cookie preferences</a><a href="/support.html">Support</a></div>
 </div></footer>"""
 
 
