@@ -1071,7 +1071,14 @@ html.js .reveal.in{ opacity:1; transform:none; }
 .geo-kicker{ font-family:var(--f-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
     color:var(--cue); margin:0 0 12px; }
 .geo-card h2{ font-size:1.42rem; line-height:1.18; letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance; }
-.geo-card > p{ color:var(--mute-on-night); font-size:.97rem; line-height:1.6; margin:0 auto 20px; max-width:40ch; }
+/* Descendant, not child: the two country panels sit between the card and its
+   paragraphs. Same specificity as before, so nothing re-renders. */
+.geo-card p{ color:var(--mute-on-night); font-size:.97rem; line-height:1.6; margin:0 auto 20px; max-width:40ch; }
+.geo-panel[hidden]{ display:none; }
+.geo-panel .appstore-badge{ display:inline-block; margin:2px 0 0; }
+.geo-panel .appstore-badge img{ width:180px; height:60px; }
+.geo-card:focus{ outline:none; }
+.geo-panel .appstore-badge:focus-visible{ outline:2px solid var(--cue); outline-offset:4px; border-radius:10px; }
 .geo-close{ position:absolute; top:12px; right:14px; background:none; border:0; color:var(--mute-on-night);
     font-size:26px; line-height:1; cursor:pointer; padding:6px 10px; border-radius:8px; }
 .geo-close:hover{ color:var(--paper-on-night); }
@@ -1701,8 +1708,20 @@ document.documentElement.classList.add('js');
         });
     }
 
-    wireWaitlist('waitlistFormIntl', 'waitlistMsgIntl', 'intl', 'website-intl');
-    wireWaitlist('waitlistFormGeo', 'waitlistMsgGeo', 'geo', 'website-intl');
+    /* Wire after the document is parsed. This script runs inline at ~line 1712
+       but #waitlistFormGeo is not defined until ~1745, so wiring it here
+       synchronously found null and returned — the prompt's "Notify me" button
+       submitted nothing and showed no message. Deferring covers both forms
+       regardless of where they sit relative to this block. */
+    function wireAll() {
+        wireWaitlist('waitlistFormIntl', 'waitlistMsgIntl', 'intl', 'website-intl');
+        wireWaitlist('waitlistFormGeo', 'waitlistMsgGeo', 'geo', 'website-intl');
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireAll);
+    } else {
+        wireAll();
+    }
 })();
 </script>
 
@@ -1720,57 +1739,97 @@ document.documentElement.classList.add('js');
 }());
 </script>
 
-<!-- International notify prompt. Shown ONLY to visitors Cloudflare places
-     outside the US, at most once, and never after it is dismissed. -->
+<!-- Country prompt. Every visitor gets one of two panels: US visitors are sent
+     to the App Store, everyone else is offered the launch notification. Shown
+     at most once per panel, never again after dismissal. -->
 <div class="geo-modal" id="geoModal" hidden role="dialog" aria-modal="true"
      aria-labelledby="geoModalTitle" aria-describedby="geoModalBody">
     <div class="geo-backdrop" data-geo-close></div>
-    <div class="geo-card" role="document">
+    <div class="geo-card" role="document" tabindex="-1">
         <button class="geo-close" type="button" data-geo-close aria-label="Close">&times;</button>
-        <p class="geo-kicker" id="geoModalFlag">Hello from <span data-geo-country>your country</span></p>
-        <h2 id="geoModalTitle">PickleCue isn&rsquo;t in your App Store yet.</h2>
-        <p id="geoModalBody">We launched on iPhone in the United States first. Leave your email and
-           we&rsquo;ll tell you the day PickleCue reaches your country &mdash; nothing else, ever.</p>
-        <form class="waitlist-form waitlist-dark" id="waitlistFormGeo" novalidate
-              aria-label="Get notified when PickleCue launches in your country">
-            <label for="waitlist-email-geo" style="position:absolute;left:-9999px;">Email address</label>
-            <input type="email" id="waitlist-email-geo" name="email" placeholder="Your email address"
-                   required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgGeo">
-            <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
-            <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="geo_waitlist">Notify me</button>
-        </form>
-        <p class="waitlist-msg" id="waitlistMsgGeo" role="status" aria-live="polite"></p>
-        <button class="geo-dismiss" type="button" data-geo-close>No thanks &mdash; just browsing</button>
+
+        <!-- Outside the US: the app is not in their App Store yet. -->
+        <div class="geo-panel" data-geo-panel="intl" hidden>
+            <p class="geo-kicker">Hello from <span data-geo-country>your country</span></p>
+            <h2 id="geoModalTitle">PickleCue isn&rsquo;t in your App Store yet.</h2>
+            <p id="geoModalBody">We launched on iPhone in the United States first. Leave your email and
+               we&rsquo;ll tell you the day PickleCue reaches your country &mdash; nothing else, ever.</p>
+            <form class="waitlist-form waitlist-dark" id="waitlistFormGeo" novalidate
+                  aria-label="Get notified when PickleCue launches in your country">
+                <label for="waitlist-email-geo" style="position:absolute;left:-9999px;">Email address</label>
+                <input type="email" id="waitlist-email-geo" name="email" placeholder="Your email address"
+                       required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgGeo">
+                <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
+                <button type="submit" class="btn btn-primary" data-track="cta_click" data-cta="geo_waitlist">Notify me</button>
+            </form>
+            <p class="waitlist-msg" id="waitlistMsgGeo" role="status" aria-live="polite"></p>
+            <button class="geo-dismiss" type="button" data-geo-close>No thanks &mdash; just browsing</button>
+        </div>
+
+        <!-- In the US: they can install it right now, so send them there. -->
+        <div class="geo-panel" data-geo-panel="us" hidden>
+            <p class="geo-kicker">Available now &middot; United States</p>
+            <h2 id="geoModalTitleUS">PickleCue is live on the App&nbsp;Store.</h2>
+            <p id="geoModalBodyUS">Free on iPhone. Find courts near you, organize games,
+               keep score, and run leagues and tournaments.</p>
+            <a class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631"
+               data-track="cta_click" data-cta="geo_us_download"
+               aria-label="Download PickleCue on the App Store"><img src="/images/badges/app-store-badge.svg"
+               alt="Download on the App Store" width="180" height="60" decoding="async"></a>
+            <button class="geo-dismiss" type="button" data-geo-close>Maybe later</button>
+        </div>
     </div>
 </div>
 
 <script>
-/* International notify prompt.
-   Shown only to visitors Cloudflare places outside the US, at most once, and
-   never again once dismissed or submitted. Fails silently and shows nothing if
-   the country cannot be determined — a US visitor must never see this, and an
-   unplaceable visitor should not be nagged. */
+/* Country prompt.
+   US visitors get the App Store panel; everyone else gets the notify panel.
+   Each panel is shown at most once and never again after it is dismissed or
+   submitted — the two are tracked separately so they cannot suppress each
+   other. Shows nothing at all when the country cannot be determined: a US
+   visitor must never be told the app is unavailable, and an unplaceable
+   visitor must never be sent to a store listing they may not be able to use. */
 (function () {
-    var KEY = 'pc_geo_prompt_v1';
+    var KEYS = { intl: 'pc_geo_prompt_v1', us: 'pc_us_prompt_v1' };
     var modal = document.getElementById('geoModal');
     if (!modal) return;
-    try { if (localStorage.getItem(KEY)) return; } catch (_) { return; }
 
+    var activeKey = null;
     var lastFocus = null;
+
+    function remembered(k) {
+        try { return !!localStorage.getItem(k); } catch (_) { return true; }
+    }
     function close(remember) {
         modal.hidden = true;
         document.body.style.overflow = '';
-        if (remember !== false) { try { localStorage.setItem(KEY, '1'); } catch (_) {} }
+        if (remember !== false && activeKey) {
+            try { localStorage.setItem(activeKey, '1'); } catch (_) {}
+        }
         if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
-    function open(country) {
-        var label = modal.querySelector('[data-geo-country]');
-        if (label && country) label.textContent = country;
+    function open(variant, country) {
+        activeKey = KEYS[variant];
+        var panels = modal.querySelectorAll('[data-geo-panel]');
+        for (var i = 0; i < panels.length; i++) {
+            panels[i].hidden = panels[i].getAttribute('data-geo-panel') !== variant;
+        }
+        // Point the dialog's accessible name and description at the live panel.
+        modal.setAttribute('aria-labelledby', variant === 'us' ? 'geoModalTitleUS' : 'geoModalTitle');
+        modal.setAttribute('aria-describedby', variant === 'us' ? 'geoModalBodyUS' : 'geoModalBody');
+
+        if (variant === 'intl' && country) {
+            var label = modal.querySelector('[data-geo-country]');
+            if (label) label.textContent = country;
+        }
         lastFocus = document.activeElement;
         modal.hidden = false;
         document.body.style.overflow = 'hidden';
-        var input = document.getElementById('waitlist-email-geo');
-        if (input) setTimeout(function () { input.focus(); }, 120);
+
+        var target = variant === 'us'
+            ? modal.querySelector('.geo-card')
+            : document.getElementById('waitlist-email-geo');
+        if (target) setTimeout(function () { target.focus(); }, 120);
     }
 
     modal.addEventListener('click', function (e) {
@@ -1782,7 +1841,11 @@ document.documentElement.classList.add('js');
     // Keep focus inside the dialog while it is open.
     modal.addEventListener('keydown', function (e) {
         if (e.key !== 'Tab' || modal.hidden) return;
-        var f = modal.querySelectorAll('button, input:not([tabindex="-1"]), a[href]');
+        // offsetParent filters out the panel that is not in play — without it
+        // Tab walks into the hidden panel's controls and focus disappears.
+        var all = modal.querySelectorAll('button, input:not([tabindex="-1"]), a[href]');
+        var f = [];
+        for (var i = 0; i < all.length; i++) { if (all[i].offsetParent !== null) f.push(all[i]); }
         if (!f.length) return;
         var first = f[0], last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -1800,14 +1863,23 @@ document.documentElement.classList.add('js');
     fetch('/api/geo', { headers: { 'Accept': 'application/json' } })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (d) {
-            if (!d || !d.country || d.country === 'US') return;  // fail closed
-            setTimeout(function () { open(COUNTRY_NAMES[d.country] || 'your country'); }, 3000);
+            if (!d || !d.country) return;           // unplaceable: show nothing
+            var variant = d.country === 'US' ? 'us' : 'intl';
+            if (remembered(KEYS[variant])) return;  // already seen this panel
+            setTimeout(function () {
+                open(variant, COUNTRY_NAMES[d.country] || 'your country');
+            }, 3000);
         })
         .catch(function () { /* no country, no prompt */ });
 
     var f = document.getElementById('waitlistFormGeo');
     if (f) f.addEventListener('submit', function () {
-        try { localStorage.setItem(KEY, '1'); } catch (_) {}
+        try { localStorage.setItem(KEYS.intl, '1'); } catch (_) {}
+    });
+    // Following the badge counts as answering the prompt.
+    var dl = modal.querySelector('[data-geo-panel="us"] .appstore-badge');
+    if (dl) dl.addEventListener('click', function () {
+        try { localStorage.setItem(KEYS.us, '1'); } catch (_) {}
     });
 }());
 </script>
