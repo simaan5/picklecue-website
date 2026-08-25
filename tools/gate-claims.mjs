@@ -92,6 +92,12 @@ function scanPhrases(rel, text) {
     for (const [phrase, why] of Object.entries(MARKETING_ONLY_PHRASES)) {
       if (text.includes(phrase)) fail(rel, `banned on marketing pages: "${phrase}" — ${why}`);
     }
+    /* A star rating with a review count. The banned-phrase list caught
+       "courts with reviews" in prose but not "4.6 (128)" rendered as UI — the
+       live demo shipped three fabricated court ratings past the first gate.
+       public.court_reviews has zero rows, so no rating is real. */
+    const rating = text.match(/\b[0-5]\.[0-9]\s*\(\s*\d{1,5}\s*\)/);
+    if (rating) fail(rel, `fabricated rating "${rating[0]}" — court_reviews is empty, there are no ratings`);
   }
   for (const [phrase, why] of Object.entries({
     'user-scalable=no': 'disables pinch zoom (WCAG 2.2 SC 1.4.4)',

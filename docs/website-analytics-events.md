@@ -40,6 +40,11 @@ Caught in Phase B verification; the interception now emits `qr_open` only.
 | `install_bar_shown` | sticky install bar became visible | `page` |
 | `install_bar_dismiss` | visitor dismissed the sticky bar | `page` |
 | `demo_open` | link into `/demo/` | `placement`, `audience`, `page` |
+| `demo_start` | guided tour started | `source` (`intro` \| `replay`), `page` |
+| `demo_step` | a tour step became active | `step` (1–5), `id`, `page` |
+| `demo_skip` | tour abandoned mid-way | `step` reached, `page` |
+| `demo_complete` | final tour step finished | `page` |
+| `demo_explore_free` | tour declined from the landing state | `page` |
 | `spectators_open` | link into `/live-scores` | `placement`, `audience`, `page` |
 | `event_code_focus` | "I have an event code" CTA | `placement`, `audience`, `page` |
 | `event_code_open` | a well-formed six-character code submitted | `placement`, `audience`, `page` |
@@ -107,3 +112,10 @@ matter:
    click a CTA, and assert one event.
 2. **Never fire for a cancelled navigation.** Click a desktop App Store badge and
    assert the only event is `qr_open`.
+3. **Resolve `window.track` at call time in the demo.** `demo/tour.js` is a
+   classic script at the end of `<body>`, so it runs *before* the deferred
+   `acquire.js` that defines `window.track`. Capturing the function at load time
+   binds the no-op fallback and drops every tour event silently.
+4. **`demo_start` precedes `demo_step 1`.** The first implementation called
+   `setStep(0)` before it announced the start, so the funnel read "step 1, then
+   started".

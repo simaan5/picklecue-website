@@ -32,7 +32,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32.png?v=20260812b">
     <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png?v=20260812b">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="stylesheet" href="demo.css?v=20260825a">
+    <link rel="stylesheet" href="demo.css?v=20260825b">
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
@@ -93,6 +93,23 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         picklecue.com
     </a>
+
+
+    <!-- Landing state. Not a popup over content: it IS the page's entry state,
+         the phone is visible behind it, and "Explore freely" is a full escape
+         with no close-button trickery. -->
+    <div class="tour-intro" id="tourIntro">
+      <div class="tour-intro-card">
+        <p class="tour-kicker">Live demo</p>
+        <h2>Try PickleCue before you download it.</h2>
+        <p class="tour-lede">A guided walk through courts, games, joining, competing and your match record. Real screens, demo data. No account, nothing to install.</p>
+        <div class="tour-intro-actions">
+          <button class="tour-btn tour-btn-primary" id="tourStart" type="button">Start the tour</button>
+          <button class="tour-btn" id="tourFree" type="button">Explore freely</button>
+        </div>
+        <p class="tour-meta">Five steps, about a minute. You can leave at any point.</p>
+      </div>
+    </div>
 
     <div class="iphone-frame">
         <div class="iphone-screen">
@@ -226,17 +243,17 @@
                     </div>
                     <div class="court-row">
                         <span class="c-ico green"><svg class="i ci"><use href="#i-paddle"/></svg></span>
-                        <div class="c-body"><b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.6 (128) • 6 Courts</i></div>
+                        <div class="c-body"><b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-paddle"/></svg> 6 Courts • Free</i></div>
                         <span class="c-dist">1.2 mi</span>
                     </div>
                     <div class="court-row">
                         <span class="c-ico purple"><svg class="i ci"><use href="#i-paddle"/></svg></span>
-                        <div class="c-body"><b>Mueller Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.4 (96) • 4 Courts</i></div>
+                        <div class="c-body"><b>Mueller Courts</b><i><svg class="i st"><use href="#i-paddle"/></svg> 4 Courts • Free</i></div>
                         <span class="c-dist">2.1 mi</span>
                     </div>
                     <div class="court-row">
                         <span class="c-ico orange"><svg class="i ci"><use href="#i-paddle"/></svg></span>
-                        <div class="c-body"><b>Northwest Park</b><i><svg class="i st"><use href="#i-star"/></svg> 4.3 (74) • 8 Courts</i></div>
+                        <div class="c-body"><b>Northwest Park</b><i><svg class="i st"><use href="#i-paddle"/></svg> 8 Courts • Free</i></div>
                         <span class="c-dist">3.3 mi</span>
                     </div>
                     <div class="outline-btn">Find More Courts</div>
@@ -245,16 +262,16 @@
                 <div class="section-h"><span>Recommended For You</span><a>View All</a></div>
                 <div class="reco-scroll">
                     <div class="reco-card">
-                        <div class="reco-photo"><span class="pill-lime">Popular</span><span class="heart"><svg class="i hi"><use href="#i-heart"/></svg></span></div>
-                        <b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.6 (128) • 1.2 mi</i><u>Outdoor • 6 Courts</u>
+                        <div class="reco-photo"><span class="pill-lime">Free</span><span class="heart"><svg class="i hi"><use href="#i-heart"/></svg></span></div>
+                        <b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-paddle"/></svg> Free • 1.2 mi</i><u>Outdoor • 6 Courts</u>
                     </div>
                     <div class="reco-card">
                         <div class="reco-photo"><span class="pill-lime">New</span><span class="heart"><svg class="i hi"><use href="#i-heart"/></svg></span></div>
-                        <b>Mueller Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.4 (96) • 2.1 mi</i><u>Outdoor • 4 Courts</u>
+                        <b>Mueller Courts</b><i><svg class="i st"><use href="#i-paddle"/></svg> Free • 2.1 mi</i><u>Outdoor • 4 Courts</u>
                     </div>
                     <div class="reco-card">
                         <div class="reco-photo"><span class="heart"><svg class="i hi"><use href="#i-heart"/></svg></span></div>
-                        <b>Northwest Park</b><i><svg class="i st"><use href="#i-star"/></svg> 4.3 (74) • 3.3 mi</i><u>Outdoor • 8 Courts</u>
+                        <b>Northwest Park</b><i><svg class="i st"><use href="#i-paddle"/></svg> Free • 3.3 mi</i><u>Outdoor • 8 Courts</u>
                     </div>
                 </div>
 
@@ -302,7 +319,7 @@
                 <div class="card courts-sel">
                     <div class="court-row tall">
                         <span class="c-ico green"><svg class="i ci"><use href="#i-paddle"/></svg></span>
-                        <div class="c-body"><b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-star"/></svg> 4.6 (128) • 6 Courts</i><u>Outdoor • Free • Lights</u></div>
+                        <div class="c-body"><b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-paddle"/></svg> 6 Courts • Free</i><u>Outdoor • Free • Lights</u></div>
                         <span class="c-dist">1.2 mi</span>
                     </div>
                     <div class="lime-btn">View Court</div>
@@ -632,9 +649,46 @@
         </div>
     </div>
 
+
+    <!-- Tour panel. Hidden until the visitor asks for the tour. -->
+    <aside class="tour-panel" id="tourPanel" hidden aria-label="Guided tour">
+      <div class="tour-head">
+        <ol class="tour-dots" id="tourDots" aria-hidden="true"></ol>
+        <button class="tour-skip" id="tourSkip" type="button">Skip tour</button>
+      </div>
+      <div class="tour-body" aria-live="polite">
+        <p class="tour-step" id="tourStepNo">Step 1 of 5</p>
+        <h2 class="tour-title" id="tourTitle" tabindex="-1">Know before you go.</h2>
+        <p class="tour-copy" id="tourCopy"></p>
+      </div>
+      <div class="tour-nav">
+        <button class="tour-btn" id="tourBack" type="button">Back</button>
+        <button class="tour-btn tour-btn-primary" id="tourNext" type="button">Next</button>
+      </div>
+      <p class="tour-hint">Arrow keys move between steps. Esc leaves the tour.</p>
+    </aside>
+
+    <!-- Completion. The one place in the demo that asks for the download. -->
+    <aside class="tour-done" id="tourDone" hidden aria-label="Tour complete">
+      <p class="tour-kicker">That is the whole loop</p>
+      <h2>Ready to play for real?</h2>
+      <p class="tour-lede">Courts, games, scores and competition in one app. Free on iPhone, in the United States.</p>
+      <a class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631"
+         data-track="app_store_click" data-placement="demo_complete" data-audience="demo"
+         aria-label="Download PickleCue on the App Store">
+        <img src="/images/badges/app-store-badge.svg" alt="Download on the App Store" width="180" height="60" decoding="async">
+      </a>
+      <div class="tour-done-actions">
+        <button class="tour-btn" id="tourReplay" type="button">Replay the tour</button>
+        <button class="tour-btn" id="tourExplore" type="button">Keep exploring</button>
+      </div>
+      <p class="tour-meta"><a href="/live-scores">See what a spectator sees</a> &middot; <a href="/">Back to picklecue.com</a></p>
+    </aside>
+
     <div class="demo-tag">LIVE · PREVIEW</div>
 </div>
 
 <script src="demo.js?v=20260825a"></script>
+<script src="tour.js?v=20260825a"></script>
 </body>
 </html>
