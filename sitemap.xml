@@ -97,6 +97,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/connecticut</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/district-of-columbia</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -167,7 +172,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/north-dakota</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/nebraska</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/new-jersey</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -247,12 +262,22 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/alabama/madison</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/alabama/mobile</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/arkansas/bentonville</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/arkansas/fort-smith</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -267,12 +292,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/arizona/chandler</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/arizona/goodyear</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/arizona/mesa</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/arizona/oro-valley</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -302,7 +337,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/california/arcadia</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/camarillo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/california/chula-vista</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/concord</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -332,6 +382,21 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/california/goleta</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/hemet</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/indian-wells</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/california/indio</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -347,6 +412,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/california/lake-forest</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/lincoln</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/california/long-beach</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -357,12 +432,27 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/california/los-gatos</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/california/malibu</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/california/menifee</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/california/moreno-valley</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/newport-beach</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -382,12 +472,27 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/california/pasadena</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/california/portola-valley</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/california/rancho-mirage</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/rancho-santa-fe</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/rohnert-park</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -417,6 +522,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/california/san-marino</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/santa-ana</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/california/santa-barbara</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -428,6 +543,11 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/california/simi-valley</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/california/south-pasadena</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -477,7 +597,27 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/colorado/loveland</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/colorado/windsor</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/connecticut/greenwich</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/district-of-columbia/washington</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/boca-raton</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -492,6 +632,26 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/florida/bradenton</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/cape-coral</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/clearwater</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/daytona-beach</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/florida/destin</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -502,12 +662,52 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/florida/estero</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/fort-myers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/fort-walton-beach</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/gainesville</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/florida/jacksonville</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/florida/lakeland</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/largo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/longboat-key</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/florida/marco-island</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/miami</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -527,7 +727,37 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/florida/palm-beach</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/palm-coast</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/port-saint-lucie</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/saint-petersburg</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/florida/sanibel</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/south-bradenton</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/florida/tampa</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -547,7 +777,17 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/georgia/atlanta</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/georgia/macon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/georgia/marietta</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -567,7 +807,17 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/idaho/nampa</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/idaho/post-falls</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/idaho/rathdrum</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -597,12 +847,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/illinois/decatur</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/illinois/elgin</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/illinois/highland-park</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/illinois/hoffman-estates</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -627,7 +887,27 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/illinois/skokie</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/illinois/springfield</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/illinois/urbana</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/illinois/wheaton</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/indiana/bloomington</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -657,7 +937,17 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/indiana/westfield</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/kansas/lawrence</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/kansas/olathe</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -687,6 +977,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/massachusetts/concord</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/massachusetts/falmouth</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -707,12 +1002,32 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/maryland/bethesda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/maryland/towson</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/michigan/ann-arbor</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/michigan/detroit</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/michigan/livonia</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/michigan/rochester-hills</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -787,6 +1102,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/minnesota/woodbury</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/missouri/chesterfield</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -807,12 +1127,37 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/missouri/parkville</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/missouri/saint-charles</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/missouri/saint-louis</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/missouri/springfield</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/north-carolina/apex</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/north-carolina/carrboro</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/north-carolina/cary</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -832,12 +1177,47 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/north-carolina/greensboro</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/north-carolina/raleigh</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/north-carolina/southern-pines</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/north-carolina/winston-salem</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/north-dakota/fargo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/nebraska/lincoln</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/nebraska/omaha</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/new-jersey/toms-river</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/new-mexico/albuquerque</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -867,7 +1247,27 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/new-york/new-york</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/new-york/plainview</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/new-york/town-of-east-hampton</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/new-york/westhampton-beach</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/ohio/avon-lake</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -882,12 +1282,27 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/ohio/new-albany</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/oklahoma/oklahoma-city</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/oregon/beaverton</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/oregon/bend</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/oregon/eugene</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -902,12 +1317,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/oregon/lake-oswego</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/oregon/medford</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/oregon/portland</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/oregon/salem</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -922,7 +1347,17 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/oregon/tualatin</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/oregon/west-linn</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/oregon/wilsonville</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -942,7 +1377,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/rhode-island/north-kingstown</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/rhode-island/south-kingstown</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/rhode-island/warwick</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/rhode-island/westerly</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -952,7 +1402,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/south-carolina/greenville</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/south-carolina/greer</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/south-carolina/hilton-head-island</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/south-carolina/mount-pleasant</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -963,6 +1428,16 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/south-carolina/north-charleston</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/tennessee/franklin</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/tennessee/knoxville</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -997,7 +1472,17 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/texas/lewisville</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/texas/richardson</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/texas/rockwall</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1022,6 +1507,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/utah/brigham-city</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/utah/cedar-hills</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1038,6 +1528,11 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/utah/eagle-mountain</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/utah/holladay</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1062,12 +1557,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/utah/millcreek</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/utah/murray</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/utah/north-ogden</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/utah/ogden</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1098,6 +1603,11 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/utah/sandy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/utah/santa-clara</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1142,6 +1652,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/utah/west-jordan</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/virginia/arlington</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1177,6 +1692,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.picklecue.com/courts/us/washington/camas</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/washington/cottage-lake</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.picklecue.com/courts/us/washington/federal-way</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1188,6 +1713,11 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/washington/kirkland</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/washington/liberty-lake</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1223,6 +1753,11 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/washington/seattle</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.picklecue.com/courts/us/washington/shoreline</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
