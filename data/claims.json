@@ -1,0 +1,62 @@
+{
+  "_readme": [
+    "Every numeric claim the marketing site makes about court data lives here.",
+    "Three different numbers shipped simultaneously before this file existed:",
+    "the homepage schema said 'over 22,000 courts', the live demo said '26,000+",
+    "courts with reviews', and the courts directory said '3,443'. All three were",
+    "hand-written in different files and none of them agreed.",
+    "",
+    "tools/verify-claims.mjs is a CI gate. It fails the build if any HTML file",
+    "contains a court-count number that is not one of the values below, so a",
+    "fourth number cannot appear silently.",
+    "",
+    "TERMS. A court LOCATION is one row in public.courts: a park, club, school",
+    "or rec centre. A COURT is one playing surface. One location holds several.",
+    "Never use the two words interchangeably - that ambiguity is what made",
+    "'574 courts' and 'DEDICATED COURTS 1909' both true on the same page."
+  ],
+  "verifiedOn": "2026-08-25",
+  "verifiedBy": "SQL against project uejmhtdfbqbotvbqvfja, public.courts",
+  "app": {
+    "courtLocations": 10674,
+    "playingCourts": 29679,
+    "query": "SELECT count(*), sum(court_count) FROM public.courts WHERE removed_at IS NULL AND review_status = 'approved'",
+    "note": [
+      "This is exactly what a user sees, because the courts SELECT policy is",
+      "(removed_at IS NULL AND (review_status = 'approved' OR created_by = auth.uid()",
+      "OR is_admin_or_mod())) - the same predicate for anon and authenticated.",
+      "",
+      "The older 22,311 figure in the iOS repo counted rows that included 14,903",
+      "PlayPickleball-scraped venues. Those are soft-deleted (removed_at set) and",
+      "are no longer visible to anyone. 22,311 is dead. Do not revive it."
+    ]
+  },
+  "web": {
+    "publishedLocations": 3443,
+    "publishedCities": 310,
+    "publishedStates": 38,
+    "note": [
+      "tools/courtgen/build_site.py publishes a city only when it has",
+      "MIN_COURTS (5) or more locations, and skips county/township labels.",
+      "That is a deliberate thin-content guard, not a data limit: 7,231 more",
+      "locations across roughly 4,420 smaller cities exist in the app and are",
+      "not on the web. Lowering MIN_COURTS is an open decision, tracked in",
+      "docs/website-cro-audit-2026-08-25.md.",
+      "",
+      "These three values are GENERATED. build_site.py writes them into",
+      "courts/index.html and courts/us.html. Never hand-edit them; run the",
+      "generator and update this file to match."
+    ]
+  },
+  "bannedNumbers": {
+    "22000": "app court count before the PlayPickleball rows were removed",
+    "22311": "same, exact form",
+    "22312": "same, table-total form",
+    "26000": "never had a basis in any query",
+    "20000": "rounded form of the same dead figure"
+  },
+  "bannedPhrases": {
+    "courts with reviews": "public.court_reviews is empty; there are no court reviews",
+    "court photos": "public.court_photos is empty"
+  }
+}

@@ -1,0 +1,70 @@
+name: Site gates
+
+# The court-page publication gate already runs inside rebuild-courts.yml, but
+# it only guards generated pages and only on the weekly rebuild. Everything a
+# human edits by hand — the homepage, the demo, the event page — had no gate at
+# all, which is how "over 22,000 courts", "26,000+ courts with reviews" and
+# "3,443 courts" all shipped at the same time.
+#
+# This runs on every push and every PR, so a claim cannot drift silently again.
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  claims:
+    name: Claims, canonicals and accessibility basics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Claim gate
+        run: node tools/gate-claims.mjs
+
+      - name: Sitemap must not list a redirecting URL
+        run: |
+          set -e
+          # Cloudflare Pages serves /players and 308s /players.html to it.
+          # Listing the .html form asks Google to crawl a permanent redirect.
+          if grep -q '\.html</loc>' sitemap.xml; then
+            echo "SITEMAP GATE: a .html URL is listed; those 308-redirect."
+            grep -n '\.html</loc>' sitemap.xml
+            exit 1
+          fi
+          echo "Sitemap clean: $(grep -c '<loc>' sitemap.xml) URLs, none with .html"
+
+      - name: No internal link may point at a redirecting path
+        run: |
+          set -e
+          HITS=$(grep -rhoE 'href="/[a-z0-9-]+\.html' --include='*.html' \
+                   --exclude-dir=node_modules . | sort -u || true)
+          if [ -n "$HITS" ]; then
+            echo "LINK GATE: internal links target the redirecting .html form:"
+            echo "$HITS"
+            exit 1
+          fi
+          echo "Internal links clean."
+
+      - name: Reveal blocks must not depend on one script
+        run: |
+          set -e
+          # html.js hides every .reveal. Only site-v2.js removes it again. If
+          # that file ever fails to load, the page is blank below the hero
+          # unless the inline watchdog is present on the same page.
+          for f in $(grep -rl "classList.add('js')" --include='*.html' \
+                       --exclude-dir=node_modules .); do
+            if ! grep -q '__pcShell' "$f"; then
+              echo "REVEAL GATE: $f hides .reveal blocks with no watchdog."
+              exit 1
+            fi
+          done
+          echo "Every page that hides reveals also carries the watchdog."
