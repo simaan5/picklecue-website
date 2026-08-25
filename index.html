@@ -135,7 +135,7 @@
     <link rel="preload" as="font" type="font/woff2" crossorigin
           href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="preload" as="image" href="/images/app/courts-allcourts.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="/images/app/courts-detail.webp" fetchpriority="high">
 
 <style>
 /* ============================================================
@@ -381,6 +381,82 @@ a{ color:inherit; }
 @media (prefers-reduced-motion: no-preference){
     .kenburns{ animation: kb 26s ease-in-out infinite alternate; }
     @keyframes kb{ from{ transform:scale(1);} to{ transform:scale(1.07);} }
+}
+
+/* ---- Connected journey ---------------------------------------------------
+   Base state = stacked chapters, each with its own image. That is what mobile,
+   a no-JS browser and a failed script all get, and it is complete on its own.
+   .has-stage is added by assets/journey.js only above 1080px. */
+.journey{ padding:clamp(72px,9vw,124px) 0; background:var(--paper); }
+.journey-inner{ width:min(1180px, 92vw); margin:0 auto; }
+.journey-head{ max-width:660px; margin:0 0 clamp(36px,5vw,64px); }
+.journey-head h2{ font:800 clamp(30px,4.4vw,50px)/1.1 var(--f); letter-spacing:-.028em; margin:14px 0 16px; }
+.journey-lede{ font:450 clamp(16px,1.5vw,18.5px)/1.6 var(--f); color:var(--ink-soft); margin:0; }
+
+.journey-chapters{ list-style:none; margin:0; padding:0; }
+.chapter{ padding:0 0 clamp(56px,7vw,96px); max-width:560px; }
+.chapter:last-child{ padding-bottom:0; }
+.chapter-no{
+    display:flex; align-items:center; gap:10px; margin:0 0 12px;
+    font:600 12px/1 var(--f-mono); letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink-mute);
+}
+.chapter-no span{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%;
+    border:1px solid var(--line); color:var(--court-fg); letter-spacing:.04em;
+}
+.chapter h3{ font:750 clamp(22px,2.6vw,30px)/1.24 var(--f); letter-spacing:-.02em; margin:0 0 12px; }
+.chapter p{ font:450 16.5px/1.65 var(--f); color:var(--ink-soft); margin:0; }
+.chapter-shot{ margin:24px 0 0; }
+.chapter-shot img{
+    width:min(300px,72%); height:auto; display:block; border-radius:26px;
+    border:1px solid var(--line); box-shadow:0 24px 60px rgba(6,24,17,.16);
+}
+
+@media (min-width: 1080px){
+    /* Two columns only once the stage exists. Without JS this rule never
+       applies, because .has-stage is never added. */
+    .journey.has-stage .journey-grid{
+        display:grid; grid-template-columns: minmax(0,1fr) minmax(0,420px); gap:clamp(48px,6vw,96px);
+        align-items:start;
+    }
+    .journey.has-stage .chapter-shot{ display:none; }
+    .journey.has-stage .chapter{ padding-bottom:min(38vh, 340px); }
+    .journey.has-stage .chapter:last-child{ padding-bottom:12vh; }
+    .journey.has-stage .chapter h3,
+    .journey.has-stage .chapter p,
+    .journey.has-stage .chapter-no{
+        opacity:.4; transition:opacity .45s var(--ease);
+    }
+    .journey.has-stage .chapter.is-active h3,
+    .journey.has-stage .chapter.is-active p,
+    .journey.has-stage .chapter.is-active .chapter-no{ opacity:1; }
+
+    /* Size the stage from the VIEWPORT height, not a fixed width. At 392px wide
+       the phone is 852px tall and ran off the bottom of a 900px window, so the
+       tab bar — the part that proves it is an app — was never visible. */
+    .journey-stage{ position:sticky; top:96px; display:flex; justify-content:center; }
+    .journey-phone{
+        position:relative; height:min(852px, calc(100vh - 132px)); width:auto;
+        aspect-ratio:402/874; border-radius:46px; overflow:hidden;
+        background:#08130D; border:10px solid #0B0E0C;
+        box-shadow:0 40px 100px rgba(6,24,17,.30);
+    }
+    .journey-phone img{
+        position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+        opacity:0; transition:opacity .5s var(--ease);
+    }
+    .journey-phone img.is-on{ opacity:1; }
+}
+
+/* With motion off, the chapter text is never dimmed and the stage swaps
+   instantly. Nothing fades in or out; the content is simply there. */
+@media (prefers-reduced-motion: reduce){
+    .journey.has-stage .chapter h3,
+    .journey.has-stage .chapter p,
+    .journey.has-stage .chapter-no{ opacity:1 !important; transition:none; }
+    .journey-phone img{ transition:none; }
 }
 
 /* ---- Hero sequence -------------------------------------------------------
@@ -1162,6 +1238,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/acquire.js?v=20260825a"></script>
+    <script defer src="/assets/journey.js?v=20260825a"></script>
 </head>
 <body data-audience="home">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -1188,7 +1265,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
 <header class="masthead" id="masthead">
     <div class="masthead-inner">
         <a class="brand" href="/" aria-label="PickleCue — home">
-            <img class="brand-mark" src="/images/email/cuemark.png" alt="" width="42" height="42">
+            <img class="brand-mark" src="/images/email/cuemark.webp" alt="" width="42" height="42">
             <img class="brand-wordmark wm-light" src="/images/wordmark-on-light.webp" alt="" width="790" height="133">
             <img class="brand-wordmark wm-dark" src="/images/wordmark-on-dark.webp" alt="" width="780" height="133">
         </a>
@@ -1258,7 +1335,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
                          sourced venue names that are now soft-deleted from the
                          app. See docs/website-cro-audit-2026-08-25.md, P0-1. -->
                     <div class="hero-seq">
-                        <img src="/images/app/courts-allcourts.webp" alt="Nearby pickleball courts in PickleCue, each with city, court count and whether it is free to play" width="760" height="1651" fetchpriority="high" decoding="async">
+                        <img src="/images/app/courts-detail.webp" alt="A PickleCue court page showing court count, indoor and outdoor, price, address and directions" width="760" height="1651" fetchpriority="high" decoding="async">
                         <img src="/images/app/s1-play-open-games.webp" alt="Open games near you, with skill range, start time and spots left" width="760" height="1651" loading="lazy" decoding="async">
                         <img src="/images/app/game-roster.webp" alt="A game roster showing who has joined and who is on the waitlist" width="760" height="1651" loading="lazy" decoding="async">
                         <img src="/images/app/match-result.webp" alt="A finished match with the final score recorded" width="760" height="1651" loading="lazy" decoding="async">
@@ -1322,42 +1399,68 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
 
 <div id="product"></div>
 
-<!-- ================= 1. Where can I play? ================= -->
-<section class="story">
-    <div class="story-inner">
-        <div class="story-copy">
-            <p class="story-kicker">Discover</p>
-            <h2>Where can I play?</h2>
-            <p>A searchable map of public courts, with the detail that decides whether you drive there — surface, lights, indoor or out — and the courts you keep coming back to saved for next time.</p>
+<!-- ================= The connected journey =================
+     Five chapters, one story. Each chapter carries its own image IN THE FLOW —
+     that is the base state, and it is what mobile, a no-JS browser and a failed
+     script all get. On a wide screen assets/journey.js adds .has-stage, which
+     switches to a two-column layout with one sticky product stage, and swaps the
+     stage image as each chapter scrolls into view. Native scrolling throughout:
+     nothing is hijacked, nothing is pinned, and the page reads top to bottom
+     with every enhancement removed. -->
+<section class="journey" id="journey">
+    <div class="journey-inner">
+        <header class="journey-head">
+            <p class="story-kicker">The whole thing, connected</p>
+            <h2>Court to bracket, without leaving the app.</h2>
+            <p class="journey-lede">Most pickleball tools do one of these. The point of PickleCue is that the next one already knows about the last one.</p>
+        </header>
+
+        <div class="journey-grid">
+            <ol class="journey-chapters">
+                <li class="chapter" id="ch-court">
+                    <p class="chapter-no"><span>01</span> Court</p>
+                    <h3>Know where to play.</h3>
+                    <p>How many courts, indoor or out, free or paid, and the address — before you get in the car. Directions, check-in and a game you can host right there.</p>
+                    <figure class="chapter-shot"><img src="/images/app/courts-detail.webp" alt="A PickleCue court page: eight courts, indoor and outdoor, paid, with the address, directions, check-in and a button to host a game here." width="760" height="1651" loading="lazy" decoding="async"></figure>
+                </li>
+                <li class="chapter" id="ch-game">
+                    <p class="chapter-no"><span>02</span> Game</p>
+                    <h3>Know whether the game fits you.</h3>
+                    <p>Level, format, venue, start time and exactly how many spots are left. You can see who is already in before you commit to anything.</p>
+                    <figure class="chapter-shot"><img src="/images/app/s1-play-open-games.webp" alt="Open games near you, each showing skill range, format, court and spots left." width="760" height="1651" loading="lazy" decoding="async"></figure>
+                </li>
+                <li class="chapter" id="ch-score">
+                    <p class="chapter-no"><span>03</span> Score</p>
+                    <h3>Keep the result.</h3>
+                    <p>One person keeps score on their phone. Nobody argues about what game it is or who served, and the number is the same everywhere at the same moment.</p>
+                    <figure class="chapter-shot"><img src="/images/app/s2-live-scoring.webp" alt="Live scoring in PickleCue: team scores at nine to five, serving indicator, and undo." width="760" height="1651" loading="lazy" decoding="async"></figure>
+                </li>
+                <li class="chapter" id="ch-compete">
+                    <p class="chapter-no"><span>04</span> Compete</p>
+                    <h3>Run the bracket or the season.</h3>
+                    <p>Enter a score once. The bracket advances the winner and the league table recalculates — for the organizer, the players and anyone watching in a browser.</p>
+                    <figure class="chapter-shot"><img src="/images/app/s4-bracket-summer-smash.webp" alt="A tournament bracket in PickleCue with matches and advancing winners." width="760" height="1651" loading="lazy" decoding="async"></figure>
+                </li>
+                <li class="chapter" id="ch-remember">
+                    <p class="chapter-no"><span>05</span> Remember</p>
+                    <h3>Keep your pickleball history.</h3>
+                    <p>Record, win rate, current streak and recent form. Not one night — the season, built from matches you already played.</p>
+                    <figure class="chapter-shot"><img src="/images/app/s6-player-stats.webp" alt="Player statistics: matches played, win-loss record, current streak and recent form." width="760" height="1651" loading="lazy" decoding="async"></figure>
+                </li>
+            </ol>
         </div>
-        <figure class="shot-phone">
-            <img src="/images/app/s3a-courts-pinfocus.webp" alt="The PickleCue courts map showing nearby pickleball courts with a selected court." loading="lazy" decoding="async">
-        </figure>
     </div>
 </section>
 
-<!-- ================= 2. Who can I play with? ================= -->
-<section class="story story-alt">
-    <div class="story-inner">
-        <div class="story-copy">
-            <p class="story-kicker">Games</p>
-            <h2>Who can I play with?</h2>
-            <p>Post an open game or join one. Everyone sees the same roster, the same time and the same court — so nobody drives out to a game that quietly fell apart.</p>
-        </div>
-        <figure class="shot-duo">
-            <img src="/images/app/s1-play-open-games.webp" alt="A list of open pickleball games with times, courts and spots left." loading="lazy" decoding="async">
-            <img src="/images/app/game-roster.webp" alt="A game roster showing the players who have joined." loading="lazy" decoding="async">
-        </figure>
-    </div>
-</section>
-
-<!-- ================= 3. Keep every point ================= -->
+<!-- ================= One score, four screens =================
+     The proof for chapter 03. It is the differentiator, so it gets its own beat
+     rather than being buried inside a chapter. -->
 <section class="story story-dark" id="scoring">
     <div class="story-wide-inner">
         <div class="story-copy story-copy-center">
             <p class="story-kicker">Scoring</p>
-            <h2>Keep every point.</h2>
-            <p>Real scoring, live everywhere. One person keeps score and the number moves at the same moment on the players' phones, the spectators' browsers, the board at the venue, and the Lock Screen.</p>
+            <h2>One score. Four screens.</h2>
+            <p>The same number, at the same moment, on the players' phones, the spectators' browsers, the board at the venue and the Lock Screen. Entered once.</p>
         </div>
         <div class="tile-grid tile-grid-4">
             <figure class="tile">
@@ -1381,35 +1484,6 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
             <img src="/images/web/sc-tv.webp" srcset="/images/web/sc-tv-sm.webp 760w, /images/web/sc-tv.webp 1600w" sizes="(max-width:900px) 94vw, 1060px" alt="The TV and projector board at the venue, showing all three completed results for the event." loading="lazy" decoding="async">
             <figcaption>And on the screen at the venue.</figcaption>
         </figure>
-    </div>
-</section>
-
-<!-- ================= 4. What happens afterward? ================= -->
-<section class="story">
-    <div class="story-wide-inner">
-        <div class="story-copy story-copy-center">
-            <p class="story-kicker">After the match</p>
-            <h2>What happens afterward?</h2>
-            <p>Scores become a record you can actually read, and leagues and tournaments keep themselves current — standings recalculate, brackets advance the winner for you.</p>
-        </div>
-        <div class="tile-grid tile-grid-4">
-            <figure class="tile">
-                <div class="tile-shot tile-tall"><img src="/images/app/match-result.webp" alt="Match history listing recent matches with scores." loading="lazy" decoding="async"></div>
-                <figcaption><b>Match history</b><span>Every match you log</span></figcaption>
-            </figure>
-            <figure class="tile">
-                <div class="tile-shot tile-tall"><img src="/images/app/s6-player-stats.webp" alt="Player statistics showing win-loss record and recent form." loading="lazy" decoding="async"></div>
-                <figcaption><b>Your record</b><span>Trends, not one night</span></figcaption>
-            </figure>
-            <figure class="tile">
-                <div class="tile-shot tile-tall"><img src="/images/app/s5b-league-standings.webp" alt="League standings with wins, losses and win percentage." loading="lazy" decoding="async"></div>
-                <figcaption><b>League standings</b><span>Recalculated as results land</span></figcaption>
-            </figure>
-            <figure class="tile">
-                <div class="tile-shot tile-tall"><img src="/images/app/s4-bracket-summer-smash.webp" alt="A tournament bracket in the PickleCue app." loading="lazy" decoding="async"></div>
-                <figcaption><b>Brackets</b><span>Single, double, round robin</span></figcaption>
-            </figure>
-        </div>
     </div>
 </section>
 
