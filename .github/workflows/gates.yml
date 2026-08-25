@@ -30,6 +30,9 @@ jobs:
       - name: Claim gate
         run: node tools/gate-claims.mjs
 
+      - name: Event freshness gate
+        run: node tools/gate-events.mjs
+
       - name: Sitemap must not list a redirecting URL
         run: |
           set -e

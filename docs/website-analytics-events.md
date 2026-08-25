@@ -88,6 +88,24 @@ generated court shell, now emit one event with a placement and an audience.
 
 ---
 
+## Cutovers
+
+| Retired | Date | Replaced by | Why |
+|---|---|---|---|
+| `community_event_register_click` | 2026-08-25 | `community_event_outbound_click` | The button no longer offers registration. The organizer's page exposes no purchasable ticket, so every CTA now reads "View official event page". Counting those as registrations would be wrong data, not untidy data. |
+| `cta_click` + `data-cta` (28 values) | 2026-08-25 | `app_store_click` / `demo_open` / `spectators_open` / … with `placement` + `audience` | Eight different names pointed at the same Download button. |
+
+**Do not double-fire during a cutover.** Emitting both the old and the new name
+contaminates both totals and makes the transition impossible to read.
+
+If registration for a community event becomes directly available again, do not
+revive `community_event_register_click`. Express it on the current event —
+`community_event_outbound_click` with `intent: "registration"` — or define a
+deliberate registration event with a written meaning. The base event name must
+keep describing what the click actually does.
+
+---
+
 ## Privacy
 
 - No PII. No email, no search text, no coordinates, no court name.

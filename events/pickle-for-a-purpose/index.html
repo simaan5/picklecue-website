@@ -230,6 +230,16 @@
     .includes li::before{content:"";width:7px;height:7px;flex:none;border-radius:50%;background:var(--court);transform:translateY(-2px)}
 
     /* Pricing — dark cards, lime amounts */
+    .event-ended-banner{
+      display:block; margin:0 0 14px; padding:12px 16px;
+      border:1px solid var(--card-rule); border-radius:12px;
+      background:var(--paper-2); color:var(--ink);
+      font-weight:650; font-size:1rem;
+    }
+    /* Once the event is over nothing on the page may look purchasable. */
+    html.event-over .cta, html.event-over .cta-big, html.event-over .sticky-cta,
+    html.event-over .price .amt small, html.event-over .limited{ display:none !important; }
+    html.event-over .price{ opacity:.6; }
     .price-row{display:grid;gap:16px;margin:26px 0 0;grid-template-columns:repeat(2,minmax(0,1fr));max-width:780px}
     @media (max-width:560px){.price-row{grid-template-columns:1fr}}
     .price{background:var(--paper-2);border:1px solid var(--card-rule);border-radius:18px;padding:26px}
@@ -496,6 +506,30 @@
         placement: el.getAttribute('data-placement') || undefined
       });
     });
+  </script>
+  <script>
+  /* Seam cover, not a rewrite.
+     endsAt is 2026-08-29T20:00:00-07:00. Between the final whistle and the next
+     deploy this page would otherwise still read as upcoming, so the moment that
+     time passes the page states plainly that the event has happened and hides
+     every registration control.
+     tools/gate-events.mjs FAILS the build after that date until a human writes
+     the real recap — this banner buys hours, not weeks. */
+  (function () {
+    var ENDS = new Date('2026-08-29T20:00:00-07:00');
+    if (new Date() <= ENDS) return;
+    document.documentElement.classList.add('event-over');
+    var hero = document.querySelector('.cta-note');
+    if (hero) {
+      var b = document.createElement('p');
+      b.className = 'event-ended-banner';
+      b.setAttribute('role', 'status');
+      b.textContent = 'This event has taken place. Registration is closed.';
+      hero.parentNode.insertBefore(b, hero);
+    }
+    var sticky = document.getElementById('stickyCta');
+    if (sticky) { sticky.hidden = true; sticky.remove(); }
+  })();
   </script>
 </body>
 </html>
