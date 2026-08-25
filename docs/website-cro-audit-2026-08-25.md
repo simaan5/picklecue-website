@@ -325,6 +325,80 @@ form on the site is the international-availability form.
 
 ---
 
+## 11b. Programmatic SEO: the unpublished court directory
+
+**Not a bulk-indexing exercise.** Owner decision 2026-08-25: do not lower
+`MIN_COURTS` or publish more pages until the questions below are answered. This
+section sizes the opportunity so that decision has numbers behind it.
+
+`tools/courtgen/build_site.py` publishes a city only when it holds
+`MIN_COURTS = 5` or more locations. Distribution of every live, approved,
+US-state-coded, non-county city (SQL, 2026-08-25):
+
+| Locations per city | Cities | Locations | Names that are generic | Surface known |
+|---|---:|---:|---:|---:|
+| **5+ — published today** | 321 | 3,527 | 90.0% | 15.2% |
+| 4 | 128 | 512 | 90.0% | 16.4% |
+| 3 | 294 | 882 | 92.2% | 16.2% |
+| 2 | 656 | 1,312 | 91.8% | 17.5% |
+| 1 | 2,521 | 2,521 | 92.2% | 14.6% |
+
+(The generator's own count is 310 cities / 3,443 locations — it applies a
+stricter city-label filter than this sizing query. Its numbers are the
+authoritative ones; the buckets are for scale.)
+
+**The finding that should drive the decision:** content quality does not vary
+with city size. 90–92% of court names are generic in *every* bucket, and surface
+is known for roughly one row in six regardless. A one-court city page would not
+be worse-written than a five-court one — it would just be one row. So the real
+question is not "are small cities lower quality" but "does a page listing one
+unnamed court, described by its street, deserve to exist".
+
+| Option | Adds | Verdict |
+|---|---|---|
+| `MIN_COURTS = 3` | +422 cities, +1,394 locations | Defensible **if** the city page gains something beyond a list — a map, nearby cities, the state above it. A 3-row page that is only 3 rows is thin. |
+| `MIN_COURTS = 1` | +3,177 cities, +3,833 locations | 2,521 of those are single-row pages. This is the pattern `build_site.py`'s own comment warns about, and it is a sitewide quality signal, not a per-page one. |
+
+**Answer these before changing the threshold:**
+
+1. **Uniqueness.** What does a 3-court city page say that its state page does
+   not? Right now: the same rows, one level down.
+2. **Court detail.** `surface` is known for 15%, `indoor` for 12.5%, `lights`
+   for 843 of 10,674. Plan 090 in the iOS repo proposes a per-attribute
+   confirmation loop; that is the input that makes these pages worth indexing.
+3. **Search demand.** Does anyone search "pickleball courts in <town of 1
+   court>"? Measure before generating 2,521 pages to find out.
+4. **Internal linking.** A city page with no inbound link but a sitemap entry is
+   a crawl-budget cost. Nearby-city links would have to exist first.
+5. **Canonical and duplicates.** 656 two-location cities across 38 states will
+   contain repeated city names (Springfield, Franklin, Clinton). The slug is
+   state-scoped, but the title and H1 are not.
+6. **Court detail pages.** 4,101 already generate and are all `noindex` because
+   they are thin without photos or reviews. Publishing more city pages that link
+   to more `noindex` pages widens that ratio.
+
+**Recommendation:** treat this as its own project after the redesign. The
+sequence that makes it work is court-detail quality first (iOS plan 090), then
+`MIN_COURTS = 3` with a genuinely different city-page template, then measure,
+then consider going lower. Not the reverse.
+
+---
+
+## 11c. Geolocation: deliberately off
+
+`_headers` sets `Permissions-Policy: geolocation=()` sitewide, so the browser
+geolocation API is unavailable on every page. That is not an oversight and it is
+**not to be relaxed as a shortcut** for a "Near me" button.
+
+Courts search is being built on city, state, ZIP and court name (Phase D). A
+permission prompt is friction on first visit and a second privacy surface to
+document, justify in the policy, and defend at review.
+
+If "Use my location" is ever added it needs, in order: a product case with a
+measured benefit, a privacy review, the policy updated, a direct user gesture
+before the prompt is raised, a graceful denied path, and a guarantee that no
+coordinate reaches analytics. Until all six exist, the header stays as it is.
+
 ## 12. Still open
 
 **Phase B–I (not started).** Shared CTA/QR component, desktop QR-to-phone, sticky
