@@ -68,12 +68,18 @@ Compete. Motion now explains the product instead of just moving.
 
 Side effect: the homepage lost 1.67 MB (see §8).
 
-**Still open for the owner.** `videos/` holds 291 MB of unreferenced older
-marketing clips that Cloudflare Pages still serves — `curl` returns 206 for
-`/videos/11b-dupr.mp4`, a demo of a feature that does not ship. They are unlinked
-and not in the sitemap, so nothing finds them, but they are public. Recommend
-deleting or moving them out of the deploy root. Not done here: deleting 291 MB of
-tracked assets is the owner's call.
+**Also removed (owner authorised, 2026-08-25).** Every remaining file under
+`videos/`. A reference scan of 4,248 text files found **no HTML, CSS or JS on the
+site pointing at any of them** — 60 tracked media files, 7.7 MB, all orphaned,
+all publicly fetchable (`curl` returned 206 for `/videos/11b-dupr.mp4`, a demo of
+a feature `FeatureFlags.duprIntegration` switches off). They are recoverable from
+git history; the docs and re-encode scripts moved to `archive/marketing-video/`.
+
+**Correction to an earlier figure in this document.** A first pass reported
+"291 MB of unreferenced video deploys". That was `du` on the working directory
+and counted `videos/raw/`, which `.gitignore` excludes — so it was never checked
+out by CI and never deployed. The deployed figure was **7.7 MB**. `du` measures
+the disk; `git ls-files` measures the deploy.
 
 ---
 
@@ -328,8 +334,8 @@ editorial rebuild, the demo guided tour, and the full accessibility pass.
 
 **Needs the owner.**
 
-1. **291 MB of unreferenced video** still deploys and is publicly fetchable,
-   including a DUPR demo.
+1. ~~Unreferenced video~~ — **resolved 2026-08-25.** 7.7 MB, 60 files, removed
+   from the deploy tree after a full reference scan. See §2.
 2. **The iOS repo still claims 22,311 courts** in `CLAUDE.md`, `README.md` and
    `APP_STORE_REVIEW_NOTES.md`. The last of those is Apple-facing and also
    promises court "reviews and photos" — `court_reviews` and `court_photos` are

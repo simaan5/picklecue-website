@@ -69,4 +69,4 @@ Listed in full in §12 of the audit. The two that matter most:
 1. `APP_STORE_REVIEW_NOTES.md` in the iOS repo tells Apple the app has "22,311
    U.S. courts" with "reviews and photos". The real figures are 10,674 locations,
    zero reviews, zero photos. The iOS repo was read-only for this task.
-2. 291 MB of unreferenced video still deploys and is publicly fetchable.
+2. ~~291 MB of unreferenced video~~ — corrected: 7.7 MB tracked, all unreferenced, now removed from the deploy tree. The 287 MB of raw takes are gitignored and were never deployed.

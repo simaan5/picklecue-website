@@ -82,3 +82,31 @@ To add a seventh clip you'd need to:
 3. Drop `07-<name>.{mp4,webm,jpg}` here
 
 Or ask the assistant and it'll wire it in one pass.
+
+---
+
+## Why this folder is not `videos/` any more
+
+**2026-08-25.** Every file that used to live in `videos/` was deployed to
+Cloudflare Pages and publicly fetchable, and **not one of them was referenced by
+any page.** 7.7 MB of tracked media, 60 files, all orphaned — including
+`11b-dupr.mp4`, a demonstration of DUPR, which `FeatureFlags.duprIntegration`
+has switched off. A stale demo of a feature that does not ship should not be
+downloadable from the production site.
+
+The encoded clips were removed from the deploy tree. They are recoverable from
+git history at commit `9cd5a4d8`'s parent:
+
+```
+git show <sha>:videos/04-tournaments.mp4 > 04-tournaments.mp4
+```
+
+The raw simulator takes (`videos/raw/*.mp4`, ~287 MB) were never deployed —
+`.gitignore` excluded them — and are untouched on the local disk. `process.sh`
+and `build_combined.sh` moved here with them so a re-encode is still one command.
+
+**If a video ever returns to the site**, it must be captured against the scrubbed
+marketing fixture, not against live production. The hero video removed in the
+same commit had been recorded against production and reproduced five
+PlayPickleball-sourced venue names that `tools/courtgen/gate.py` exists to keep
+off public pages. Grep cannot read an MP4; that check is manual.
