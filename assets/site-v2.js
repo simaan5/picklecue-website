@@ -3,6 +3,10 @@
 (function () {
     'use strict';
 
+    /* Tells the inline watchdog in each page that the shell arrived, so it
+       does not strip the 'js' class and disable the reveal animation. */
+    window.__pcShell = 1;
+
     window.track = window.track || function (name, params) {
         if (typeof gtag === 'function') gtag('event', name, params || {});
     };
@@ -132,13 +136,13 @@
                     'Content-Type': 'application/json',
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ email: email, source: 'website' })
+                body: JSON.stringify({ email: email, source: 'website-intl' })
             }).then(function (r) {
                 if (r.ok || r.status === 409) {
                     window.track('waitlist_success', { existing: r.status === 409 });
                     setMsg(r.status === 409
-                        ? 'You are already on the list. We will email you at launch.'
-                        : 'You are on the list. We will email you at launch.', 'success');
+                        ? 'You are already on the list. We will email you the day PickleCue reaches your country.'
+                        : 'You are on the list. We will email you the day PickleCue reaches your country.', 'success');
                     form.reset();
                 } else {
                     window.track('waitlist_error', { status: r.status });

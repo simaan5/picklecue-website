@@ -22,6 +22,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-itunes-app" content="app-id=6757326631">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>PickleCue. Find your court. Find your game. One place.</title>
 
@@ -94,7 +95,7 @@
         "image": "https://www.picklecue.com/images/app-icon-512.png?v=20260812b",
         "description": "Find pickleball courts, fill games, run leagues and tournaments, and keep a record of every match. Native iPhone and iPad app.",
         "featureList": [
-            "Court finder with over 22,000 courts",
+            "Court finder with 10,674 court locations across the United States",
             "Open games with RSVPs, waitlists and check-ins",
             "Match scoring and lifetime match history",
             "Leagues with standings and schedules",
@@ -134,7 +135,7 @@
     <link rel="preload" as="font" type="font/woff2" crossorigin
           href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="preload" as="image" href="/videos/hero/app-tour-poster.jpg">
+    <link rel="preload" as="image" href="/images/app/courts-allcourts.webp" fetchpriority="high">
 
 <style>
 /* ============================================================
@@ -382,6 +383,62 @@ a{ color:inherit; }
     @keyframes kb{ from{ transform:scale(1);} to{ transform:scale(1.07);} }
 }
 
+/* ---- Hero sequence -------------------------------------------------------
+   Five real screens on a 20s loop, 4s each, in workflow order. Every frame is
+   a still, so nothing is downloaded that is not shown, and the whole sequence
+   costs less than a tenth of the 1.7 MB screen recording it replaced.
+
+   Base state (no animation, no JS, reduced motion) shows frame 1 at full
+   opacity and hides the rest — content is never dependent on the animation. */
+.hero-seq{ position:relative; width:100%; height:100%; }
+.hero-seq img{ position:absolute; inset:0; opacity:0; }
+.hero-seq img:first-child{ opacity:1; }
+
+.hero-stages{
+    list-style:none; margin:22px 0 0; padding:0;
+    display:flex; gap:6px; width:min(392px, 84%);
+}
+.hero-stages li{
+    flex:1; text-align:center; padding-top:9px;
+    border-top:2px solid var(--line);
+    font:600 10.5px/1 var(--f-mono); letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-mute);
+    transition: color .4s var(--ease), border-color .4s var(--ease);
+}
+.hero-stages li:first-child{ color:var(--court-fg); border-top-color:var(--court-fg); }
+
+@media (prefers-reduced-motion: no-preference){
+    .hero-seq img{ animation: heroSeq 20s var(--ease) infinite; }
+    .hero-seq img:first-child{ animation-name: heroSeqFirst; }
+    .hero-seq img:nth-child(2){ animation-delay:4s; }
+    .hero-seq img:nth-child(3){ animation-delay:8s; }
+    .hero-seq img:nth-child(4){ animation-delay:12s; }
+    .hero-seq img:nth-child(5){ animation-delay:16s; }
+
+    /* 0-2% fades in (0.4s), holds to 18%, fades out by 20% (4s slot). */
+    @keyframes heroSeq{ 0%{opacity:0} 2%{opacity:1} 18%{opacity:1} 20%{opacity:0} 100%{opacity:0} }
+    /* Frame 1 must be visible at t=0, so it starts lit and returns lit. */
+    @keyframes heroSeqFirst{ 0%{opacity:1} 18%{opacity:1} 20%{opacity:0} 98%{opacity:0} 100%{opacity:1} }
+
+    .hero-stages li{ animation: heroStage 20s step-end infinite; }
+    .hero-stages li:nth-child(2){ animation-delay:4s; }
+    .hero-stages li:nth-child(3){ animation-delay:8s; }
+    .hero-stages li:nth-child(4){ animation-delay:12s; }
+    .hero-stages li:nth-child(5){ animation-delay:16s; }
+    @keyframes heroStage{
+        0%{ color:var(--court-fg); border-top-color:var(--court-fg); }
+        20%{ color:var(--ink-mute); border-top-color:var(--line); }
+        100%{ color:var(--ink-mute); border-top-color:var(--line); }
+    }
+    .hero-stages li:first-child{ animation-name: heroStageFirst; }
+    @keyframes heroStageFirst{
+        0%{ color:var(--court-fg); border-top-color:var(--court-fg); }
+        20%{ color:var(--ink-mute); border-top-color:var(--line); }
+        99.9%{ color:var(--ink-mute); border-top-color:var(--line); }
+        100%{ color:var(--court-fg); border-top-color:var(--court-fg); }
+    }
+}
+
 .float-card{
     position:absolute; background:var(--card); border:1px solid var(--line);
     border-radius:18px; padding:20px 22px;
@@ -569,6 +626,17 @@ a{ color:inherit; }
 }
 .story.flip .story-copy{ order:2; }
 .story-kicker{ font:600 13px/1 var(--f-mono); letter-spacing:.16em; text-transform:uppercase; color:var(--court-fg); }
+/* Inline link out of a story section. The night sections invert, so the colour
+   comes from a token rather than a literal. */
+.story-link{
+    display:inline-block; margin-top:6px; color:var(--court-fg);
+    font:600 16px/1.5 var(--f); text-decoration:none; border-bottom:1px solid transparent;
+    transition: border-color .2s var(--ease);
+}
+.story-link:hover, .story-link:focus-visible{ border-bottom-color:currentColor; }
+/* Only the night sections. --cue is the bright lime action colour and sits at
+   roughly 2:1 on paper — it is legible on ink, never on the light surfaces. */
+.story-night .story-link{ color:var(--cue); }
 .story h2{ margin-top:18px; font:800 clamp(38px,4.2vw,56px)/1.08 var(--f); letter-spacing:-.03em; }
 .story p{ margin-top:16px; font:450 19px/1.55 var(--f); color:var(--ink-soft); max-width:44ch; }
 .story .stat-chip{
@@ -1097,6 +1165,12 @@ html.js .reveal.in{ opacity:1; transform:none; }
 <a class="skip-link" href="#main">Skip to content</a>
 <script>
 document.documentElement.classList.add('js');
+/* The 'js' class is what hides every .reveal block. It is set here, inline,
+   but the class is only REMOVED again by the deferred shell script. If that
+   file 404s, is blocked, or fails to parse, everything below the hero stays
+   at opacity 0 forever. This watchdog makes the hide conditional on the
+   un-hider actually arriving. */
+setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList.remove('js'); }, 1500);
 (function(){
     try {
         var saved = localStorage.getItem('pc_theme');
@@ -1113,15 +1187,16 @@ document.documentElement.classList.add('js');
     <div class="masthead-inner">
         <a class="brand" href="/" aria-label="PickleCue — home">
             <img class="brand-mark" src="/images/email/cuemark.png" alt="" width="42" height="42">
-            <img class="brand-wordmark wm-light" src="/images/wordmark-on-light.png" alt="" width="1137" height="190">
-            <img class="brand-wordmark wm-dark" src="/images/wordmark-on-dark.png" alt="" width="744" height="126">
+            <img class="brand-wordmark wm-light" src="/images/wordmark-on-light.webp" alt="" width="790" height="133">
+            <img class="brand-wordmark wm-dark" src="/images/wordmark-on-dark.webp" alt="" width="780" height="133">
         </a>
         <nav aria-label="Primary">
             <a href="#product">Product</a>
-            <a href="/courts">Courts</a>
-            <a href="/players.html">Players</a>
-            <a href="/organizers.html">Organizers</a>
-            <a href="/community.html">Community</a>
+            <a href="/courts/">Courts</a>
+            <a href="/players">Players</a>
+            <a href="/organizers">Organizers</a>
+            <a href="/clubs">Clubs</a>
+            <a href="/community">Community</a>
             <a href="/demo/">Live demo</a>
         </nav>
         <button class="theme-toggle" id="themeToggle" aria-label="Switch between light and dark mode">
@@ -1140,11 +1215,11 @@ document.documentElement.classList.add('js');
 <div class="site-menu" id="siteMenu" hidden>
     <button class="site-menu-close" aria-label="Close menu">×</button>
     <nav aria-label="Mobile">
-        <a href="#product">Product</a><a href="/courts">Courts</a>
-        <a href="/players.html">Players</a>
-        <a href="/organizers.html">Organizers</a>
-        <a href="/clubs.html">Clubs</a>
-        <a href="/community.html">Community</a>
+        <a href="#product">Product</a><a href="/courts/">Courts</a>
+        <a href="/players">Players</a>
+        <a href="/organizers">Organizers</a>
+        <a href="/clubs">Clubs</a>
+        <a href="/community">Community</a>
         <a href="/demo/">Live demo</a>
     </nav>
     <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
@@ -1171,11 +1246,25 @@ document.documentElement.classList.add('js');
         <div class="theater rise rise-3">
             <div class="phone">
                 <div class="phone-screen">
-                    <video autoplay muted loop playsinline preload="auto" poster="/videos/hero/app-tour-poster.jpg" aria-label="A tour through PickleCue: home, courts, court details, tournaments, leagues, and your profile" data-hero-video>
-                        <source src="/videos/hero/app-tour.webm" type="video/webm">
-                        <source src="/videos/hero/app-tour.mp4" type="video/mp4">
-                    </video>
+                    <!-- Five real app screens, crossfading in the order a player
+                         actually moves through them. These are the scrubbed
+                         marketing captures (fictional cast, fictional venues) —
+                         the same files players.html and organizers.html use.
+                         The 54s screen recording this replaced was recorded
+                         against live production and showed five PlayPickleball-
+                         sourced venue names that are now soft-deleted from the
+                         app. See docs/website-cro-audit-2026-08-25.md, P0-1. -->
+                    <div class="hero-seq">
+                        <img src="/images/app/courts-allcourts.webp" alt="Nearby pickleball courts in PickleCue, each with city, court count and whether it is free to play" width="760" height="1651" fetchpriority="high" decoding="async">
+                        <img src="/images/app/s1-play-open-games.webp" alt="Open games near you, with skill range, start time and spots left" width="760" height="1651" loading="lazy" decoding="async">
+                        <img src="/images/app/game-roster.webp" alt="A game roster showing who has joined and who is on the waitlist" width="760" height="1651" loading="lazy" decoding="async">
+                        <img src="/images/app/match-result.webp" alt="A finished match with the final score recorded" width="760" height="1651" loading="lazy" decoding="async">
+                        <img src="/images/app/bracket-champion.webp" alt="A completed tournament bracket with the champion decided" width="760" height="1651" loading="lazy" decoding="async">
+                    </div>
                 </div>
+                <ol class="hero-stages">
+                    <li>Discover</li><li>Join</li><li>Play</li><li>Score</li><li>Compete</li>
+                </ol>
             </div>
             <aside class="float-card float-game" aria-hidden="true">
                 <p class="float-kicker">Open game</p>
@@ -1365,6 +1454,7 @@ document.documentElement.classList.add('js');
             <p class="story-kicker">Spectators</p>
             <h2>Can everyone follow without installing anything?</h2>
             <p>Most people at an event will never install an app. Print the QR, or say the short code out loud. They get the schedule, their next match, the live score and the bracket — in a browser.</p>
+            <p><a class="story-link" href="/live-scores" data-track="cta_click" data-cta="home_spectators">See what a spectator sees →</a></p>
         </div>
         <div class="tile-grid tile-grid-4">
             <figure class="tile">
@@ -1414,31 +1504,32 @@ document.documentElement.classList.add('js');
 <footer>
     <div class="foot-inner">
         <div class="foot-brand">
-            <img src="/images/wordmark-on-dark.png" alt="PickleCue" width="744" height="126">
+            <img src="/images/wordmark-on-dark.webp" alt="PickleCue" width="780" height="133">
             <p>All the pickleball. One elegant app.</p>
         </div>
         <div class="foot-col">
             <h3>Product</h3>
             <a href="#product">Product</a>
+            <a href="/live-scores">Follow live</a>
             <a href="/demo/">Live demo</a>
-            <a href="/support.html">Support</a>
+            <a href="/support">Support</a>
         </div>
         <div class="foot-col">
             <h3>Courts</h3>
-            <a href="/courts">Find courts</a><a href="/courts/methodology">How we count</a>
+            <a href="/courts/">Find courts</a><a href="/courts/methodology">How we count</a>
         </div>
         <div class="foot-col">
             <h3>For you</h3>
-            <a href="/players.html">Players</a>
-            <a href="/organizers.html">Organizers</a>
-            <a href="/clubs.html">Clubs</a>
-            <a href="/community.html">Community</a>
+            <a href="/players">Players</a>
+            <a href="/organizers">Organizers</a>
+            <a href="/clubs">Clubs</a>
+            <a href="/community">Community</a>
         </div>
         <div class="foot-col">
             <h3>Legal</h3>
-            <a href="/privacy.html">Privacy policy</a>
-            <a href="/terms.html">Terms of service</a>
-            <a href="/licenses.html">Third-party notices</a>
+            <a href="/privacy">Privacy policy</a>
+            <a href="/terms">Terms of service</a>
+            <a href="/licenses">Third-party notices</a>
             <a href="#cookie-preferences">Cookie preferences</a>
         </div>
     </div>
@@ -1471,6 +1562,7 @@ document.documentElement.classList.add('js');
     });
 
     /* Reveal: enhancement only. Failsafe guarantees visibility. */
+    window.__pcShell = 1;
     var reveals = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window){
         var io = new IntersectionObserver(function(entries){
@@ -1537,12 +1629,6 @@ document.documentElement.classList.add('js');
         }, 3400);
     }
 
-    /* Hero tour video: pause under reduced motion */
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-        document.querySelectorAll('video[data-hero-video]').forEach(function(v){
-            v.removeAttribute('autoplay'); v.pause();
-        });
-    }
 
 
     /* Stage + roles devices open the visible screen full size */
@@ -1693,8 +1779,8 @@ document.documentElement.classList.add('js');
                 if (r.ok || r.status === 409){
                     window.track('waitlist_success', { existing: r.status === 409, form: ctaName });
                     setMsg(r.status === 409
-                        ? 'You are already on the list. We will email you at launch.'
-                        : 'You are on the list. We will email you at launch.', 'success');
+                        ? 'You are already on the list. We will email you the day PickleCue reaches your country.'
+                        : 'You are on the list. We will email you the day PickleCue reaches your country.', 'success');
                     form.reset();
                 } else {
                     window.track('waitlist_error', { status: r.status, form: ctaName });

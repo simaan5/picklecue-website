@@ -23,18 +23,19 @@
 <script defer src="/assets/consent.js"></script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-itunes-app" content="app-id=6757326631">
+    <link rel="canonical" href="https://www.picklecue.com/demo/">
     <title>PickleCue Demo — Try the App</title>
     <meta name="description" content="Interactive demo of PickleCue, the pickleball companion app. Try it in your browser.">
     <meta name="theme-color" content="#0B0F14">
     <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32.png?v=20260812b">
     <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png?v=20260812b">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="demo.css">
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="demo.css?v=20260825a">
 </head>
 <body>
+<h1 class="sr-only">PickleCue interactive demo</h1>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
 <defs>
@@ -176,7 +177,7 @@
                             <div class="g-tile"><svg class="i gi lime-i"><use href="#i-trophy"/></svg><b>32</b><i>Matches</i></div>
                             <div class="g-tile"><svg class="i gi purple-i"><use href="#i-chart"/></svg><b>68%</b><i>Win Rate</i></div>
                             <div class="g-tile"><svg class="i gi orange-i"><use href="#i-flame"/></svg><b>12</b><i>Win Streak</i></div>
-                            <div class="g-tile"><svg class="i gi teal-i"><use href="#i-up-right"/></svg><b>3.48</b><i>DUPR</i></div>
+                            <div class="g-tile"><svg class="i gi teal-i"><use href="#i-up-right"/></svg><b>3.5</b><i>Skill</i></div>
                         </div>
                         <div class="card-link">View Stats</div>
                     </div>
@@ -188,7 +189,7 @@
                         <div class="f-body">
                             <div class="f-title">Austin Pickleball Classic <span class="pill-purple sm">Tournament</span></div>
                             <div class="f-sub">Registration is open!</div>
-                            <div class="f-time">Jun 22–23 • Austin, TX</div>
+                            <div class="f-time">Next month • Austin, TX</div>
                         </div><span class="dot"></span>
                     </div>
                     <div class="feed-row">
@@ -260,7 +261,7 @@
                     <div class="prog-stats">
                         <div><b>3</b><i>Matches</i></div>
                         <div><b class="lime-t">67%</b><i>Win Rate</i></div>
-                        <div><b>3.48</b><i>DUPR</i></div>
+                        <div><b>3.5</b><i>Skill</i></div>
                     </div>
                     <div class="prog-bars">
                         <div class="p-col"><span style="height:34px"></span><i>M</i></div>
@@ -273,7 +274,7 @@
                     </div>
                     <div class="pro-tip">
                         <span class="tip-ico"><svg class="i ci"><use href="#i-bulb"/></svg></span>
-                        <div><b>Pro Tip</b><i>Playing 1 more match this week can improve your DUPR rating!</i></div>
+                        <div><b>Pro Tip</b><i>You are one match off your best week this month.</i></div>
                     </div>
                 </div>
                 <div class="scroll-pad"></div>
@@ -283,8 +284,8 @@
             <div class="screen" id="screen-courts">
                 <div class="hub-header">
                     <div class="hub-titles">
-                        <h1>Courts</h1>
-                        <p>26,000+ courts with reviews and live activity.</p>
+                        <h2 class="scr-title">Courts</h2>
+                        <p>10,674 court locations across the United States.</p>
                     </div>
                     <div class="circle-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg></div>
                 </div>
@@ -311,7 +312,7 @@
             <div class="screen" id="screen-play">
                 <div class="hub-header">
                     <div class="hub-titles">
-                        <h1>Play</h1>
+                        <h2 class="scr-title">Play</h2>
                         <p>Find games, join players, and hit the courts.</p>
                     </div>
                     <div class="circle-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg></div>
@@ -329,7 +330,7 @@
                     <div class="hero-card" onclick="openGameDetail(1)">
                         <div class="hero-top"><span class="hero-pill"><svg class="i hp"><use href="#i-pin"/></svg> NEAR YOU</span></div>
                         <div class="hero-title big">Lunch Singles Ladder</div>
-                        <div class="hero-meta"><svg class="i mi"><use href="#i-paddle"/></svg> Rec - Fillmore</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-paddle"/></svg> Ricky Guerrero Park</div>
                         <div class="hero-meta"><svg class="i mi"><use href="#i-cal"/></svg> Tomorrow • 12:00 PM</div>
                         <div class="hero-meta"><svg class="i mi"><use href="#i-run"/></svg> 3.0–4.0 Level • Singles</div>
                         <div class="hero-bottom">
@@ -352,7 +353,7 @@
                         <span class="mono pink">SD</span>
                         <div class="g-body">
                             <b>Sunset Doubles Rally</b>
-                            <i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Carl Larsen Park</i>
+                            <i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Bartholomew District Park</i>
                             <i><svg class="i di"><use href="#i-cal"/></svg> Tomorrow 6:00 PM</i>
                             <u>3.5–4.0 • Doubles</u>
                         </div>
@@ -363,7 +364,7 @@
                         <span class="mono blue">SR</span>
                         <div class="g-body">
                             <b>Saturday Round Robin</b>
-                            <i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Carl Larsen Park</i>
+                            <i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Bartholomew District Park</i>
                             <i><svg class="i di"><use href="#i-cal"/></svg> Sat 9:00 AM</i>
                             <u>3.0–4.5 • Doubles</u>
                         </div>
@@ -374,7 +375,7 @@
                         <span class="mono green">EO</span>
                         <div class="g-body">
                             <b>Evening Open Play</b>
-                            <i><svg class="i di"><use href="#i-pin"/></svg> Betty Ann Ong Recreation Center</i>
+                            <i><svg class="i di"><use href="#i-pin"/></svg> Dove Springs Recreation Center</i>
                             <i><svg class="i di"><use href="#i-cal"/></svg> Today 8:30 PM</i>
                             <u>3.0–3.5 • Doubles</u>
                         </div>
@@ -398,14 +399,14 @@
                     <div class="day-h">Saturday – June 13</div>
                     <div class="game-row">
                         <span class="mono blue">SR</span>
-                        <div class="g-body"><b>Saturday Round Robin</b><i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Carl Larsen Park</i><i><svg class="i di"><use href="#i-cal"/></svg> 9:00 AM</i><u>1/8 Spots</u></div>
+                        <div class="g-body"><b>Saturday Round Robin</b><i><svg class="i di"><use href="#i-pin"/></svg> Pickleball Courts | Bartholomew District Park</i><i><svg class="i di"><use href="#i-cal"/></svg> 9:00 AM</i><u>1/8 Spots</u></div>
                         <span class="pill-green sm">Organizer</span>
                     </div>
                 </div>
                 <div class="play-seg" id="seg-wait">
                     <div class="game-row">
                         <span class="mono green">EO</span>
-                        <div class="g-body"><b>Evening Open Play</b><i><svg class="i di"><use href="#i-pin"/></svg> Betty Ann Ong Recreation Center</i><i><svg class="i di"><use href="#i-cal"/></svg> Today 8:30 PM</i><u>3.0–3.5 • Doubles</u></div>
+                        <div class="g-body"><b>Evening Open Play</b><i><svg class="i di"><use href="#i-pin"/></svg> Dove Springs Recreation Center</i><i><svg class="i di"><use href="#i-cal"/></svg> Today 8:30 PM</i><u>3.0–3.5 • Doubles</u></div>
                         <span class="pill-lime sm">#2 of 4</span>
                     </div>
                     <div class="notice-row"><svg class="i ti"><use href="#i-bell"/></svg> You'll be notified if a spot opens up!</div>
@@ -430,7 +431,7 @@
                 <div class="hub-pane active" id="hub-tournaments">
                     <div class="hub-header tight">
                         <div class="hub-titles">
-                            <h1>Tournaments</h1>
+                            <h2 class="scr-title">Tournaments</h2>
                             <p>Register, compete, and climb the bracket.</p>
                         </div>
                         <div class="circle-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg></div>
@@ -464,8 +465,8 @@
                         <div class="g-body">
                             <span class="pill-green sm caps">Registration Open</span>
                             <b>Coastal Classic</b>
-                            <i><svg class="i di"><use href="#i-cal"/></svg> Jul 19–20, 2026</i><i><svg class="i di"><use href="#i-pin"/></svg> San Diego, CA</i>
-                            <u>DUPR 3.0+ • 25/48 Players</u>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Next month</i><i><svg class="i di"><use href="#i-pin"/></svg> Austin, TX</i>
+                            <u>3.0+ Skill • 25/48 Players</u>
                         </div>
                         <span class="chev">›</span>
                     </div>
@@ -473,8 +474,8 @@
                         <svg class="logo-badge"><use href="#lg-gate"/></svg>
                         <div class="g-body">
                             <span class="pill-green sm caps">Registration Open</span>
-                            <b>Golden Gate Open</b>
-                            <i><svg class="i di"><use href="#i-cal"/></svg> Jun 22, 2026</i><i><svg class="i di"><use href="#i-pin"/></svg> San Francisco, CA</i>
+                            <b>Barton Springs Open</b>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> In three weeks</i><i><svg class="i di"><use href="#i-pin"/></svg> Austin, TX</i>
                             <u>3.0+ Level • 48 max</u>
                         </div>
                         <span class="chev">›</span>
@@ -484,7 +485,7 @@
                 <div class="hub-pane" id="hub-leagues">
                     <div class="hub-header tight">
                         <div class="hub-titles">
-                            <h1>Leagues</h1>
+                            <h2 class="scr-title">Leagues</h2>
                             <p>Join a season, track standings, and compete with your community.</p>
                         </div>
                         <div class="circle-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg></div>
@@ -497,9 +498,9 @@
                     </div>
                     <div class="hero-card">
                         <div class="hero-top"><span class="hero-pill"><svg class="i hp"><use href="#i-star"/></svg> FEATURED LEAGUE</span><svg class="logo-badge"><use href="#lg-bay"/></svg></div>
-                        <div class="hero-title">Bay Area Pickleball League</div>
-                        <div class="hero-meta"><svg class="i mi"><use href="#i-cal"/></svg> Jan 8 – Apr 8, 2026</div>
-                        <div class="hero-meta"><svg class="i mi"><use href="#i-pin"/></svg> San Francisco, CA</div>
+                        <div class="hero-title">Hill Country Pickleball League</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-cal"/></svg> Season in progress</div>
+                        <div class="hero-meta"><svg class="i mi"><use href="#i-pin"/></svg> Austin, TX</div>
                         <div class="hero-meta-row">
                             <span class="pill-purple">3.0 - 5.0</span><span class="pill-purple">Singles League</span>
                         </div>
@@ -521,7 +522,7 @@
                         <div class="g-body">
                             <span class="pill-blue sm caps"><svg class="i xs"><use href="#i-bolt"/></svg> Active Season</span>
                             <b>Eastside Elite</b>
-                            <i><svg class="i di"><use href="#i-cal"/></svg> Season ends Apr 8</i>
+                            <i><svg class="i di"><use href="#i-cal"/></svg> Season ends in six weeks</i>
                             <u>2.5 – 4.0 Division • 12/16 members</u>
                         </div>
                         <div class="g-right"><span class="g-dist">Your Role</span><span class="g-count lime-t">Organizer</span></div>
@@ -546,8 +547,8 @@
             <div class="screen" id="screen-profile">
                 <div class="profile-head">
                     <img class="profile-av img" src="../images/avatars/emerald_court_captain.png" alt="Andrew">
-                    <h1>Andrew Simaan</h1>
-                    <p>@andrew_s • <span class="lime-t">DUPR 3.48</span></p>
+                    <h2 class="scr-title">Andrew Simaan</h2>
+                    <p>@andrew_s • <span class="lime-t">Skill 3.5</span></p>
                 </div>
                 <div class="split-row three">
                     <div class="g-tile center"><b>32</b><i>Matches</i></div>
@@ -632,6 +633,6 @@
     <div class="demo-tag">LIVE · PREVIEW</div>
 </div>
 
-<script src="demo.js"></script>
+<script src="demo.js?v=20260825a"></script>
 </body>
 </html>
