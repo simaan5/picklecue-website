@@ -143,7 +143,8 @@ def main():
                                  len(eligible), ROOT / "index.html",
                                  indexable=a.index, us=False))
 
-    p_meth = P.build_methodology_to(len(rows), len(eligible),
+    published_total = sum(c[1] for c in state_cards)
+    p_meth = P.build_methodology_to(len(rows), published_total, len(eligible),
                                     ROOT / "methodology.html", indexable=a.index)
     written.append(p_meth)
 
@@ -151,7 +152,7 @@ def main():
     # Only what is indexable goes in. Court detail pages are noindex, so listing
     # them would ask Google to crawl 2,149 pages it is told to ignore.
     if a.index:
-        urls = ["/courts", "/courts/us", "/courts/methodology"]
+        urls = ["/courts/", "/courts/us", "/courts/methodology"]
         urls += [f"/courts/us/{S.slugify(STATES[st])}" for st in sorted(by_state)]
         urls += [f"/courts/us/{S.slugify(STATES[st])}/{S.slugify(ct)}"
                  for (st, ct) in sorted(eligible)]

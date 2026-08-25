@@ -2,8 +2,10 @@
 
 READ THIS BEFORE CHANGING ANYTHING HERE.
 
-Two thirds of the `courts` table (14,903 of 22,312) was scraped from
-PlayPickleball.com. Their Terms of Use, clause (xi), prohibits using any
+Two thirds of the `courts` table (14,903 rows) was scraped from
+PlayPickleball.com. Those rows were soft-deleted on 2026-08-24 — `removed_at`
+is set and RLS hides them from every caller — leaving 10,674 live OSM rows.
+The ban below still stands: nothing re-imports them onto a public page. Their Terms of Use, clause (xi), prohibits using any
 "robot, spider, site search/retrieval application, or other manual or automatic
 device or process to retrieve, index, 'data mine,' or in any way reproduce"
 the site or its contents. That data must never reach a public page.
@@ -47,14 +49,14 @@ ODBL_ATTRIBUTION = (
 #   verified      marks import source,  -> BANNED, never means "player verified"
 #                 not a player action
 BANNED_STATS = {
-    "indoor": "indoor is null for ~95% of publishable rows",
-    "lights": "only 520 of 22,312 rows nationally have lights=true",
+    "indoor": "indoor is null for 87% of publishable rows (known on 1,335 of 10,674)",
+    "lights": "only 843 of 10,674 rows nationally have lights=true",
     "verified": "verified marks the import source, not a player verification",
     "rating": "court_reviews is empty; there are no ratings",
     "reviews": "court_reviews is empty",
     "photos": "court_photos is empty",
     "hours": "open_play_schedule is null for every row",
-    "amenities": "amenities populated on 6 rows out of 22,312",
+    "amenities": "amenities populated on 4 rows out of 10,674",
 }
 
 

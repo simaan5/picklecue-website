@@ -11,6 +11,12 @@ NOT built, deliberately:
 from pathlib import Path
 
 from gate import BANNED_STATS, display_label
+
+
+def plural(n, one, many):
+    """Five state cards shipped "1 cities". Counts come from live data, so
+    every rendered count needs this, not just the ones that looked plural."""
+    return one if n == 1 else many
 from icons import STAT_ICON, icon
 from shell import (MAP_CREDIT, attribution, courts, crumbs, esc, map_chrome,
                    map_payload, page, plot, slugify)
@@ -85,7 +91,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
     stats, total, free, paid, counted = stats_for(rows)
     ranked = sorted(rows, key=lambda r: (-(r.get("court_count") or 0), r["label"]))
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, None)])
     svg, plotted = plot(rows)
 
@@ -161,7 +167,7 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
     free = sum(1 for r in rows if r.get("is_free") is True)
     paid = sum(1 for r in rows if r.get("is_free") is False)
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, base), ("All courts", None)])
     ranked = sorted(rows, key=lambda r: (-(r.get("court_count") or 0), r["label"]))
 
@@ -261,7 +267,7 @@ def build_court(r, city, state, sf, siblings):
 
 def build_court_to(r, city, state, sf, siblings, out, indexable=False):
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, base), (r["label"], None)])
     svg, _ = plot([r] + [s for s in siblings if s["id"] != r["id"]][:40], maxh=300, focus=r["id"])
     n = r.get("court_count")
@@ -346,13 +352,13 @@ def build_state_from(state, sf, rows, out, indexable=False):
             by_city.setdefault(c, []).append(r)
     ranked = sorted(by_city.items(), key=lambda kv: -len(kv[1]))
     stats, total, free, paid, counted = stats_for(rows)
-    cb, ld = crumbs([("Courts", "/courts"), ("United States", "/courts/us"), (sf, None)])
+    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"), (sf, None)])
     svg, plotted = plot(rows, maxh=430, r=4)
 
     body = f"""{cb}
 <section class="chero">
   <div><p class="ceyebrow">Pickleball in</p><h1>{esc(sf)}</h1>
-  <p class="clede">{total} courts across {len(by_city)} cities and towns in {esc(sf)},
+  <p class="clede">{total} court locations across {len(by_city)} {plural(len(by_city), "city or town", "cities and towns")} in {esc(sf)},
   {free} of them free to play.</p></div>
   {stat_block(stats)}
 </section>
@@ -378,7 +384,8 @@ def build_state_from(state, sf, rows, out, indexable=False):
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page(f"Pickleball courts in {sf} | PickleCue",
-                      f"{total} pickleball courts across {len(by_city)} cities in {sf}. "
+                      f"{total} pickleball court locations across {len(by_city)} "
+                      f"{plural(len(by_city), 'city', 'cities')} in {sf}. "
                       f"{free} are free to play.", f"/courts/us/{slugify(sf)}", body, ld,
                       indexable), encoding="utf-8")
     return p
@@ -389,8 +396,8 @@ def build_methodology(total_pub, cities_pub):
     return build_methodology_to(total_pub, cities_pub, OUT / "_courts-methodology.html")
 
 
-def build_methodology_to(total_pub, cities_pub, out, indexable=False):
-    cb, ld = crumbs([("Courts", "/courts"), ("How we count courts", None)])
+def build_methodology_to(pool_total, published_total, cities_pub, out, indexable=False):
+    cb, ld = crumbs([("Courts", "/courts/"), ("How we count courts", None)])
     banned = "".join(f"<li><b>{esc(k)}</b> {esc(v)}</li>" for k, v in sorted(BANNED_STATS.items()))
     body = f"""{cb}
 <section class="chero mhero">
@@ -411,8 +418,10 @@ def build_methodology_to(total_pub, cities_pub, out, indexable=False):
       <p>Courts submitted from inside the app by people who play on them. These
       start at a low confidence score and rise as others confirm them.</p></div>
   </div>
-  <p class="cnote">We currently publish {total_pub:,} courts across {cities_pub}
-  cities on the web. The app itself holds more.</p>
+  <p class="cnote">We publish {published_total:,} court locations across
+  {cities_pub} {plural(cities_pub, "city", "cities")} here. The app holds
+  {pool_total:,} — the difference is smaller towns that do not yet have enough
+  courts to justify a page of their own.</p>
 </section>
 
 <section class="csec"><h2>What we will not claim</h2>
@@ -449,10 +458,10 @@ def build_methodology_to(total_pub, cities_pub, out, indexable=False):
   built with <a href="https://www.openmaptiles.org/" rel="noopener">OpenMapTiles</a>
   from that same OpenStreetMap data. Loading the map sends a request from your
   browser to OpenFreeMap, so your IP address reaches them; the
-  <a href="/privacy.html">privacy policy</a> says what that does and does not
+  <a href="/privacy">privacy policy</a> says what that does and does not
   involve. Icons are from <a href="https://lucide.dev" rel="noopener">Lucide</a>
   (ISC). Full licence texts for everything this site redistributes are on the
-  <a href="/licenses.html">third-party notices</a> page.</p>
+  <a href="/licenses">third-party notices</a> page.</p>
 </section>
 
 <section class="ccta"><div><h2>Found something wrong?</h2>
@@ -473,23 +482,23 @@ def build_index(states, total, cities_n, out, indexable=False, us=False):
     city and state page point here, so these must exist or 448 pages link to a
     404."""
     if us:
-        cb, ld = crumbs([("Courts", "/courts"), ("United States", None)])
+        cb, ld = crumbs([("Courts", "/courts/"), ("United States", None)])
         title, h1 = "Pickleball courts in the United States | PickleCue", "United States"
         canon = "/courts/us"
     else:
         cb, ld = crumbs([("Courts", None)])
         title, h1 = "Pickleball courts | PickleCue", "Pickleball courts"
-        canon = "/courts"
+        canon = "/courts/"
 
     cards = "".join(
         f'<li><a href="/courts/us/{slugify(sf)}"><b>{n}</b><span>{esc(sf)}</span>'
-        f'<em>{c} cities</em></a></li>'
+        f'<em>{c} {plural(c, "city", "cities")}</em></a></li>'
         for sf, n, c in sorted(states, key=lambda x: -x[1]))
 
     body = f"""{cb}
 <section class="chero mhero">
   <div><p class="ceyebrow">Where to play</p><h1>{esc(h1)}</h1>
-  <p class="clede">{total:,} courts across {cities_n} cities and {len(states)} states,
+  <p class="clede">{total:,} court locations across {cities_n} cities and {len(states)} states,
   with an address and a location for every one. Free public courts, school courts,
   clubs and recreation centers.</p></div>
 </section>
@@ -507,7 +516,7 @@ def build_index(states, total, cities_n, out, indexable=False, us=False):
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page(title,
-                      f"{total:,} pickleball courts across {cities_n} cities. "
+                      f"{total:,} pickleball court locations across {cities_n} cities. "
                       f"Addresses, locations and open games.", canon, body, ld,
                       indexable), encoding="utf-8")
     return p
