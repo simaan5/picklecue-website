@@ -50,11 +50,13 @@
 
     <link rel="stylesheet" href="/fonts.css">
     <link rel="stylesheet" href="/assets/site-v2.css?v=20260825a">
+    <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/site-v2.js?v=20260825a"></script>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
+    <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
-<body>
+<body data-audience="organizers">
 <a class="skip-link" href="#main">Skip to content</a>
 <script>
 document.documentElement.classList.add('js');
@@ -95,7 +97,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
             <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         </button>
-        <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" data-track="cta_click" data-cta="nav_waitlist">Download on iPhone</a>
+        <a data-track="app_store_click" data-placement="nav" data-audience="organizers" class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
         <button class="masthead-burger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
             <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><path d="M1 1h18M1 7h18M1 13h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
@@ -114,7 +116,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         <a href="/community">Community</a>
         <a href="/demo/">Live demo</a>
     </nav>
-    <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
+    <a data-track="app_store_click" data-placement="inline" data-audience="organizers" class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
 </div>
 
 <section class="page-hero">
@@ -123,7 +125,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         <h1 class="reveal">Run the competition.<br>Lose the spreadsheet.</h1>
         <p class="sub reveal">From first signup to final score. Brackets seed and advance themselves, standings update as matches are logged, and everyone can follow along.</p>
         <div class="actions reveal">
-            <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" data-track="cta_click" data-cta="organizers_hero">Download on iPhone
+            <a data-track="app_store_click" data-placement="hero" data-audience="organizers" class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone
                 <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             <a class="btn btn-ghost" href="/demo/">Live demo</a>
         </div>
@@ -186,8 +188,9 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
     <div class="page-cta-inner">
         <h2 class="reveal">Run your next event on PickleCue.</h2>
         <p class="reveal">Organizer tools are live. Download PickleCue free on iPhone in the United States. More countries are on the way.</p>
-        <a class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" data-track="cta_click" data-cta="organizers" aria-label="Download PickleCue on the App Store"><img src="/images/badges/app-store-badge.svg" alt="Download on the App Store" width="180" height="60" loading="lazy" decoding="async"></a>
+        <a data-track="app_store_click" data-placement="final" data-audience="organizers" class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" aria-label="Download PickleCue on the App Store"><img src="/images/badges/app-store-badge.svg" alt="Download on the App Store" width="180" height="60" loading="lazy" decoding="async"></a>
             <p class="store-note">Free on iPhone · Available in the <strong>United States</strong><br>More countries are on the way.</p>
+            <p class="qr-line"><button class="qr-trigger" type="button" data-qr-open><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 14h2M14 19h3M19 19h2"/></svg>Scan to get it on your phone</button></p>
         <p class="cta-note reveal"><span>Free core app</span><span>No ads</span><span>Native iOS</span></p>
     </div>
 </section>

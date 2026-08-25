@@ -140,7 +140,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
   <p>Open games around {esc(city)}, skill levels and spots left, inside the app.</p></div>
-  <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
+  <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
 
 <section class="cnear"><h2>Pickleball near {esc(city)}</h2><ul>{"".join(
   f'<li><a href="{city_path(sf, c)}"><span>{esc(c)}</span><em>{n}</em></a></li>'
@@ -317,7 +317,7 @@ def build_court_to(r, city, state, sf, siblings, out, indexable=False):
   <div class="vempty">
     <p>Open games, skill levels and spots left live inside PickleCue. We do not publish
     who is playing on the open web.</p>
-    <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
+    <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
   </div>
 </section>
 
@@ -379,7 +379,7 @@ def build_state_from(state, sf, rows, out, indexable=False):
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
   <p>Open games across {esc(sf)}, skill levels and spots left, inside the app.</p></div>
-  <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
+  <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
 {attribution()}"""
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -466,7 +466,7 @@ def build_methodology_to(pool_total, published_total, cities_pub, out, indexable
 
 <section class="ccta"><div><h2>Found something wrong?</h2>
   <p>Corrections come from players. That is the only way court data stays true.</p></div>
-  <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>"""
+  <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>"""
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page("How we count courts | PickleCue",
@@ -511,7 +511,7 @@ def build_index(states, total, cities_n, out, indexable=False, us=False):
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
   <p>Open games, skill levels and spots left, inside the app.</p></div>
-  <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
+  <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
 {attribution()}"""
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)

@@ -7,13 +7,8 @@
        does not strip the 'js' class and disable the reveal animation. */
     window.__pcShell = 1;
 
-    window.track = window.track || function (name, params) {
-        if (typeof gtag === 'function') gtag('event', name, params || {});
-    };
-    document.addEventListener('click', function (e) {
-        var el = e.target.closest && e.target.closest('[data-track]');
-        if (el) window.track(el.getAttribute('data-track'), { cta: el.getAttribute('data-cta') });
-    });
+    /* CTA tracking moved to assets/acquire.js, which owns the single delegated
+       listener. Two listeners on nested elements double-count every click. */
 
     /* Reveal: enhancement only, with failsafe so content can never stay hidden */
     var reveals = document.querySelectorAll('.reveal');
