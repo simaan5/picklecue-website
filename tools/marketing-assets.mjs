@@ -58,6 +58,15 @@ if (process.argv.includes('--refresh')) {
     rec.width = w; rec.height = h;
     rec.sha256 = createHash('sha256').update(buf).digest('hex').slice(0, 16);
     rec.fileModified = statSync(abs).mtime.toISOString().slice(0, 10);
+    /* Approval is bound to the BYTES that were inspected. If the file changes
+       under a filename that was already approved, the approval is void — that
+       is the whole hole a filename-keyed manifest would otherwise leave open. */
+    if (rec.audit && rec.audit.sha256 && rec.audit.sha256 !== rec.sha256) {
+      rec.approvedForMarketing = null;
+      rec.audit = { ...rec.audit, invalidatedOn: new Date().toISOString().slice(0, 10),
+                    invalidatedBecause: `file changed since audit (${rec.audit.sha256} -> ${rec.sha256})` };
+      console.log(`  ! ${name}: bytes changed since audit — approval revoked`);
+    }
   }
   writeFileSync(FILE, JSON.stringify(manifest, null, 2) + '\n');
   console.log(`refreshed ${Object.keys(manifest.assets).length} records`);

@@ -1088,6 +1088,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
 /* ---- tile grids ---- */
 .tile-grid{ display:grid; gap:22px; }
 .tile-grid-4{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+.tile-grid-3{ grid-template-columns:repeat(3,minmax(0,1fr)); }
 .tile{ margin:0; display:flex; flex-direction:column; gap:11px; }
 .tile-shot{
     border-radius:14px; border:1px solid var(--line); background:var(--card);
@@ -1153,7 +1154,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
 
 /* ---- responsive ---- */
 @media (max-width:1080px){
-    .tile-grid-4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .tile-grid-4, .tile-grid-3{ grid-template-columns:repeat(2,minmax(0,1fr)); }
     .strip{ grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 @media (max-width:860px){
@@ -1167,7 +1168,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
     .final-cta{ padding:64px 20px; }
 }
 @media (max-width:560px){
-    .tile-grid-4{ grid-template-columns:1fr; }
+    .tile-grid-4, .tile-grid-3{ grid-template-columns:1fr; }
     .strip{ grid-template-columns:repeat(2,minmax(0,1fr)); }
     .tile-tall, .tile-wide{ height:300px; }
     .proof-list{ gap:8px 16px; padding:14px 16px; }
@@ -1513,10 +1514,6 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         </figure>
         <ol class="strip">
             <li>
-                <div class="strip-shot"><img src="/images/web/step-reg-form.webp" srcset="/images/web/step-reg-form-sm.webp 620w, /images/web/step-reg-form.webp 1200w" sizes="(max-width:860px) 44vw, 15vw" alt="The public registration form for an event." loading="lazy" decoding="async"></div>
-                <p class="strip-t">Register</p>
-            </li>
-            <li>
                 <div class="strip-shot"><img src="/images/web/step-reg-waiver.webp" srcset="/images/web/step-reg-waiver-sm.webp 620w, /images/web/step-reg-waiver.webp 1200w" sizes="(max-width:860px) 44vw, 15vw" alt="The waiver text and signature field inside the registration form." loading="lazy" decoding="async"></div>
                 <p class="strip-t">Sign the waiver</p>
             </li>
@@ -1546,14 +1543,10 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
             <p>Most people at an event will never install an app. Print the QR, or say the short code out loud. They get the schedule, their next match, the live score and the bracket — in a browser.</p>
             <p><a class="story-link" href="/live-scores" data-track="spectators_open" data-placement="mid" data-audience="home">See what a spectator sees →</a></p>
         </div>
-        <div class="tile-grid tile-grid-4">
+        <div class="tile-grid tile-grid-3">
             <figure class="tile">
                 <div class="tile-shot tile-land"><img src="/images/web/sp-qr.webp" srcset="/images/web/sp-qr-sm.webp 640w, /images/web/sp-qr.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="The organizer QR panel showing a speakable short link, a staff claim code, and a printable QR for the live event page." loading="lazy" decoding="async"></div>
                 <figcaption><b>QR + short code</b><span>picklecue.com/e/FUDMRD</span></figcaption>
-            </figure>
-            <figure class="tile">
-                <div class="tile-shot tile-land"><img src="/images/web/sp-event.webp" srcset="/images/web/sp-event-sm.webp 640w, /images/web/sp-event.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="The public event page header with the event name, format and sponsor." loading="lazy" decoding="async"></div>
-                <figcaption><b>The event page</b><span>Opens in any browser</span></figcaption>
             </figure>
             <figure class="tile">
                 <div class="tile-shot tile-land"><img src="/images/web/sp-next.webp" srcset="/images/web/sp-next-sm.webp 640w, /images/web/sp-next.webp 1200w" sizes="(max-width:860px) 90vw, 21vw" alt="A player's next match: playing now on Court 2 against Blake H. and Drew M. at 7-5." loading="lazy" decoding="async"></div>

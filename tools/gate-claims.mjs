@@ -133,8 +133,16 @@ function scanPhrases(rel, text) {
                        rec.containsDupr && 'DUPR', rec.containsRatingOrReviewCount && 'a rating'].filter(Boolean);
           fail(rel, `${m[1]} is not approved for marketing (${why.join(', ') || 'see notes'}). ` +
                     `Do not retouch or crop it; use another authentic state.`);
-        } else if (!rec.audit) {
-          warns.push(`${rel}: ${m[1]} has never been inspected. Open it, then set approvedForMarketing.`);
+        } else if (!rec.audit || rec.approvedForMarketing !== true) {
+          /* A page in production must not depend on a capture nobody has
+             opened. Unreferenced assets stay a warning (see the inventory
+             sweep at the end); a REFERENCED one is a failure, because that is
+             the case where an unknown screenshot is actually being shown. */
+          const why = rec.audit?.invalidatedBecause
+            ? `its approval was revoked: ${rec.audit.invalidatedBecause}`
+            : 'nobody has inspected it';
+          fail(rel, `${m[1]} is referenced by a public page but ${why}. ` +
+                    `Open it and record the finding in data/marketing-assets.json.`);
         }
       }
     }
@@ -221,6 +229,19 @@ for (const f of htmlFiles()) {
   if (c && ![appCourts, appLoc, claims.web.publishedLocations.toLocaleString('en-US')].includes(c[1])) {
     fail(rel, `"${c[1]} courts" matches no verified figure`);
   }
+}
+
+/* Inventory sweep: assets nobody has looked at that no page uses. Not blocking
+   — they are not being shown to anyone — but they should not quietly become a
+   pool of unknown screenshots either. */
+{
+  const referenced = new Set();
+  for (const f of htmlFiles()) {
+    for (const m of readFileSync(f, 'utf8').matchAll(/\/images\/(?:app|web)\/([a-z0-9._-]+\.webp)/g)) referenced.add(m[1]);
+  }
+  const idle = Object.entries(assetManifest).filter(([n, r]) => !referenced.has(n) && !r.audit);
+  if (idle.length) warns.push(`${idle.length} asset(s) in the manifest are unreferenced and uninspected: ` +
+                              idle.slice(0, 6).map(([n]) => n).join(', ') + (idle.length > 6 ? ', …' : ''));
 }
 
 if (warns.length) {

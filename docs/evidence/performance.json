@@ -1,20 +1,20 @@
 {
-  "generated": "2026-08-26T01:23:32.357Z",
+  "generated": "2026-08-26T01:37:19.044Z",
   "pages": [
     {
       "path": "/",
       "viewport": "390",
       "before": 2209,
-      "after": 435,
+      "after": 434,
       "deltaPct": -80,
       "after_detail": {
         "path": "/",
         "viewport": "390",
         "status": 200,
-        "kb": 435,
+        "kb": 434,
         "requests": 21,
         "byType": {
-          "document": 110174,
+          "document": 109423,
           "image": 234508,
           "font": 61244,
           "stylesheet": 18799,
@@ -23,7 +23,7 @@
         },
         "heaviest": [
           {
-            "bytes": 110174,
+            "bytes": 109423,
             "url": "/",
             "type": "document"
           },
@@ -63,16 +63,16 @@
       "path": "/",
       "viewport": "1440",
       "before": 2343,
-      "after": 461,
+      "after": 460,
       "deltaPct": -80,
       "after_detail": {
         "path": "/",
         "viewport": "1440",
         "status": 200,
-        "kb": 461,
+        "kb": 460,
         "requests": 22,
         "byType": {
-          "document": 110174,
+          "document": 109423,
           "image": 260860,
           "font": 61244,
           "stylesheet": 18799,
@@ -81,7 +81,7 @@
         },
         "heaviest": [
           {
-            "bytes": 110174,
+            "bytes": 109423,
             "url": "/",
             "type": "document"
           },
@@ -365,7 +365,7 @@
           "image": 117960,
           "font": 61244,
           "stylesheet": 40813,
-          "document": 14847,
+          "document": 14910,
           "script": 22992,
           "other": 1608
         },
@@ -411,19 +411,19 @@
       "path": "/clubs",
       "viewport": "1440",
       "before": 409,
-      "after": 290,
-      "deltaPct": -29,
+      "after": 253,
+      "deltaPct": -38,
       "after_detail": {
         "path": "/clubs",
         "viewport": "1440",
         "status": 200,
-        "kb": 290,
-        "requests": 15,
+        "kb": 253,
+        "requests": 14,
         "byType": {
-          "image": 155220,
+          "image": 117960,
           "font": 61244,
           "stylesheet": 40813,
-          "document": 14847,
+          "document": 14910,
           "script": 22992,
           "other": 1608
         },
@@ -431,11 +431,6 @@
           {
             "bytes": 49184,
             "url": "/images/app/courts-detail.webp",
-            "type": "image"
-          },
-          {
-            "bytes": 37260,
-            "url": "/images/app/league-members.webp",
             "type": "image"
           },
           {
@@ -457,6 +452,11 @@
             "bytes": 28544,
             "url": "/images/wordmark-on-dark.webp",
             "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
           }
         ],
         "hits": {
@@ -585,19 +585,19 @@
       "path": "/live-scores",
       "viewport": "390",
       "before": 346,
-      "after": 226,
-      "deltaPct": -35,
+      "after": 220,
+      "deltaPct": -36,
       "after_detail": {
         "path": "/live-scores",
         "viewport": "390",
         "status": 200,
-        "kb": 226,
+        "kb": 220,
         "requests": 14,
         "byType": {
           "font": 61244,
-          "image": 85234,
+          "image": 78378,
           "stylesheet": 40813,
-          "document": 20029,
+          "document": 20035,
           "script": 22992,
           "other": 1608
         },
@@ -628,7 +628,7 @@
             "type": "stylesheet"
           },
           {
-            "bytes": 20029,
+            "bytes": 20035,
             "url": "/live-scores",
             "type": "document"
           }
@@ -643,19 +643,19 @@
       "path": "/live-scores",
       "viewport": "1440",
       "before": 346,
-      "after": 261,
-      "deltaPct": -25,
+      "after": 255,
+      "deltaPct": -26,
       "after_detail": {
         "path": "/live-scores",
         "viewport": "1440",
         "status": 200,
-        "kb": 261,
+        "kb": 255,
         "requests": 18,
         "byType": {
           "font": 61244,
-          "image": 120798,
+          "image": 113942,
           "stylesheet": 40813,
-          "document": 20029,
+          "document": 20035,
           "script": 22992,
           "other": 1608
         },
@@ -686,7 +686,7 @@
             "type": "stylesheet"
           },
           {
-            "bytes": 20029,
+            "bytes": 20035,
             "url": "/live-scores",
             "type": "document"
           }
