@@ -37,6 +37,7 @@
     <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
 <body data-no-install-bar data-audience="demo">
+<main id="main">
 <h1 class="sr-only">PickleCue interactive demo</h1>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -125,7 +126,7 @@
             </div>
 
             <!-- ═══════════ HOME ═══════════ -->
-            <div class="screen active" id="screen-home">
+            <div class="screen active" id="screen-home" tabindex="0" role="group" aria-label="Home screen">
                 <div class="greet-header">
                     <img class="greet-avatar img" src="../images/avatars/emerald_court_captain.png" alt="Andrew">
                     <div class="greet-text">
@@ -260,7 +261,7 @@
                 </div>
 
                 <div class="section-h"><span>Recommended For You</span><a>View All</a></div>
-                <div class="reco-scroll">
+                <div class="reco-scroll" tabindex="0" role="group" aria-label="Recommended courts, scrolls horizontally">
                     <div class="reco-card">
                         <div class="reco-photo"><span class="pill-lime">Free</span><span class="heart"><svg class="i hi"><use href="#i-heart"/></svg></span></div>
                         <b>Zilker Park Courts</b><i><svg class="i st"><use href="#i-paddle"/></svg> Free • 1.2 mi</i><u>Outdoor • 6 Courts</u>
@@ -300,7 +301,7 @@
             </div>
 
             <!-- ═══════════ COURTS ═══════════ -->
-            <div class="screen" id="screen-courts">
+            <div class="screen" id="screen-courts" tabindex="0" role="group" aria-label="Courts screen">
                 <div class="hub-header">
                     <div class="hub-titles">
                         <h2 class="scr-title">Courts</h2>
@@ -328,7 +329,7 @@
             </div>
 
             <!-- ═══════════ PLAY ═══════════ -->
-            <div class="screen" id="screen-play">
+            <div class="screen" id="screen-play" tabindex="0" role="group" aria-label="Play screen">
                 <div class="hub-header">
                     <div class="hub-titles">
                         <h2 class="scr-title">Play</h2>
@@ -361,7 +362,7 @@
 
                     <div class="section-h"><span>Open Games Near You</span><a>View All</a></div>
 
-                    <div class="pills-row">
+                    <div class="pills-row" tabindex="0" role="group" aria-label="Filters, scrolls horizontally">
                         <span class="pill sel"><svg class="i ti"><use href="#i-pin"/></svg> Nearby (50mi)</span>
                         <span class="pill" onclick="cyclePill(this,'Time','Today','This Week')"><svg class="i ti"><use href="#i-clock"/></svg> Time</span>
                         <span class="pill" onclick="cyclePill(this,'Level','3.0–3.5','3.5–4.0','4.0+')"><svg class="i ti"><use href="#i-chart"/></svg> Level</span>
@@ -441,7 +442,7 @@
             </div>
 
             <!-- ═══════════ COMPETE ═══════════ -->
-            <div class="screen" id="screen-compete">
+            <div class="screen" id="screen-compete" tabindex="0" role="group" aria-label="Compete screen">
                 <div class="seg-control" id="compete-seg">
                     <div class="seg-pill active" data-hub="tournaments" onclick="competeSeg(this)"><svg class="i ti"><use href="#i-trophy"/></svg> Tournaments</div>
                     <div class="seg-pill" data-hub="leagues" onclick="competeSeg(this)"><svg class="i ti"><use href="#i-shield"/></svg> Leagues</div>
@@ -563,7 +564,7 @@
             </div>
 
             <!-- ═══════════ PROFILE ═══════════ -->
-            <div class="screen" id="screen-profile">
+            <div class="screen" id="screen-profile" tabindex="0" role="group" aria-label="Profile screen">
                 <div class="profile-head">
                     <img class="profile-av img" src="../images/avatars/emerald_court_captain.png" alt="Andrew">
                     <h2 class="scr-title">Andrew Simaan</h2>
@@ -588,7 +589,7 @@
                     <div class="circle-btn" onclick="closeGameDetail()"><span class="x-t">✕</span></div>
                     <div class="circle-btn"><svg class="i"><use href="#i-share"/></svg></div>
                 </div>
-                <div class="detail-scroll">
+                <div class="detail-scroll" tabindex="0" role="group" aria-label="Game details">
                     <div class="detail-hero">
                         <span class="hero-pill" id="gd-pill"><svg class="i hp"><use href="#i-pin"/></svg> <span id="gd-pill-t">NEAR YOU</span></span>
                         <div class="hero-title big" id="gd-title">Evening Open Play</div>
@@ -687,6 +688,7 @@
 
     <div class="demo-tag">LIVE · PREVIEW</div>
 </div>
+</main>
 
 <script src="demo.js?v=20260825a"></script>
 <script src="tour.js?v=20260825a"></script>

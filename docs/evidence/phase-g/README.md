@@ -137,12 +137,19 @@ footer links (38 px), social row (25 px), skip link (39 px), theme toggle
 are reported, not fixed here; the fix belongs with the Phase I cross-site pass,
 where the court-page shell is regenerated anyway.
 
-Also unfixed and worth the same pass: **both wordmark images download on every
-page** (`wordmark-on-light.webp` 30 KB + `wordmark-on-dark.webp` 28 KB), because
-the theme swap is `display:none` and a `display:none` image is still fetched.
-Roughly 28 KB per page load across the whole site. A CSS `background-image`
-driven by a custom property would fetch only the used one, but it changes the
-shared masthead markup that `tools/courtgen/shell.py` generates.
+**Correction, measured in Phase I.** This document originally said both wordmark
+images cost "roughly 28 KB per page load across the whole site". That is wrong.
+Both are fetched — the theme swap is `display:none` and a `display:none` image
+is still requested — but `/images/*` is cached for 30 days, so the cost is
+**28 KB once per visitor**, not per navigation. Measured with
+`PerformanceResourceTiming.transferSize` across three navigations in one
+context: 30 KB + 28 KB on the first page, `0` on every page after it.
+(`page.on('response')` fires for cache hits too and reports `200`, which is what
+produced the wrong number the first time.)
+
+Against a 4,117-file markup change and a full court-page regeneration, 28 KB on
+a first visit does not justify the blast radius. **Not doing it**, and the
+reason is recorded here rather than left as an open item that looks skipped.
 
 ## Structured data
 

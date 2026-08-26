@@ -58,9 +58,10 @@ const MIME = {
  * failure path — that is how the reveal watchdog, the search-index failure and
  * the journey fallback were all verified.
  */
-export async function withSite(fn, { block = null } = {}) {
+export async function withSite(fn, { block = null, headers = null } = {}) {
   const srv = createServer(async (req, res) => {
     const p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+    if (headers) for (const [k, v] of Object.entries(headers)) res.setHeader(k, v);
     if (block && block(p)) { res.writeHead(404, { 'Content-Length': 0 }).end(); return; }
     for (const c of (p.endsWith('/') ? [p + 'index.html'] : [p, p + '.html', p + '/index.html'])) {
       const f = normalize(join(ROOT, c));

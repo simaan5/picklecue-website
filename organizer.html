@@ -45,7 +45,7 @@
 
     <main class="page" id="main"><div class="state"><h2>Loading…</h2></div></main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
     <script src="assets/live-core.js?v=rr8"></script>
     <script src="assets/bracket.js?v=rr8"></script>
     <script>
@@ -738,7 +738,7 @@
                 });
             });
             var s = document.createElement('script');
-            s.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+            s.src = '/assets/vendor/qrcode-generator-1.4.4.min.js';
             s.onload = function () {
                 targets.forEach(function (tg, i) {
                     var el = document.getElementById('qr-mini-' + i);

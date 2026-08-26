@@ -366,7 +366,10 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 .csearch-field input::-webkit-search-cancel-button{ cursor:pointer; }
 .csearch-field button{
     flex:0 0 auto; min-height:44px; padding:0 20px; border:0; border-radius:10px; cursor:pointer;
-    background:var(--court); color:var(--on-court,#0B1D14); font:650 15px/1 var(--f);
+    /* --on-court is not defined anywhere, so the #0B1D14 fallback was always
+       what shipped: near-black on the #1F5D43 button = 2.25:1, on the primary
+       control of the courts page. White on that green is 7.76:1. */
+    background:var(--court); color:var(--on-court,#FFFFFF); font:650 15px/1 var(--f);
 }
 .csearch-field button:focus-visible{ outline:2px solid var(--court-fg); outline-offset:2px; }
 .csearch-hint{ margin:10px 0 0; font:450 13.5px/1.5 var(--f); color:var(--ink-mute); }

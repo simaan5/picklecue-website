@@ -14,11 +14,11 @@
     --hairline-strong: rgba(255,255,255,.16);
     --t1: #FFFFFF;
     --t2: #9BA4B0;
-    --t3: #6B7480;
+    --t3: #8B95A4;   /* was #6B7480: 3.91:1 on --bg2 and 3.66:1 on --bg3, under the 4.5 floor for the 11-12.5px text that uses it. #8B95A4 gives 6.12 / 5.72 and still sits below --t2 in the hierarchy. */
     --green: #059669;
     --green-light: #6EE7B7;
     --lime: #CDE34A;
-    --purple: #8B5CF6;
+    --purple: #6D28D9;   /* was #8B5CF6: white on it is 4.23:1 at 11px bold. #6D28D9 gives 7.10:1. */
     --orange: #F59E0B;
     --teal: #5FA8B8;
     --pink: #EC4899;
@@ -384,6 +384,11 @@ body {
     overflow-x: auto; padding-bottom: 6px;
     scrollbar-width: none;
 }
+/* A scrollable region that cannot be focused cannot be scrolled by keyboard.
+   These carry tabindex="0" in the markup; give them a visible focus ring so
+   the tab stop is not invisible. */
+.reco-scroll:focus-visible, .screen:focus-visible,
+.pills-row:focus-visible, .detail-scroll:focus-visible{ outline:2px solid var(--lime); outline-offset:2px; }
 .reco-scroll::-webkit-scrollbar { display: none; }
 .reco-card {
     flex: 0 0 188px;

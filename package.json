@@ -10,6 +10,7 @@
     "workers-og": "^0.0.25"
   },
   "devDependencies": {
+    "axe-core": "^4.13.0",
     "playwright-core": "^1.61.1"
   }
 }
