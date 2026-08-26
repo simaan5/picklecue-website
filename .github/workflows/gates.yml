@@ -30,6 +30,12 @@ jobs:
       - name: Claim gate
         run: node tools/gate-claims.mjs
 
+      - name: Search index integrity
+        # Every court-search result must be a real page. Rebuilds each path
+        # the way the client does and checks the file exists, and caps the
+        # index so a lazy 58 KB fetch cannot quietly become half a megabyte.
+        run: node tools/gate-search-index.mjs
+
       - name: Event freshness (advisory)
         # Staleness warns here and fails in deploy.yml. A development PR going
         # red overnight because a verification timestamp aged teaches people to

@@ -495,16 +495,66 @@ def build_index(states, total, cities_n, out, indexable=False, us=False):
         f'<em>{c} {plural(c, "city", "cities")}</em></a></li>'
         for sf, n, c in sorted(states, key=lambda x: -x[1]))
 
+    # A-Z jump list. Plain anchors to the same cards, so a reader who thinks
+    # alphabetically and a reader who thinks "biggest first" both get a path,
+    # and neither needs JavaScript.
+    az = "".join(
+        f'<a href="#st-{slugify(sf)}">{esc(sf)}</a>'
+        for sf, _, _ in sorted(states, key=lambda x: x[0]))
+
+    cards = "".join(
+        f'<li id="st-{slugify(sf)}"><a href="/courts/us/{slugify(sf)}">'
+        f'<b>{n:,}</b><span>{esc(sf)}</span>'
+        f'<em>court locations &middot; {c} {plural(c, "city", "cities")}</em></a></li>'
+        for sf, n, c in sorted(states, key=lambda x: -x[1]))
+
     body = f"""{cb}
-<section class="chero mhero">
-  <div><p class="ceyebrow">Where to play</p><h1>{esc(h1)}</h1>
-  <p class="clede">{total:,} court locations across {cities_n} cities and {len(states)} states,
-  with an address and a location for every one. Free public courts, school courts,
-  clubs and recreation centers.</p></div>
+<section class="chero csearch-hero">
+  <div class="csearch-copy">
+    <p class="ceyebrow">Where to play</p>
+    <h1>Know where to play before you leave.</h1>
+    <p class="clede">{total:,} court locations across {cities_n} cities and {len(states)} states,
+    every one with an address you can navigate to. Search a court, a city or a state.</p>
+  </div>
+
+  <form class="csearch" id="courtSearch" role="search" autocomplete="off">
+    <label for="courtSearchInput">Search courts, cities and states</label>
+    <div class="csearch-field">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>
+      <input id="courtSearchInput" type="search" name="q"
+             placeholder="Austin, California, or a court name"
+             role="combobox" aria-expanded="false" aria-controls="courtSearchResults"
+             aria-autocomplete="list" aria-describedby="courtSearchHint">
+      <button type="submit">Search</button>
+    </div>
+    <p class="csearch-hint" id="courtSearchHint">Every result is a page on this site, not a login.</p>
+    <div class="csearch-results" id="courtSearchResults" hidden></div>
+    <p class="csearch-status" id="courtSearchStatus" role="status" aria-live="polite"></p>
+  </form>
 </section>
 
-<section class="csec"><h2>Browse by state</h2>
-  <p class="cnote">Every state we have court records for.</p>
+<section class="cbridge">
+  <div class="cbridge-copy">
+    <p class="ceyebrow">Why the app</p>
+    <h2>These pages tell you where. PickleCue tells you what happens next.</h2>
+    <p class="cnote">A directory ends at an address. In the app the same venue carries
+    the detail that decides whether you drive over &mdash; how many courts, indoor or
+    out, free or paid &mdash; plus directions, check-in, the court&rsquo;s chat, and a
+    game you can host right there.</p>
+    <p class="cnote"><a class="btn btn-primary" data-track="app_store_click"
+      data-placement="mid" data-audience="courts"
+      href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></p>
+  </div>
+  <figure class="cbridge-shot">
+    <img src="/images/app/courts-detail.webp" width="760" height="1651" loading="lazy" decoding="async"
+         alt="A venue in PickleCue: eight courts, indoor and outdoor, paid, with the address, directions, check-in, court chat and a button to host a game here.">
+  </figure>
+</section>
+
+<section class="csec" id="browse"><h2>Browse by state</h2>
+  <p class="cnote">Every state we have court records for, largest first. Counts are
+  court <em>locations</em> &mdash; a park or club, which may hold several courts.</p>
+  <nav class="saz" aria-label="Jump to a state">{az}</nav>
   <ul class="scities">{cards}</ul>
 </section>
 
@@ -517,6 +567,6 @@ def build_index(states, total, cities_n, out, indexable=False, us=False):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page(title,
                       f"{total:,} pickleball court locations across {cities_n} cities. "
-                      f"Addresses, locations and open games.", canon, body, ld,
-                      indexable), encoding="utf-8")
+                      f"Search by court, city or state.", canon, body, ld,
+                      indexable, search=True), encoding="utf-8")
     return p

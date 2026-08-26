@@ -79,8 +79,10 @@ def court_count(**filters):
     return int(cr.split("/")[-1]) if "/" in cr else 0
 
 
-def head(title, desc, canonical, extra_ld=None, indexable=False):
+def head(title, desc, canonical, extra_ld=None, indexable=False, search=False):
     EEA = "['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']"
+    search_js = ('<script defer src="/assets/courtsearch.js?v=20260825a"></script>'
+                 if search else "")
     robots = "" if indexable else '<meta name="robots" content="noindex">'
     ld = ""
     if extra_ld:
@@ -103,11 +105,12 @@ gtag('js',new Date());gtag('config','G-XCV417L0J8');</script>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
 <link rel="stylesheet" href="/fonts.css">
 <link rel="stylesheet" href="/assets/site-v2.css?v=20260825a">
-<link rel="stylesheet" href="/assets/courts.css?v=2">
+<link rel="stylesheet" href="/assets/courts.css?v=3">
 <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
 <script defer src="/assets/site-v2.js?v=20260825a"></script>
 <script defer src="/assets/courtmap.js?v=1"></script>
 <script defer src="/assets/acquire.js?v=20260825a"></script>
+{search_js}
 <style>.site-menu[hidden],.lightbox[hidden]{{display:none !important}}</style>
 <script>(function(){{try{{var t=localStorage.getItem('pc_theme');
 var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -272,8 +275,8 @@ def map_chrome(count, noun="courts"):
 </div>"""
 
 
-def page(title, desc, canonical, body, extra_ld=None, indexable=False):
+def page(title, desc, canonical, body, extra_ld=None, indexable=False, search=False):
     return (f"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n"
-            f"{head(title, desc, canonical, extra_ld, indexable)}\n</head>\n<body data-audience=\"courts\">\n"
+            f"{head(title, desc, canonical, extra_ld, indexable, search)}\n</head>\n<body data-audience=\"courts\">\n"
             f"{MASTHEAD}\n<main id=\"main\"><div class=\"wrap\">\n{body}\n</div></main>\n"
             f"{FOOTER}\n</body>\n</html>\n")

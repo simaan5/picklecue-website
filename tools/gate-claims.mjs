@@ -152,8 +152,12 @@ for (const f of htmlFiles()) {
 const { publishedLocations, publishedCities, publishedStates } = claims.web;
 for (const page of ['courts/index.html', 'courts/us.html']) {
   const text = readFileSync(join(ROOT, page), 'utf8');
-  const nums = [...text.matchAll(/<b>(\d+)<\/b><span>/g)].map(m => +m[1]);
-  const cities = [...text.matchAll(/<em>(\d+) (?:city|cities)<\/em>/g)].map(m => +m[1]);
+  /* Parses the state cards. Phase D added a comma-formatted count and an
+     explicit "court locations" label, and this assertion correctly failed until
+     it was taught the new shape — the fix is to follow the markup, never to
+     loosen the check into something that would pass on anything. */
+  const nums = [...text.matchAll(/<b>([\d,]+)<\/b><span>/g)].map(m => +m[1].replace(/,/g, ''));
+  const cities = [...text.matchAll(/(\d+) (?:city|cities)<\/em>/g)].map(m => +m[1]);
   const sum = nums.reduce((a, b) => a + b, 0);
   const citySum = cities.reduce((a, b) => a + b, 0);
   if (sum !== publishedLocations) fail(page, `state cards total ${sum}, claims.json says ${publishedLocations}`);

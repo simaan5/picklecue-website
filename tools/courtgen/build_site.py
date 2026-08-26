@@ -22,6 +22,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import pages as P
+import search_index
 import shell as S
 from gate import PUBLISHABLE_SOURCES
 
@@ -147,6 +148,14 @@ def main():
     p_meth = P.build_methodology_to(len(rows), published_total, len(eligible),
                                     ROOT / "methodology.html", indexable=a.index)
     written.append(p_meth)
+
+    # Static search index — built from `eligible`, the same set that just
+    # produced the pages, so a result can never point at a URL that does not
+    # exist. Fetched by the browser only when somebody searches.
+    idx_bytes, counts = search_index.build(eligible, STATES,
+                                           SITE / "assets" / "courts-search-index.json")
+    print(f"  search index: {counts['st']} states, {counts['ci']} cities, "
+          f"{counts['co']} courts, {idx_bytes / 1024:,.0f} KB raw")
 
     # ---- sitemap ----------------------------------------------------------
     # Only what is indexable goes in. Court detail pages are noindex, so listing
