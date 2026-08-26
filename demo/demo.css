@@ -906,3 +906,14 @@ body.tour-on .demo-tag{ display:none; }
 @media (prefers-reduced-motion: reduce){
     .tour-intro{ backdrop-filter:none; }
 }
+
+/* The demo had no skip link: its first tab stop was the "picklecue.com" back
+   link, so a keyboard user tabbed out of the page before reaching it. */
+.skip-link{
+  position:absolute; left:-9999px; top:0; z-index:100;
+  background:var(--bg2,#0f1418); color:var(--t1,#fff);
+  padding:12px 18px; border-radius:0 0 10px 0; font:600 15px/1 var(--f,system-ui);
+  text-decoration:none;
+}
+.skip-link:focus{ left:0; outline:2px solid var(--lime); outline-offset:2px; }
+main:focus{ outline:none; }

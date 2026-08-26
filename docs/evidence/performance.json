@@ -1,20 +1,20 @@
 {
-  "generated": "2026-08-26T02:21:55.981Z",
+  "generated": "2026-08-26T03:39:33.600Z",
   "pages": [
     {
       "path": "/",
       "viewport": "390",
       "before": 2209,
-      "after": 434,
+      "after": 435,
       "deltaPct": -80,
       "after_detail": {
         "path": "/",
         "viewport": "390",
         "status": 200,
-        "kb": 434,
+        "kb": 435,
         "requests": 21,
         "byType": {
-          "document": 109423,
+          "document": 110484,
           "image": 234508,
           "font": 61244,
           "stylesheet": 18799,
@@ -23,7 +23,7 @@
         },
         "heaviest": [
           {
-            "bytes": 109423,
+            "bytes": 110484,
             "url": "/",
             "type": "document"
           },
@@ -63,16 +63,16 @@
       "path": "/",
       "viewport": "1440",
       "before": 2343,
-      "after": 460,
+      "after": 461,
       "deltaPct": -80,
       "after_detail": {
         "path": "/",
         "viewport": "1440",
         "status": 200,
-        "kb": 460,
+        "kb": 461,
         "requests": 22,
         "byType": {
-          "document": 109423,
+          "document": 110484,
           "image": 260860,
           "font": 61244,
           "stylesheet": 18799,
@@ -81,7 +81,7 @@
         },
         "heaviest": [
           {
-            "bytes": 109423,
+            "bytes": 110484,
             "url": "/",
             "type": "document"
           },
@@ -712,7 +712,7 @@
         "byType": {
           "image": 117960,
           "font": 61244,
-          "stylesheet": 66752,
+          "stylesheet": 66978,
           "document": 16453,
           "script": 39896,
           "other": 1608
@@ -744,7 +744,7 @@
             "type": "image"
           },
           {
-            "bytes": 25939,
+            "bytes": 26165,
             "url": "/assets/courts.css",
             "type": "stylesheet"
           }
@@ -770,7 +770,7 @@
         "byType": {
           "image": 117960,
           "font": 61244,
-          "stylesheet": 66752,
+          "stylesheet": 66978,
           "document": 16453,
           "script": 39896,
           "other": 1608
@@ -802,7 +802,7 @@
             "type": "image"
           },
           {
-            "bytes": 25939,
+            "bytes": 26165,
             "url": "/assets/courts.css",
             "type": "stylesheet"
           }
@@ -829,7 +829,7 @@
           "document": 70230,
           "image": 68776,
           "font": 29904,
-          "stylesheet": 66752,
+          "stylesheet": 66978,
           "script": 29195,
           "other": 1608
         },
@@ -855,7 +855,7 @@
             "type": "image"
           },
           {
-            "bytes": 25939,
+            "bytes": 26165,
             "url": "/assets/courts.css",
             "type": "stylesheet"
           },
@@ -887,7 +887,7 @@
           "document": 70230,
           "image": 68776,
           "font": 29904,
-          "stylesheet": 66752,
+          "stylesheet": 66978,
           "script": 29195,
           "other": 1608
         },
@@ -913,7 +913,7 @@
             "type": "image"
           },
           {
-            "bytes": 25939,
+            "bytes": 26165,
             "url": "/assets/courts.css",
             "type": "stylesheet"
           },
@@ -945,7 +945,7 @@
           "image": 68776,
           "font": 29904,
           "document": 28857,
-          "stylesheet": 66752,
+          "stylesheet": 66978,
           "script": 29195,
           "other": 1608
         },
@@ -971,7 +971,7 @@
             "type": "image"
           },
           {
-            "bytes": 25939,
+            "bytes": 26165,
             "url": "/assets/courts.css",
             "type": "stylesheet"
           },
@@ -1003,7 +1003,7 @@
           "image": 68776,
           "font": 29904,
           "document": 28857,
-          "stylesheet": 66752,
+          "stylesheet": 66978,
           "script": 29195,
           "other": 1608
         },
@@ -1029,7 +1029,7 @@
             "type": "image"
           },
           {
-            "bytes": 25939,
+            "bytes": 26165,
             "url": "/assets/courts.css",
             "type": "stylesheet"
           },
@@ -1165,17 +1165,17 @@
       "path": "/demo/",
       "viewport": "390",
       "before": 686,
-      "after": 453,
+      "after": 455,
       "deltaPct": -34,
       "after_detail": {
         "path": "/demo/",
         "viewport": "390",
         "status": 200,
-        "kb": 453,
+        "kb": 455,
         "requests": 21,
         "byType": {
-          "document": 54353,
-          "stylesheet": 56199,
+          "document": 54910,
+          "stylesheet": 57306,
           "image": 293905,
           "font": 29904,
           "script": 27990,
@@ -1183,12 +1183,12 @@
         },
         "heaviest": [
           {
-            "bytes": 54353,
+            "bytes": 54910,
             "url": "/demo/",
             "type": "document"
           },
           {
-            "bytes": 37400,
+            "bytes": 38507,
             "url": "/demo/demo.css",
             "type": "stylesheet"
           },
@@ -1223,17 +1223,17 @@
       "path": "/demo/",
       "viewport": "1440",
       "before": 686,
-      "after": 453,
+      "after": 455,
       "deltaPct": -34,
       "after_detail": {
         "path": "/demo/",
         "viewport": "1440",
         "status": 200,
-        "kb": 453,
+        "kb": 455,
         "requests": 21,
         "byType": {
-          "document": 54353,
-          "stylesheet": 56199,
+          "document": 54910,
+          "stylesheet": 57306,
           "image": 293905,
           "font": 29904,
           "script": 27990,
@@ -1241,12 +1241,12 @@
         },
         "heaviest": [
           {
-            "bytes": 54353,
+            "bytes": 54910,
             "url": "/demo/",
             "type": "document"
           },
           {
-            "bytes": 37400,
+            "bytes": 38507,
             "url": "/demo/demo.css",
             "type": "stylesheet"
           },
