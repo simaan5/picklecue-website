@@ -56,10 +56,15 @@ await withSite(async ({ origin }) => {
       const page = await ctx.newPage();
       const cdp = rate ? await ctx.newCDPSession(page) : null;
       if (cdp) await cdp.send('Emulation.setCPUThrottlingRate', { rate });
-      await page.addInitScript(`window.__vitals = ${collect.toString()}()`);
       const r = await page.goto(origin + path, { waitUntil: 'load', timeout: 60000 }).catch(() => null);
       if (!r || r.status() !== 200) { await ctx.close(); continue; }
-      const v = await page.evaluate(() => window.__vitals);
+      /* Evaluated AFTER load with buffered observers, not injected before it.
+         An init-script version read `window.__vitals` as a Promise that had
+         never been invoked (a missing pair of parentheses around the arrow
+         function) and reported undefined for every page. buffered:true replays
+         the entries that occurred before the observer existed, so nothing is
+         lost by starting late. */
+      const v = await page.evaluate(collect);
       rows.push({
         profile, page: label,
         LCP: Math.round(v.lcp), CLS: +v.cls.toFixed(3), TBT: Math.round(v.tbt),

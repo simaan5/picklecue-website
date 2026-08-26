@@ -28,15 +28,18 @@ import { TEMPLATES } from './templates.mjs';
 /* Read the live policy rather than restating it — a copy in this file is a copy
    that goes stale the first time somebody edits _headers. */
 const headersFile = readFileSync(join(ROOT, '_headers'), 'utf8');
-const m = headersFile.match(/Content-Security-Policy-Report-Only:\s*(.+)/);
-if (!m) { console.error('No Content-Security-Policy-Report-Only found in _headers.'); process.exit(2); }
+/* Works whether the policy is enforcing or Report-Only — the point of this
+   check is to enforce it here regardless of how it ships. */
+const m = headersFile.match(/^\s*Content-Security-Policy(?:-Report-Only)?:\s*(.+)$/m);
+if (!m) { console.error('No Content-Security-Policy found in _headers.'); process.exit(2); }
 const POLICY = m[1].trim();
+const MODE = headersFile.includes('Content-Security-Policy-Report-Only:') ? 'Report-Only' : 'ENFORCING';
 
 const STRICT = process.argv.includes('--strict');
 const variants = [['as written in _headers', POLICY]];
 if (STRICT) variants.push(["without 'unsafe-inline'", POLICY.replace(/ 'unsafe-inline'/g, '')]);
 
-console.log('\n  Policy under test:\n');
+console.log(`\n  Policy under test (ships as ${MODE}):\n`);
 for (const d of POLICY.split(';')) console.log('     ' + d.trim());
 
 const found = [];
