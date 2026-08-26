@@ -22,6 +22,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import pages as P
+import search_index
 import shell as S
 from gate import PUBLISHABLE_SOURCES
 
@@ -143,15 +144,24 @@ def main():
                                  len(eligible), ROOT / "index.html",
                                  indexable=a.index, us=False))
 
-    p_meth = P.build_methodology_to(len(rows), len(eligible),
+    published_total = sum(c[1] for c in state_cards)
+    p_meth = P.build_methodology_to(len(rows), published_total, len(eligible),
                                     ROOT / "methodology.html", indexable=a.index)
     written.append(p_meth)
+
+    # Static search index — built from `eligible`, the same set that just
+    # produced the pages, so a result can never point at a URL that does not
+    # exist. Fetched by the browser only when somebody searches.
+    idx_bytes, counts = search_index.build(eligible, STATES,
+                                           SITE / "assets" / "courts-search-index.json")
+    print(f"  search index: {counts['st']} states, {counts['ci']} cities, "
+          f"{counts['co']} courts, {idx_bytes / 1024:,.0f} KB raw")
 
     # ---- sitemap ----------------------------------------------------------
     # Only what is indexable goes in. Court detail pages are noindex, so listing
     # them would ask Google to crawl 2,149 pages it is told to ignore.
     if a.index:
-        urls = ["/courts", "/courts/us", "/courts/methodology"]
+        urls = ["/courts/", "/courts/us", "/courts/methodology"]
         urls += [f"/courts/us/{S.slugify(STATES[st])}" for st in sorted(by_state)]
         urls += [f"/courts/us/{S.slugify(STATES[st])}/{S.slugify(ct)}"
                  for (st, ct) in sorted(eligible)]

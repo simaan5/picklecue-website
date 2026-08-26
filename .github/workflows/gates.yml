@@ -1,0 +1,111 @@
+name: Site gates
+
+# The court-page publication gate already runs inside rebuild-courts.yml, but
+# it only guards generated pages and only on the weekly rebuild. Everything a
+# human edits by hand — the homepage, the demo, the event page — had no gate at
+# all, which is how "over 22,000 courts", "26,000+ courts with reviews" and
+# "3,443 courts" all shipped at the same time.
+#
+# This runs on every push and every PR, so a claim cannot drift silently again.
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  claims:
+    name: Claims, canonicals and accessibility basics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Claim gate
+        run: node tools/gate-claims.mjs
+
+      - name: Search index integrity
+        # Every court-search result must be a real page. Rebuilds each path
+        # the way the client does and checks the file exists, and caps the
+        # index so a lazy 58 KB fetch cannot quietly become half a megabyte.
+        run: node tools/gate-search-index.mjs
+
+      - name: Event freshness (advisory)
+        # Staleness warns here and fails in deploy.yml. A development PR going
+        # red overnight because a verification timestamp aged teaches people to
+        # ignore the gate. Wrongness — a finished event still reading as
+        # upcoming, an unobserved price, a sold-out claim — still fails here.
+        run: node tools/gate-events.mjs
+
+      - name: Event pages must be built from data/events.json
+        # The builder is deterministic and idempotent, so "the working tree
+        # differs from what the builder would write" means exactly one thing:
+        # somebody hand-edited a marked region, or the clock moved the event
+        # into a new lifecycle state. Both need the same one-line fix.
+        run: node tools/build-event.mjs --all --check
+
+      - name: One analytics owner
+        # assets/acquire.js owns window.track and the single [data-track]
+        # listener. community.html and the event page each had their own,
+        # pushing a GTM-shaped object into a gtag.js dataLayer — 0 GA4 events
+        # per click, twice over, on the pages whose whole job is conversion.
+        run: node tools/gate-analytics.mjs
+
+      - name: Structured data
+        # JSON-LD is the part of a page nobody looks at: a trailing comma or a
+        # relative image URL costs the rich result with no visual symptom and
+        # no console error. Parses every block and holds it to Google's
+        # required properties per type.
+        run: node tools/gate-schema.mjs --all
+
+      - name: CSP covers every external host
+        # /live, /organizer, /scorekeeper, /checkin and /e loaded Supabase from
+        # cdn.jsdelivr.net, which script-src has never allowed. Report-Only
+        # meant nothing broke and nothing complained; enforcing it would have
+        # taken all five down at once. Caught statically now, on every push.
+        run: node tools/gate-csp-hosts.mjs
+
+      - name: Sitemap must not list a redirecting URL
+        run: |
+          set -e
+          # Cloudflare Pages serves /players and 308s /players.html to it.
+          # Listing the .html form asks Google to crawl a permanent redirect.
+          if grep -q '\.html</loc>' sitemap.xml; then
+            echo "SITEMAP GATE: a .html URL is listed; those 308-redirect."
+            grep -n '\.html</loc>' sitemap.xml
+            exit 1
+          fi
+          echo "Sitemap clean: $(grep -c '<loc>' sitemap.xml) URLs, none with .html"
+
+      - name: No internal link may point at a redirecting path
+        run: |
+          set -e
+          HITS=$(grep -rhoE 'href="/[a-z0-9-]+\.html' --include='*.html' \
+                   --exclude-dir=node_modules . | sort -u || true)
+          if [ -n "$HITS" ]; then
+            echo "LINK GATE: internal links target the redirecting .html form:"
+            echo "$HITS"
+            exit 1
+          fi
+          echo "Internal links clean."
+
+      - name: Reveal blocks must not depend on one script
+        run: |
+          set -e
+          # html.js hides every .reveal. Only site-v2.js removes it again. If
+          # that file ever fails to load, the page is blank below the hero
+          # unless the inline watchdog is present on the same page.
+          for f in $(grep -rl "classList.add('js')" --include='*.html' \
+                       --exclude-dir=node_modules .); do
+            if ! grep -q '__pcShell' "$f"; then
+              echo "REVEAL GATE: $f hides .reveal blocks with no watchdog."
+              exit 1
+            fi
+          done
+          echo "Every page that hides reveals also carries the watchdog."

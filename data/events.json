@@ -1,0 +1,175 @@
+{
+  "_readme": [
+    "State for every community event the site promotes, and WHEN that state was",
+    "last checked against the organizer's own page.",
+    "",
+    "This file exists because the site advertised $60/$45 early-bird pricing for",
+    "fifteen days after the early-bird tier disappeared from the organizer's page,",
+    "four days before the event. Nothing on the site knew the claim had an expiry.",
+    "",
+    "tools/gate-events.mjs reads this. It FAILS the build when an event inside",
+    "seven days has not been re-verified within 24 hours, and when an event that",
+    "has finished still carries registration language. Bump statusVerifiedAt only",
+    "after actually re-fetching the organizer's page — a timestamp typed without a",
+    "fetch is worse than no timestamp."
+  ],
+  "events": [
+    {
+      "slug": "pickle-for-a-purpose",
+      "page": "events/pickle-for-a-purpose/index.html",
+      "name": "Pickle for a Purpose",
+      "organizer": "Echelon LA Metro — The Salvation Army",
+      "organizerShort": "Echelon LA Metro",
+      "organizerUrl": "https://www.instagram.com/echelonlosangeles/",
+      "description": "Echelon LA Metro's first annual charity pickleball tournament. Mixed doubles, beginner through advanced, organized in support of The Salvation Army's Los Angeles-area programs.",
+      "timeZone": "America/Los_Angeles",
+      "goPath": "/go/pickle-for-a-purpose",
+      "location": {
+        "name": "Peninsula Racquet Club",
+        "streetAddress": "30850 Hawthorne Blvd",
+        "addressLocality": "Rancho Palos Verdes",
+        "addressRegion": "CA",
+        "addressCountry": "US",
+        "mapsQuery": "Peninsula Racquet Club, 30850 Hawthorne Blvd, Rancho Palos Verdes, CA"
+      },
+      "images": [
+        "https://www.picklecue.com/images/p4p-hero-golden.jpg",
+        "https://www.picklecue.com/images/social/pickle-for-a-purpose-s1.png"
+      ],
+      "sourceUrl": "https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563",
+      "startsAt": "2026-08-29T17:00:00-07:00",
+      "endsAt": "2026-08-29T20:00:00-07:00",
+      "registrationState": "unavailable",
+      "statusVerifiedAt": "2026-08-26T04:32:55Z",
+      "verifiedBy": "curl of sourceUrl; SportsEvent JSON-LD parsed from the response",
+      "observed": {
+        "eventStatus": "EventScheduled",
+        "offers": [
+          {
+            "name": "General Admission",
+            "price": "75.00",
+            "availability": "SoldOut"
+          },
+          {
+            "name": "Player Registration",
+            "price": "100.00",
+            "availability": "SoldOut"
+          },
+          {
+            "name": "Tabling Sponsor",
+            "price": "750.00",
+            "availability": "SoldOut"
+          },
+          {
+            "name": "1 Raffle Ticket",
+            "price": "5.00",
+            "availability": "SoldOut"
+          },
+          {
+            "name": "4 Raffle Tickets",
+            "price": "20.00",
+            "availability": "SoldOut"
+          },
+          {
+            "name": "15 Raffle Tickets",
+            "price": "60.00",
+            "availability": "SoldOut"
+          },
+          {
+            "name": "50 Raffle Tickets",
+            "price": "150.00",
+            "availability": "SoldOut"
+          }
+        ],
+        "note": [
+          "Every offer reports SoldOut, down to a single $5 raffle ticket. That",
+          "reads like a closed ticket widget rather than a literal sell-out, and",
+          "only the organizer can tell those apart — so the site says",
+          "'registration is currently unavailable on the organizer's site' and",
+          "links out. It does NOT say sold out.",
+          "",
+          "The $60/$45 early-bird tiers that were live on 2026-08-08 no longer",
+          "appear on their page in any form. Do not restore them."
+        ]
+      },
+      "afterTheEvent": {
+        "requirement": "ended",
+        "recapOptional": true,
+        "note": [
+          "Once endsAt passes, 'registration is currently unavailable' becomes a",
+          "different kind of wrong - it implies the event is still ahead. The page",
+          "moves to the 'ended' state: past tense, no registration CTA, no prices",
+          "presented as purchasable, no Offer nodes in the schema.",
+          "",
+          "What is NOT required is a recap. Photos, results and a write-up belong to",
+          "the organizer, and a gate that stays red until one exists is a gate that",
+          "pressures somebody into inventing one. 'This event has taken place' is",
+          "complete and true on its own. Add a recap if and when there is real",
+          "material for it.",
+          "",
+          "Three mechanisms, deliberately layered:",
+          "  1. tools/build-event.mjs writes the ended state into the page, schema",
+          "     and every CTA from this record. One command, no hand-editing.",
+          "  2. An inline script in the page swaps to an ended banner the moment",
+          "     endsAt passes, covering the hours between the event and the next",
+          "     deploy. A seam cover, never the source of truth.",
+          "  3. tools/gate-events.mjs fails the build while forward-looking copy",
+          "     survives after endsAt - and says which command fixes it."
+        ]
+      },
+      "lifecycle": {
+        "_note": [
+          "Which states exist, and what each one is allowed to assert. The page",
+          "renders exactly one of them; tools/build-event.mjs picks it from",
+          "startsAt, endsAt and registrationState, then writes the status line, the",
+          "CTA labels, the pricing framing and the whole JSON-LD block from this",
+          "record - so those four can no longer disagree with each other.",
+          "",
+          "The wording for each state is in tools/build-event.mjs (COPY). Facts live",
+          "here; voice lives there."
+        ],
+        "upcoming-open": {
+          "purchasable": true,
+          "offerAvailability": "https://schema.org/InStock",
+          "sticky": true
+        },
+        "upcoming-unavailable": {
+          "purchasable": false,
+          "offerAvailability": null,
+          "sticky": true
+        },
+        "event-day": {
+          "purchasable": false,
+          "offerAvailability": null,
+          "sticky": true
+        },
+        "ended": {
+          "purchasable": false,
+          "offerAvailability": null,
+          "sticky": false
+        }
+      },
+      "ticketTiers": [
+        {
+          "label": "Players",
+          "offerName": "Player Registration",
+          "unit": "per player"
+        },
+        {
+          "label": "General admission",
+          "offerName": "General Admission",
+          "unit": "per person"
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "reverifyWithinHours": 24,
+    "windowDays": 7,
+    "note": [
+      "Inside seven days of an event, a stale claim is expensive: someone may be",
+      "about to drive there. Outside that window the gate is quiet — it does not",
+      "nag about an event three months away."
+    ]
+  }
+}

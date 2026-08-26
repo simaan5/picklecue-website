@@ -1,0 +1,1315 @@
+{
+  "generated": "2026-08-26T03:39:33.600Z",
+  "pages": [
+    {
+      "path": "/",
+      "viewport": "390",
+      "before": 2209,
+      "after": 435,
+      "deltaPct": -80,
+      "after_detail": {
+        "path": "/",
+        "viewport": "390",
+        "status": 200,
+        "kb": 435,
+        "requests": 21,
+        "byType": {
+          "document": 110484,
+          "image": 234508,
+          "font": 61244,
+          "stylesheet": 18799,
+          "script": 19272,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 110484,
+            "url": "/",
+            "type": "document"
+          },
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 44042,
+            "url": "/images/app/bracket-champion.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/",
+      "viewport": "1440",
+      "before": 2343,
+      "after": 461,
+      "deltaPct": -80,
+      "after_detail": {
+        "path": "/",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 461,
+        "requests": 22,
+        "byType": {
+          "document": 110484,
+          "image": 260860,
+          "font": 61244,
+          "stylesheet": 18799,
+          "script": 19272,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 110484,
+            "url": "/",
+            "type": "document"
+          },
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 44042,
+            "url": "/images/app/bracket-champion.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/players",
+      "viewport": "390",
+      "before": 402,
+      "after": 257,
+      "deltaPct": -36,
+      "after_detail": {
+        "path": "/players",
+        "viewport": "390",
+        "status": 200,
+        "kb": 257,
+        "requests": 14,
+        "byType": {
+          "image": 117960,
+          "font": 61244,
+          "stylesheet": 40813,
+          "document": 18979,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/players",
+      "viewport": "1440",
+      "before": 440,
+      "after": 257,
+      "deltaPct": -42,
+      "after_detail": {
+        "path": "/players",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 257,
+        "requests": 14,
+        "byType": {
+          "image": 117960,
+          "font": 61244,
+          "stylesheet": 40813,
+          "document": 18979,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/organizers",
+      "viewport": "390",
+      "before": 380,
+      "after": 210,
+      "deltaPct": -45,
+      "after_detail": {
+        "path": "/organizers",
+        "viewport": "390",
+        "status": 200,
+        "kb": 210,
+        "requests": 13,
+        "byType": {
+          "font": 61244,
+          "image": 68776,
+          "stylesheet": 40813,
+          "document": 19731,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 19731,
+            "url": "/organizers",
+            "type": "document"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/organizers",
+      "viewport": "1440",
+      "before": 422,
+      "after": 248,
+      "deltaPct": -41,
+      "after_detail": {
+        "path": "/organizers",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 248,
+        "requests": 14,
+        "byType": {
+          "image": 107556,
+          "font": 61244,
+          "stylesheet": 40813,
+          "document": 19731,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 38780,
+            "url": "/images/app/organizer-center.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/clubs",
+      "viewport": "390",
+      "before": 373,
+      "after": 253,
+      "deltaPct": -32,
+      "after_detail": {
+        "path": "/clubs",
+        "viewport": "390",
+        "status": 200,
+        "kb": 253,
+        "requests": 14,
+        "byType": {
+          "image": 117960,
+          "font": 61244,
+          "stylesheet": 40813,
+          "document": 14910,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/clubs",
+      "viewport": "1440",
+      "before": 409,
+      "after": 253,
+      "deltaPct": -38,
+      "after_detail": {
+        "path": "/clubs",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 253,
+        "requests": 14,
+        "byType": {
+          "image": 117960,
+          "font": 61244,
+          "stylesheet": 40813,
+          "document": 14910,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/community",
+      "viewport": "390",
+      "before": 429,
+      "after": 227,
+      "deltaPct": -47,
+      "after_detail": {
+        "path": "/community",
+        "viewport": "390",
+        "status": 200,
+        "kb": 227,
+        "requests": 15,
+        "byType": {
+          "font": 61244,
+          "image": 77320,
+          "document": 19606,
+          "stylesheet": 51851,
+          "script": 20477,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 19606,
+            "url": "/community",
+            "type": "document"
+          },
+          {
+            "bytes": 18857,
+            "url": "/assets/site.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/community",
+      "viewport": "1440",
+      "before": 429,
+      "after": 227,
+      "deltaPct": -47,
+      "after_detail": {
+        "path": "/community",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 227,
+        "requests": 15,
+        "byType": {
+          "font": 61244,
+          "image": 77320,
+          "document": 19606,
+          "stylesheet": 51851,
+          "script": 20477,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 19606,
+            "url": "/community",
+            "type": "document"
+          },
+          {
+            "bytes": 18857,
+            "url": "/assets/site.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/live-scores",
+      "viewport": "390",
+      "before": 346,
+      "after": 220,
+      "deltaPct": -36,
+      "after_detail": {
+        "path": "/live-scores",
+        "viewport": "390",
+        "status": 200,
+        "kb": 220,
+        "requests": 14,
+        "byType": {
+          "font": 61244,
+          "image": 78378,
+          "stylesheet": 40813,
+          "document": 20035,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 20035,
+            "url": "/live-scores",
+            "type": "document"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/live-scores",
+      "viewport": "1440",
+      "before": 346,
+      "after": 255,
+      "deltaPct": -26,
+      "after_detail": {
+        "path": "/live-scores",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 255,
+        "requests": 18,
+        "byType": {
+          "font": 61244,
+          "image": 113942,
+          "stylesheet": 40813,
+          "document": 20035,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 20035,
+            "url": "/live-scores",
+            "type": "document"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/courts/",
+      "viewport": "390",
+      "before": 323,
+      "after": 297,
+      "deltaPct": -8,
+      "after_detail": {
+        "path": "/courts/",
+        "viewport": "390",
+        "status": 200,
+        "kb": 297,
+        "requests": 17,
+        "byType": {
+          "image": 117960,
+          "font": 61244,
+          "stylesheet": 66978,
+          "document": 16453,
+          "script": 39896,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 26165,
+            "url": "/assets/courts.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/courts/",
+      "viewport": "1440",
+      "before": 323,
+      "after": 297,
+      "deltaPct": -8,
+      "after_detail": {
+        "path": "/courts/",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 297,
+        "requests": 17,
+        "byType": {
+          "image": 117960,
+          "font": 61244,
+          "stylesheet": 66978,
+          "document": 16453,
+          "script": 39896,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 26165,
+            "url": "/assets/courts.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/courts/us/california",
+      "viewport": "390",
+      "before": 1366,
+      "after": 260,
+      "deltaPct": -81,
+      "after_detail": {
+        "path": "/courts/us/california",
+        "viewport": "390",
+        "status": 200,
+        "kb": 260,
+        "requests": 14,
+        "byType": {
+          "document": 70230,
+          "image": 68776,
+          "font": 29904,
+          "stylesheet": 66978,
+          "script": 29195,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 70230,
+            "url": "/courts/us/california",
+            "type": "document"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 26165,
+            "url": "/assets/courts.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/courts/us/california",
+      "viewport": "1440",
+      "before": 1366,
+      "after": 260,
+      "deltaPct": -81,
+      "after_detail": {
+        "path": "/courts/us/california",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 260,
+        "requests": 14,
+        "byType": {
+          "document": 70230,
+          "image": 68776,
+          "font": 29904,
+          "stylesheet": 66978,
+          "script": 29195,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 70230,
+            "url": "/courts/us/california",
+            "type": "document"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 26165,
+            "url": "/assets/courts.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/courts/us/texas/austin",
+      "viewport": "390",
+      "before": 1325,
+      "after": 220,
+      "deltaPct": -83,
+      "after_detail": {
+        "path": "/courts/us/texas/austin",
+        "viewport": "390",
+        "status": 200,
+        "kb": 220,
+        "requests": 14,
+        "byType": {
+          "image": 68776,
+          "font": 29904,
+          "document": 28857,
+          "stylesheet": 66978,
+          "script": 29195,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28857,
+            "url": "/courts/us/texas/austin",
+            "type": "document"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 26165,
+            "url": "/assets/courts.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/courts/us/texas/austin",
+      "viewport": "1440",
+      "before": 1325,
+      "after": 220,
+      "deltaPct": -83,
+      "after_detail": {
+        "path": "/courts/us/texas/austin",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 220,
+        "requests": 14,
+        "byType": {
+          "image": 68776,
+          "font": 29904,
+          "document": 28857,
+          "stylesheet": 66978,
+          "script": 29195,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28857,
+            "url": "/courts/us/texas/austin",
+            "type": "document"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 26165,
+            "url": "/assets/courts.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 22014,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/events/pickle-for-a-purpose/",
+      "viewport": "390",
+      "before": 381,
+      "after": 229,
+      "deltaPct": -40,
+      "after_detail": {
+        "path": "/events/pickle-for-a-purpose/",
+        "viewport": "390",
+        "status": 200,
+        "kb": 229,
+        "requests": 14,
+        "byType": {
+          "document": 39880,
+          "font": 61244,
+          "image": 73547,
+          "stylesheet": 37656,
+          "script": 20477,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 39880,
+            "url": "/events/pickle-for-a-purpose/",
+            "type": "document"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 18857,
+            "url": "/assets/site.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/events/pickle-for-a-purpose/",
+      "viewport": "1440",
+      "before": 381,
+      "after": 229,
+      "deltaPct": -40,
+      "after_detail": {
+        "path": "/events/pickle-for-a-purpose/",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 229,
+        "requests": 14,
+        "byType": {
+          "document": 39880,
+          "font": 61244,
+          "image": 73547,
+          "stylesheet": 37656,
+          "script": 20477,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 39880,
+            "url": "/events/pickle-for-a-purpose/",
+            "type": "document"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 18857,
+            "url": "/assets/site.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/demo/",
+      "viewport": "390",
+      "before": 686,
+      "after": 455,
+      "deltaPct": -34,
+      "after_detail": {
+        "path": "/demo/",
+        "viewport": "390",
+        "status": 200,
+        "kb": 455,
+        "requests": 21,
+        "byType": {
+          "document": 54910,
+          "stylesheet": 57306,
+          "image": 293905,
+          "font": 29904,
+          "script": 27990,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 54910,
+            "url": "/demo/",
+            "type": "document"
+          },
+          {
+            "bytes": 38507,
+            "url": "/demo/demo.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 32538,
+            "url": "/images/avatars/emerald_court_captain.png",
+            "type": "image"
+          },
+          {
+            "bytes": 29935,
+            "url": "/images/avatars/coral_court_queen.png",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 29643,
+            "url": "/images/avatars/lavender_mentor.png",
+            "type": "image"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/demo/",
+      "viewport": "1440",
+      "before": 686,
+      "after": 455,
+      "deltaPct": -34,
+      "after_detail": {
+        "path": "/demo/",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 455,
+        "requests": 21,
+        "byType": {
+          "document": 54910,
+          "stylesheet": 57306,
+          "image": 293905,
+          "font": 29904,
+          "script": 27990,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 54910,
+            "url": "/demo/",
+            "type": "document"
+          },
+          {
+            "bytes": 38507,
+            "url": "/demo/demo.css",
+            "type": "stylesheet"
+          },
+          {
+            "bytes": 32538,
+            "url": "/images/avatars/emerald_court_captain.png",
+            "type": "image"
+          },
+          {
+            "bytes": 29935,
+            "url": "/images/avatars/coral_court_queen.png",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 29643,
+            "url": "/images/avatars/lavender_mentor.png",
+            "type": "image"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/courts-search-index.json",
+      "rawKB": 312.3,
+      "gzipKB": 71,
+      "brotliKB": 58.3
+    },
+    {
+      "path": "assets/acquire.js",
+      "rawKB": 10.7,
+      "gzipKB": 3.7,
+      "brotliKB": 3.1
+    },
+    {
+      "path": "assets/courtsearch.js",
+      "rawKB": 10.5,
+      "gzipKB": 3.8,
+      "brotliKB": 3.1
+    },
+    {
+      "path": "assets/journey.js",
+      "rawKB": 3.9,
+      "gzipKB": 1.6,
+      "brotliKB": 1.3
+    },
+    {
+      "path": "assets/site-v2.css",
+      "rawKB": 21.5,
+      "gzipKB": 6.1,
+      "brotliKB": 5.2
+    }
+  ],
+  "search": null,
+  "throttle": null
+}

@@ -79,13 +79,23 @@ def court_count(**filters):
     return int(cr.split("/")[-1]) if "/" in cr else 0
 
 
-def head(title, desc, canonical, extra_ld=None, indexable=False):
+def head(title, desc, canonical, extra_ld=None, indexable=False, search=False):
+    EEA = "['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']"
+    search_js = ('<script defer src="/assets/courtsearch.js?v=20260826a"></script>'
+                 if search else "")
     robots = "" if indexable else '<meta name="robots" content="noindex">'
     ld = ""
     if extra_ld:
         ld = f'<script type="application/ld+json">{json.dumps(extra_ld)}</script>'
     return f"""<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-itunes-app" content="app-id=6757326631">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}
+gtag('consent','default',{{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'}});
+gtag('consent','default',{{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',region:{EEA}}});
+gtag('js',new Date());gtag('config','G-XCV417L0J8');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XCV417L0J8"></script>
+<script defer src="/assets/consent.js"></script>
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 {robots}
@@ -94,10 +104,13 @@ def head(title, desc, canonical, extra_ld=None, indexable=False):
 <meta name="theme-color" content="#F7F7F2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
 <link rel="stylesheet" href="/fonts.css">
-<link rel="stylesheet" href="/assets/site-v2.css?v=20260824a">
-<link rel="stylesheet" href="/assets/courts.css?v=2">
-<script defer src="/assets/site-v2.js?v=20260822c"></script>
+<link rel="stylesheet" href="/assets/site-v2.css?v=20260826a">
+<link rel="stylesheet" href="/assets/courts.css?v=4">
+<link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
+<script defer src="/assets/site-v2.js?v=20260825a"></script>
 <script defer src="/assets/courtmap.js?v=1"></script>
+<script defer src="/assets/acquire.js?v=20260825a"></script>
+{search_js}
 <style>.site-menu[hidden],.lightbox[hidden]{{display:none !important}}</style>
 <script>(function(){{try{{var t=localStorage.getItem('pc_theme');
 var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -108,32 +121,55 @@ document.documentElement.setAttribute('data-theme',t||(d?'dark':'light'));}}catc
 MASTHEAD = """<a class="skip-link" href="#main">Skip to content</a>
 <header class="masthead" id="masthead"><div class="masthead-inner">
 <a class="brand" href="/" aria-label="PickleCue, home">
-<img class="brand-mark" src="/images/email/cuemark.png" alt="" width="42" height="42">
-<img class="brand-wordmark wm-light" src="/images/wordmark-on-light.png" alt="" width="1137" height="190">
-<img class="brand-wordmark wm-dark" src="/images/wordmark-on-dark.png" alt="" width="744" height="126"></a>
-<nav aria-label="Primary"><a href="/#product">Product</a><a href="/courts">Courts</a><a href="/players.html">Players</a>
-<a href="/organizers.html">Organizers</a><a href="/community.html">Community</a><a href="/demo/">Live demo</a></nav>
+<img class="brand-mark" src="/images/email/cuemark.webp" alt="" width="42" height="42">
+<img class="brand-wordmark wm-light" src="/images/wordmark-on-light.webp" alt="" width="790" height="133">
+<img class="brand-wordmark wm-dark" src="/images/wordmark-on-dark.webp" alt="" width="780" height="133"></a>
+<nav aria-label="Primary"><a href="/#product">Product</a><a href="/courts/">Courts</a><a href="/players">Players</a>
+<a href="/organizers">Organizers</a><a href="/clubs">Clubs</a><a href="/community">Community</a><a href="/demo/">Live demo</a></nav>
 <button class="theme-toggle" id="themeToggle" aria-label="Switch between light and dark mode">
 <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
 <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
-<a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
+<a class="btn btn-primary" data-track="app_store_click" data-placement="nav" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
 <button class="masthead-burger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
 <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><path d="M1 1h18M1 7h18M1 13h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
 </div></header>
 <div class="site-menu" id="siteMenu" hidden><button class="site-menu-close" aria-label="Close menu">&times;</button>
-<nav aria-label="Mobile"><a href="/#product">Product</a><a href="/courts">Courts</a><a href="/players.html">Players</a>
-<a href="/organizers.html">Organizers</a><a href="/clubs.html">Clubs</a><a href="/community.html">Community</a>
-<a href="/demo/">Live demo</a></nav><a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></div>"""
+<nav aria-label="Mobile"><a href="/#product">Product</a><a href="/courts/">Courts</a><a href="/players">Players</a>
+<a href="/organizers">Organizers</a><a href="/clubs">Clubs</a><a href="/community">Community</a>
+<a href="/demo/">Live demo</a></nav><a class="btn btn-primary" data-track="app_store_click" data-placement="nav_mobile" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></div>"""
 
 FOOTER = """<footer class="site-foot"><div class="foot-inner">
-<div class="foot-brand"><img src="/images/wordmark-on-dark.png" alt="PickleCue" width="744" height="126">
+<div class="foot-brand"><img src="/images/wordmark-on-dark.webp" alt="PickleCue" width="780" height="133">
 <p>All the pickleball. One elegant app.</p></div>
-<div class="foot-col"><h3>Product</h3><a href="/#product">Product</a><a href="/demo/">Live demo</a></div>
-<div class="foot-col"><h3>For you</h3><a href="/players.html">Players</a><a href="/organizers.html">Organizers</a><a href="/clubs.html">Clubs</a></div>
-<div class="foot-col"><h3>Courts</h3><a href="/courts">All courts</a><a href="/courts/methodology">How we count</a></div>
-<div class="foot-col"><h3>Legal</h3><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/licenses.html">Notices</a><a href="#cookie-preferences">Cookie preferences</a><a href="/support.html">Support</a></div>
+<div class="foot-col"><h3>Product</h3><a href="/#product">Product</a><a href="/live-scores">Follow live</a><a href="/demo/">Live demo</a></div>
+<div class="foot-col"><h3>For you</h3><a href="/players">Players</a><a href="/organizers">Organizers</a><a href="/clubs">Clubs</a></div>
+<div class="foot-col"><h3>Courts</h3><a href="/courts/">All courts</a><a href="/courts/methodology">How we count</a></div>
+<div class="foot-col"><h3>Legal</h3><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/licenses">Notices</a><a href="#cookie-preferences">Cookie preferences</a><a href="/support">Support</a></div>
 </div></footer>"""
 
+
+
+# Arriving from search at #court-<slug>. The browser already scrolls there
+# without any of this — that is the base behaviour and it is not allowed to
+# depend on the script. This only makes the arrival legible: it moves focus to
+# the row (so a keyboard and a screen reader land there too, not just the
+# viewport) and marks it briefly. Under reduced motion the mark is static.
+ANCHOR_ARRIVAL = """<script>
+(function(){
+  function land(){
+    var h = location.hash;
+    if (!h || h.indexOf('#court-') !== 0) return;
+    var el = document.getElementById(h.slice(1));
+    if (!el) return;
+    try { el.focus({ preventScroll: true }); } catch (e) {}
+    el.classList.add('court-landed');
+    setTimeout(function(){ el.classList.remove('court-landed'); }, 2600);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', land);
+  else land();
+  window.addEventListener('hashchange', land);
+})();
+</script>"""
 
 def attribution(extra=""):
     return (f'<p class="cattrib">{ODBL_ATTRIBUTION} Court details are community '
@@ -262,8 +298,8 @@ def map_chrome(count, noun="courts"):
 </div>"""
 
 
-def page(title, desc, canonical, body, extra_ld=None, indexable=False):
+def page(title, desc, canonical, body, extra_ld=None, indexable=False, search=False):
     return (f"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n"
-            f"{head(title, desc, canonical, extra_ld, indexable)}\n</head>\n<body>\n"
+            f"{head(title, desc, canonical, extra_ld, indexable, search)}\n</head>\n<body data-audience=\"courts\">\n"
             f"{MASTHEAD}\n<main id=\"main\"><div class=\"wrap\">\n{body}\n</div></main>\n"
-            f"{FOOTER}\n</body>\n</html>\n")
+            f"{FOOTER}\n{ANCHOR_ARRIVAL}\n</body>\n</html>\n")

@@ -92,7 +92,7 @@
         document.title = title + (eventName ? ' · ' + eventName : '') + ' · PickleCue';
 
         var s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+        s.src = '/assets/vendor/qrcode-generator-1.4.4.min.js';
         s.onload = function () {
             var qr = window.qrcode(0, 'M');
             qr.addData(url);

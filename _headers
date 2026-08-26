@@ -8,7 +8,28 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()
   Cross-Origin-Opener-Policy: same-origin
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; child-src 'self' blob:; img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://tiles.openfreemap.org; font-src 'self'; media-src 'self'; connect-src 'self' https://tiles.openfreemap.org https://uejmhtdfbqbotvbqvfja.supabase.co wss://uejmhtdfbqbotvbqvfja.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  # ENFORCING since Phase I. It ran Report-Only from launch until 2026-08-26,
+  # which meant nothing broke and nothing complained — including the fact that
+  # /live, /organizer, /scorekeeper, /checkin and /e were loading
+  # @supabase/supabase-js from cdn.jsdelivr.net, a host script-src has never
+  # allowed. Enforcing it that day would have taken down live scoring, the
+  # organizer console, scorekeeper mode and check-in at once, while every
+  # marketing page kept working and looked perfect. Those libraries are
+  # vendored now (assets/vendor/), so the policy and reality agree.
+  #
+  # Evidence before the flip: 32 pages (20 templates + 12 app-adjacent) loaded
+  # under this exact policy as ENFORCING, in Chromium and in WebKit, with zero
+  # securitypolicyviolation events. No eval or new Function anywhere in our
+  # scripts or the vendored ones. Re-run it with:
+  #     node tools/checks/csp.mjs
+  #
+  # tools/gate-csp-hosts.mjs runs on every push and fails the build if a page
+  # ever references an external host this policy does not cover.
+  #
+  # 'unsafe-inline' is still required by both script-src and style-src: 21
+  # inline onclick handlers and a large number of inline style attributes.
+  # Dropping it needs a nonce and a markup pass, and is NOT part of this change.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; child-src 'self' blob:; img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://tiles.openfreemap.org; font-src 'self'; media-src 'self'; connect-src 'self' https://tiles.openfreemap.org https://uejmhtdfbqbotvbqvfja.supabase.co wss://uejmhtdfbqbotvbqvfja.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
 # HTML must always revalidate. A stale HTML document pins the old ?v= query on
 # every stylesheet and script, which is how a shipped CSS fix can stay invisible
@@ -35,3 +56,12 @@
 
 /videos/*
   Cache-Control: public, max-age=2592000
+
+# Calendar files. The event page's "Add to calendar" only offers to add an
+# event if the response is text/calendar; served as octet-stream, iOS saves it
+# to Files and nothing happens. Short cache because the file is regenerated
+# whenever the event record is re-verified, and it is deleted once the event
+# has passed.
+/*.ics
+  Content-Type: text/calendar; charset=utf-8
+  Cache-Control: public, max-age=3600, must-revalidate

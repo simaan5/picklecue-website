@@ -13,6 +13,50 @@ jobs:
       deployments: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Deploy readiness, not development convenience. An event inside seven
+      # days whose registration state has not been re-checked in 24 hours does
+      # not reach production; inside 48 hours it certainly does not. The site
+      # advertised withdrawn early-bird pricing for fifteen days once already.
+      - name: Claim gate
+        run: node tools/gate-claims.mjs
+
+      - name: Search index integrity
+        # Every court-search result must be a real page. Rebuilds each path
+        # the way the client does and checks the file exists, and caps the
+        # index so a lazy 58 KB fetch cannot quietly become half a megabyte.
+        run: node tools/gate-search-index.mjs
+
+      - name: Event freshness (strict — blocks the deploy)
+        run: node tools/gate-events.mjs --strict
+
+      - name: Event pages must be built from data/events.json
+        run: node tools/build-event.mjs --all --check
+
+      - name: One analytics owner
+        # assets/acquire.js owns window.track and the single [data-track]
+        # listener. community.html and the event page each had their own,
+        # pushing a GTM-shaped object into a gtag.js dataLayer — 0 GA4 events
+        # per click, twice over, on the pages whose whole job is conversion.
+        run: node tools/gate-analytics.mjs
+
+      - name: Structured data
+        # JSON-LD is the part of a page nobody looks at: a trailing comma or a
+        # relative image URL costs the rich result with no visual symptom and
+        # no console error. Parses every block and holds it to Google's
+        # required properties per type.
+        run: node tools/gate-schema.mjs --all
+
+      - name: CSP covers every external host
+        # /live, /organizer, /scorekeeper, /checkin and /e loaded Supabase from
+        # cdn.jsdelivr.net, which script-src has never allowed. Report-Only
+        # meant nothing broke and nothing complained; enforcing it would have
+        # taken all five down at once. Caught statically now, on every push.
+        run: node tools/gate-csp-hosts.mjs
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:

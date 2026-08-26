@@ -24,17 +24,21 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-itunes-app" content="app-id=6757326631">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
   <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
-  <link rel="preload" href="/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/fonts.css">
   <link rel="stylesheet" href="/assets/site.css?v=20260812b">
   <script defer src="/assets/site.js"></script>
   <title>Pickle for a Purpose | PickleCue Community</title>
-  <meta name="description" content="Join Echelon LA Metro’s Pickle for a Purpose charity pickleball tournament on August 29 in Rancho Palos Verdes, supported through community promotion by PickleCue.">
+  <!-- EVENT:META -->
+  <meta name="description" content="Pickle for a Purpose: Echelon LA Metro’s charity pickleball tournament on August 29 in Rancho Palos Verdes, supported through community promotion by PickleCue.">
+  <meta property="og:description" content="Pickle for a Purpose: Echelon LA Metro’s charity pickleball tournament on August 29 in Rancho Palos Verdes, supported through community promotion by PickleCue.">
+  <meta name="twitter:description" content="Pickle for a Purpose: Echelon LA Metro’s charity pickleball tournament on August 29 in Rancho Palos Verdes, supported through community promotion by PickleCue.">
+  <!-- /EVENT:META -->
   <link rel="canonical" href="https://www.picklecue.com/events/pickle-for-a-purpose/">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=20260812b">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=20260812b">
@@ -42,16 +46,23 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.picklecue.com/events/pickle-for-a-purpose/">
   <meta property="og:title" content="Pickle for a Purpose · Charity Pickleball Tournament">
-  <meta property="og:description" content="Mixed doubles for every skill level. Saturday, August 29, 2026 at Peninsula Racquet Club. Organized by Echelon LA Metro in support of The Salvation Army's Los Angeles-area programs.">
   <meta property="og:image" content="https://www.picklecue.com/images/social/pickle-for-a-purpose-s1.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pickle for a Purpose · Charity Pickleball Tournament">
-  <meta name="twitter:description" content="Mixed doubles for every skill level. August 29, 2026 · Rancho Palos Verdes.">
   <meta name="twitter:image" content="https://www.picklecue.com/images/social/pickle-for-a-purpose-s1.png">
 
   <!-- Event structured data. Organizer is Echelon LA Metro — PickleCue is NOT the
-       organizer and must not be listed as one. Offers reflect only the early-bird
-       tiers published on the official registration page. -->
+       organizer and must not be listed as one.
+       Offers mirror the prices the organizer publishes, re-checked 2026-08-25
+       against the SportsEvent JSON-LD on give-sc.salvationarmy.org: Player
+       Registration $100, General Admission $75. The $60/$45 early-bird tiers
+       that used to be here no longer appear on their page at all.
+       `availability` is deliberately OMITTED. Their page currently marks every
+       offer — down to a single $5 raffle ticket — SoldOut, which reads like a
+       closed ticket widget rather than a literal sell-out. We can verify the
+       price; we cannot verify the stock, so we state one and link for the
+       other rather than assert something we would be guessing at. -->
+  <!-- EVENT:JSONLD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -75,28 +86,32 @@
     },
     "organizer": {
       "@type": "Organization",
-      "name": "Echelon LA Metro — The Salvation Army"
+      "name": "Echelon LA Metro — The Salvation Army",
+      "url": "https://www.instagram.com/echelonlosangeles/"
     },
+    "image": [
+      "https://www.picklecue.com/images/p4p-hero-golden.jpg",
+      "https://www.picklecue.com/images/social/pickle-for-a-purpose-s1.png"
+    ],
     "offers": [
       {
         "@type": "Offer",
-        "name": "Player Registration (Early Bird)",
-        "price": "60",
+        "name": "Player Registration",
+        "price": "100",
         "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
         "url": "https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563"
       },
       {
         "@type": "Offer",
-        "name": "General Admission (Early Bird)",
-        "price": "45",
+        "name": "General Admission",
+        "price": "75",
         "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
         "url": "https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563"
       }
     ]
   }
   </script>
+  <!-- /EVENT:JSONLD -->
 
   <!-- ======================================================================
        EVENT DATA — SINGLE SOURCE OF TRUTH (static site: update HERE first,
@@ -114,9 +129,18 @@
          registrationURL            /go/pickle-for-a-purpose  (302 -> official
                                     give-sc.salvationarmy.org page + UTM; the
                                     target lives in /_redirects)
-         playerEarlyBird / regular  $60 / $100
-         admissionEarlyBird / reg   $45 / $75
-         tentativeEarlyBirdDeadline Aug 10  (TENTATIVE - never render as firm)
+         playerRegistration         $100   (re-verified 2026-08-25)
+         generalAdmission           $75    (re-verified 2026-08-25)
+         earlyBird                  GONE. $60/$45 were live on 2026-08-08 and
+                                    are absent from the organizer's page on
+                                    2026-08-25. Never re-add without checking.
+         availability               UNAVAILABLE as of 2026-08-25. Their page
+                                    exposes no purchasable ticket. We do NOT
+                                    say "sold out" - we cannot tell sold out
+                                    from a closed widget, and only Echelon can.
+                                    Every CTA reads "View official event page"
+                                    until they confirm. Do not restore a
+                                    Register button without re-checking.
 
        Appears in: this page, /community.html (featured card), /index.html
        (03.5 Community chapter), JSON-LD above, IG assets in /images/social.
@@ -193,6 +217,18 @@
     .cta-note{margin:15px 0 0;font-size:1rem;line-height:1.6;color:var(--ink-soft);max-width:46ch}
     .cta-note a{color:var(--court);font-weight:600;text-decoration:underline;text-underline-offset:3px}
     .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px}
+
+    /* Secondary utilities. Ghost pills so they read as tools next to the one
+       primary action, not as three competing CTAs. 44px minimum, like every
+       other target on the site. */
+    .ev-utils{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 0;padding:0}
+    .ev-utils a,.ev-utils button{display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:11px 18px;border-radius:999px;border:1px solid var(--rule-strong);background:transparent;color:var(--ink);font:inherit;font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer}
+    .ev-utils a:hover,.ev-utils button:hover{background:rgba(235,255,235,0.06);border-color:var(--court)}
+    .ev-utils a:focus-visible,.ev-utils button:focus-visible{outline:2px solid var(--court);outline-offset:3px}
+    .ev-utils svg{flex:none;width:19px;height:19px;stroke:var(--court);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+    /* [hidden] loses to display:inline-flex without this — the share button
+       would render before its script decides whether sharing is possible. */
+    .ev-utils button[hidden]{display:none}
     .cta-big{width:100%;max-width:560px;justify-content:center}
 
     /* What to expect — soft dark cards, lime line icons (mockup language) */
@@ -214,6 +250,26 @@
     .includes li::before{content:"";width:7px;height:7px;flex:none;border-radius:50%;background:var(--court);transform:translateY(-2px)}
 
     /* Pricing — dark cards, lime amounts */
+    .event-ended-banner{
+      display:block; margin:0 0 14px; padding:12px 16px;
+      border:1px solid var(--card-rule); border-radius:12px;
+      background:var(--paper-2); color:var(--ink);
+      font-weight:650; font-size:1rem;
+    }
+    /* TWO ended treatments, for two different pages.
+
+       .event-over is the SEAM: applied by script to a page still built as
+       upcoming, in the hours between the final whistle and the next deploy.
+       That page's copy is wrong, so its registration controls all go away.
+
+       [data-event-state="ended"] is the BUILT page. Its copy is already past
+       tense and its outbound link is the only place updates can come from, so
+       the link stays; only what implies a purchase is softened. */
+    html.event-over .cta, html.event-over .cta-big, html.event-over .sticky-cta,
+    html.event-over .price .amt small, html.event-over .limited{ display:none !important; }
+    html.event-over .price{ opacity:.6; }
+    body[data-event-state="ended"] .price{ opacity:.72; }
+    body[data-event-state="ended"] .price .amt small{ display:none; }
     .price-row{display:grid;gap:16px;margin:26px 0 0;grid-template-columns:repeat(2,minmax(0,1fr));max-width:780px}
     @media (max-width:560px){.price-row{grid-template-columns:1fr}}
     .price{background:var(--paper-2);border:1px solid var(--card-rule);border-radius:18px;padding:26px}
@@ -246,23 +302,25 @@
       @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
     }
   </style>
+    <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
+    <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
-<body>
+<body data-audience="event" data-event-state="upcoming-unavailable" data-event-ends="2026-08-29T20:00:00-07:00">
   <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="masthead" role="banner">
     <div class="page masthead-row">
       <a href="/" class="masthead-logo" aria-label="PickleCue home">
         <img src="/images/app-icon-120.png?v=20260812b" alt="" width="30" height="30" aria-hidden="true">
-        <img class="masthead-wordmark wm-light" src="/images/wordmark-on-light.png?v=20260812b" alt="" height="21" aria-hidden="true">
-        <img class="masthead-wordmark wm-dark" src="/images/wordmark-on-dark.png?v=20260812b" alt="" height="21" aria-hidden="true">
+        <img class="masthead-wordmark wm-light" src="/images/wordmark-on-light.webp" alt="" height="21" aria-hidden="true">
+        <img class="masthead-wordmark wm-dark" src="/images/wordmark-on-dark.webp" alt="" height="21" aria-hidden="true">
       </a>
       <nav aria-label="Primary">
         <ul class="masthead-nav">
           <li><a href="/#pitch">What it is</a></li>
           <li><a href="/#features">Features</a></li>
           <li><a href="/community" aria-current="page">Community</a></li>
-          <li><a href="/support.html">Support</a></li>
+          <li><a href="/support">Support</a></li>
         </ul>
       </nav>
       <div class="masthead-actions">
@@ -270,8 +328,8 @@
         <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
-      <a href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" class="btn-pill" data-track="cta_click" data-cta="event_p4p_nav_waitlist">
-        Get early access
+      <a data-track="app_store_click" data-placement="nav" data-audience="event" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" class="btn-pill">
+        Download PickleCue
         <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
       </a>
       <button type="button" class="masthead-burger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu"><span></span></button>
@@ -287,16 +345,16 @@
         <li><a href="/#features">Features</a></li>
         <li><a href="/community">Community</a></li>
         <li><a href="/demo/">Demo</a></li>
-        <li class="site-menu-minor"><a href="/players.html">For players</a></li>
-        <li class="site-menu-minor"><a href="/organizers.html">For organizers</a></li>
-        <li class="site-menu-minor"><a href="/clubs.html">For clubs &amp; venues</a></li>
-        <li class="site-menu-minor"><a href="/support.html">Support</a></li>
+        <li class="site-menu-minor"><a href="/players">For players</a></li>
+        <li class="site-menu-minor"><a href="/organizers">For organizers</a></li>
+        <li class="site-menu-minor"><a href="/clubs">For clubs &amp; venues</a></li>
+        <li class="site-menu-minor"><a href="/support">Support</a></li>
         <li class="site-menu-minor"><a href="https://discord.gg/YvfgkFGVxd" target="_blank" rel="noopener noreferrer">Discord</a></li>
-        <li class="site-menu-minor"><a href="/privacy.html">Privacy</a></li>
-        <li class="site-menu-minor"><a href="/terms.html">Terms</a></li>
+        <li class="site-menu-minor"><a href="/privacy">Privacy</a></li>
+        <li class="site-menu-minor"><a href="/terms">Terms</a></li>
       </ul>
-      <a href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" class="btn-pill" data-track="cta_click" data-cta="mobile_waitlist">
-        Get early access
+      <a data-track="app_store_click" data-placement="nav_mobile" data-audience="event" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" class="btn-pill">
+        Download PickleCue
         <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
       </a>
     </nav>
@@ -307,7 +365,7 @@
       <div class="hero-copy">
         <p class="badge"><span class="b-full">Community event supported by PickleCue</span><span class="b-short">Supported by PickleCue</span></p>
         <h1 id="p4p-title">Pickle for a Purpose</h1>
-        <p class="lede">A charity pickleball evening that brings players together and supports a local cause.</p>
+        <p class="lede"><!-- EVENT:LEDE -->A charity pickleball evening that brings players together and supports a local cause.<!-- /EVENT:LEDE --></p>
         <ul class="factlist">
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
@@ -315,7 +373,7 @@
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>
-            <span>Peninsula Racquet Club, 30850 Hawthorne Blvd, Rancho Palos Verdes &middot; <a href="https://maps.google.com/?q=Peninsula+Racquet+Club,+30850+Hawthorne+Blvd,+Rancho+Palos+Verdes,+CA" target="_blank" rel="noopener noreferrer">Get directions</a></span>
+            <span>Peninsula Racquet Club, 30850 Hawthorne Blvd, Rancho Palos Verdes</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
@@ -331,34 +389,42 @@
       </figure>
       <div class="hero-cta">
         <div class="cta-row" style="margin-top:0">
-          <a class="cta" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="hero">
-            Register for the event
+          <a class="cta" href="/go/pickle-for-a-purpose" data-track="community_event_outbound" data-audience="event" data-event-slug="pickle-for-a-purpose" data-placement="hero">
+            <!-- EVENT:CTA -->View official event page<!-- /EVENT:CTA -->
             <svg viewBox="0 0 12 12" width="13" height="13" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
           </a>
         </div>
-        <p class="cta-note">Registration and payment are handled on The Salvation Army&rsquo;s <a href="https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563" target="_blank" rel="noopener noreferrer">official event page&nbsp;&#8599;</a></p>
+        <p class="cta-note"><!-- EVENT:STATUS --><strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> The event is still scheduled. Registration and payment are handled entirely on The Salvation Army&rsquo;s <a href="https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563" target="_blank" rel="noopener noreferrer">official event page&nbsp;&#8599;</a>, and only they can confirm whether it reopens.<!-- /EVENT:STATUS --></p>
+        <!-- EVENT:UTILITIES -->
+        <ul class="ev-utils">
+          <li><a href="https://maps.google.com/?q=Peninsula%20Racquet%20Club%2C%2030850%20Hawthorne%20Blvd%2C%20Rancho%20Palos%20Verdes%2C%20CA" target="_blank" rel="noopener noreferrer" data-track="event_utility" data-utility="directions" data-event-slug="pickle-for-a-purpose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>Directions</a></li>
+          <li><a href="/events/pickle-for-a-purpose/pickle-for-a-purpose.ics" type="text/calendar" data-track="event_utility" data-utility="calendar" data-event-slug="pickle-for-a-purpose"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 13v4M10 15h4"/></svg>Add to calendar</a></li>
+          <li><button type="button" class="ev-util-share" hidden data-track="event_utility" data-utility="share" data-event-slug="pickle-for-a-purpose"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.4"/><circle cx="17" cy="6.5" r="2.4"/><circle cx="17" cy="17.5" r="2.4"/><path d="M8.2 10.9 14.8 7.6M8.2 13.1l6.6 3.3"/></svg><span>Share</span></button></li>
+        </ul>
+      <!-- /EVENT:UTILITIES -->
       </div>
     </section>
 
     <section id="expect" class="measure" aria-labelledby="expect-title">
-      <h2 id="expect-title">What to expect</h2>
+      <h2 id="expect-title"><!-- EVENT:EXPECT_HEAD -->What to expect<!-- /EVENT:EXPECT_HEAD --></h2>
       <ul class="xgrid">
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8.2" cy="8.6" rx="4.2" ry="5" transform="rotate(-30 8.2 8.6)"/><path d="M11 13.2 14 18"/><ellipse cx="15.8" cy="8.6" rx="4.2" ry="5" transform="rotate(30 15.8 8.6)"/><path d="M13 13.2 10 18"/></svg><span>Mixed doubles</span></li>
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-5M10 20v-9M15 20V7M20 20V4"/></svg><span>All skill levels</span></li>
-        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="8.5" r="3.2"/><path d="M3.8 19.5a5.7 5.7 0 0 1 11.4 0M18 8v6M15 11h6"/></svg><span>Register solo or bring a partner</span></li>
+        <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="8.5" r="3.2"/><path d="M3.8 19.5a5.7 5.7 0 0 1 11.4 0M18 8v6M15 11h6"/></svg><span><!-- EVENT:ENTRY_CARD -->Register solo or bring a partner<!-- /EVENT:ENTRY_CARD --></span></li>
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 2.8 8.2 12 12.4l9.2-4.2L12 4Z"/><path d="M6.4 10.4V15c0 1.4 2.5 2.9 5.6 2.9s5.6-1.5 5.6-2.9v-4.6M21.2 8.2V13"/></svg><span>Pro coaching</span></li>
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20v-7M12 13c0-3-1.6-5.4-5.5-5.6.2 3.8 2.4 5.6 5.5 5.6ZM12 11c0-2.6 1.4-4.7 4.9-4.9-.2 3.4-2.1 4.9-4.9 4.9Z"/></svg><span>Beginner clinic</span></li>
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5.5a4 4 0 0 1-8 0V4ZM8 6H5.2A2.7 2.7 0 0 0 8 9.8M16 6h2.8A2.7 2.7 0 0 1 16 9.8M12 13.5V17M8.5 20h7M10 17h4"/></svg><span>Awards &amp; raffle</span></li>
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.4" cy="8.8" r="3"/><circle cx="16.4" cy="9.8" r="2.4"/><path d="M3.4 19.4a5.2 5.2 0 0 1 10 0M13.8 19.4a4.4 4.4 0 0 1 6.8-3.2"/></svg><span>Networking mixer</span></li>
         <li class="xcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9h10l-1.2 11H8.2L7 9ZM7.6 13h8.8M13.4 9l2-5.5"/></svg><span>Snacks &amp; non&#8209;alcoholic drinks</span></li>
       </ul>
+      <!-- EVENT:CALLOUT -->
       <div class="callout">
         <strong>No partner? No problem.</strong>
         <p>Register solo and the organizers will pair you by skill level, or bring a partner.</p>
-      </div>
+      </div><!-- /EVENT:CALLOUT -->
       <div class="includes">
         <div>
-          <h3>Player registration includes</h3>
+          <h3>Player registration <!-- EVENT:INCLUDES -->includes<!-- /EVENT:INCLUDES --></h3>
           <ul>
             <li>Club access &amp; tournament play</li>
             <li>Pro coaching &amp; beginner instruction</li>
@@ -368,7 +434,7 @@
           </ul>
         </div>
         <div>
-          <h3>General admission includes</h3>
+          <h3>General admission <!-- EVENT:INCLUDES -->includes<!-- /EVENT:INCLUDES --></h3>
           <ul>
             <li>Club access &amp; courtside seating</li>
             <li>Beginner instruction</li>
@@ -379,31 +445,34 @@
     </section>
 
     <section class="measure" aria-labelledby="pricing-title">
-      <h2 id="pricing-title">Early-bird pricing</h2>
-      <div class="price-row">
+      <h2 id="pricing-title"><!-- EVENT:PRICING_HEAD -->Published prices<!-- /EVENT:PRICING_HEAD --></h2>
+      <div class="price-row"><!-- EVENT:PRICES -->
         <div class="price">
           <span class="lbl">Players</span>
-          <span class="amt">$60<small>early bird</small></span>
-          <span class="was">Regular price $100</span>
+          <span class="amt">$100<small>per player</small></span>
+          <span class="was">Set by the organizer</span>
         </div>
         <div class="price">
           <span class="lbl">General admission</span>
-          <span class="amt">$45<small>early bird</small></span>
-          <span class="was">Regular price $75</span>
+          <span class="amt">$75<small>per person</small></span>
+          <span class="was">Set by the organizer</span>
         </div>
+      <!-- /EVENT:PRICES -->
       </div>
-      <!-- Regular prices ($100 / $75) verified 2026-08-08 against the official
-           registration page's embedded event JSON. The early-bird deadline
-           (Aug 10) is TENTATIVE per the organizers and is deliberately NOT
-           rendered. Once the official page publishes it, change the .limited
-           line to "Early bird ends Aug 10." -->
+      <!-- Prices re-verified 2026-08-25 against the official registration
+           page's embedded event JSON. Do not restate availability here: their
+           page reports SoldOut on every offer and we cannot tell whether that
+           means sold out or ticketing closed. The line below sends people to
+           the source instead of guessing on their behalf. -->
+      <!-- EVENT:PRICING_CTA -->
       <div class="cta-row" style="margin-top:26px">
-        <a class="cta cta-big" href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="pricing">
-          Register for Pickle for a Purpose
+        <a class="cta cta-big" href="/go/pickle-for-a-purpose" data-track="community_event_outbound" data-audience="event" data-event-slug="pickle-for-a-purpose" data-placement="pricing">
+          <!-- EVENT:CTA -->View official event page<!-- /EVENT:CTA -->
           <svg viewBox="0 0 12 12" width="13" height="13" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
         </a>
       </div>
-      <p class="limited" style="margin-top:16px">Early-bird pricing is available for a limited time.</p>
+      <!-- /EVENT:PRICING_CTA -->
+      <p class="limited" style="margin-top:16px"><!-- EVENT:PRICING_NOTE --><strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> These are the prices they last published, shown so you know what the event costs if registration reopens. We are not the organizer and cannot take a registration &mdash; check <a href="/go/pickle-for-a-purpose" data-track="community_event_outbound" data-audience="event" data-event-slug="pickle-for-a-purpose" data-placement="availability_note">their page</a> before you travel.<!-- /EVENT:PRICING_NOTE --></p>
       <p class="proceeds">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5S4 15.3 4 9.9A4.4 4.4 0 0 1 8.4 5.5c1.5 0 2.9.8 3.6 2a4.2 4.2 0 0 1 3.6-2A4.4 4.4 0 0 1 20 9.9c0 5.4-8 10.6-8 10.6Z"/></svg>
         The organizers state that event proceeds support Salvation Army LA Metro programs serving local communities.
@@ -426,20 +495,47 @@
     <div class="page" style="display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap;">
       <span>&copy; 2026 PickleCue</span>
       <div style="display:flex; gap:30px; flex-wrap:wrap;">
-        <a href="/privacy.html" style="color:var(--ink-soft);">Privacy</a>
-        <a href="/terms.html" style="color:var(--ink-soft);">Terms</a>
-        <a href="/support.html" style="color:var(--ink-soft);">Support</a>
-        <a href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" style="color:var(--ink-soft);">Waitlist</a>
+        <a href="/privacy" style="color:var(--ink-soft);">Privacy</a>
+        <a href="/terms" style="color:var(--ink-soft);">Terms</a>
+        <a href="/support" style="color:var(--ink-soft);">Support</a>
+        <a data-track="app_store_click" data-placement="inline" data-audience="event" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" style="color:var(--ink-soft);">Get the app</a>
       </div>
     </div>
   </footer>
+  <!-- EVENT:STICKY -->
   <div class="sticky-cta" id="stickyCta" hidden>
-    <a href="/go/pickle-for-a-purpose" data-track="cta_click" data-cta="community_event_register_click" data-event-slug="pickle-for-a-purpose" data-placement="sticky_mobile">
-      Register &middot; $60 Early Bird
+    <a href="/go/pickle-for-a-purpose" data-track="community_event_outbound" data-audience="event" data-event-slug="pickle-for-a-purpose" data-placement="sticky_mobile">
+      <!-- EVENT:CTA -->View official event page<!-- /EVENT:CTA -->
       <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
     </a>
   </div>
+  <!-- /EVENT:STICKY -->
   <script>
+    /* Share: enhancement only. The button ships hidden and is revealed only
+       when the browser can actually do something — a share control that cannot
+       share is worse than no control at all. */
+    (function () {
+      var btn = document.querySelector('.ev-util-share');
+      if (!btn) return;
+      var label = btn.querySelector('span');
+      if (navigator.share) {
+        btn.hidden = false;
+        btn.addEventListener('click', function () {
+          navigator.share({ title: document.title, url: location.href }).catch(function () {});
+        });
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        btn.hidden = false;
+        label.setAttribute('aria-live', 'polite');
+        btn.addEventListener('click', function () {
+          navigator.clipboard.writeText(location.href).then(function () {
+            var was = label.textContent;
+            label.textContent = 'Link copied';
+            setTimeout(function () { label.textContent = was; }, 2000);
+          }).catch(function () {});
+        });
+      }
+    })();
+
     /* Sticky register bar (mobile): appears after the hero CTA scrolls out,
        hides while the pricing/registration section is on screen. */
     (function () {
@@ -460,24 +556,38 @@
         es.forEach(function (e) { pricingVisible = e.isIntersecting; }); update();
       }, { rootMargin: '0px 0px -20% 0px' }).observe(pricing.parentElement);
     })();
-
-    /* Lightweight analytics - same pattern as the homepage: queues to
-       window.dataLayer (GA4 reads it; consent gating in /assets/consent.js).
-       Register CTAs carry event_slug + placement per the campaign spec. */
-    window.dataLayer = window.dataLayer || [];
-    window.track = function (name, props) {
-      try { window.dataLayer.push({ event: name, ts: Date.now(), ...(props || {}) }); } catch (_) {}
-    };
-    document.addEventListener('click', function (e) {
-      var el = e.target.closest('[data-track]');
-      if (!el) return;
-      window.track(el.getAttribute('data-track'), {
-        cta: el.getAttribute('data-cta') || null,
-        href: el.getAttribute('href') || null,
-        event_slug: el.getAttribute('data-event-slug') || undefined,
-        placement: el.getAttribute('data-placement') || undefined
-      });
-    });
+  </script>
+  <script>
+  /* Seam cover, not a rewrite.
+     endsAt is 2026-08-29T20:00:00-07:00. Between the final whistle and the next
+     deploy this page would otherwise still read as upcoming, so the moment that
+     time passes the page states plainly that the event has happened and hides
+     every registration control.
+     tools/gate-events.mjs FAILS the build after that date until a human writes
+     the real recap — this banner buys hours, not weeks. */
+  (function () {
+    if (document.body.dataset.eventState === 'ended') return;   // page already rebuilt
+    /* Both values come from <body data-*>, never from a marker inside this
+       string. HTML comments are not comments inside <script>: an earlier
+       version read
+           new Date('<!-'+'- EVENT:ENDSAT -'+'->2026-08-29T20:00:00-07:00...')
+       which is an Invalid Date, and `new Date() <= InvalidDate` is false — so
+       the "this event has taken place" banner rendered four days early. */
+    var ENDS = new Date(document.body.dataset.eventEnds || '');
+    if (isNaN(ENDS)) return;
+    if (new Date() <= ENDS) return;
+    document.documentElement.classList.add('event-over');
+    var hero = document.querySelector('.cta-note');
+    if (hero) {
+      var b = document.createElement('p');
+      b.className = 'event-ended-banner';
+      b.setAttribute('role', 'status');
+      b.textContent = 'This event has taken place. Registration is closed.';
+      hero.parentNode.insertBefore(b, hero);
+    }
+    var sticky = document.getElementById('stickyCta');
+    if (sticky) { sticky.hidden = true; sticky.remove(); }
+  })();
   </script>
 </body>
 </html>

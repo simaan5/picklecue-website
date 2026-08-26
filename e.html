@@ -24,6 +24,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-itunes-app" content="app-id=6757326631">
     <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
     <title>Event · PickleCue</title>
     <meta name="description" content="Event details, registration and live results. No app required.">
@@ -45,10 +46,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png?v=20260812b">
     <link rel="stylesheet" href="/fonts.css">
     <link rel="stylesheet" href="assets/live.css?v=rr9">
+    <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
+    <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
-<body>
+<body data-audience="spectators">
     <main class="page"><div class="state" id="state"><h2>Finding your event…</h2></div></main>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
     <script src="assets/live-core.js"></script>
     <script>
     (function () {

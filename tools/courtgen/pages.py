@@ -11,6 +11,12 @@ NOT built, deliberately:
 from pathlib import Path
 
 from gate import BANNED_STATS, display_label
+
+
+def plural(n, one, many):
+    """Five state cards shipped "1 cities". Counts come from live data, so
+    every rendered count needs this, not just the ones that looked plural."""
+    return one if n == 1 else many
 from icons import STAT_ICON, icon
 from shell import (MAP_CREDIT, attribution, courts, crumbs, esc, map_chrome,
                    map_payload, page, plot, slugify)
@@ -52,19 +58,44 @@ def stat_block(stats):
         f'<dt>{lbl}</dt><dd>{val}</dd></div>' for val, lbl in stats) + '</dl>')
 
 
-def court_row(r, href=None, city=""):
+def city_anchor_slugs(rows):
+    """Slugs that get an id on the CITY page, in render order.
+
+    The city page shows a handful of courts; the /all directory shows every one.
+    Search needs to know which, so a result lands on the richer city page when
+    the court is there and on /all when it is not. This is the single source for
+    that decision — pages.py renders from it and search_index.py routes from it.
+    Duplicated logic here would break silently the first time a slice changed.
+    """
+    ranked = sorted(rows, key=lambda r: (-(r.get("court_count") or 0), r["label"]))
+    order, seen = [], set()
+    for r in ([x for x in ranked if x.get("court_count")][:4]
+              + [x for x in ranked if x.get("is_free") is True][:8]
+              + [x for x in ranked if x.get("is_free") is False][:8]):
+        s = slugify(r["slug"])
+        if s not in seen:
+            seen.add(s); order.append(s)
+    return order
+
+
+def court_row(r, href=None, city="", aid=None):
     n = r.get("court_count")
     meta = f'{n} courts' if n else ("Free" if r.get("is_free") else "Members")
     inner = (f'<span class="rn">{esc(r["label"])}'
              f'<em>{esc(r.get("address") or city)}</em></span>'
              f'<span class="rm">{meta}</span>')
-    return f'<li><a href="{href}">{inner}</a></li>' if href else f'<li>{inner}</li>'
+    # tabindex -1 so an anchored arrival can take focus, which is what makes the
+    # jump work for a keyboard and a screen reader rather than only visually.
+    at = f' id="court-{aid}" tabindex="-1"' if aid else ""
+    return (f'<li{at}><a href="{href}">{inner}</a></li>' if href
+            else f'<li{at}>{inner}</li>')
 
 
-def court_card(r, href, city=""):
+def court_card(r, href, city="", aid=None):
     n = r.get("court_count")
     badge = f'<span class="cnum">{n}</span>' if n else ""
-    return (f'<a class="cc" href="{href}">{badge}'
+    at = f' id="court-{aid}" tabindex="-1"' if aid else ""
+    return (f'<a class="cc"{at} href="{href}">{badge}'
             f'<span class="cc-art" aria-hidden="true"></span>'
             f'<span class="cc-body"><span class="cc-name">{esc(r["label"])}</span>'
             f'<span class="cc-addr">{esc(r.get("address") or city)}</span>'
@@ -85,7 +116,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
     stats, total, free, paid, counted = stats_for(rows)
     ranked = sorted(rows, key=lambda r: (-(r.get("court_count") or 0), r["label"]))
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, None)])
     svg, plotted = plot(rows)
 
@@ -100,6 +131,17 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
     paid_rows = [r for r in ranked if r.get("is_free") is False][:8]
     top = [r for r in ranked if r.get("court_count")][:4]
 
+    # Search sends a named court here as /courts/us/<state>/<city>#court-<slug>.
+    # A court can appear in `top` and again in a row list, so the id goes on the
+    # first render only — two elements with one id makes the anchor ambiguous.
+    _used = set()
+    def _aid(r):
+        s = slugify(r["slug"])
+        if s in _used:
+            return None
+        _used.add(s)
+        return s
+
     body = f"""{cb}
 <section class="chero">
   <div><p class="ceyebrow">Pickleball courts in</p>
@@ -109,32 +151,33 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
   {stat_block(stats)}
 </section>
 
-<section class="cmap" aria-label="Court locations" data-courtmap="{map_payload(rows, base)}">{svg}{map_chrome(total)}
-  <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
-  <span><i class="dot-p"></i>Club or paid</span>
-  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 
 <section class="csec"><h2>Venues with the most courts</h2>
   <p class="cnote">These publish a court count, so you know what you are turning up to.</p>
-  <div class="ccards">{"".join(court_card(r, f'{base}/{esc(slugify(r["slug"]))}', city) for r in top)}</div>
+  <div class="ccards">{"".join(court_card(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in top)}</div>
   <p class="ccount"><a class="clink" href="{base}/all">Browse all {total} courts in {esc(city)}</a></p>
 </section>
 
 <section class="csec ctwo">
   <div><h2>Free and open</h2><p class="cnote">Public parks and school courts.</p>
-  <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city) for r in free_rows)}</ul>
+  <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in free_rows)}</ul>
   <p class="ccount">Showing {len(free_rows)} of {free} free courts.</p></div>
   <div><h2>Clubs &amp; centers</h2>
   <p class="cnote">{'Membership or a day rate applies.' if paid_rows else 'None recorded here yet.'}</p>
-  <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city) for r in paid_rows)
+  <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in paid_rows)
       or '<li class="cempty">Nothing recorded yet. You can add one from inside PickleCue.</li>'}</ul>
   {f'<p class="ccount">Showing {len(paid_rows)} of {paid}.</p>' if paid_rows else ''}</div>
 </section>
 
+<p class="cmap-jump"><a href="#map">View map <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14"><path fill="currentColor" d="M12 16l-6-6 1.4-1.4L12 13.2l4.6-4.6L18 10z"/></svg></a></p>
+<section class="cmap" id="map" aria-label="Court locations" data-courtmap="{map_payload(rows, base)}">{svg}{map_chrome(total)}
+  <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
+  <span><i class="dot-p"></i>Club or paid</span>
+  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
   <p>Open games around {esc(city)}, skill levels and spots left, inside the app.</p></div>
-  <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
+  <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
 
 <section class="cnear"><h2>Pickleball near {esc(city)}</h2><ul>{"".join(
   f'<li><a href="{city_path(sf, c)}"><span>{esc(c)}</span><em>{n}</em></a></li>'
@@ -161,14 +204,16 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
     free = sum(1 for r in rows if r.get("is_free") is True)
     paid = sum(1 for r in rows if r.get("is_free") is False)
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, base), ("All courts", None)])
     ranked = sorted(rows, key=lambda r: (-(r.get("court_count") or 0), r["label"]))
 
     def drow(r):
         n = r.get("court_count")
         access = "Free" if r.get("is_free") else ("Members" if r.get("is_free") is False else "")
-        return (f'<li class="drow" data-access="{"free" if r.get("is_free") else "paid"}" '
+        # Every court in the city is here, so every row is an anchor target.
+        return (f'<li class="drow" id="court-{slugify(r["slug"])}" tabindex="-1" '
+                f'data-access="{"free" if r.get("is_free") else "paid"}" '
                 f'data-name="{esc((r["label"] + " " + (r.get("address") or "")).lower())}" '
                 f'data-courts="{n or 0}">'
                 f'<a href="{base}/{esc(slugify(r["slug"]))}">'
@@ -185,6 +230,8 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
   <p class="clede">Every court we have on record in {esc(city)}. Filter by cost, search by
   name or street, or sort by size.</p>
 </section>
+
+<h2 class="vh">All {total} court locations in {esc(city)}</h2>
 
 <div class="dbar">
   <div class="dtabs" role="group" aria-label="Filter by access">
@@ -261,7 +308,7 @@ def build_court(r, city, state, sf, siblings):
 
 def build_court_to(r, city, state, sf, siblings, out, indexable=False):
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, base), (r["label"], None)])
     svg, _ = plot([r] + [s for s in siblings if s["id"] != r["id"]][:40], maxh=300, focus=r["id"])
     n = r.get("court_count")
@@ -311,7 +358,7 @@ def build_court_to(r, city, state, sf, siblings, out, indexable=False):
   <div class="vempty">
     <p>Open games, skill levels and spots left live inside PickleCue. We do not publish
     who is playing on the open web.</p>
-    <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
+    <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
   </div>
 </section>
 
@@ -346,21 +393,17 @@ def build_state_from(state, sf, rows, out, indexable=False):
             by_city.setdefault(c, []).append(r)
     ranked = sorted(by_city.items(), key=lambda kv: -len(kv[1]))
     stats, total, free, paid, counted = stats_for(rows)
-    cb, ld = crumbs([("Courts", "/courts"), ("United States", "/courts/us"), (sf, None)])
+    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"), (sf, None)])
     svg, plotted = plot(rows, maxh=430, r=4)
 
     body = f"""{cb}
 <section class="chero">
   <div><p class="ceyebrow">Pickleball in</p><h1>{esc(sf)}</h1>
-  <p class="clede">{total} courts across {len(by_city)} cities and towns in {esc(sf)},
+  <p class="clede">{total} court locations across {len(by_city)} {plural(len(by_city), "city or town", "cities and towns")} in {esc(sf)},
   {free} of them free to play.</p></div>
   {stat_block(stats)}
 </section>
 
-<section class="cmap" aria-label="Courts across {esc(sf)}" data-courtmap="{map_payload(rows)}">{svg}{map_chrome(total)}
-  <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
-  <span><i class="dot-p"></i>Club or paid</span>
-  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 
 <section class="csec"><h2>Cities with the most courts</h2>
   <p class="cnote">Every city we have court records for in {esc(sf)}.</p>
@@ -370,15 +413,21 @@ def build_state_from(state, sf, rows, out, indexable=False):
     for c, v in ranked[:24])}</ul>
 </section>
 
+<p class="cmap-jump"><a href="#map">View map <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14"><path fill="currentColor" d="M12 16l-6-6 1.4-1.4L12 13.2l4.6-4.6L18 10z"/></svg></a></p>
+<section class="cmap" id="map" aria-label="Courts across {esc(sf)}" data-courtmap="{map_payload(rows)}">{svg}{map_chrome(total)}
+  <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
+  <span><i class="dot-p"></i>Club or paid</span>
+  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
   <p>Open games across {esc(sf)}, skill levels and spots left, inside the app.</p></div>
-  <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
+  <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
 {attribution()}"""
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page(f"Pickleball courts in {sf} | PickleCue",
-                      f"{total} pickleball courts across {len(by_city)} cities in {sf}. "
+                      f"{total} pickleball court locations across {len(by_city)} "
+                      f"{plural(len(by_city), 'city', 'cities')} in {sf}. "
                       f"{free} are free to play.", f"/courts/us/{slugify(sf)}", body, ld,
                       indexable), encoding="utf-8")
     return p
@@ -389,8 +438,8 @@ def build_methodology(total_pub, cities_pub):
     return build_methodology_to(total_pub, cities_pub, OUT / "_courts-methodology.html")
 
 
-def build_methodology_to(total_pub, cities_pub, out, indexable=False):
-    cb, ld = crumbs([("Courts", "/courts"), ("How we count courts", None)])
+def build_methodology_to(pool_total, published_total, cities_pub, out, indexable=False):
+    cb, ld = crumbs([("Courts", "/courts/"), ("How we count courts", None)])
     banned = "".join(f"<li><b>{esc(k)}</b> {esc(v)}</li>" for k, v in sorted(BANNED_STATS.items()))
     body = f"""{cb}
 <section class="chero mhero">
@@ -411,8 +460,10 @@ def build_methodology_to(total_pub, cities_pub, out, indexable=False):
       <p>Courts submitted from inside the app by people who play on them. These
       start at a low confidence score and rise as others confirm them.</p></div>
   </div>
-  <p class="cnote">We currently publish {total_pub:,} courts across {cities_pub}
-  cities on the web. The app itself holds more.</p>
+  <p class="cnote">We publish {published_total:,} court locations across
+  {cities_pub} {plural(cities_pub, "city", "cities")} here. The app holds
+  {pool_total:,} — the difference is smaller towns that do not yet have enough
+  courts to justify a page of their own.</p>
 </section>
 
 <section class="csec"><h2>What we will not claim</h2>
@@ -449,15 +500,15 @@ def build_methodology_to(total_pub, cities_pub, out, indexable=False):
   built with <a href="https://www.openmaptiles.org/" rel="noopener">OpenMapTiles</a>
   from that same OpenStreetMap data. Loading the map sends a request from your
   browser to OpenFreeMap, so your IP address reaches them; the
-  <a href="/privacy.html">privacy policy</a> says what that does and does not
+  <a href="/privacy">privacy policy</a> says what that does and does not
   involve. Icons are from <a href="https://lucide.dev" rel="noopener">Lucide</a>
   (ISC). Full licence texts for everything this site redistributes are on the
-  <a href="/licenses.html">third-party notices</a> page.</p>
+  <a href="/licenses">third-party notices</a> page.</p>
 </section>
 
 <section class="ccta"><div><h2>Found something wrong?</h2>
   <p>Corrections come from players. That is the only way court data stays true.</p></div>
-  <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>"""
+  <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>"""
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page("How we count courts | PickleCue",
@@ -473,41 +524,91 @@ def build_index(states, total, cities_n, out, indexable=False, us=False):
     city and state page point here, so these must exist or 448 pages link to a
     404."""
     if us:
-        cb, ld = crumbs([("Courts", "/courts"), ("United States", None)])
+        cb, ld = crumbs([("Courts", "/courts/"), ("United States", None)])
         title, h1 = "Pickleball courts in the United States | PickleCue", "United States"
         canon = "/courts/us"
     else:
         cb, ld = crumbs([("Courts", None)])
         title, h1 = "Pickleball courts | PickleCue", "Pickleball courts"
-        canon = "/courts"
+        canon = "/courts/"
 
     cards = "".join(
         f'<li><a href="/courts/us/{slugify(sf)}"><b>{n}</b><span>{esc(sf)}</span>'
-        f'<em>{c} cities</em></a></li>'
+        f'<em>{c} {plural(c, "city", "cities")}</em></a></li>'
+        for sf, n, c in sorted(states, key=lambda x: -x[1]))
+
+    # A-Z jump list. Plain anchors to the same cards, so a reader who thinks
+    # alphabetically and a reader who thinks "biggest first" both get a path,
+    # and neither needs JavaScript.
+    az = "".join(
+        f'<a href="#st-{slugify(sf)}">{esc(sf)}</a>'
+        for sf, _, _ in sorted(states, key=lambda x: x[0]))
+
+    cards = "".join(
+        f'<li id="st-{slugify(sf)}"><a href="/courts/us/{slugify(sf)}">'
+        f'<b>{n:,}</b><span>{esc(sf)}</span>'
+        f'<em>court locations &middot; {c} {plural(c, "city", "cities")}</em></a></li>'
         for sf, n, c in sorted(states, key=lambda x: -x[1]))
 
     body = f"""{cb}
-<section class="chero mhero">
-  <div><p class="ceyebrow">Where to play</p><h1>{esc(h1)}</h1>
-  <p class="clede">{total:,} courts across {cities_n} cities and {len(states)} states,
-  with an address and a location for every one. Free public courts, school courts,
-  clubs and recreation centers.</p></div>
+<section class="chero csearch-hero">
+  <div class="csearch-copy">
+    <p class="ceyebrow">Where to play</p>
+    <h1>Know where to play before you leave.</h1>
+    <p class="clede">{total:,} court locations across {cities_n} cities and {len(states)} states,
+    every one with an address you can navigate to. Search a court, a city or a state.</p>
+  </div>
+
+  <form class="csearch" id="courtSearch" role="search" autocomplete="off">
+    <label for="courtSearchInput">Search courts, cities and states</label>
+    <div class="csearch-field">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>
+      <input id="courtSearchInput" type="search" name="q"
+             placeholder="Austin, California, or a court name"
+             role="combobox" aria-expanded="false" aria-controls="courtSearchResults"
+             aria-autocomplete="list" aria-describedby="courtSearchHint">
+      <button type="submit">Search</button>
+    </div>
+    <p class="csearch-hint" id="courtSearchHint">Every result is a page on this site, not a login.</p>
+    <div class="csearch-results" id="courtSearchResults" hidden></div>
+    <p class="csearch-status" id="courtSearchStatus" role="status" aria-live="polite"></p>
+  </form>
 </section>
 
-<section class="csec"><h2>Browse by state</h2>
-  <p class="cnote">Every state we have court records for.</p>
+<section class="cbridge">
+  <div class="cbridge-copy">
+    <p class="ceyebrow">Why the app</p>
+    <h2>These pages tell you where. PickleCue tells you what happens next.</h2>
+    <p class="cnote">A directory ends at an address. In the app the same venue carries
+    the detail that decides whether you drive over &mdash; how many courts, indoor or
+    out, free or paid &mdash; plus directions, check-in, the court&rsquo;s chat, and a
+    game you can host right there.</p>
+    <p class="cnote"><a class="btn btn-primary" data-track="app_store_click"
+      data-placement="mid" data-audience="courts"
+      href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></p>
+  </div>
+  <figure class="cbridge-shot">
+    <img src="/images/app/courts-detail.webp" width="760" height="1651" loading="lazy" decoding="async"
+         alt="A venue in PickleCue: eight courts, indoor and outdoor, paid, with the address, directions, check-in, court chat and a button to host a game here.">
+  </figure>
+</section>
+
+<section class="csec" id="browse"><h2>Browse by state</h2>
+  <p class="cnote">Every state we have court records for, largest first. Counts are
+  court <em>locations</em> &mdash; a park or club, which may hold several courts.</p>
+  <nav class="saz" aria-label="Jump to a state">{az}</nav>
   <ul class="scities">{cards}</ul>
 </section>
 
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
   <p>Open games, skill levels and spots left, inside the app.</p></div>
-  <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
+  <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
 {attribution()}"""
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page(title,
-                      f"{total:,} pickleball courts across {cities_n} cities. "
-                      f"Addresses, locations and open games.", canon, body, ld,
-                      indexable), encoding="utf-8")
+                      f"{total:,} pickleball court locations across {cities_n} cities. "
+                      f"Search by court, city or state.", canon, body, ld,
+                      indexable, search=True), encoding="utf-8")
     return p

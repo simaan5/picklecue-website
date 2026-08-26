@@ -24,6 +24,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-itunes-app" content="app-id=6757326631">
     <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
     <title>Live · PickleCue</title>
     <meta name="description" content="Live scores, brackets, and standings for PickleCue tournaments and leagues.">
@@ -48,8 +49,10 @@
     <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
     <link rel="stylesheet" href="/fonts.css">
     <link rel="stylesheet" href="assets/live.css?v=rr9">
+    <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
+    <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
-<body>
+<body data-audience="spectators">
     <header class="live-head">
         <div class="page live-head-row">
             <a href="/" class="live-logo"><img src="images/app-icon-120.png?v=20260812b" alt="">PickleCue</a>
@@ -61,7 +64,7 @@
         <div class="state" id="loading"><h2>Loading…</h2><p>Fetching the latest scores.</p></div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
     <script src="assets/live-core.js?v=rr8"></script>
     <script src="assets/bracket.js?v=rr8"></script>
     <script>
@@ -248,7 +251,7 @@
             }
             var shareBtn = document.getElementById('recapShare');
             if (shareBtn) shareBtn.addEventListener('click', async function () {
-                var url = 'https://www.picklecue.com/live.html?' + kind + '=' + eventId + '&view=results';
+                var url = 'https://www.picklecue.com/live?' + kind + '=' + eventId + '&view=results';
                 var head2 = kind === 't' ? snap.tournament : snap.league;
                 if (navigator.share) {
                     try { await navigator.share({ title: head2.name + ' — results', url: url }); } catch (_) {}
