@@ -25,6 +25,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const claims = JSON.parse(readFileSync(join(ROOT, 'data/claims.json'), 'utf8'));
+const assetManifest = JSON.parse(readFileSync(join(ROOT, 'data/marketing-assets.json'), 'utf8')).assets;
+const warns = [];
 
 /* Generated court pages are excluded from the number scan: they carry
    thousands of legitimate per-city counts. Their totals are asserted
@@ -107,10 +109,36 @@ function scanPhrases(rel, text) {
        the games happening there" and sailed through.
        Deliberately narrow: courts/methodology.html states "court_reviews is
        empty" and "there are no reviews", which must keep passing. */
-    /* Captures whose "upcoming" game carries an absolute date. They are true
-       for days, then quietly wrong. Retouching is not an option, so they are
-       simply not used on a selling page until the fixture set is recaptured
-       against a formatter that renders Today/Tomorrow (iOS plans 091 + 092). */
+    /* PROVENANCE. Every marketing image the page uses is looked up in
+       data/marketing-assets.json.
+
+         approvedForMarketing === false  -> fail. Somebody opened it and it is
+                                            unsafe (upcoming absolute date, the
+                                            misleading verified badge, DUPR, a
+                                            fabricated rating).
+         audit === null                  -> warn. Nobody has looked. Unaudited
+                                            is not the same as safe.
+
+       The filename list below is REDUNDANT with the manifest today and stays
+       anyway until iOS plans 091 + 092 land and the set is recaptured — belt
+       and braces while the manifest is still being filled in. Retire it then,
+       not before, and retire it in favour of provenance rather than trust. */
+    if (SELLING.test(rel)) {
+      for (const m of text.matchAll(/src="\/images\/(?:app|web)\/([a-z0-9._-]+\.webp)"/g)) {
+        const rec = assetManifest[m[1]];
+        if (!rec) { warns.push(`${rel}: ${m[1]} has no provenance record — add one to data/marketing-assets.json`); continue; }
+        if (rec.approvedForMarketing === false) {
+          const why = [rec.containsUpcomingDate && 'an upcoming absolute date',
+                       rec.containsVerifiedBadge && 'the misleading verified badge',
+                       rec.containsDupr && 'DUPR', rec.containsRatingOrReviewCount && 'a rating'].filter(Boolean);
+          fail(rel, `${m[1]} is not approved for marketing (${why.join(', ') || 'see notes'}). ` +
+                    `Do not retouch or crop it; use another authentic state.`);
+        } else if (!rec.audit) {
+          warns.push(`${rel}: ${m[1]} has never been inspected. Open it, then set approvedForMarketing.`);
+        }
+      }
+    }
+
     for (const shot of ['s1-play-open-games', 'game-join', 'game-detail', 's10-home-dashboard', 's9-week-schedule', 'game-roster']) {
       if (SELLING.test(rel) && new RegExp('src="[^"]*' + shot).test(text)) {
         fail(rel, `uses ${shot}.webp, whose "upcoming" game shows an absolute date — ` +
@@ -195,6 +223,11 @@ for (const f of htmlFiles()) {
   }
 }
 
+if (warns.length) {
+  console.warn(`\nCLAIM GATE: ${warns.length} asset(s) with no provenance record — not blocking:\n`);
+  for (const w of [...new Set(warns)]) console.warn('  ? ' + w);
+  console.warn('');
+}
 if (fails.length) {
   console.error(`\nCLAIM GATE: ${fails.length} violation(s)\n`);
   for (const f of fails) console.error('  ✗ ' + f);
