@@ -72,8 +72,16 @@
             var bits = [];
             if (k[3]) bits.push(k[3] + ' court' + (k[3] === 1 ? '' : 's'));
             bits.push(k[4] ? 'Free to play' : 'Club or paid');
+            /* A named court goes to the CITY page with an anchor, or to that
+               city's /all directory when the city page does not render it.
+               Never to the court's own page: it exists, and stays alive for
+               direct links and Universal Links, but it is deliberately noindex
+               and thin, and it is the wrong landing for someone who just told
+               us exactly what they wanted. */
+            var city = '/courts/us/' + s[1] + '/' + c[2];
             out.push({ t: 2, label: k[1], sub: c[1] + ', ' + s[0] + ' · ' + bits.join(' · '),
-                       href: '/courts/us/' + s[1] + '/' + c[2] + '/' + k[2], n: k[3], key: norm(k[1] + ' ' + c[1]) });
+                       href: (k[5] ? city : city + '/all') + '#court-' + k[2],
+                       n: k[3], key: norm(k[1] + ' ' + c[1]) });
         });
         return out;
     }
@@ -124,10 +132,10 @@
         if (!q.trim()) { close(); return; }
         if (!list.length) {
             panel.innerHTML =
-                '<p class="cs-msg"><b>Nothing matches &ldquo;' + esc(q) + '&rdquo;.</b></p>' +
-                '<p class="cs-msg cs-msg-sub">We publish court locations for cities with five or more. ' +
-                'Try the city or the state instead, or <a href="#browse">browse by state</a>. ' +
-                'Court missing? You can add it from inside PickleCue.</p>';
+                '<p class="cs-msg"><b>No published court locations matched &ldquo;' + esc(q) + '&rdquo;.</b></p>' +
+                '<p class="cs-msg cs-msg-sub">Try a nearby city, or ' +
+                '<a href="#browse">browse courts by state</a>. ' +
+                'Know a court we are missing? You can add it from inside PickleCue.</p>';
             open();
             say('No matches for ' + q);
             return;
@@ -193,9 +201,13 @@
         clearTimeout(debounce);
         var q = input.value;
         if (!q.trim()) { close(); return; }
+        /* 40ms, not 90. Measured compute + render over ten representative
+           queries is 2.7ms on desktop and 2.1ms on a 4x-throttled phone, so the
+           debounce WAS the latency. 40ms still coalesces a fast typist without
+           being felt. */
         debounce = setTimeout(function () {
             load().then(function () { render(search(q), q); }, function () {});
-        }, 90);
+        }, 40);
     }
 
     /* Focus is intent. Warm the index then, so the first keystroke has it. */

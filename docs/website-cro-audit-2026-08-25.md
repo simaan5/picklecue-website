@@ -399,6 +399,31 @@ measured benefit, a privacy review, the policy updated, a direct user gesture
 before the prompt is raised, a graceful denied path, and a guarantee that no
 coordinate reaches analytics. Until all six exist, the header stays as it is.
 
+## 11d. Court search performance, measured properly
+
+The Phase D report said "warm query ~400 ms". **That number was the test harness,
+not the product.** The harness typed, slept 400 ms, then read the DOM, and 400 ms
+is what it recorded.
+
+Re-measured inside the real code path — a `MutationObserver` catching the exact
+moment results are painted, ten representative queries, no sleeps in the timing
+window:
+
+| | keystroke → painted | minus the debounce (compute + render) |
+|---|---:|---:|
+| desktop 1440 | median 43 ms | **2.6 ms**, slowest 6.1 ms |
+| mobile 390, 4× CPU throttle | median 43 ms | **1.8 ms**, slowest 3.4 ms |
+
+The CPU throttle was itself verified before those numbers were trusted: a busy
+loop takes 27 ms unthrottled and 108 ms at rate 4 — exactly 4.00×. A first check
+said the throttle was not applying; that check was too short and JIT-noisy, and
+was wrong.
+
+Since compute is under 3 ms, **the debounce was the entire latency**. It was
+90 ms; it is now 40 ms, which still coalesces a fast typist. Targets were
+compute <25 ms, render <50 ms, post-debounce <150 ms — met with room to spare
+without any change to the algorithm.
+
 ## 12. Still open
 
 **Phase B–I (not started).** Shared CTA/QR component, desktop QR-to-phone, sticky

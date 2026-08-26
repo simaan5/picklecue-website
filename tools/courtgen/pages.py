@@ -58,19 +58,44 @@ def stat_block(stats):
         f'<dt>{lbl}</dt><dd>{val}</dd></div>' for val, lbl in stats) + '</dl>')
 
 
-def court_row(r, href=None, city=""):
+def city_anchor_slugs(rows):
+    """Slugs that get an id on the CITY page, in render order.
+
+    The city page shows a handful of courts; the /all directory shows every one.
+    Search needs to know which, so a result lands on the richer city page when
+    the court is there and on /all when it is not. This is the single source for
+    that decision — pages.py renders from it and search_index.py routes from it.
+    Duplicated logic here would break silently the first time a slice changed.
+    """
+    ranked = sorted(rows, key=lambda r: (-(r.get("court_count") or 0), r["label"]))
+    order, seen = [], set()
+    for r in ([x for x in ranked if x.get("court_count")][:4]
+              + [x for x in ranked if x.get("is_free") is True][:8]
+              + [x for x in ranked if x.get("is_free") is False][:8]):
+        s = slugify(r["slug"])
+        if s not in seen:
+            seen.add(s); order.append(s)
+    return order
+
+
+def court_row(r, href=None, city="", aid=None):
     n = r.get("court_count")
     meta = f'{n} courts' if n else ("Free" if r.get("is_free") else "Members")
     inner = (f'<span class="rn">{esc(r["label"])}'
              f'<em>{esc(r.get("address") or city)}</em></span>'
              f'<span class="rm">{meta}</span>')
-    return f'<li><a href="{href}">{inner}</a></li>' if href else f'<li>{inner}</li>'
+    # tabindex -1 so an anchored arrival can take focus, which is what makes the
+    # jump work for a keyboard and a screen reader rather than only visually.
+    at = f' id="court-{aid}" tabindex="-1"' if aid else ""
+    return (f'<li{at}><a href="{href}">{inner}</a></li>' if href
+            else f'<li{at}>{inner}</li>')
 
 
-def court_card(r, href, city=""):
+def court_card(r, href, city="", aid=None):
     n = r.get("court_count")
     badge = f'<span class="cnum">{n}</span>' if n else ""
-    return (f'<a class="cc" href="{href}">{badge}'
+    at = f' id="court-{aid}" tabindex="-1"' if aid else ""
+    return (f'<a class="cc"{at} href="{href}">{badge}'
             f'<span class="cc-art" aria-hidden="true"></span>'
             f'<span class="cc-body"><span class="cc-name">{esc(r["label"])}</span>'
             f'<span class="cc-addr">{esc(r.get("address") or city)}</span>'
@@ -106,6 +131,17 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
     paid_rows = [r for r in ranked if r.get("is_free") is False][:8]
     top = [r for r in ranked if r.get("court_count")][:4]
 
+    # Search sends a named court here as /courts/us/<state>/<city>#court-<slug>.
+    # A court can appear in `top` and again in a row list, so the id goes on the
+    # first render only — two elements with one id makes the anchor ambiguous.
+    _used = set()
+    def _aid(r):
+        s = slugify(r["slug"])
+        if s in _used:
+            return None
+        _used.add(s)
+        return s
+
     body = f"""{cb}
 <section class="chero">
   <div><p class="ceyebrow">Pickleball courts in</p>
@@ -115,28 +151,29 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
   {stat_block(stats)}
 </section>
 
-<section class="cmap" aria-label="Court locations" data-courtmap="{map_payload(rows, base)}">{svg}{map_chrome(total)}
-  <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
-  <span><i class="dot-p"></i>Club or paid</span>
-  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 
 <section class="csec"><h2>Venues with the most courts</h2>
   <p class="cnote">These publish a court count, so you know what you are turning up to.</p>
-  <div class="ccards">{"".join(court_card(r, f'{base}/{esc(slugify(r["slug"]))}', city) for r in top)}</div>
+  <div class="ccards">{"".join(court_card(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in top)}</div>
   <p class="ccount"><a class="clink" href="{base}/all">Browse all {total} courts in {esc(city)}</a></p>
 </section>
 
 <section class="csec ctwo">
   <div><h2>Free and open</h2><p class="cnote">Public parks and school courts.</p>
-  <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city) for r in free_rows)}</ul>
+  <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in free_rows)}</ul>
   <p class="ccount">Showing {len(free_rows)} of {free} free courts.</p></div>
   <div><h2>Clubs &amp; centers</h2>
   <p class="cnote">{'Membership or a day rate applies.' if paid_rows else 'None recorded here yet.'}</p>
-  <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city) for r in paid_rows)
+  <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in paid_rows)
       or '<li class="cempty">Nothing recorded yet. You can add one from inside PickleCue.</li>'}</ul>
   {f'<p class="ccount">Showing {len(paid_rows)} of {paid}.</p>' if paid_rows else ''}</div>
 </section>
 
+<p class="cmap-jump"><a href="#map">View map <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14"><path fill="currentColor" d="M12 16l-6-6 1.4-1.4L12 13.2l4.6-4.6L18 10z"/></svg></a></p>
+<section class="cmap" id="map" aria-label="Court locations" data-courtmap="{map_payload(rows, base)}">{svg}{map_chrome(total)}
+  <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
+  <span><i class="dot-p"></i>Club or paid</span>
+  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
   <p>Open games around {esc(city)}, skill levels and spots left, inside the app.</p></div>
@@ -174,7 +211,9 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
     def drow(r):
         n = r.get("court_count")
         access = "Free" if r.get("is_free") else ("Members" if r.get("is_free") is False else "")
-        return (f'<li class="drow" data-access="{"free" if r.get("is_free") else "paid"}" '
+        # Every court in the city is here, so every row is an anchor target.
+        return (f'<li class="drow" id="court-{slugify(r["slug"])}" tabindex="-1" '
+                f'data-access="{"free" if r.get("is_free") else "paid"}" '
                 f'data-name="{esc((r["label"] + " " + (r.get("address") or "")).lower())}" '
                 f'data-courts="{n or 0}">'
                 f'<a href="{base}/{esc(slugify(r["slug"]))}">'
@@ -191,6 +230,8 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
   <p class="clede">Every court we have on record in {esc(city)}. Filter by cost, search by
   name or street, or sort by size.</p>
 </section>
+
+<h2 class="vh">All {total} court locations in {esc(city)}</h2>
 
 <div class="dbar">
   <div class="dtabs" role="group" aria-label="Filter by access">
@@ -363,10 +404,6 @@ def build_state_from(state, sf, rows, out, indexable=False):
   {stat_block(stats)}
 </section>
 
-<section class="cmap" aria-label="Courts across {esc(sf)}" data-courtmap="{map_payload(rows)}">{svg}{map_chrome(total)}
-  <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
-  <span><i class="dot-p"></i>Club or paid</span>
-  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 
 <section class="csec"><h2>Cities with the most courts</h2>
   <p class="cnote">Every city we have court records for in {esc(sf)}.</p>
@@ -376,6 +413,11 @@ def build_state_from(state, sf, rows, out, indexable=False):
     for c, v in ranked[:24])}</ul>
 </section>
 
+<p class="cmap-jump"><a href="#map">View map <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14"><path fill="currentColor" d="M12 16l-6-6 1.4-1.4L12 13.2l4.6-4.6L18 10z"/></svg></a></p>
+<section class="cmap" id="map" aria-label="Courts across {esc(sf)}" data-courtmap="{map_payload(rows)}">{svg}{map_chrome(total)}
+  <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
+  <span><i class="dot-p"></i>Club or paid</span>
+  <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
   <p>Open games across {esc(sf)}, skill levels and spots left, inside the app.</p></div>

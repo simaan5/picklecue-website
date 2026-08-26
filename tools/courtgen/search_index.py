@@ -29,19 +29,26 @@ Shape:
     {"v":1, "n":{"st":38,"ci":310,"co":3443},
      "st":[["California","california",574,46], ...],
      "ci":[[stateIdx,"San Diego","san-diego",40], ...],
-     "co":[[cityIdx,"Balboa Park Courts","balboa-park-courts",8,1], ...]}
+     "co":[[cityIdx,"Balboa Park Courts","balboa-park-courts",8,1,1], ...]}
 
     st: name, slug, locations, cities
     ci: state index, name, slug, locations
-    co: city index, label, slug, court count, free (1/0)
+    co: city index, label, slug, court count, free (1/0), on the city page (1/0)
 
 Paths are rebuilt client-side:
     /courts/us/{st.slug}
     /courts/us/{st.slug}/{ci.slug}
-    /courts/us/{st.slug}/{ci.slug}/{co.slug}
+    /courts/us/{st.slug}/{ci.slug}#court-{co.slug}          when on the city page
+    /courts/us/{st.slug}/{ci.slug}/all#court-{co.slug}      otherwise
+
+A named court NEVER routes to /courts/us/.../{slug} — that page exists and stays
+alive for direct links and Universal Links, but it is deliberately noindex and
+thin, and it is the wrong thing to hand a searcher who just told us what they
+wanted.
 """
 import json
 
+from pages import city_anchor_slugs
 from shell import slugify
 
 INDEX_VERSION = 1
@@ -67,14 +74,24 @@ def build(eligible, states_full, out_path):
             ci_idx = len(ci_list)
             ci_list.append([st_idx, city, slugify(city), len(rows)])
 
+            # Which courts the city page actually renders. A search result for
+            # one of those lands on the richer, indexable city page; the rest
+            # land on that city's /all directory, which lists every court and
+            # canonicals back to the city page. Both carry the anchor, so the
+            # searcher arrives at the exact court either way — and neither is
+            # the thin, deliberately noindex court detail page.
+            on_city = set(city_anchor_slugs(rows))
+
             for r in sorted(rows, key=lambda x: (x.get("label") or "").lower()):
                 label = r.get("label") or "Pickleball courts"
+                slug = slugify(r["slug"])
                 co_list.append([
                     ci_idx,
                     label,
-                    slugify(r["slug"]),
+                    slug,
                     int(r.get("court_count") or 0),
                     1 if r.get("is_free") else 0,
+                    1 if slug in on_city else 0,
                 ])
 
     payload = {

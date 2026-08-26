@@ -424,3 +424,31 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 @media (prefers-reduced-motion: reduce){
     .csearch-results, .cs-list a{ transition:none; }
 }
+
+/* ─── Arriving from search ────────────────────────────────────────────────
+   The browser's own anchor jump does the work. This marks where you landed
+   for a couple of seconds so the row is findable among its neighbours. */
+.court-landed{
+    outline:2px solid var(--court-fg); outline-offset:3px; border-radius:12px;
+    animation:courtLanded 2.6s ease-out 1;
+}
+.cc.court-landed{ outline-offset:0; }
+@keyframes courtLanded{
+    0%,55%{ background-color:rgba(31,93,67,.10); }
+    100%{ background-color:transparent; }
+}
+@media (prefers-reduced-motion: reduce){
+    .court-landed{ animation:none; background-color:rgba(31,93,67,.08); }
+}
+
+/* Jump to the map. A plain anchor: following it scrolls the map into view, and
+   the existing IntersectionObserver in courtmap.js loads MapLibre then — which
+   is the whole point of moving the map down. No JS needed to reach it. */
+.cmap-jump{ margin:0 0 18px; }
+.cmap-jump a{
+    display:inline-flex; align-items:center; gap:7px; min-height:44px;
+    font:600 15px/1 var(--f); color:var(--court-fg); text-decoration:none;
+    border-bottom:1px solid transparent;
+}
+.cmap-jump a:hover{ border-bottom-color:currentColor; }
+.cmap-jump a:focus-visible{ outline:2px solid var(--court-fg); outline-offset:3px; border-radius:6px; }

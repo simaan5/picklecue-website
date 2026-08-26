@@ -81,7 +81,7 @@ def court_count(**filters):
 
 def head(title, desc, canonical, extra_ld=None, indexable=False, search=False):
     EEA = "['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']"
-    search_js = ('<script defer src="/assets/courtsearch.js?v=20260825a"></script>'
+    search_js = ('<script defer src="/assets/courtsearch.js?v=20260826a"></script>'
                  if search else "")
     robots = "" if indexable else '<meta name="robots" content="noindex">'
     ld = ""
@@ -105,7 +105,7 @@ gtag('js',new Date());gtag('config','G-XCV417L0J8');</script>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
 <link rel="stylesheet" href="/fonts.css">
 <link rel="stylesheet" href="/assets/site-v2.css?v=20260825a">
-<link rel="stylesheet" href="/assets/courts.css?v=3">
+<link rel="stylesheet" href="/assets/courts.css?v=4">
 <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
 <script defer src="/assets/site-v2.js?v=20260825a"></script>
 <script defer src="/assets/courtmap.js?v=1"></script>
@@ -147,6 +147,29 @@ FOOTER = """<footer class="site-foot"><div class="foot-inner">
 <div class="foot-col"><h3>Legal</h3><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/licenses">Notices</a><a href="#cookie-preferences">Cookie preferences</a><a href="/support">Support</a></div>
 </div></footer>"""
 
+
+
+# Arriving from search at #court-<slug>. The browser already scrolls there
+# without any of this — that is the base behaviour and it is not allowed to
+# depend on the script. This only makes the arrival legible: it moves focus to
+# the row (so a keyboard and a screen reader land there too, not just the
+# viewport) and marks it briefly. Under reduced motion the mark is static.
+ANCHOR_ARRIVAL = """<script>
+(function(){
+  function land(){
+    var h = location.hash;
+    if (!h || h.indexOf('#court-') !== 0) return;
+    var el = document.getElementById(h.slice(1));
+    if (!el) return;
+    try { el.focus({ preventScroll: true }); } catch (e) {}
+    el.classList.add('court-landed');
+    setTimeout(function(){ el.classList.remove('court-landed'); }, 2600);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', land);
+  else land();
+  window.addEventListener('hashchange', land);
+})();
+</script>"""
 
 def attribution(extra=""):
     return (f'<p class="cattrib">{ODBL_ATTRIBUTION} Court details are community '
@@ -279,4 +302,4 @@ def page(title, desc, canonical, body, extra_ld=None, indexable=False, search=Fa
     return (f"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n"
             f"{head(title, desc, canonical, extra_ld, indexable, search)}\n</head>\n<body data-audience=\"courts\">\n"
             f"{MASTHEAD}\n<main id=\"main\"><div class=\"wrap\">\n{body}\n</div></main>\n"
-            f"{FOOTER}\n</body>\n</html>\n")
+            f"{FOOTER}\n{ANCHOR_ARRIVAL}\n</body>\n</html>\n")

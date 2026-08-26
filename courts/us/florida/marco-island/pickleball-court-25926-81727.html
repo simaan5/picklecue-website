@@ -19,7 +19,7 @@ gtag('js',new Date());gtag('config','G-XCV417L0J8');</script>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
 <link rel="stylesheet" href="/fonts.css">
 <link rel="stylesheet" href="/assets/site-v2.css?v=20260825a">
-<link rel="stylesheet" href="/assets/courts.css?v=3">
+<link rel="stylesheet" href="/assets/courts.css?v=4">
 <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
 <script defer src="/assets/site-v2.js?v=20260825a"></script>
 <script defer src="/assets/courtmap.js?v=1"></script>
@@ -95,5 +95,21 @@ document.documentElement.setAttribute('data-theme',t||(d?'dark':'light'));}catch
 <div class="foot-col"><h3>Courts</h3><a href="/courts/">All courts</a><a href="/courts/methodology">How we count</a></div>
 <div class="foot-col"><h3>Legal</h3><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/licenses">Notices</a><a href="#cookie-preferences">Cookie preferences</a><a href="/support">Support</a></div>
 </div></footer>
+<script>
+(function(){
+  function land(){
+    var h = location.hash;
+    if (!h || h.indexOf('#court-') !== 0) return;
+    var el = document.getElementById(h.slice(1));
+    if (!el) return;
+    try { el.focus({ preventScroll: true }); } catch (e) {}
+    el.classList.add('court-landed');
+    setTimeout(function(){ el.classList.remove('court-landed'); }, 2600);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', land);
+  else land();
+  window.addEventListener('hashchange', land);
+})();
+</script>
 </body>
 </html>

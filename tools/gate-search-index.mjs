@@ -48,23 +48,55 @@ if (br / 1024 > MAX_BROTLI_KB) {
    shapes count. */
 const seen = new Set();
 const missing = [];
+const noAnchor = [];
+const bodies = new Map();
+
+function read(rel) {
+  if (bodies.has(rel)) return bodies.get(rel);
+  let f = join(ROOT, rel + '.html');
+  if (!existsSync(f)) f = join(ROOT, rel, 'index.html');
+  const v = existsSync(f) ? readFileSync(f, 'utf8') : null;
+  bodies.set(rel, v);
+  return v;
+}
+
+/* A court result promises to land on the exact court. Checking the page exists
+   is not enough — the anchor has to be on it. */
 const check = (p) => {
   if (seen.has(p)) return;
   seen.add(p);
-  const rel = p.replace(/^\//, '');
-  if (!existsSync(join(ROOT, rel + '.html')) && !existsSync(join(ROOT, rel, 'index.html'))) missing.push(p);
+  const [path, hash] = p.split('#');
+  const body = read(path.replace(/^\//, ''));
+  if (body === null) { missing.push(p); return; }
+  if (hash && !body.includes('id="' + hash + '"')) noAnchor.push(p);
 };
 
 j.st.forEach(s => check('/courts/us/' + s[1]));
 j.ci.forEach(c => check('/courts/us/' + j.st[c[0]][1] + '/' + c[2]));
 j.co.forEach(k => {
-  const c = j.ci[k[0]];
-  check('/courts/us/' + j.st[c[0]][1] + '/' + c[2] + '/' + k[2]);
+  const c = j.ci[k[0]], city = '/courts/us/' + j.st[c[0]][1] + '/' + c[2];
+  check((k[5] ? city : city + '/all') + '#court-' + k[2]);
 });
+
+/* Individual court pages must keep working — they are the Universal Link and
+   direct-share target even though search no longer sends anyone there. */
+const sample = j.co.slice(0, 200).concat(j.co.slice(-200));
+const deadCourtPages = sample.filter(k => {
+  const c = j.ci[k[0]];
+  return read('courts/us/' + j.st[c[0]][1] + '/' + c[2] + '/' + k[2]) === null;
+});
+if (deadCourtPages.length) {
+  fails.push(`${deadCourtPages.length} of ${sample.length} sampled court detail pages are missing — ` +
+             `search no longer links to them, but Universal Links and shared URLs still do`);
+}
 
 if (missing.length) {
   fails.push(`${missing.length} of ${seen.size} indexed paths have no page:\n      ` +
              missing.slice(0, 8).join('\n      ') + (missing.length > 8 ? `\n      …and ${missing.length - 8} more` : ''));
+}
+if (noAnchor.length) {
+  fails.push(`${noAnchor.length} indexed paths point at an anchor the page does not contain:\n      ` +
+             noAnchor.slice(0, 8).join('\n      ') + (noAnchor.length > 8 ? `\n      …and ${noAnchor.length - 8} more` : ''));
 }
 
 /* Fields that must never appear in a public search index. `verified` marks the
