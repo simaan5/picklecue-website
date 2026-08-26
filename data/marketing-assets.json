@@ -199,33 +199,6 @@
       "sha256": "34cce6d542527dd9",
       "fileModified": "2026-08-22"
     },
-    "courts-detail.webp": {
-      "path": "images/app/courts-detail.webp",
-      "sourceBuild": null,
-      "fixtureProfile": "marketing",
-      "capturedAt": null,
-      "sourceScreen": null,
-      "dateBehavior": "none",
-      "containsUpcomingDate": false,
-      "containsVerifiedBadge": false,
-      "containsDupr": false,
-      "containsRatingOrReviewCount": false,
-      "evergreen": true,
-      "approvedForMarketing": true,
-      "audit": {
-        "by": "visual inspection of the rendered master and the encoded webp",
-        "on": "2026-08-26",
-        "sha256": "7f8ae45d5958f006",
-        "replaced": "the previous courts-detail.webp showed the court page BEFORE the conditions card shipped"
-      },
-      "notes": "Court detail, dark, current UI: Apple Maps embed, 4 courts / Indoor-Outdoor / Paid, address, the CONDITIONS card (76F, feels like 76F, Great, 9 mph wind, 69%) that the previous capture predated, then Directions / Chat / Check In / Reviews tiles, Host a Game Here, and Report Status / Share Court / Fix Pin Location rows. Fictional fixture venue (Seabreeze Recreation Center) - not a PlayPickleball name. No verified seal, no dates, no rating or review count. A \"Reviews\" BUTTON is present - the feature exists; copy must not claim review content.",
-      "bytes": 68128,
-      "width": 760,
-      "height": 1651,
-      "sha256": "7f8ae45d5958f006",
-      "fileModified": "2026-08-26",
-      "master": "PickleCue repo: qa/marketing-account/raw-captures/2026-08-05-iphone-dark/42-court-detail.png"
-    },
     "game-detail.webp": {
       "path": "images/app/game-detail.webp",
       "sourceBuild": null,
@@ -950,6 +923,28 @@
       "height": 1057,
       "sha256": "f5e586c36431d968",
       "fileModified": "2026-08-24"
+    },
+    "courts-map-sheet.webp": {
+      "path": "images/app/courts-map-sheet.webp",
+      "master": "PickleCue repo: qa/store-screenshots/build-213-deck-v4/raw/s3a-courts-pinfocus.png",
+      "sourceBuild": 213,
+      "capturedAt": "2026-08-19",
+      "approvedForMarketing": true,
+      "containsUpcomingDate": false,
+      "containsVerifiedBadge": true,
+      "containsDupr": false,
+      "containsRatingOrReviewCount": false,
+      "notes": "The SHIPPING Courts experience: CourtsReimaginedRootView -> CourtsFloatingSheet. OpenStreetMap tiles, green runner pins, a selected-court sheet with 8 Courts / Outdoor / Free and an Open Court button, over the app's tab bar.\n\nREPLACES courts-detail.webp, which showed CourtDetailView - the RETIRED court screen. MainTabView.swift:63 renders CourtsReimaginedRootView; CourtDetailView survives only behind CourtsMapView and MarketingPreviewHost.swift:157, and that host is what every marketing capture of 'courtDetail' rendered. So every court screenshot this site has ever shipped was a screen users no longer see.\n\nCARRIES THE BLUE VERIFIED SEAL. iOS plan 091: courts.verified marks the IMPORT SOURCE, not a checked place - 90 of 10,674 live rows. Shipped anyway because showing the app as it actually is beats showing a screen that does not exist; the badge is an app defect to fix in 091, not a website claim. NO COPY ON ANY PAGE MAY SAY VERIFIED, and when 091 ships this must be recaptured.",
+      "audit": {
+        "by": "visual inspection of the master and the encoded webp, plus source verification that MainTabView renders the reimagined root",
+        "on": "2026-08-26",
+        "sha256": "6c94dec80289ca68"
+      },
+      "bytes": 84600,
+      "width": 760,
+      "height": 1651,
+      "sha256": "6c94dec80289ca68",
+      "fileModified": "2026-08-26"
     }
   }
 }
