@@ -213,16 +213,18 @@
       "evergreen": true,
       "approvedForMarketing": true,
       "audit": {
-        "by": "visual inspection of the rendered image",
-        "on": "2026-08-25",
-        "sha256": "fff420063fb42a13"
+        "by": "visual inspection of the rendered master and the encoded webp",
+        "on": "2026-08-26",
+        "sha256": "7f8ae45d5958f006",
+        "replaced": "the previous courts-detail.webp showed the court page BEFORE the conditions card shipped"
       },
-      "notes": "Court page: 8 courts, Indoor/Outdoor, Paid, address, Directions/Chat/Check In/Reviews, Host a Game Here. No badge, no dates. A \"Reviews\" BUTTON is present - the feature exists; copy must not claim review content.",
-      "bytes": 49184,
-      "width": 9,
-      "height": 194305,
-      "sha256": "fff420063fb42a13",
-      "fileModified": "2026-08-22"
+      "notes": "Court detail, dark, current UI: Apple Maps embed, 4 courts / Indoor-Outdoor / Paid, address, the CONDITIONS card (76F, feels like 76F, Great, 9 mph wind, 69%) that the previous capture predated, then Directions / Chat / Check In / Reviews tiles, Host a Game Here, and Report Status / Share Court / Fix Pin Location rows. Fictional fixture venue (Seabreeze Recreation Center) - not a PlayPickleball name. No verified seal, no dates, no rating or review count. A \"Reviews\" BUTTON is present - the feature exists; copy must not claim review content.",
+      "bytes": 68128,
+      "width": 760,
+      "height": 1651,
+      "sha256": "7f8ae45d5958f006",
+      "fileModified": "2026-08-26",
+      "master": "PickleCue repo: qa/marketing-account/raw-captures/2026-08-05-iphone-dark/42-court-detail.png"
     },
     "game-detail.webp": {
       "path": "images/app/game-detail.webp",
