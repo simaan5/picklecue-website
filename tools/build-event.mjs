@@ -25,7 +25,7 @@
  * system was built to prevent. "This event has taken place" is complete and
  * true on its own.
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, unlinkSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -72,6 +72,7 @@ const COPY = {
     cta: 'Register on the organizer&rsquo;s site',
     expectHead: 'What to expect',
     callout: c.calloutUpcoming,
+    utilities: c.utilities,
     entryCard: 'Register solo or bring a partner',
     includes: 'includes',
     pricingHead: 'Published prices',
@@ -85,6 +86,7 @@ const COPY = {
     cta: 'View official event page',
     expectHead: 'What to expect',
     callout: c.calloutUpcoming,
+    utilities: c.utilities,
     entryCard: 'Register solo or bring a partner',
     includes: 'includes',
     pricingHead: 'Published prices',
@@ -98,6 +100,7 @@ const COPY = {
     cta: 'View official event page',
     expectHead: 'What to expect',
     callout: c.calloutUpcoming,
+    utilities: c.utilities,
     entryCard: 'Register solo or bring a partner',
     includes: 'includes',
     pricingHead: 'Published prices',
@@ -113,6 +116,7 @@ const COPY = {
     cta: 'View official event page',
     expectHead: 'What the event included',
     callout: '',
+    utilities: '',
     entryCard: 'Solo and partner entry',
     includes: 'included',
     pricingHead: 'Prices the organizer published',
@@ -120,6 +124,57 @@ const COPY = {
     cardStatus: 'This event has taken place.',
   }),
 };
+
+/* ------------------------------------------------------------------ ics --- */
+
+/* RFC 5545: escape the reserved characters, then fold at 75 octets. Unfolded
+   long lines are the single most common reason a calendar refuses a file. */
+const icsText = v => String(v).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+function fold(line) {
+  const b = Buffer.from(line, 'utf8');
+  if (b.length <= 75) return line;
+  const out = []; let i = 0;
+  while (i < b.length) {
+    let n = Math.min(i ? 74 : 75, b.length - i);
+    /* Never split a multi-byte sequence: slicing an em-dash in half yields a
+       replacement character, and the whole DESCRIPTION arrives corrupted on the
+       one device that actually opens the file. Back off to a lead byte. */
+    while (n > 1 && i + n < b.length && (b[i + n] & 0xC0) === 0x80) n--;
+    out.push((i ? ' ' : '') + b.slice(i, i + n).toString('utf8'));
+    i += n;
+  }
+  return out.join('\r\n');
+}
+const icsStamp = d => new Date(d).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+
+/**
+ * A calendar file for the event.
+ *
+ * DTSTAMP is statusVerifiedAt, not "now" — a build must be reproducible, and
+ * "when we last checked the organizer's page" is a more honest stamp than the
+ * moment a CI runner happened to execute.
+ *
+ * The DESCRIPTION says who runs this and who does not, because a calendar entry
+ * outlives the page it came from and is the one artefact that ends up on a
+ * stranger's phone with no context around it.
+ */
+function ics(ev) {
+  const url = `https://www.picklecue.com/${ev.page.replace(/index\.html$/, '')}`;
+  const desc = `${ev.description}\n\nOrganized by ${ev.organizer}. Registration, payment and all event operations are handled by the organizer at ${ev.sourceUrl} — PickleCue promotes this event and is not the organizer.\n\n${url}`;
+  return [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//PickleCue//Community Events//EN',
+    'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+    `UID:${ev.slug}@picklecue.com`,
+    `DTSTAMP:${icsStamp(ev.statusVerifiedAt)}`,
+    `DTSTART:${icsStamp(ev.startsAt)}`,
+    `DTEND:${icsStamp(ev.endsAt)}`,
+    `SUMMARY:${icsText(ev.name)}`,
+    `LOCATION:${icsText([ev.location.name, ev.location.streetAddress, `${ev.location.addressLocality}, ${ev.location.addressRegion}`].join(', '))}`,
+    `DESCRIPTION:${icsText(desc)}`,
+    `URL:${url}`,
+    'END:VEVENT', 'END:VCALENDAR',
+  ].map(fold).join('\r\n') + '\r\n';
+}
 
 /* ---------------------------------------------------------------- render --- */
 
@@ -138,6 +193,16 @@ function context(ev) {
     officialLink: `<a href="${ev.sourceUrl}" target="_blank" rel="noopener noreferrer">official event page&nbsp;&#8599;</a>`,
     goLink: place => `<a href="${ev.goPath}" data-track="community_event_outbound" data-audience="event" data-event-slug="${ev.slug}" data-placement="${place}">their page</a>`,
   };
+  const svg = d => `<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+  /* Three secondary actions, one row, one interaction owner each. They exist
+     only while the event is still ahead — a calendar file for a finished event
+     is noise, and directions to a finished one are worse. */
+  c.utilities = `
+        <ul class="ev-utils">
+          <li><a href="https://maps.google.com/?q=${encodeURIComponent(ev.location.mapsQuery)}" target="_blank" rel="noopener noreferrer" data-track="event_utility" data-utility="directions" data-event-slug="${ev.slug}">${svg('<path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/>')}Directions</a></li>
+          <li><a href="/${ev.page.replace(/index\.html$/, '')}${ev.slug}.ics" type="text/calendar" data-track="event_utility" data-utility="calendar" data-event-slug="${ev.slug}">${svg('<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 13v4M10 15h4"/>')}Add to calendar</a></li>
+          <li><button type="button" class="ev-util-share" hidden data-track="event_utility" data-utility="share" data-event-slug="${ev.slug}">${svg('<circle cx="6" cy="12" r="2.4"/><circle cx="17" cy="6.5" r="2.4"/><circle cx="17" cy="17.5" r="2.4"/><path d="M8.2 10.9 14.8 7.6M8.2 13.1l6.6 3.3"/>')}<span>Share</span></button></li>
+        </ul>`;
   c.calloutUpcoming = `
       <div class="callout">
         <strong>No partner? No problem.</strong>
@@ -218,6 +283,7 @@ function render(ev, now) {
   html = region(html, 'STATUS', k.heroStatus);
   html = region(html, 'CTA', k.cta);
   html = region(html, 'EXPECT_HEAD', k.expectHead);
+  html = region(html, 'UTILITIES', k.utilities + (k.utilities ? '\n      ' : ''));
   html = region(html, 'CALLOUT', k.callout);
   html = region(html, 'ENTRY_CARD', k.entryCard);
   html = region(html, 'INCLUDES', k.includes);
@@ -251,7 +317,8 @@ function render(ev, now) {
   cardHtml = region(cardHtml, 'CARD_STATUS', k.cardStatus);
   cardHtml = region(cardHtml, 'CARD_CTA', state === 'ended' ? 'View event page' : 'View event');
 
-  return { state, files: [[page, html], [card, cardHtml]] };
+  const icsPath = join(ROOT, ev.page.replace(/index\.html$/, `${ev.slug}.ics`));
+  return { state, icsPath, ics: state === 'ended' ? null : ics(ev), files: [[page, html], [card, cardHtml]] };
 }
 
 /* ------------------------------------------------------------------ cli --- */
@@ -278,9 +345,15 @@ let stale = 0;
 for (const slug of slugs) {
   const ev = CFG.events.find(x => x.slug === slug);
   if (!ev) { console.error(`unknown event "${slug}"`); process.exit(2); }
-  const { state, files } = render(ev, NOW);
+  const { state, files, icsPath, ics: icsBody } = render(ev, NOW);
+  /* The calendar file is part of the built state: present while the event is
+     ahead, gone once it is not. A stale .ics on a stranger's phone is the one
+     artefact that outlives the page it came from. */
+  const icsNow = existsSync(icsPath) ? readFileSync(icsPath, 'utf8') : null;
+  const icsChanged = icsBody !== icsNow;
   const changed = files.filter(([f, out]) => readFileSync(f, 'utf8') !== out);
   if (CHECK) {
+    if (icsChanged) changed.push([icsPath]);
     if (changed.length) {
       stale++;
       console.error(
@@ -295,6 +368,10 @@ for (const slug of slugs) {
     }
   } else {
     for (const [f, out] of changed) writeFileSync(f, out);
+    if (icsChanged) {
+      if (icsBody) writeFileSync(icsPath, icsBody); else if (icsNow !== null) unlinkSync(icsPath);
+      changed.push([icsPath + (icsBody ? '' : ' (removed)')]);
+    }
     console.log(`  ${slug}: state "${state}" at ${NOW.toISOString()} — ${changed.length ? changed.map(([f]) => f.replace(ROOT, '')).join(', ') + ' updated' : 'no change'}`);
   }
 }

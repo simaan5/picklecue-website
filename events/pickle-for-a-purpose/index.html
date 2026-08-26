@@ -214,6 +214,18 @@
     .cta-note{margin:15px 0 0;font-size:1rem;line-height:1.6;color:var(--ink-soft);max-width:46ch}
     .cta-note a{color:var(--court);font-weight:600;text-decoration:underline;text-underline-offset:3px}
     .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px}
+
+    /* Secondary utilities. Ghost pills so they read as tools next to the one
+       primary action, not as three competing CTAs. 44px minimum, like every
+       other target on the site. */
+    .ev-utils{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 0;padding:0}
+    .ev-utils a,.ev-utils button{display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:11px 18px;border-radius:999px;border:1px solid var(--rule-strong);background:transparent;color:var(--ink);font:inherit;font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer}
+    .ev-utils a:hover,.ev-utils button:hover{background:rgba(235,255,235,0.06);border-color:var(--court)}
+    .ev-utils a:focus-visible,.ev-utils button:focus-visible{outline:2px solid var(--court);outline-offset:3px}
+    .ev-utils svg{flex:none;width:19px;height:19px;stroke:var(--court);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+    /* [hidden] loses to display:inline-flex without this — the share button
+       would render before its script decides whether sharing is possible. */
+    .ev-utils button[hidden]{display:none}
     .cta-big{width:100%;max-width:560px;justify-content:center}
 
     /* What to expect — soft dark cards, lime line icons (mockup language) */
@@ -358,7 +370,7 @@
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>
-            <span>Peninsula Racquet Club, 30850 Hawthorne Blvd, Rancho Palos Verdes &middot; <a href="https://maps.google.com/?q=Peninsula+Racquet+Club,+30850+Hawthorne+Blvd,+Rancho+Palos+Verdes,+CA" target="_blank" rel="noopener noreferrer">Get directions</a></span>
+            <span>Peninsula Racquet Club, 30850 Hawthorne Blvd, Rancho Palos Verdes</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
@@ -380,6 +392,13 @@
           </a>
         </div>
         <p class="cta-note"><!-- EVENT:STATUS --><strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> The event is still scheduled. Registration and payment are handled entirely on <a href="https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563" target="_blank" rel="noopener noreferrer">official event page&nbsp;&#8599;</a>, and only they can confirm whether it reopens.<!-- /EVENT:STATUS --></p>
+        <!-- EVENT:UTILITIES -->
+        <ul class="ev-utils">
+          <li><a href="https://maps.google.com/?q=Peninsula%20Racquet%20Club%2C%2030850%20Hawthorne%20Blvd%2C%20Rancho%20Palos%20Verdes%2C%20CA" target="_blank" rel="noopener noreferrer" data-track="event_utility" data-utility="directions" data-event-slug="pickle-for-a-purpose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>Directions</a></li>
+          <li><a href="/events/pickle-for-a-purpose/pickle-for-a-purpose.ics" type="text/calendar" data-track="event_utility" data-utility="calendar" data-event-slug="pickle-for-a-purpose"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 13v4M10 15h4"/></svg>Add to calendar</a></li>
+          <li><button type="button" class="ev-util-share" hidden data-track="event_utility" data-utility="share" data-event-slug="pickle-for-a-purpose"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.4"/><circle cx="17" cy="6.5" r="2.4"/><circle cx="17" cy="17.5" r="2.4"/><path d="M8.2 10.9 14.8 7.6M8.2 13.1l6.6 3.3"/></svg><span>Share</span></button></li>
+        </ul>
+      <!-- /EVENT:UTILITIES -->
       </div>
     </section>
 
@@ -487,6 +506,31 @@
   </div>
   <!-- /EVENT:STICKY -->
   <script>
+    /* Share: enhancement only. The button ships hidden and is revealed only
+       when the browser can actually do something — a share control that cannot
+       share is worse than no control at all. */
+    (function () {
+      var btn = document.querySelector('.ev-util-share');
+      if (!btn) return;
+      var label = btn.querySelector('span');
+      if (navigator.share) {
+        btn.hidden = false;
+        btn.addEventListener('click', function () {
+          navigator.share({ title: document.title, url: location.href }).catch(function () {});
+        });
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        btn.hidden = false;
+        label.setAttribute('aria-live', 'polite');
+        btn.addEventListener('click', function () {
+          navigator.clipboard.writeText(location.href).then(function () {
+            var was = label.textContent;
+            label.textContent = 'Link copied';
+            setTimeout(function () { label.textContent = was; }, 2000);
+          }).catch(function () {});
+        });
+      }
+    })();
+
     /* Sticky register bar (mobile): appears after the hero CTA scrolls out,
        hides while the pricing/registration section is on screen. */
     (function () {

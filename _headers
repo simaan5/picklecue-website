@@ -35,3 +35,12 @@
 
 /videos/*
   Cache-Control: public, max-age=2592000
+
+# Calendar files. The event page's "Add to calendar" only offers to add an
+# event if the response is text/calendar; served as octet-stream, iOS saves it
+# to Files and nothing happens. Short cache because the file is regenerated
+# whenever the event record is re-verified, and it is deleted once the event
+# has passed.
+/*.ics
+  Content-Type: text/calendar; charset=utf-8
+  Cache-Control: public, max-age=3600, must-revalidate

@@ -49,6 +49,7 @@ const MIME = {
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp',
   '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain',
   '.mp4': 'video/mp4', '.webm': 'video/webm', '.ico': 'image/x-icon',
+  '.ics': 'text/calendar; charset=utf-8',
 };
 
 /**
