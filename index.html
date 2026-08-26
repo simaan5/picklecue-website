@@ -135,7 +135,7 @@
     <link rel="preload" as="font" type="font/woff2" crossorigin
           href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="preload" as="image" href="/images/app/courts-detail.webp?v=20260826a" fetchpriority="high">
+    <link rel="preload" as="image" href="/videos/hero/app-tour-poster.jpg" fetchpriority="high">
 
 <style>
 /* ============================================================
@@ -479,59 +479,6 @@ a{ color:inherit; }
     .journey-phone img{ transition:none; }
 }
 
-/* ---- Hero sequence -------------------------------------------------------
-   Five real screens on a 20s loop, 4s each, in workflow order. Every frame is
-   a still, so nothing is downloaded that is not shown, and the whole sequence
-   costs less than a tenth of the 1.7 MB screen recording it replaced.
-
-   Base state (no animation, no JS, reduced motion) shows frame 1 at full
-   opacity and hides the rest — content is never dependent on the animation. */
-.hero-seq{ position:relative; width:100%; height:100%; }
-.hero-seq img{ position:absolute; inset:0; opacity:0; }
-.hero-seq img:first-child{ opacity:1; }
-
-.hero-stages{
-    list-style:none; margin:22px 0 0; padding:0;
-    display:flex; gap:6px; width:min(392px, 84%);
-}
-.hero-stages li{
-    flex:1; text-align:center; padding-top:9px;
-    border-top:2px solid var(--line);
-    font:600 10.5px/1 var(--f-mono); letter-spacing:.1em; text-transform:uppercase;
-    color:var(--ink-mute);
-    transition: color .4s var(--ease), border-color .4s var(--ease);
-}
-.hero-stages li:first-child{ color:var(--court-fg); border-top-color:var(--court-fg); }
-
-@media (prefers-reduced-motion: no-preference){
-    .hero-seq img{ animation: heroSeq 16s var(--ease) infinite; }
-    .hero-seq img:first-child{ animation-name: heroSeqFirst; }
-    .hero-seq img:nth-child(2){ animation-delay:4s; }
-    .hero-seq img:nth-child(3){ animation-delay:8s; }
-    .hero-seq img:nth-child(4){ animation-delay:12s; }
-
-    /* 0-2% fades in (0.4s), holds to 18%, fades out by 20% (4s slot). */
-    @keyframes heroSeq{ 0%{opacity:0} 2.5%{opacity:1} 22.5%{opacity:1} 25%{opacity:0} 100%{opacity:0} }
-    /* Frame 1 must be visible at t=0, so it starts lit and returns lit. */
-    @keyframes heroSeqFirst{ 0%{opacity:1} 22.5%{opacity:1} 25%{opacity:0} 97.5%{opacity:0} 100%{opacity:1} }
-
-    .hero-stages li{ animation: heroStage 16s step-end infinite; }
-    .hero-stages li:nth-child(2){ animation-delay:4s; }
-    .hero-stages li:nth-child(3){ animation-delay:8s; }
-    .hero-stages li:nth-child(4){ animation-delay:12s; }
-    @keyframes heroStage{
-        0%{ color:var(--court-fg); border-top-color:var(--court-fg); }
-        25%{ color:var(--ink-mute); border-top-color:var(--line); }
-        100%{ color:var(--ink-mute); border-top-color:var(--line); }
-    }
-    .hero-stages li:first-child{ animation-name: heroStageFirst; }
-    @keyframes heroStageFirst{
-        0%{ color:var(--court-fg); border-top-color:var(--court-fg); }
-        25%{ color:var(--ink-mute); border-top-color:var(--line); }
-        99.9%{ color:var(--ink-mute); border-top-color:var(--line); }
-        100%{ color:var(--court-fg); border-top-color:var(--court-fg); }
-    }
-}
 
 .float-card{
     position:absolute; background:var(--card); border:1px solid var(--line);
@@ -1350,24 +1297,30 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         <div class="theater rise rise-3">
             <div class="phone">
                 <div class="phone-screen">
-                    <!-- Five real app screens, crossfading in the order a player
-                         actually moves through them. These are the scrubbed
-                         marketing captures (fictional cast, fictional venues) —
-                         the same files players.html and organizers.html use.
-                         The 54s screen recording this replaced was recorded
-                         against live production and showed five PlayPickleball-
-                         sourced venue names that are now soft-deleted from the
-                         app. See docs/website-cro-audit-2026-08-25.md, P0-1. -->
-                    <div class="hero-seq">
-                        <img src="/images/app/courts-detail.webp?v=20260826a" alt="A PickleCue court page: court count, indoor and outdoor, price, address, current conditions and directions" width="760" height="1651" fetchpriority="high" decoding="async">
-                        <img src="/images/app/s2-live-scoring.webp" alt="Live scoring in PickleCue, nine to five, with the serving team marked" width="760" height="1651" loading="lazy" decoding="async">
-                        <img src="/images/app/match-result.webp" alt="A finished match with the final score recorded" width="760" height="1651" loading="lazy" decoding="async">
-                        <img src="/images/app/bracket-champion.webp" alt="A completed tournament bracket with the champion decided" width="760" height="1651" loading="lazy" decoding="async">
-                    </div>
+                    <!-- Owner directive 2026-08-26: restore the original app-tour
+                         hero video.
+
+                         Recorded against LIVE PRODUCTION, not the marketing
+                         fixture. docs/website-cro-audit-2026-08-25.md P0-1
+                         records what frame sampling found and what SQL against
+                         public.courts confirmed on 2026-08-25: five venues in
+                         the tour (Pickletownla, Santa Monica Family YMCA,
+                         Pickle Pop, Memorial Park Pickleball, Memorial Park
+                         Gymnasium) carry source='playpickleball' and all five
+                         now have removed_at set. tools/courtgen/gate.py exists
+                         because PlayPickleball's ToU clause (xi) prohibits
+                         reproducing their content; that gate greps generated
+                         court pages and cannot see inside an MP4.
+
+                         Replacing this with a capture made against the
+                         MarketingCapture fixture removes the licence question
+                         and the five dead venues in one pass. Until then this
+                         ships by explicit owner decision. -->
+                    <video autoplay muted loop playsinline preload="auto" poster="/videos/hero/app-tour-poster.jpg" aria-label="A tour through PickleCue: home, courts, court details, tournaments, leagues, and your profile" data-hero-video>
+                        <source src="/videos/hero/app-tour.webm" type="video/webm">
+                        <source src="/videos/hero/app-tour.mp4" type="video/mp4">
+                    </video>
                 </div>
-                <ol class="hero-stages">
-                    <li>Discover</li><li>Score</li><li>Keep</li><li>Compete</li>
-                </ol>
             </div>
             <aside class="float-card float-game" aria-hidden="true">
                 <p class="float-kicker">Open game</p>
