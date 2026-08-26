@@ -43,6 +43,20 @@ jobs:
         # upcoming, an unobserved price, a sold-out claim — still fails here.
         run: node tools/gate-events.mjs
 
+      - name: Event pages must be built from data/events.json
+        # The builder is deterministic and idempotent, so "the working tree
+        # differs from what the builder would write" means exactly one thing:
+        # somebody hand-edited a marked region, or the clock moved the event
+        # into a new lifecycle state. Both need the same one-line fix.
+        run: node tools/build-event.mjs --all --check
+
+      - name: One analytics owner
+        # assets/acquire.js owns window.track and the single [data-track]
+        # listener. community.html and the event page each had their own,
+        # pushing a GTM-shaped object into a gtag.js dataLayer — 0 GA4 events
+        # per click, twice over, on the pages whose whole job is conversion.
+        run: node tools/gate-analytics.mjs
+
       - name: Sitemap must not list a redirecting URL
         run: |
           set -e

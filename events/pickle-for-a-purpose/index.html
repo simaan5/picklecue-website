@@ -507,24 +507,6 @@
         es.forEach(function (e) { pricingVisible = e.isIntersecting; }); update();
       }, { rootMargin: '0px 0px -20% 0px' }).observe(pricing.parentElement);
     })();
-
-    /* Lightweight analytics - same pattern as the homepage: queues to
-       window.dataLayer (GA4 reads it; consent gating in /assets/consent.js).
-       Register CTAs carry event_slug + placement per the campaign spec. */
-    window.dataLayer = window.dataLayer || [];
-    window.track = function (name, props) {
-      try { window.dataLayer.push({ event: name, ts: Date.now(), ...(props || {}) }); } catch (_) {}
-    };
-    document.addEventListener('click', function (e) {
-      var el = e.target.closest('[data-track]');
-      if (!el) return;
-      window.track(el.getAttribute('data-track'), {
-        cta: el.getAttribute('data-cta') || null,
-        href: el.getAttribute('href') || null,
-        event_slug: el.getAttribute('data-event-slug') || undefined,
-        placement: el.getAttribute('data-placement') || undefined
-      });
-    });
   </script>
   <script>
   /* Seam cover, not a rewrite.
