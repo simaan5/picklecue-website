@@ -13,6 +13,20 @@ jobs:
       deployments: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Deploy readiness, not development convenience. An event inside seven
+      # days whose registration state has not been re-checked in 24 hours does
+      # not reach production; inside 48 hours it certainly does not. The site
+      # advertised withdrawn early-bird pricing for fifteen days once already.
+      - name: Claim gate
+        run: node tools/gate-claims.mjs
+
+      - name: Event freshness (strict — blocks the deploy)
+        run: node tools/gate-events.mjs --strict
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:

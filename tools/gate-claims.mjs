@@ -40,6 +40,7 @@ const GENERATED_COURT_PAGES = /^courts\/us\//;
    live columns. A "3.48 DUPR" stat tile in marketing is not: the rating
    integration is switched off behind FeatureFlags.duprIntegration. */
 const MARKETING = /^(index|players|organizers|community|clubs|support|privacy|terms|licenses|404|live-scores)\.html$|^(courts|demo|events)\//;
+const SELLING = /^(index|players|organizers|community|clubs|live-scores)\.html$|^(demo|events)\/|^courts\/(index|us)\.html$/;
 const MARKETING_ONLY_PHRASES = {
   DUPR: 'FeatureFlags.duprIntegration is false — the app does not show DUPR ratings',
 };
@@ -98,6 +99,19 @@ function scanPhrases(rel, text) {
        public.court_reviews has zero rows, so no rating is real. */
     const rating = text.match(/\b[0-5]\.[0-9]\s*\(\s*\d{1,5}\s*\)/);
     if (rating) fail(rel, `fabricated rating "${rating[0]}" — court_reviews is empty, there are no ratings`);
+
+    /* Reviews and photos listed among things a visitor will find. The app has
+       both features; the tables have zero rows, so presenting them as content
+       is a promise the app cannot keep. The banned-phrase list only caught
+       "courts with reviews" — clubs.html said "plus directions, reviews, and
+       the games happening there" and sailed through.
+       Deliberately narrow: courts/methodology.html states "court_reviews is
+       empty" and "there are no reviews", which must keep passing. */
+    if (SELLING.test(rel)) {
+      const asContent = text.match(/(?:,|and|with|plus)\s+(?:reviews|photos)\b|\breviews and photos\b/i);
+      if (asContent) fail(rel, `"${asContent[0].trim()}" presents an empty dataset as content — ` +
+                               `court_reviews and court_photos both have zero rows`);
+    }
   }
   for (const [phrase, why] of Object.entries({
     'user-scalable=no': 'disables pinch zoom (WCAG 2.2 SC 1.4.4)',

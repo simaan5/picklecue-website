@@ -12,7 +12,21 @@
  * A claim about someone else's event is perishable. This makes the build refuse
  * to ship one that has gone off.
  *
+ * TWO ENFORCEMENT LEVELS, because a development PR should not go red overnight
+ * just because a clock advanced.
+ *
+ *   default    staleness is a WARNING. Prints the slug, the age and the exact
+ *              command to fix it, and exits 0. This runs on every push and PR.
+ *   --strict   staleness is a HARD FAIL. This runs before a production deploy,
+ *              where "we last checked two days ago" is not good enough for an
+ *              event somebody may be driving to.
+ *
+ * Three things fail in BOTH modes, because they are wrong rather than stale:
+ * a finished event still reading as upcoming, a price the page shows that we
+ * never observed, and the page claiming sold out on the organizer's behalf.
+ *
  * Run:  node tools/gate-events.mjs
+ *       node tools/gate-events.mjs --strict
  *       node tools/gate-events.mjs --now 2026-08-30T12:00:00Z   (time travel, for testing)
  */
 import { readFileSync } from 'node:fs';
@@ -26,8 +40,11 @@ const nowArg = process.argv.indexOf('--now');
 const NOW = nowArg > -1 ? new Date(process.argv[nowArg + 1]) : new Date();
 if (isNaN(NOW)) { console.error('--now is not a date'); process.exit(2); }
 
+const STRICT = process.argv.includes('--strict');
 const HOUR = 3600e3, DAY = 24 * HOUR;
 const fails = [], warns = [];
+/* Staleness: hard in strict mode, advisory otherwise. */
+const stale = m => (STRICT ? fails : warns).push(m);
 
 /* Language that only makes sense while an event is still ahead of the reader. */
 const FORWARD_LOOKING = [
@@ -74,10 +91,12 @@ for (const e of cfg.events) {
         recently. Someone may be about to drive there. */
   if (daysOut <= cfg.rules.windowDays) {
     if (verifiedAgoH > cfg.rules.reverifyWithinHours) {
-      fails.push(
-        `${label}: starts in ${daysOut.toFixed(1)} day(s) but registration state was last verified ` +
-        `${verifiedAgoH.toFixed(1)}h ago (limit ${cfg.rules.reverifyWithinHours}h). ` +
-        `Re-fetch ${e.sourceUrl}, then update statusVerifiedAt.`);
+      const imminent = daysOut <= 2;
+      stale(
+        `${label}: starts in ${daysOut.toFixed(1)} day(s)${imminent ? ' — INSIDE 48 HOURS' : ''} but registration ` +
+        `state was last verified ${verifiedAgoH.toFixed(1)}h ago (limit ${cfg.rules.reverifyWithinHours}h).\n` +
+        `      Fix: node tools/verify-event.mjs ${e.slug} --write` +
+        (STRICT ? '' : '\n      (warning here; this is a hard failure in --strict, which gates deployment)'));
     } else {
       console.log(`  ${label}: starts in ${daysOut.toFixed(1)}d, verified ${verifiedAgoH.toFixed(1)}h ago — fresh`);
     }
@@ -102,11 +121,13 @@ for (const e of cfg.events) {
   }
 }
 
-for (const w of warns) console.warn('  warn: ' + w);
+for (const w of warns) console.warn('\n  ⚠ ' + w);
+if (warns.length) console.warn(`\n  ${warns.length} warning(s). Not blocking this run; --strict blocks a deploy.\n`);
 if (fails.length) {
   console.error(`\nEVENT GATE: ${fails.length} problem(s)\n`);
   for (const f of fails) console.error('  ✗ ' + f);
   console.error('\nSource of truth: data/events.json\n');
   process.exit(1);
 }
-console.log(`Event gate holds. ${cfg.events.length} event(s) checked at ${NOW.toISOString()}.`);
+console.log(`Event gate holds (${STRICT ? 'strict' : 'advisory'}). ` +
+            `${cfg.events.length} event(s) checked at ${NOW.toISOString()}.`);

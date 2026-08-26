@@ -30,7 +30,11 @@ jobs:
       - name: Claim gate
         run: node tools/gate-claims.mjs
 
-      - name: Event freshness gate
+      - name: Event freshness (advisory)
+        # Staleness warns here and fails in deploy.yml. A development PR going
+        # red overnight because a verification timestamp aged teaches people to
+        # ignore the gate. Wrongness — a finished event still reading as
+        # upcoming, an unobserved price, a sold-out claim — still fails here.
         run: node tools/gate-events.mjs
 
       - name: Sitemap must not list a redirecting URL
