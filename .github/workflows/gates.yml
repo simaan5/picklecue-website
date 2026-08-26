@@ -64,6 +64,13 @@ jobs:
         # required properties per type.
         run: node tools/gate-schema.mjs --all
 
+      - name: CSP covers every external host
+        # /live, /organizer, /scorekeeper, /checkin and /e loaded Supabase from
+        # cdn.jsdelivr.net, which script-src has never allowed. Report-Only
+        # meant nothing broke and nothing complained; enforcing it would have
+        # taken all five down at once. Caught statically now, on every push.
+        run: node tools/gate-csp-hosts.mjs
+
       - name: Sitemap must not list a redirecting URL
         run: |
           set -e
