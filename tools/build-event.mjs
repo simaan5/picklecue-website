@@ -68,7 +68,7 @@ const t = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt
 const COPY = {
   'upcoming-open': c => ({
     metaDescription: `Join ${c.organizer}’s ${c.name} charity pickleball tournament on ${c.monthDay} in ${c.city}, supported through community promotion by PickleCue.`,
-    heroStatus: `<strong>Registration is open on the organizer&rsquo;s site.</strong> Registration and payment are handled entirely on ${c.officialLink}, not here.`,
+    heroStatus: `<strong>Registration is open on the organizer&rsquo;s site.</strong> Registration and payment are handled entirely on the organizer&rsquo;s ${c.officialLink}, not here.`,
     cta: 'Register on the organizer&rsquo;s site',
     expectHead: 'What to expect',
     callout: c.calloutUpcoming,
@@ -78,11 +78,12 @@ const COPY = {
     pricingHead: 'Published prices',
     pricingNote: `These are the prices the organizer published. We are not the organizer and cannot take a registration &mdash; that happens on ${c.goLink('availability_note')}.`,
     cardStatus: 'Registration is open on the organizer&rsquo;s site.',
+    cardHead: 'Coming up',
   }),
 
   'upcoming-unavailable': c => ({
     metaDescription: `${c.name}: ${c.organizer}’s charity pickleball tournament on ${c.monthDay} in ${c.city}, supported through community promotion by PickleCue.`,
-    heroStatus: `<strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> The event is still scheduled. Registration and payment are handled entirely on ${c.officialLink}, and only they can confirm whether it reopens.`,
+    heroStatus: `<strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> The event is still scheduled. Registration and payment are handled entirely on The Salvation Army&rsquo;s ${c.officialLink}, and only they can confirm whether it reopens.`,
     cta: 'View official event page',
     expectHead: 'What to expect',
     callout: c.calloutUpcoming,
@@ -92,6 +93,7 @@ const COPY = {
     pricingHead: 'Published prices',
     pricingNote: `<strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> These are the prices they last published, shown so you know what the event costs if registration reopens. We are not the organizer and cannot take a registration &mdash; check ${c.goLink('availability_note')} before you travel.`,
     cardStatus: 'Registration is currently unavailable on the organizer&rsquo;s site.',
+    cardHead: 'Coming up',
   }),
 
   'event-day': c => ({
@@ -105,14 +107,15 @@ const COPY = {
     includes: 'includes',
     pricingHead: 'Published prices',
     pricingNote: `These are the prices the organizer published. We are not the organizer and cannot take a registration &mdash; check ${c.goLink('availability_note')} before you travel.`,
-    cardStatus: 'Happening today.',
+    cardStatus: 'Entry and timing are the organizer&rsquo;s &mdash; check their page.',
+    cardHead: 'Happening today',
   }),
 
   ended: c => ({
     metaDescription: `${c.name}, ${c.organizer}’s charity pickleball tournament, was held on ${c.monthDay} at ${c.venue} in ${c.city}. PickleCue supported the event through community promotion.`,
     /* Past tense, no CTA language, nothing purchasable, and no claim about how
        it went — we were not there and it is not our event to summarise. */
-    heroStatus: `<strong>This event has taken place.</strong> ${t(c.name)} was held on ${c.longDate} at ${t(c.venue)} in ${t(c.city)}. Anything the organizers publish afterwards will be on ${c.officialLink}.`,
+    heroStatus: `<strong>This event has taken place.</strong> ${t(c.name)} was held on ${c.longDate} at ${t(c.venue)} in ${t(c.city)}. Anything the organizers publish afterwards will be on their ${c.officialLink}.`,
     cta: 'View official event page',
     expectHead: 'What the event included',
     callout: '',
@@ -122,6 +125,7 @@ const COPY = {
     pricingHead: 'Prices the organizer published',
     pricingNote: `These were the prices published for this event. It has taken place &mdash; nothing here is purchasable, and PickleCue never took registrations for it.`,
     cardStatus: 'This event has taken place.',
+    cardHead: 'Recently supported',
   }),
 };
 
@@ -274,6 +278,7 @@ function render(ev, now) {
   let html = readFileSync(page, 'utf8');
 
   html = html.replace(/(<body[^>]*\sdata-event-state=")[a-z-]*(")/, `$1${state}$2`);
+  html = html.replace(/(<body[^>]*\sdata-event-ends=")[^"]*(")/, `$1${ev.endsAt}$2`);
   html = region(html, 'JSONLD', `\n  <script type="application/ld+json">\n  ${schema(ev, state)}\n  </script>\n  `);
   html = region(html, 'META', [
     `\n  <meta name="description" content="${k.metaDescription}">`,
@@ -287,7 +292,7 @@ function render(ev, now) {
   html = region(html, 'CALLOUT', k.callout);
   html = region(html, 'ENTRY_CARD', k.entryCard);
   html = region(html, 'INCLUDES', k.includes);
-  html = region(html, 'ENDSAT', ev.endsAt);
+
   html = region(html, 'PRICING_HEAD', k.pricingHead);
   html = region(html, 'PRICING_NOTE', k.pricingNote);
   html = region(html, 'PRICES', ev.ticketTiers.map(tier => {
@@ -314,6 +319,7 @@ function render(ev, now) {
      state from the same record, or it becomes the next thing that goes stale. */
   const card = join(ROOT, 'community.html');
   let cardHtml = readFileSync(card, 'utf8');
+  cardHtml = region(cardHtml, 'CARD_HEAD', k.cardHead);
   cardHtml = region(cardHtml, 'CARD_STATUS', k.cardStatus);
   cardHtml = region(cardHtml, 'CARD_CTA', state === 'ended' ? 'View event page' : 'View event');
 

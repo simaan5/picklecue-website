@@ -302,7 +302,7 @@
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
-<body data-audience="event" data-event-state="upcoming-unavailable">
+<body data-audience="event" data-event-state="upcoming-unavailable" data-event-ends="2026-08-29T20:00:00-07:00">
   <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="masthead" role="banner">
@@ -391,7 +391,7 @@
             <svg viewBox="0 0 12 12" width="13" height="13" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
           </a>
         </div>
-        <p class="cta-note"><!-- EVENT:STATUS --><strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> The event is still scheduled. Registration and payment are handled entirely on <a href="https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563" target="_blank" rel="noopener noreferrer">official event page&nbsp;&#8599;</a>, and only they can confirm whether it reopens.<!-- /EVENT:STATUS --></p>
+        <p class="cta-note"><!-- EVENT:STATUS --><strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> The event is still scheduled. Registration and payment are handled entirely on The Salvation Army&rsquo;s <a href="https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563" target="_blank" rel="noopener noreferrer">official event page&nbsp;&#8599;</a>, and only they can confirm whether it reopens.<!-- /EVENT:STATUS --></p>
         <!-- EVENT:UTILITIES -->
         <ul class="ev-utils">
           <li><a href="https://maps.google.com/?q=Peninsula%20Racquet%20Club%2C%2030850%20Hawthorne%20Blvd%2C%20Rancho%20Palos%20Verdes%2C%20CA" target="_blank" rel="noopener noreferrer" data-track="event_utility" data-utility="directions" data-event-slug="pickle-for-a-purpose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>Directions</a></li>
@@ -562,7 +562,14 @@
      the real recap — this banner buys hours, not weeks. */
   (function () {
     if (document.body.dataset.eventState === 'ended') return;   // page already rebuilt
-    var ENDS = new Date('<!-- EVENT:ENDSAT -->2026-08-29T20:00:00-07:00<!-- /EVENT:ENDSAT -->');
+    /* Both values come from <body data-*>, never from a marker inside this
+       string. HTML comments are not comments inside <script>: an earlier
+       version read
+           new Date('<!-'+'- EVENT:ENDSAT -'+'->2026-08-29T20:00:00-07:00...')
+       which is an Invalid Date, and `new Date() <= InvalidDate` is false — so
+       the "this event has taken place" banner rendered four days early. */
+    var ENDS = new Date(document.body.dataset.eventEnds || '');
+    if (isNaN(ENDS)) return;
     if (new Date() <= ENDS) return;
     document.documentElement.classList.add('event-over');
     var hero = document.querySelector('.cta-note');
