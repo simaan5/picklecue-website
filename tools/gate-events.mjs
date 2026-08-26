@@ -21,9 +21,16 @@
  *              where "we last checked two days ago" is not good enough for an
  *              event somebody may be driving to.
  *
- * Three things fail in BOTH modes, because they are wrong rather than stale:
- * a finished event still reading as upcoming, a price the page shows that we
- * never observed, and the page claiming sold out on the organizer's behalf.
+ * Four things fail in BOTH modes, because they are wrong rather than stale:
+ * a page built for a lifecycle state the clock has left behind, forward-looking
+ * copy surviving after the event, a price the page shows that we never
+ * observed, and the page claiming sold out on the organizer's behalf.
+ *
+ * WHAT THIS GATE DOES NOT DEMAND
+ * It does not require a recap. Photos, results and a write-up belong to the
+ * organizer; a gate that stays red until one exists is a gate that pressures
+ * somebody into inventing one. "This event has taken place" is complete and
+ * true on its own, and `node tools/build-event.mjs <slug>` writes it in full.
  *
  * Run:  node tools/gate-events.mjs
  *       node tools/gate-events.mjs --strict
@@ -32,6 +39,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { stateFor } from './build-event.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const cfg = JSON.parse(readFileSync(join(ROOT, 'data/events.json'), 'utf8'));
@@ -46,7 +54,9 @@ const fails = [], warns = [];
 /* Staleness: hard in strict mode, advisory otherwise. */
 const stale = m => (STRICT ? fails : warns).push(m);
 
-/* Language that only makes sense while an event is still ahead of the reader. */
+/* Language that only makes sense while an event is still ahead of the reader.
+   The builder removes all of it in the ended state; this catches anything a
+   later hand-edit adds OUTSIDE a marked region. */
 const FORWARD_LOOKING = [
   'Register',
   'registration is currently unavailable',
@@ -57,10 +67,17 @@ const FORWARD_LOOKING = [
 
 for (const e of cfg.events) {
   const raw = readFileSync(join(ROOT, e.page), 'utf8');
-  /* Scan what a READER sees. The first run of this gate flagged the page for
-     saying "sold out" — in an HTML comment explaining why we deliberately do
-     not say it. A gate that fires on its own rationale gets switched off. */
-  const page = raw.replace(/<!--[\s\S]*?-->/g, ' ');
+  /* Scan what a READER sees.
+     Two false positives shaped this. The first run flagged the page for saying
+     "sold out" — in an HTML comment explaining why we deliberately do not say
+     it. The second flagged "Register" inside the seam-cover script's string
+     "Registration is closed", which is the opposite of forward-looking. So
+     comments, <script> and <style> all come out before the scan. A gate that
+     fires on its own rationale gets switched off, and a switched-off gate
+     protects nothing. */
+  const page = raw
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ');
   const ends = new Date(e.endsAt);
   const starts = new Date(e.startsAt);
   const verified = new Date(e.statusVerifiedAt);
@@ -74,7 +91,23 @@ for (const e of cfg.events) {
     continue;
   }
 
-  /* 1. An event that has finished must not still be sold. */
+  /* 1. The page must be BUILT for the state the clock is actually in. One
+        check covers every state transition, because the state is computed by
+        the same function the builder uses — not re-derived here. */
+  const want = stateFor(e, NOW);
+  const built = (raw.match(/<body[^>]*data-event-state="([a-z-]*)"/) || [])[1];
+  if (!built) {
+    fails.push(`${label}: ${e.page} has no data-event-state on <body> — it is not built by tools/build-event.mjs`);
+  } else if (built !== want) {
+    fails.push(
+      `${label}: the clock says "${want}" but the page is built as "${built}".\n` +
+      `      Fix: node tools/build-event.mjs ${e.slug}\n` +
+      `      That rewrites the copy, the CTAs and the schema from data/events.json.\n` +
+      `      It needs no recap, no photos and no results.`);
+  }
+
+  /* 2. Belt and braces after the event: forward-looking copy that a hand-edit
+        added outside a marked region would survive the builder. */
   if (NOW > ends) {
     const still = FORWARD_LOOKING.filter(p => page.includes(p));
     if (still.length) {
@@ -82,12 +115,12 @@ for (const e of cfg.events) {
       fails.push(
         `${label}: ended ${agoD < 1 ? Math.round(agoD * 24) + 'h' : agoD.toFixed(1) + ' day(s)'} ago but the page still reads as upcoming ` +
         `(found: ${still.map(s => JSON.stringify(s.slice(0, 34))).join(', ')}). ` +
-        `Move it to the ${e.afterTheEvent?.requirement || 'ended'} state.`);
+        `These sit OUTSIDE a marked region — the builder cannot reach them, so edit the page.`);
     }
     continue;   // freshness of a finished event is moot
   }
 
-  /* 2. Inside the window, the organizer's state must have been re-checked
+  /* 3. Inside the window, the organizer's state must have been re-checked
         recently. Someone may be about to drive there. */
   if (daysOut <= cfg.rules.windowDays) {
     if (verifiedAgoH > cfg.rules.reverifyWithinHours) {
@@ -104,7 +137,7 @@ for (const e of cfg.events) {
     warns.push(`${label}: ${daysOut.toFixed(0)} days out, last verified ${(verifiedAgoH / 24).toFixed(0)} days ago`);
   }
 
-  /* 3. The prices on the page must be the ones we recorded observing. A silent
+  /* 4. The prices on the page must be the ones we recorded observing. A silent
         edit to either side is the failure mode this whole file is about. */
   for (const o of e.observed?.offers || []) {
     if (!/Registration|Admission/.test(o.name)) continue;    // ticket tiers only
@@ -114,7 +147,7 @@ for (const e of cfg.events) {
     }
   }
 
-  /* 4. Nothing may claim sold out on our behalf. We cannot tell a sell-out from
+  /* 5. Nothing may claim sold out on our behalf. We cannot tell a sell-out from
         a closed ticket widget, and saying so about a charity is not ours to do. */
   if (/sold\s*out/i.test(page)) {
     fails.push(`${label}: the page says "sold out". Only the organizer can say that.`);
