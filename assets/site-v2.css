@@ -414,3 +414,8 @@ html.js .reveal.in{ opacity:1; transform:none; }
 .friction-col-on li{ color:var(--ink); }
 .friction-col-on li::before{ background:var(--court-fg); }
 .friction-note{ margin:20px 0 0; font:450 14.5px/1.6 var(--f); color:var(--ink-mute); }
+
+/* Fine print that belongs with a CTA rather than in a footnote — the Pro
+   requirement is stated where the download is offered, not discovered later. */
+.hero-fine{ margin:18px 0 0; font:450 14px/1.6 var(--f); color:var(--ink-mute); max-width:52ch; }
+.pj-after{ margin:20px 0 0; }

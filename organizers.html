@@ -123,63 +123,127 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
     <div class="wrap">
         <p class="kicker reveal">PickleCue for organizers</p>
         <h1 class="reveal">Run the competition.<br>Lose the spreadsheet.</h1>
-        <p class="sub reveal">From first signup to final score. Brackets seed and advance themselves, standings update as matches are logged, and everyone can follow along.</p>
+        <p class="sub reveal">Build the bracket, get players into it, keep scores moving, and give everyone a page they can follow &mdash; without a group thread, a printout and a spreadsheet all disagreeing with each other.</p>
         <div class="actions reveal">
-            <a data-track="app_store_click" data-placement="hero" data-audience="organizers" class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone
+            <a class="btn btn-primary" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" data-track="app_store_click" data-placement="hero" data-audience="organizers">Download free
                 <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            <a class="btn btn-ghost" href="/demo/">Live demo</a>
+            <a class="btn btn-ghost" href="/live-scores" data-track="spectators_open" data-placement="hero" data-audience="organizers">What spectators see</a>
         </div>
+        <p class="qr-line"><button class="qr-trigger" type="button" data-qr-open><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 14h2M14 19h3M19 19h2"/></svg>Scan to get it on your phone</button></p>
+        <p class="hero-fine reveal">Creating tournaments and leagues is part of PickleCue Pro. Playing in them, and following them, is free.</p>
+    </div>
+</section>
+
+<!-- ================= Organizer lifecycle =================
+     SET UP -> FILL -> RUN -> ADVANCE -> SHARE.
+     Two chapters carry screenshots; three are editorial, for the same reason as
+     the Players page. Only two organizer captures have been inspected and
+     approved in data/marketing-assets.json (organizer-center, bracket-champion).
+     s4-bracket-summer-smash was blocked during this phase: it shows a LIVE pill
+     and "Aug 22-30, 2026", both of which expire on 2026-08-30. An unaudited
+     screenshot is not a safe screenshot, so the rest are described in web type
+     until they are inspected or recaptured. -->
+<section class="sec journey-players">
+    <div class="wrap">
+        <h2 class="reveal">One event, end to end.</h2>
+        <ol class="pj">
+            <li class="pj-step pj-step-text reveal">
+                <p class="pj-no"><span>01</span> Set up</p>
+                <div class="pj-body">
+                    <h3>Build the competition.</h3>
+                    <p>A tournament or a league, with the format you actually run. You are not choosing between what the software supports and what your event is.</p>
+                    <ul class="pj-fields">
+                        <li><b>Tournaments</b><span>Single elimination, double elimination, round robin</span></li>
+                        <li><b>Leagues</b><span>A season, with a table that keeps itself</span></li>
+                        <li><b>Singles or doubles</b><span>Including partner pairing at registration</span></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="pj-step pj-step-text reveal">
+                <p class="pj-no"><span>02</span> Fill</p>
+                <div class="pj-body">
+                    <h3>Get players in without collecting them by hand.</h3>
+                    <p>Share a link or a printed code. People register themselves, sign the waiver in the same flow, and arrive already on your list.</p>
+                    <ul class="pj-fields">
+                        <li><b>Public registration</b><span>A browser form &mdash; no account needed to sign up</span></li>
+                        <li><b>Waiver</b><span>Signed during registration, stored with the entry</span></li>
+                        <li><b>Partners</b><span>Register solo or bring one</span></li>
+                        <li><b>Check-in</b><span>Who has arrived, who still owes a waiver</span></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="pj-step reveal">
+                <p class="pj-no"><span>03</span> Run</p>
+                <div class="pj-body">
+                    <h3>Know what is live, what is next, and what needs you.</h3>
+                    <p>One screen for every event you are running: how many matches are active, how many players are in, and an explicit answer to &ldquo;is anything waiting on me?&rdquo; &mdash; rather than you going to look.</p>
+                </div>
+                <figure class="pj-shot"><img src="/images/app/organizer-center.webp" width="760" height="1651" loading="lazy" decoding="async" alt="The PickleCue organizer hub: a Command Center showing events, players, matches and how many are live, quick actions for tournaments, leagues, brackets and check-in, and a Needs Attention panel reading All clear."></figure>
+            </li>
+
+            <li class="pj-step reveal">
+                <p class="pj-no"><span>04</span> Advance</p>
+                <div class="pj-body">
+                    <h3>One result moves the competition.</h3>
+                    <p>Enter a score once. The winner takes their place in the next round and the league table reorders itself. Nobody redraws a bracket on a whiteboard, and nobody is working from last night's version.</p>
+                </div>
+                <figure class="pj-shot"><img src="/images/app/bracket-champion.webp" width="760" height="1651" loading="lazy" decoding="async" alt="A completed PickleCue bracket: quarterfinals, semifinals and final all resolved, with the champion named and results marked read-only."></figure>
+            </li>
+
+            <li class="pj-step pj-step-text reveal">
+                <p class="pj-no"><span>05</span> Share</p>
+                <div class="pj-body">
+                    <h3>Hand people a page instead of a screenshot.</h3>
+                    <p>Print the QR or read the six-character code out. Players and spectators open the event in a browser and stop asking you what the score is.</p>
+                    <ul class="pj-fields">
+                        <li><b>No app</b><span>It is an ordinary web page</span></li>
+                        <li><b>No account</b><span>Nothing to sign up for to watch</span></li>
+                        <li><b>What they get</b><span>Schedule, their next match, live scores, the bracket</span></li>
+                    </ul>
+                    <p class="pj-after"><a class="btn btn-ghost" href="/live-scores" data-track="spectators_open" data-placement="mid" data-audience="organizers">See what a spectator sees</a></p>
+                </div>
+            </li>
+        </ol>
     </div>
 </section>
 
 <section class="sec sec-alt">
     <div class="wrap">
-        <h2 class="reveal">What organizers get</h2>
+        <h2 class="reveal">Hand off the scoring, not the event.</h2>
+        <p class="lede reveal">You do not have to be at every court. Give someone a court and they can keep score from their own phone &mdash; without becoming an organizer, and without being able to change anything else.</p>
         <div class="cards">
-            <article class="card reveal"><h3>Brackets that run themselves</h3><p>Single and double elimination with seeding, automatic advancement, and a share page anyone can open in a browser.</p></article>
-            <article class="card reveal"><h3>Standings without formulas</h3><p>League tables update the moment a match is logged. Ties break on point differential, automatically.</p></article>
-            <article class="card reveal"><h3>One place to communicate</h3><p>Game, league, and tournament chats keep schedules, reminders, and updates out of fragmented group threads.</p></article>
+            <article class="card reveal"><h3>They score, you run it</h3><p>A scorekeeper enters points for the court they were handed. Everything else stays yours.</p></article>
+            <article class="card reveal"><h3>The number moves everywhere</h3><p>Players&rsquo; phones, the public page, the board at the venue and the Lock Screen, at the same moment.</p></article>
+            <article class="card reveal"><h3>You can still correct it</h3><p>A finished match can be fixed from the organizer side when somebody taps the wrong number.</p></article>
         </div>
     </div>
 </section>
 
 <section class="sec">
     <div class="wrap">
-        <div class="split">
-            <div class="split-copy reveal">
-                <p class="kicker">Tournaments</p>
-                <h2 style="margin-top:16px">From first serve to final bracket.</h2>
-                <p class="lede">Seed the field, run the rounds, and advance winners as scores come in. Spectators follow the live bracket without an account.</p>
-                <p class="lede"><a class="btn btn-ghost" href="/live-scores">What spectators see</a></p>
+        <div class="friction">
+            <div class="friction-col reveal">
+                <h2>A bracket on paper</h2>
+                <ul>
+                    <li>Scores arriving as texts</li>
+                    <li>Standings recalculated by hand</li>
+                    <li>&ldquo;Which court am I on?&rdquo;, forty times</li>
+                    <li>A photo of a whiteboard, already out of date</li>
+                </ul>
             </div>
-            <div><button class="device reveal" data-full="/images/app/bracket-champion-full.webp" aria-label="View Completed tournament bracket with champion full size"><img src="/images/app/bracket-champion.webp" alt="Completed tournament bracket with champion" loading="lazy" width="760" height="1651"></button></div>
-        </div>
-    </div>
-</section>
-
-<section class="sec">
-    <div class="wrap">
-        <div class="split flip">
-            <div class="split-copy reveal">
-                <p class="kicker">Double elimination</p>
-                <h2 style="margin-top:16px">Real formats, not compromises.</h2>
-                <p class="lede">Winners and losers brackets, if-necessary finals, and match settings that match how your event actually runs.</p>
+            <div class="friction-col friction-col-on reveal">
+                <h2>One event</h2>
+                <ul>
+                    <li>Scores entered once, at the court</li>
+                    <li>Standings and brackets that follow results</li>
+                    <li>A page everyone can open themselves</li>
+                    <li>One version, current</li>
+                </ul>
             </div>
-            <div><button class="device reveal" data-full="/images/app/bracket-double-elim-full.webp" aria-label="View Double elimination bracket full size"><img src="/images/app/bracket-double-elim.webp" alt="Double elimination bracket" loading="lazy" width="760" height="1651"></button></div>
         </div>
-    </div>
-</section>
-
-<section class="sec">
-    <div class="wrap">
-        <div class="split">
-            <div class="split-copy reveal">
-                <p class="kicker">Command center</p>
-                <h2 style="margin-top:16px">Your whole operation, one screen.</h2>
-                <p class="lede">Active events, matches scheduled, missing scores, and participant management in a single organizer dashboard.</p>
-            </div>
-            <div><button class="device reveal" data-full="/images/app/organizer-center-full.webp" aria-label="View Organizer command center dashboard full size"><img src="/images/app/organizer-center.webp" alt="Organizer command center dashboard" loading="lazy" width="760" height="1651"></button></div>
-        </div>
+        <p class="friction-note reveal">Plenty of events run fine on a printout and a group chat. This is for the ones that have outgrown it.</p>
     </div>
 </section>
 
