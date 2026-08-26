@@ -1,0 +1,271 @@
+{
+  "generated": "2026-08-26T00:55:34.323Z",
+  "pages": [
+    {
+      "path": "/",
+      "viewport": "390",
+      "before": 2209,
+      "after": 435,
+      "deltaPct": -80,
+      "after_detail": {
+        "path": "/",
+        "viewport": "390",
+        "status": 200,
+        "kb": 435,
+        "requests": 21,
+        "byType": {
+          "document": 110162,
+          "image": 234508,
+          "font": 61244,
+          "stylesheet": 18799,
+          "script": 19272,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 110162,
+            "url": "/",
+            "type": "document"
+          },
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 44042,
+            "url": "/images/app/bracket-champion.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/",
+      "viewport": "1440",
+      "before": 2343,
+      "after": 503,
+      "deltaPct": -79,
+      "after_detail": {
+        "path": "/",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 503,
+        "requests": 23,
+        "byType": {
+          "document": 110162,
+          "image": 303580,
+          "font": 61244,
+          "stylesheet": 18799,
+          "script": 19272,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 110162,
+            "url": "/",
+            "type": "document"
+          },
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 44042,
+            "url": "/images/app/bracket-champion.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 42720,
+            "url": "/images/app/s4-bracket-summer-smash.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/players",
+      "viewport": "390",
+      "before": 402,
+      "after": 257,
+      "deltaPct": -36,
+      "after_detail": {
+        "path": "/players",
+        "viewport": "390",
+        "status": 200,
+        "kb": 257,
+        "requests": 14,
+        "byType": {
+          "image": 117960,
+          "font": 61244,
+          "stylesheet": 40527,
+          "document": 18979,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 21728,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    },
+    {
+      "path": "/players",
+      "viewport": "1440",
+      "before": 440,
+      "after": 257,
+      "deltaPct": -42,
+      "after_detail": {
+        "path": "/players",
+        "viewport": "1440",
+        "status": 200,
+        "kb": 257,
+        "requests": 14,
+        "byType": {
+          "image": 117960,
+          "font": 61244,
+          "stylesheet": 40527,
+          "document": 18979,
+          "script": 22992,
+          "other": 1608
+        },
+        "heaviest": [
+          {
+            "bytes": 49184,
+            "url": "/images/app/courts-detail.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 31340,
+            "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 30304,
+            "url": "/images/wordmark-on-light.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 29904,
+            "url": "/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2",
+            "type": "font"
+          },
+          {
+            "bytes": 28544,
+            "url": "/images/wordmark-on-dark.webp",
+            "type": "image"
+          },
+          {
+            "bytes": 21728,
+            "url": "/assets/site-v2.css",
+            "type": "stylesheet"
+          }
+        ],
+        "hits": {
+          "maplibre": 0,
+          "courts-search-index": 0
+        }
+      }
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/courts-search-index.json",
+      "rawKB": 312.3,
+      "gzipKB": 71,
+      "brotliKB": 58.3
+    },
+    {
+      "path": "assets/acquire.js",
+      "rawKB": 10.7,
+      "gzipKB": 3.7,
+      "brotliKB": 3.1
+    },
+    {
+      "path": "assets/courtsearch.js",
+      "rawKB": 10.5,
+      "gzipKB": 3.8,
+      "brotliKB": 3.1
+    },
+    {
+      "path": "assets/journey.js",
+      "rawKB": 3.9,
+      "gzipKB": 1.6,
+      "brotliKB": 1.3
+    },
+    {
+      "path": "assets/site-v2.css",
+      "rawKB": 21.2,
+      "gzipKB": 6,
+      "brotliKB": 5.1
+    }
+  ],
+  "search": null,
+  "throttle": null
+}

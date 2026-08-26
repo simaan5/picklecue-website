@@ -409,6 +409,12 @@ a{ color:inherit; }
 .chapter h3{ font:750 clamp(22px,2.6vw,30px)/1.24 var(--f); letter-spacing:-.02em; margin:0 0 12px; }
 .chapter p{ font:450 16.5px/1.65 var(--f); color:var(--ink-soft); margin:0; }
 .chapter-shot{ margin:24px 0 0; }
+.chapter-fields{ list-style:none; margin:22px 0 0; padding:0; display:grid; gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+.chapter-fields li{ display:flex; flex-wrap:wrap; gap:4px 14px; align-items:baseline;
+    padding:13px 16px; background:var(--card); }
+.chapter-fields b{ font:650 15px/1.4 var(--f); color:var(--ink); min-width:118px; }
+.chapter-fields span{ font:450 14.5px/1.5 var(--f); color:var(--ink-mute); }
 .chapter-shot img{
     width:min(300px,72%); height:auto; display:block; border-radius:26px;
     border:1px solid var(--line); box-shadow:0 24px 60px rgba(6,24,17,.16);
@@ -484,32 +490,30 @@ a{ color:inherit; }
 .hero-stages li:first-child{ color:var(--court-fg); border-top-color:var(--court-fg); }
 
 @media (prefers-reduced-motion: no-preference){
-    .hero-seq img{ animation: heroSeq 20s var(--ease) infinite; }
+    .hero-seq img{ animation: heroSeq 16s var(--ease) infinite; }
     .hero-seq img:first-child{ animation-name: heroSeqFirst; }
     .hero-seq img:nth-child(2){ animation-delay:4s; }
     .hero-seq img:nth-child(3){ animation-delay:8s; }
     .hero-seq img:nth-child(4){ animation-delay:12s; }
-    .hero-seq img:nth-child(5){ animation-delay:16s; }
 
     /* 0-2% fades in (0.4s), holds to 18%, fades out by 20% (4s slot). */
-    @keyframes heroSeq{ 0%{opacity:0} 2%{opacity:1} 18%{opacity:1} 20%{opacity:0} 100%{opacity:0} }
+    @keyframes heroSeq{ 0%{opacity:0} 2.5%{opacity:1} 22.5%{opacity:1} 25%{opacity:0} 100%{opacity:0} }
     /* Frame 1 must be visible at t=0, so it starts lit and returns lit. */
-    @keyframes heroSeqFirst{ 0%{opacity:1} 18%{opacity:1} 20%{opacity:0} 98%{opacity:0} 100%{opacity:1} }
+    @keyframes heroSeqFirst{ 0%{opacity:1} 22.5%{opacity:1} 25%{opacity:0} 97.5%{opacity:0} 100%{opacity:1} }
 
-    .hero-stages li{ animation: heroStage 20s step-end infinite; }
+    .hero-stages li{ animation: heroStage 16s step-end infinite; }
     .hero-stages li:nth-child(2){ animation-delay:4s; }
     .hero-stages li:nth-child(3){ animation-delay:8s; }
     .hero-stages li:nth-child(4){ animation-delay:12s; }
-    .hero-stages li:nth-child(5){ animation-delay:16s; }
     @keyframes heroStage{
         0%{ color:var(--court-fg); border-top-color:var(--court-fg); }
-        20%{ color:var(--ink-mute); border-top-color:var(--line); }
+        25%{ color:var(--ink-mute); border-top-color:var(--line); }
         100%{ color:var(--ink-mute); border-top-color:var(--line); }
     }
     .hero-stages li:first-child{ animation-name: heroStageFirst; }
     @keyframes heroStageFirst{
         0%{ color:var(--court-fg); border-top-color:var(--court-fg); }
-        20%{ color:var(--ink-mute); border-top-color:var(--line); }
+        25%{ color:var(--ink-mute); border-top-color:var(--line); }
         99.9%{ color:var(--ink-mute); border-top-color:var(--line); }
         100%{ color:var(--court-fg); border-top-color:var(--court-fg); }
     }
@@ -1238,7 +1242,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/acquire.js?v=20260825a"></script>
-    <script defer src="/assets/journey.js?v=20260825a"></script>
+    <script defer src="/assets/journey.js?v=20260826a"></script>
 </head>
 <body data-audience="home">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -1336,14 +1340,13 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
                          app. See docs/website-cro-audit-2026-08-25.md, P0-1. -->
                     <div class="hero-seq">
                         <img src="/images/app/courts-detail.webp" alt="A PickleCue court page showing court count, indoor and outdoor, price, address and directions" width="760" height="1651" fetchpriority="high" decoding="async">
-                        <img src="/images/app/s1-play-open-games.webp" alt="Open games near you, with skill range, start time and spots left" width="760" height="1651" loading="lazy" decoding="async">
-                        <img src="/images/app/game-roster.webp" alt="A game roster showing who has joined and who is on the waitlist" width="760" height="1651" loading="lazy" decoding="async">
+                        <img src="/images/app/s2-live-scoring.webp" alt="Live scoring in PickleCue, nine to five, with the serving team marked" width="760" height="1651" loading="lazy" decoding="async">
                         <img src="/images/app/match-result.webp" alt="A finished match with the final score recorded" width="760" height="1651" loading="lazy" decoding="async">
                         <img src="/images/app/bracket-champion.webp" alt="A completed tournament bracket with the champion decided" width="760" height="1651" loading="lazy" decoding="async">
                     </div>
                 </div>
                 <ol class="hero-stages">
-                    <li>Discover</li><li>Join</li><li>Play</li><li>Score</li><li>Compete</li>
+                    <li>Discover</li><li>Score</li><li>Keep</li><li>Compete</li>
                 </ol>
             </div>
             <aside class="float-card float-game" aria-hidden="true">
@@ -1426,8 +1429,18 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
                 <li class="chapter" id="ch-game">
                     <p class="chapter-no"><span>02</span> Game</p>
                     <h3>Know whether the game fits you.</h3>
-                    <p>Level, format, venue, start time and exactly how many spots are left. You can see who is already in before you commit to anything.</p>
-                    <figure class="chapter-shot"><img src="/images/app/s1-play-open-games.webp" alt="Open games near you, each showing skill range, format, court and spots left." width="760" height="1651" loading="lazy" decoding="async"></figure>
+                    <p>Every open game states its terms up front, so nobody has to ask three questions in a group thread before they can decide.</p>
+                    <!-- No screenshot here yet. Every game-discovery capture renders an
+                         UPCOMING game with an absolute date and reads as past-dated within
+                         days; retouching or cropping to hide it is not an option. The slot
+                         returns after iOS plans 091 + 092. Deliberately site typography,
+                         so it cannot be mistaken for product UI. -->
+                    <ul class="chapter-fields">
+                        <li><b>Skill range</b><span>3.5&ndash;4.5, not &ldquo;all levels&rdquo;</span></li>
+                        <li><b>Format</b><span>Singles, doubles or open play</span></li>
+                        <li><b>Court and time</b><span>The venue, not &ldquo;the usual place&rdquo;</span></li>
+                        <li><b>Spots left</b><span>How many, right now</span></li>
+                    </ul>
                 </li>
                 <li class="chapter" id="ch-score">
                     <p class="chapter-no"><span>03</span> Score</p>

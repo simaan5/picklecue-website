@@ -107,6 +107,17 @@ function scanPhrases(rel, text) {
        the games happening there" and sailed through.
        Deliberately narrow: courts/methodology.html states "court_reviews is
        empty" and "there are no reviews", which must keep passing. */
+    /* Captures whose "upcoming" game carries an absolute date. They are true
+       for days, then quietly wrong. Retouching is not an option, so they are
+       simply not used on a selling page until the fixture set is recaptured
+       against a formatter that renders Today/Tomorrow (iOS plans 091 + 092). */
+    for (const shot of ['s1-play-open-games', 'game-join', 'game-detail', 's10-home-dashboard', 's9-week-schedule', 'game-roster']) {
+      if (SELLING.test(rel) && new RegExp('src="[^"]*' + shot).test(text)) {
+        fail(rel, `uses ${shot}.webp, whose "upcoming" game shows an absolute date — ` +
+                  `blocked until the 091/092 recapture. Do not retouch or crop it; use another authentic state.`);
+      }
+    }
+
     if (SELLING.test(rel)) {
       const asContent = text.match(/(?:,|and|with|plus)\s+(?:reviews|photos)\b|\breviews and photos\b/i);
       if (asContent) fail(rel, `"${asContent[0].trim()}" presents an empty dataset as content — ` +

@@ -32,15 +32,21 @@
         stage.setAttribute('aria-hidden', 'true');
         var phone = document.createElement('div');
         phone.className = 'journey-phone';
+        /* Not every chapter has a screenshot. Chapter 02 describes the fields
+           an open game states, in web type, because every game-discovery
+           capture currently carries an absolute date that goes stale (iOS plan
+           092). A chapter with no shot pushes null and simply holds whatever
+           the stage is already showing — it must not throw, and it must not
+           blank the phone. */
         chapters.forEach(function (ch, n) {
             var src = ch.querySelector('.chapter-shot img');
+            if (!src) { frames.push(null); return; }
             var img = new Image();
             img.src = src.getAttribute('src');
             img.alt = '';
             img.width = 760; img.height = 1651;
             img.decoding = 'async';
-            if (n > 0) img.loading = 'lazy';
-            if (n === 0) img.className = 'is-on';
+            if (frames.some(Boolean)) img.loading = 'lazy'; else img.className = 'is-on';
             phone.appendChild(img);
             frames.push(img);
         });
@@ -49,10 +55,13 @@
     }
 
     function show(n) {
-        if (n === active || !frames[n]) return;
+        if (n === active) return;
         active = n;
-        frames.forEach(function (f, k) { f.classList.toggle('is-on', k === n); });
+        /* The active chapter is always marked, even when it has no frame —
+           the copy still needs to come forward. Only the image is skipped. */
         chapters.forEach(function (c, k) { c.classList.toggle('is-active', k === n); });
+        if (!frames[n]) return;
+        frames.forEach(function (f, k) { if (f) f.classList.toggle('is-on', k === n); });
     }
 
     function attach() {
