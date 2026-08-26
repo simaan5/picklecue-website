@@ -51,6 +51,13 @@
 
 # Media is replaced by hand rather than by version bump, so keep the window
 # short enough that a corrected asset reaches everyone within a month.
+#
+# A MONTH IS A LONG TIME TO BE WRONG. courts-detail.webp was replaced in place
+# on 2026-08-26 and the edge kept serving the old bytes (cf-cache-status: HIT,
+# age 800) even though the deploy had succeeded and the origin had the new file.
+# When you REPLACE an image rather than add one, append a ?v=YYYYMMDD to every
+# reference in the same commit. HTML revalidates on every request, so a new
+# document asks for the new URL immediately.
 /images/*
   Cache-Control: public, max-age=2592000
 
