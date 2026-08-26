@@ -32,11 +32,15 @@
         "addressCountry": "US",
         "mapsQuery": "Peninsula Racquet Club, 30850 Hawthorne Blvd, Rancho Palos Verdes, CA"
       },
+      "images": [
+        "https://www.picklecue.com/images/p4p-hero-golden.jpg",
+        "https://www.picklecue.com/images/social/pickle-for-a-purpose-s1.png"
+      ],
       "sourceUrl": "https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563",
       "startsAt": "2026-08-29T17:00:00-07:00",
       "endsAt": "2026-08-29T20:00:00-07:00",
       "registrationState": "unavailable",
-      "statusVerifiedAt": "2026-08-25T23:30:51Z",
+      "statusVerifiedAt": "2026-08-26T02:11:53Z",
       "verifiedBy": "curl of sourceUrl; SportsEvent JSON-LD parsed from the response",
       "observed": {
         "eventStatus": "EventScheduled",

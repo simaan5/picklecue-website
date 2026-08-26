@@ -73,6 +73,8 @@ const COPY = {
     expectHead: 'What to expect',
     callout: c.calloutUpcoming,
     utilities: c.utilities,
+    lede: 'A charity pickleball evening that brings players together and supports a local cause.',
+    pricingCta: c.pricingCta,
     entryCard: 'Register solo or bring a partner',
     includes: 'includes',
     pricingHead: 'Published prices',
@@ -88,6 +90,8 @@ const COPY = {
     expectHead: 'What to expect',
     callout: c.calloutUpcoming,
     utilities: c.utilities,
+    lede: 'A charity pickleball evening that brings players together and supports a local cause.',
+    pricingCta: c.pricingCta,
     entryCard: 'Register solo or bring a partner',
     includes: 'includes',
     pricingHead: 'Published prices',
@@ -103,6 +107,8 @@ const COPY = {
     expectHead: 'What to expect',
     callout: c.calloutUpcoming,
     utilities: c.utilities,
+    lede: 'A charity pickleball evening that brings players together and supports a local cause.',
+    pricingCta: c.pricingCta,
     entryCard: 'Register solo or bring a partner',
     includes: 'includes',
     pricingHead: 'Published prices',
@@ -120,6 +126,8 @@ const COPY = {
     expectHead: 'What the event included',
     callout: '',
     utilities: '',
+    lede: 'A charity pickleball evening that brought players together for a local cause.',
+    pricingCta: '',
     entryCard: 'Solo and partner entry',
     includes: 'included',
     pricingHead: 'Prices the organizer published',
@@ -207,6 +215,13 @@ function context(ev) {
           <li><a href="/${ev.page.replace(/index\.html$/, '')}${ev.slug}.ics" type="text/calendar" data-track="event_utility" data-utility="calendar" data-event-slug="${ev.slug}">${svg('<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 13v4M10 15h4"/>')}Add to calendar</a></li>
           <li><button type="button" class="ev-util-share" hidden data-track="event_utility" data-utility="share" data-event-slug="${ev.slug}">${svg('<circle cx="6" cy="12" r="2.4"/><circle cx="17" cy="6.5" r="2.4"/><circle cx="17" cy="17.5" r="2.4"/><path d="M8.2 10.9 14.8 7.6M8.2 13.1l6.6 3.3"/>')}<span>Share</span></button></li>
         </ul>`;
+  c.pricingCta = `
+      <div class="cta-row" style="margin-top:26px">
+        <a class="cta cta-big" href="${ev.goPath}" data-track="community_event_outbound" data-audience="event" data-event-slug="${ev.slug}" data-placement="pricing">
+          <!-- EVENT:CTA -->__CTA__<!-- /EVENT:CTA -->
+          <svg viewBox="0 0 12 12" width="13" height="13" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
+        </a>
+      </div>`;
   c.calloutUpcoming = `
       <div class="callout">
         <strong>No partner? No problem.</strong>
@@ -249,6 +264,7 @@ function schema(ev, state) {
       },
     },
     organizer: { '@type': 'Organization', name: ev.organizer, url: ev.organizerUrl },
+    image: ev.images,
   };
   /* An Offer on a finished event advertises something nobody can buy. Google
      reads this; so do assistants. When it is over, the offers come out. */
@@ -288,6 +304,8 @@ function render(ev, now) {
   html = region(html, 'STATUS', k.heroStatus);
   html = region(html, 'CTA', k.cta);
   html = region(html, 'EXPECT_HEAD', k.expectHead);
+  html = region(html, 'LEDE', k.lede);
+  html = region(html, 'PRICING_CTA', k.pricingCta.replace('__CTA__', k.cta) + (k.pricingCta ? '\n      ' : ''));
   html = region(html, 'UTILITIES', k.utilities + (k.utilities ? '\n      ' : ''));
   html = region(html, 'CALLOUT', k.callout);
   html = region(html, 'ENTRY_CARD', k.entryCard);

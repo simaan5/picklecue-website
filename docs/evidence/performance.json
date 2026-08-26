@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-26T01:37:19.044Z",
+  "generated": "2026-08-26T02:21:55.981Z",
   "pages": [
     {
       "path": "/",
@@ -469,28 +469,23 @@
       "path": "/community",
       "viewport": "390",
       "before": 429,
-      "after": 289,
-      "deltaPct": -33,
+      "after": 227,
+      "deltaPct": -47,
       "after_detail": {
         "path": "/community",
         "viewport": "390",
         "status": 200,
-        "kb": 289,
-        "requests": 16,
+        "kb": 227,
+        "requests": 15,
         "byType": {
-          "font": 128632,
+          "font": 61244,
           "image": 77320,
+          "document": 19606,
           "stylesheet": 51851,
-          "document": 16262,
           "script": 20477,
           "other": 1608
         },
         "heaviest": [
-          {
-            "bytes": 67388,
-            "url": "/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2",
-            "type": "font"
-          },
           {
             "bytes": 31340,
             "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
@@ -510,6 +505,11 @@
             "bytes": 28544,
             "url": "/images/wordmark-on-dark.webp",
             "type": "image"
+          },
+          {
+            "bytes": 19606,
+            "url": "/community",
+            "type": "document"
           },
           {
             "bytes": 18857,
@@ -527,28 +527,23 @@
       "path": "/community",
       "viewport": "1440",
       "before": 429,
-      "after": 289,
-      "deltaPct": -33,
+      "after": 227,
+      "deltaPct": -47,
       "after_detail": {
         "path": "/community",
         "viewport": "1440",
         "status": 200,
-        "kb": 289,
-        "requests": 16,
+        "kb": 227,
+        "requests": 15,
         "byType": {
-          "font": 128632,
+          "font": 61244,
           "image": 77320,
+          "document": 19606,
           "stylesheet": 51851,
-          "document": 16262,
           "script": 20477,
           "other": 1608
         },
         "heaviest": [
-          {
-            "bytes": 67388,
-            "url": "/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2",
-            "type": "font"
-          },
           {
             "bytes": 31340,
             "url": "/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
@@ -568,6 +563,11 @@
             "bytes": 28544,
             "url": "/images/wordmark-on-dark.webp",
             "type": "image"
+          },
+          {
+            "bytes": 19606,
+            "url": "/community",
+            "type": "document"
           },
           {
             "bytes": 18857,
@@ -1049,17 +1049,17 @@
       "path": "/events/pickle-for-a-purpose/",
       "viewport": "390",
       "before": 381,
-      "after": 290,
-      "deltaPct": -24,
+      "after": 229,
+      "deltaPct": -40,
       "after_detail": {
         "path": "/events/pickle-for-a-purpose/",
         "viewport": "390",
         "status": 200,
-        "kb": 290,
-        "requests": 15,
+        "kb": 229,
+        "requests": 14,
         "byType": {
-          "font": 128632,
-          "document": 35230,
+          "document": 39880,
+          "font": 61244,
           "image": 73547,
           "stylesheet": 37656,
           "script": 20477,
@@ -1067,12 +1067,7 @@
         },
         "heaviest": [
           {
-            "bytes": 67388,
-            "url": "/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2",
-            "type": "font"
-          },
-          {
-            "bytes": 35230,
+            "bytes": 39880,
             "url": "/events/pickle-for-a-purpose/",
             "type": "document"
           },
@@ -1095,6 +1090,11 @@
             "bytes": 28544,
             "url": "/images/wordmark-on-dark.webp",
             "type": "image"
+          },
+          {
+            "bytes": 18857,
+            "url": "/assets/site.css",
+            "type": "stylesheet"
           }
         ],
         "hits": {
@@ -1107,17 +1107,17 @@
       "path": "/events/pickle-for-a-purpose/",
       "viewport": "1440",
       "before": 381,
-      "after": 290,
-      "deltaPct": -24,
+      "after": 229,
+      "deltaPct": -40,
       "after_detail": {
         "path": "/events/pickle-for-a-purpose/",
         "viewport": "1440",
         "status": 200,
-        "kb": 290,
-        "requests": 15,
+        "kb": 229,
+        "requests": 14,
         "byType": {
-          "font": 128632,
-          "document": 35230,
+          "document": 39880,
+          "font": 61244,
           "image": 73547,
           "stylesheet": 37656,
           "script": 20477,
@@ -1125,12 +1125,7 @@
         },
         "heaviest": [
           {
-            "bytes": 67388,
-            "url": "/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2",
-            "type": "font"
-          },
-          {
-            "bytes": 35230,
+            "bytes": 39880,
             "url": "/events/pickle-for-a-purpose/",
             "type": "document"
           },
@@ -1153,6 +1148,11 @@
             "bytes": 28544,
             "url": "/images/wordmark-on-dark.webp",
             "type": "image"
+          },
+          {
+            "bytes": 18857,
+            "url": "/assets/site.css",
+            "type": "stylesheet"
           }
         ],
         "hits": {

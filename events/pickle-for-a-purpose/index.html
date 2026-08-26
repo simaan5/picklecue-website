@@ -29,7 +29,6 @@
   <script>(function(){try{var t=localStorage.getItem('pc_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(_){}})();</script>
   <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
-  <link rel="preload" href="/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/fonts.css">
   <link rel="stylesheet" href="/assets/site.css?v=20260812b">
@@ -90,6 +89,10 @@
       "name": "Echelon LA Metro — The Salvation Army",
       "url": "https://www.instagram.com/echelonlosangeles/"
     },
+    "image": [
+      "https://www.picklecue.com/images/p4p-hero-golden.jpg",
+      "https://www.picklecue.com/images/social/pickle-for-a-purpose-s1.png"
+    ],
     "offers": [
       {
         "@type": "Offer",
@@ -362,7 +365,7 @@
       <div class="hero-copy">
         <p class="badge"><span class="b-full">Community event supported by PickleCue</span><span class="b-short">Supported by PickleCue</span></p>
         <h1 id="p4p-title">Pickle for a Purpose</h1>
-        <p class="lede">A charity pickleball evening that brings players together and supports a local cause.</p>
+        <p class="lede"><!-- EVENT:LEDE -->A charity pickleball evening that brings players together and supports a local cause.<!-- /EVENT:LEDE --></p>
         <ul class="factlist">
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
@@ -461,12 +464,14 @@
            page reports SoldOut on every offer and we cannot tell whether that
            means sold out or ticketing closed. The line below sends people to
            the source instead of guessing on their behalf. -->
+      <!-- EVENT:PRICING_CTA -->
       <div class="cta-row" style="margin-top:26px">
         <a class="cta cta-big" href="/go/pickle-for-a-purpose" data-track="community_event_outbound" data-audience="event" data-event-slug="pickle-for-a-purpose" data-placement="pricing">
           <!-- EVENT:CTA -->View official event page<!-- /EVENT:CTA -->
           <svg viewBox="0 0 12 12" width="13" height="13" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
         </a>
       </div>
+      <!-- /EVENT:PRICING_CTA -->
       <p class="limited" style="margin-top:16px"><!-- EVENT:PRICING_NOTE --><strong>Registration is currently unavailable on the organizer&rsquo;s site.</strong> These are the prices they last published, shown so you know what the event costs if registration reopens. We are not the organizer and cannot take a registration &mdash; check <a href="/go/pickle-for-a-purpose" data-track="community_event_outbound" data-audience="event" data-event-slug="pickle-for-a-purpose" data-placement="availability_note">their page</a> before you travel.<!-- /EVENT:PRICING_NOTE --></p>
       <p class="proceeds">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5S4 15.3 4 9.9A4.4 4.4 0 0 1 8.4 5.5c1.5 0 2.9.8 3.6 2a4.2 4.2 0 0 1 3.6-2A4.4 4.4 0 0 1 20 9.9c0 5.4-8 10.6-8 10.6Z"/></svg>

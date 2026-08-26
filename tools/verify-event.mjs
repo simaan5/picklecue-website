@@ -81,6 +81,20 @@ e.registrationState = state;
 e.statusVerifiedAt = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
 writeFileSync(PATH, JSON.stringify(cfg, null, 2) + '\n');
 console.log(`\nWrote data/events.json — statusVerifiedAt = ${e.statusVerifiedAt}`);
+
+/* Re-render immediately. The page, the community card, the schema and the .ics
+   are all derived from this record — the calendar file's DTSTAMP is
+   statusVerifiedAt itself — so a verification that does not rebuild leaves the
+   tree in a state the build gate rejects, and leaves whoever ran this staring
+   at a failure they did not cause. One command, whole job. */
+console.log('\nRebuilding from the updated record:');
+const { execFileSync } = await import('node:child_process');
+try {
+  execFileSync('node', ['tools/build-event.mjs', e.slug], { cwd: ROOT, stdio: 'inherit' });
+} catch {
+  console.error('  Rebuild failed. Run `node tools/build-event.mjs ' + e.slug + '` and read the error.');
+  process.exit(1);
+}
 if (changes.length) {
-  console.log('State changed. gate-events.mjs will now check the page copy against it.');
+  console.log('\nState changed. Read the rendered page before shipping — the gate checks\nstructure, not whether the new wording is the wording you want.');
 }

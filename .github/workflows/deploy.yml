@@ -43,6 +43,13 @@ jobs:
         # per click, twice over, on the pages whose whole job is conversion.
         run: node tools/gate-analytics.mjs
 
+      - name: Structured data
+        # JSON-LD is the part of a page nobody looks at: a trailing comma or a
+        # relative image URL costs the rich result with no visual symptom and
+        # no console error. Parses every block and holds it to Google's
+        # required properties per type.
+        run: node tools/gate-schema.mjs --all
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
