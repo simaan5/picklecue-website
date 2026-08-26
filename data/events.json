@@ -40,7 +40,7 @@
       "startsAt": "2026-08-29T17:00:00-07:00",
       "endsAt": "2026-08-29T20:00:00-07:00",
       "registrationState": "unavailable",
-      "statusVerifiedAt": "2026-08-26T02:11:53Z",
+      "statusVerifiedAt": "2026-08-26T04:32:55Z",
       "verifiedBy": "curl of sourceUrl; SportsEvent JSON-LD parsed from the response",
       "observed": {
         "eventStatus": "EventScheduled",
