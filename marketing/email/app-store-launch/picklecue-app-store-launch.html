@@ -12,6 +12,19 @@
 <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
 <![endif]-->
 <style type="text/css">
+  /* TELL THE CLIENT THIS EMAIL IS ALREADY DARK.
+     The <meta> tags above are not enough on their own: Apple Mail reads the CSS
+     `color-scheme` property, and without it iOS Mail applied its own dark-mode
+     colour transform to an email that was already dark — inverting it to a pale
+     sage background, turning the lime buttons dark green, and putting a visible
+     dark box around the wordmark (whose PNG is flattened on #0D1A12, so it only
+     disappears when the surrounding background is the colour it expects).
+     Confirmed on a real iPhone from the 2026-08-26 test send; Zoho Mail on
+     desktop rendered correctly the whole time, which is why this needed a
+     device to catch. */
+  :root{color-scheme:dark;supported-color-schemes:dark;}
+  html,body{color-scheme:dark;supported-color-schemes:dark;}
+
   /* Progressive enhancement only. Every critical style is also inlined below,
      because Outlook and several webmail clients strip <style> entirely. */
   body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
@@ -32,6 +45,16 @@
     .pc-col-gap{height:14px!important;line-height:14px!important;font-size:14px!important;}
     .pc-btn a{font-size:15px!important;}
   }
+
+  /* Gmail's mobile apps re-colour with their own wrapper classes rather than
+     honouring color-scheme. Pin the surfaces and the type. */
+  u + .body .pc-bg, u + .body .pc-card{background-color:#0D1A12!important;}
+  [data-ogsb] .pc-bg{background-color:#07100A!important;}
+  [data-ogsb] .pc-card{background-color:#0D1A12!important;}
+  [data-ogsb] .pc-white{color:#FFFFFF!important;}
+  [data-ogsb] .pc-soft{color:#D1D5DB!important;}
+  [data-ogsb] .pc-mute{color:#9CA3AF!important;}
+  [data-ogsb] .pc-lime{color:#A3E635!important;}
 
   /* Outlook.com / some webmail force a light theme onto dark email. Keep the
      brand surfaces dark and the type legible if they do. */
@@ -100,7 +123,7 @@
     <tr>
       <td align="center" class="pc-pad" style="padding:0 20px 26px 20px;background-color:#0D1A12;">
         <a href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" target="_blank" style="text-decoration:none;">
-          <img src="https://www.picklecue.com/images/email/launch/app-store-launch-hero.jpg"
+          <img src="https://www.picklecue.com/images/email/launch/app-store-launch-hero.jpg?v=2"
                width="560" height="350" class="pc-hero"
                alt="PickleCue is now available on the App Store"
                style="display:block;width:560px;max-width:100%;height:auto;border:0;outline:none;border-radius:14px;" />
