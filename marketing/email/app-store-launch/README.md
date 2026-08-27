@@ -94,10 +94,12 @@ preheader and list configured. Only the content needs replacing.
    `www.picklecue.com`, so Zoho's image manager is not involved and the URLs
    will not rot when a Zoho campaign is archived.
 4. Confirm the two merge tags in the footer survived the paste:
-   `$[LI]$` (unsubscribe) and `$[OO]$` (manage preferences). **Verify these
-   against Zoho's own merge-tag list in the editor before sending** — Zoho is
-   the authority on its tag syntax, and a footer that does not resolve is a
-   compliance failure, not a cosmetic one.
+   `$[LI:UNSUBSCRIBE]$` and `$[LI:UPDATEPROFILE]$`. Both were read from Zoho's
+   own **Merge Tags → Header and Footer** menu on 2026-08-26 by inserting them
+   into an empty editor and reading the result — not guessed. (The first draft
+   of this file used `$[LI]$` and `$[OO]$`; neither exists, and both would have
+   shipped as dead footer links, which is a compliance failure rather than a
+   cosmetic one.)
 5. Preview & Test → check mobile and desktop → send a test to yourself.
 6. Click the hero and both buttons from the test email and confirm each opens
    **PickleCue: Pickleball**, App Store ID **6757326631**.
