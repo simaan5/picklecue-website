@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /bracket/
+# Campaign email HTML lives here so its assets can be hosted on this origin.
+# It is not a page; keep it out of the index.
+Disallow: /marketing/
 
 Sitemap: https://www.picklecue.com/sitemap.xml

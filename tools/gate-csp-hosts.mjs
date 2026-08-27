@@ -25,9 +25,12 @@ import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-/* tests/ holds fixtures that are never deployed; they reference a local
-   fixture server and are not subject to the production policy. */
-const SKIP = new Set(['node_modules', '.git', 'videos', 'images', 'fonts', 'Website', 'tests']);
+/* tests/ holds fixtures that are never deployed. marketing/ holds email HTML,
+   which is rendered by mail clients and never served under this site's CSP —
+   its absolute https://www.picklecue.com image URLs are correct precisely
+   BECAUSE an email cannot resolve a same-origin path. Neither is subject to
+   the production policy. */
+const SKIP = new Set(['node_modules', '.git', 'videos', 'images', 'fonts', 'Website', 'tests', 'marketing']);
 
 const policyLine = readFileSync(join(ROOT, '_headers'), 'utf8')
   .match(/Content-Security-Policy(?:-Report-Only)?:\s*(.+)/)?.[1]?.trim();

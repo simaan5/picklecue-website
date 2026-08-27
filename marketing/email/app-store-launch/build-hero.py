@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+"""Compose the App Store launch hero for the PickleCue launch email.
+
+Every pixel of product UI here is the REAL preseeded Home dashboard from
+build 213 (qa/store-screenshots/build-213-deck-v4/raw/s10-home-dashboard.png).
+Nothing is redrawn, no UI is invented, and the screenshot is scaled and rotated
+rigidly - never stretched on one axis.
+
+    python3 marketing/email/app-store-launch/build-hero.py
+"""
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from pathlib import Path
+import math, sys
+
+REPO = Path(__file__).resolve().parents[3]
+IOS  = Path("/Volumes/Mini Drive 2/Xcode Projects/PickleCue")
+OUT  = Path(__file__).resolve().parent
+
+HOME  = IOS / "qa/store-screenshots/build-213-deck-v4/raw/s10-home-dashboard.png"
+BADGE = Path("/tmp/app-store-badge.png")
+BALL  = IOS / "PickleCue/Assets.xcassets/picklecue_loader_ball.imageset/picklecue_loader_ball@3x.png"
+
+PAPER = (13, 26, 18)      # #0D1A12
+LIME  = (163, 230, 53)    # #A3E635
+WHITE = (255, 255, 255)
+S     = 2                 # supersample factor
+W, H  = 1200 * S, 750 * S
+
+AB = "/System/Library/Fonts/Supplemental/Arial Black.ttf"
+BD = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+f = lambda p, s: ImageFont.truetype(p, s * S)
+
+for p in (HOME, BADGE, BALL):
+    if not p.exists():
+        sys.exit(f"missing asset: {p}")
+
+card = Image.new("RGB", (W, H), PAPER)
+
+# ---- ambient glow behind the device -------------------------------------
+glow = Image.new("L", (W, H), 0)
+gd = ImageDraw.Draw(glow)
+gd.ellipse([int(W*0.44), int(-H*0.30), int(W*1.16), int(H*1.16)], fill=120)
+gd.ellipse([int(W*0.56), int(H*0.02), int(W*1.02), int(H*0.92)], fill=190)
+glow = glow.filter(ImageFilter.GaussianBlur(150 * S // 2))
+card = Image.composite(Image.new("RGB", (W, H), (28, 74, 45)), card, glow)
+
+# ---- the device: real screenshot, rigid scale + rotate -------------------
+shot = Image.open(HOME).convert("RGB")
+PHONE_W = int(374 * S)
+scale = PHONE_W / shot.width
+phone = shot.resize((PHONE_W, int(shot.height * scale)), Image.LANCZOS)
+
+BEZ, RAD = int(11 * S), int(46 * S)
+dev = Image.new("RGBA", (phone.width + BEZ*2, phone.height + BEZ*2), (0, 0, 0, 0))
+dd = ImageDraw.Draw(dev)
+dd.rounded_rectangle([0, 0, dev.width-1, dev.height-1], RAD + BEZ, fill=(22, 26, 24, 255),
+                     outline=(72, 92, 80, 255), width=max(1, S))
+mask = Image.new("L", phone.size, 0)
+ImageDraw.Draw(mask).rounded_rectangle([0, 0, phone.width-1, phone.height-1], RAD, fill=255)
+dev.paste(phone, (BEZ, BEZ), mask)
+
+ANGLE = -9.5                                   # rigid rotation, aspect preserved
+dev_r = dev.rotate(ANGLE, expand=True, resample=Image.BICUBIC)
+
+shadow = Image.new("L", (W, H), 0)
+sm = dev_r.split()[3].point(lambda v: 150 if v > 8 else 0)
+shadow.paste(sm, (int(628*S) + int(10*S), int(84*S) + int(22*S)))
+shadow = shadow.filter(ImageFilter.GaussianBlur(26 * S))
+card = Image.composite(Image.new("RGB", (W, H), (4, 9, 6)), card, shadow)
+card.paste(dev_r, (int(628*S), int(84*S)), dev_r)
+
+# ---- pickleball ---------------------------------------------------------
+ball = Image.open(BALL).convert("RGBA")
+BS = int(150 * S)
+ball = ball.resize((BS, BS), Image.LANCZOS)
+bx, by = int(1096*S), int(300*S)
+bshadow = Image.new("L", (W, H), 0)
+bshadow.paste(ball.split()[3].point(lambda v: 130 if v > 8 else 0), (bx + 6*S, by + 12*S))
+card = Image.composite(Image.new("RGB", (W, H), (6, 14, 9)), card,
+                       bshadow.filter(ImageFilter.GaussianBlur(18 * S)))
+card.paste(ball, (bx, by), ball)
+
+# ---- copy lockup --------------------------------------------------------
+d = ImageDraw.Draw(card)
+X = int(72 * S)
+
+# "NOW AVAILABLE" pill
+pf = f(BD, 19)
+pt = "NOW AVAILABLE"
+tw = d.textlength(pt, font=pf)
+px0, py0 = X, int(150 * S)
+pw, ph = int(tw + 34*S), int(44 * S)
+d.rounded_rectangle([px0, py0, px0+pw, py0+ph], ph//2, fill=LIME)
+d.text((px0 + pw/2, py0 + ph/2), pt, font=pf, fill=(10, 20, 13), anchor="mm")
+
+d.text((X, int(214*S)), "PICKLECUE",        font=f(AB, 76), fill=WHITE)
+d.text((X, int(300*S)), "ON THE APP STORE", font=f(AB, 42), fill=LIME)
+
+badge = Image.open(BADGE).convert("RGBA")
+BW = int(224 * S)
+badge = badge.resize((BW, int(badge.height * BW / badge.width)), Image.LANCZOS)
+card.paste(badge, (X, int(396*S)), badge)
+
+# ---- rounded card edge --------------------------------------------------
+out = Image.new("RGB", (W, H), (7, 16, 10))
+m = Image.new("L", (W, H), 0)
+ImageDraw.Draw(m).rounded_rectangle([0, 0, W-1, H-1], int(20*S), fill=255)
+out.paste(card, (0, 0), m)
+ImageDraw.Draw(out).rounded_rectangle([0, 0, W-1, H-1], int(20*S),
+                                      outline=(46, 78, 56), width=max(1, S))
+
+out = out.resize((1200, 750), Image.LANCZOS)
+p = OUT / "assets/app-store-launch-hero.png"
+out.save(p, optimize=True)
+print(f"  wrote {p.relative_to(REPO)}  {out.size}  {p.stat().st_size//1024} KB")
