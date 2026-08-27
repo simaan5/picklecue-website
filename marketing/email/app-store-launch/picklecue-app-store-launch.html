@@ -373,13 +373,16 @@
               <p class="pc-mute" style="margin:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#9CA3AF;">
                 You&rsquo;re receiving this email because you joined the PickleCue waitlist.
               </p>
-              <!-- Zoho Campaigns merge tags. These are replaced by Zoho at send
-                   time with the real per-recipient links; they are not links we
-                   author, and they must not be removed. -->
+              <!-- Zoho Campaigns merge tags, read from Zoho's own Merge Tags >
+                   Header and Footer menu on 2026-08-26 and inserted into an
+                   empty editor to capture the exact syntax. Guessing these is
+                   how a footer ships with dead links: the first draft of this
+                   file had $[LI]$ and $[OO]$, and neither exists. Zoho replaces
+                   them per recipient at send time. Do not remove them. -->
               <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#9CA3AF;">
-                <a href="$[LI]$" class="pc-link" style="color:#A3E635;text-decoration:underline;">Unsubscribe</a>
+                <a href="$[LI:UNSUBSCRIBE]$" class="pc-link" style="color:#A3E635;text-decoration:underline;">Unsubscribe</a>
                 <span style="color:#4B5563;">&nbsp;|&nbsp;</span>
-                <a href="$[OO]$" class="pc-link" style="color:#A3E635;text-decoration:underline;">Update Preferences</a>
+                <a href="$[LI:UPDATEPROFILE]$" class="pc-link" style="color:#A3E635;text-decoration:underline;">Update Preferences</a>
               </p>
             </td>
           </tr>
