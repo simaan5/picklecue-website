@@ -19,7 +19,6 @@ OUT  = Path(__file__).resolve().parent
 
 HOME  = IOS / "qa/store-screenshots/build-213-deck-v4/raw/s10-home-dashboard.png"
 BADGE = Path("/tmp/app-store-badge.png")
-BALL  = IOS / "PickleCue/Assets.xcassets/picklecue_loader_ball.imageset/picklecue_loader_ball@3x.png"
 MARK  = Path.home() / "Desktop/Logo Transparent.png"   # the official C mark
 
 PAPER = (13, 26, 18)      # #0D1A12
@@ -32,7 +31,7 @@ AB = "/System/Library/Fonts/Supplemental/Arial Black.ttf"
 BD = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
 f = lambda p, s: ImageFont.truetype(p, s * S)
 
-for p in (HOME, BADGE, BALL, MARK):
+for p in (HOME, BADGE, MARK):
     if not p.exists():
         sys.exit(f"missing asset: {p}")
 
@@ -79,16 +78,10 @@ shadow = shadow.filter(ImageFilter.GaussianBlur(40 * S))
 card = Image.composite(Image.new("RGB", (W, H), (5, 12, 8)), card, shadow)
 card.paste(dev_r, (int(628*S), int(84*S)), dev_r)
 
-# ---- pickleball ---------------------------------------------------------
-ball = Image.open(BALL).convert("RGBA")
-BS = int(150 * S)
-ball = ball.resize((BS, BS), Image.LANCZOS)
-bx, by = int(1096*S), int(300*S)
-bshadow = Image.new("L", (W, H), 0)
-bshadow.paste(ball.split()[3].point(lambda v: 130 if v > 8 else 0), (bx + 6*S, by + 12*S))
-card = Image.composite(Image.new("RGB", (W, H), (6, 14, 9)), card,
-                       bshadow.filter(ImageFilter.GaussianBlur(18 * S)))
-card.paste(ball, (bx, by), ball)
+# The pickleball that used to sit here is gone. Composited against a
+# photographic device mockup it read as a flat sticker with a hard shadow, not
+# an object in the same scene. The phone bleeding off the right edge carries
+# the composition on its own.
 
 # ---- copy lockup --------------------------------------------------------
 d = ImageDraw.Draw(card)
