@@ -121,7 +121,7 @@
             { "@type": "Question", "name": "Is PickleCue free?",
               "acceptedAnswer": { "@type": "Answer", "text": "Yes. Finding courts, joining games, logging matches, and messaging are free. An optional subscription, PickleCue Pro, adds organizer tools like unlimited game creation, leagues, and tournaments." } },
             { "@type": "Question", "name": "Which devices does it run on?",
-              "acceptedAnswer": { "@type": "Answer", "text": "PickleCue is a native iPhone app for iOS 18 and later, and it runs on iPad too." } },
+              "acceptedAnswer": { "@type": "Answer", "text": "PickleCue is a native iPhone app for iOS 18 and later, and it runs on iPad too. An Android app and a web app are coming soon." } },
             { "@type": "Question", "name": "Do you show ads or sell my data?",
               "acceptedAnswer": { "@type": "Answer", "text": "No ads, no data sold, no tracking across apps. Read the full privacy policy." } },
             { "@type": "Question", "name": "Do organizers need Pro?",
@@ -144,6 +144,9 @@
    ============================================================ */
 
 :root{
+    /* Fixed masthead sits on top of the hero; the announcement bar above it
+       adds --banner-h to every offset that assumed a 76px header. */
+    --banner-h:   40px;
     --paper:      #F7F7F2;
     --card:       #FFFFFF;
     --ink:        #0E1B14;
@@ -171,7 +174,7 @@
 }
 
 *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
-section[id]{ scroll-margin-top:96px; }
+section[id], #android-notify{ scroll-margin-top:calc(96px + var(--banner-h)); }
 html{ scroll-behavior:smooth; }
 @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
 body{
@@ -270,6 +273,30 @@ a{ color:inherit; }
 :root[data-theme="dark"] .theme-toggle .moon{ display:none; }
 @media (max-width:860px){ .theme-toggle{ margin-left:auto; margin-right:10px; } }
 
+/* ---------- Announcement bar: Android + web app coming soon ---------- */
+/* Lives inside the fixed masthead so it scrolls with it. Solid --court in
+   both themes: white text on it stays 7:1, and it must read as a ribbon
+   over the transparent-at-top header. */
+.announce{
+    min-height:var(--banner-h); display:flex; align-items:center; justify-content:center;
+    padding:0 16px; background:var(--court); color:#fff; text-align:center;
+}
+.announce-link{
+    color:#fff; text-decoration:none; font:500 14px/1.35 var(--f); letter-spacing:.005em;
+}
+.announce-cta{ margin-left:10px; font-weight:650; text-decoration:underline; text-underline-offset:3px; white-space:nowrap; }
+.announce-link:hover .announce-cta{ text-decoration-thickness:2px; }
+.announce-link:focus-visible{ outline:2px solid #fff; outline-offset:3px; border-radius:4px; }
+.announce strong{
+    display:inline-block; margin-right:6px; padding:3px 8px; border-radius:999px;
+    background:rgba(255,255,255,.16); font:600 11px/1 var(--f-mono);
+    letter-spacing:.12em; text-transform:uppercase; vertical-align:1px;
+}
+@media (max-width:600px){
+    .announce-link{ font-size:13.5px; }
+    .announce strong, .announce .announce-more{ display:none; }
+}
+
 /* ---------- Masthead: transparent at top, blurred after scroll ---------- */
 .masthead{
     position:fixed; top:0; left:0; right:0; z-index:50;
@@ -332,7 +359,7 @@ a{ color:inherit; }
 .site-menu .btn{ align-self:flex-start; }
 
 /* ---------- Hero: own the viewport ---------- */
-.hero{ position:relative; overflow:hidden; padding-top:76px; }
+.hero{ position:relative; overflow:hidden; padding-top:calc(76px + var(--banner-h)); }
 .hero-bg{
     position:absolute; inset:0; pointer-events:none;
     background:
@@ -343,7 +370,7 @@ a{ color:inherit; }
     max-width:var(--wrap); margin:0 auto; padding:56px 32px 40px;
     display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
     gap:40px; align-items:center; position:relative;
-    min-height: calc(100dvh - 76px);
+    min-height: calc(100dvh - 76px - var(--banner-h));
 }
 .hero-proof{
     font:600 13.5px/1 var(--f-mono); letter-spacing:.14em; text-transform:uppercase;
@@ -456,7 +483,7 @@ a{ color:inherit; }
     /* Size the stage from the VIEWPORT height, not a fixed width. At 392px wide
        the phone is 852px tall and ran off the bottom of a 900px window, so the
        tab bar — the part that proves it is an app — was never visible. */
-    .journey-stage{ position:sticky; top:96px; display:flex; justify-content:center; }
+    .journey-stage{ position:sticky; top:calc(96px + var(--banner-h)); display:flex; justify-content:center; }
     .journey-phone{
         position:relative; height:min(852px, calc(100vh - 132px)); width:auto;
         aspect-ratio:402/874; border-radius:46px; overflow:hidden;
@@ -1234,6 +1261,9 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
 
 <!-- ================= Masthead ================= -->
 <header class="masthead" id="masthead">
+    <div class="announce" role="note" aria-label="Platform announcement">
+        <a class="announce-link" href="#android-notify" data-track="android_notify_open" data-placement="banner" data-audience="home"><strong>Coming soon</strong> Android app and web app.<span class="announce-more"> PickleCue is on iPhone today.</span><span class="announce-cta"> Get notified&nbsp;&rarr;</span></a>
+    </div>
     <div class="masthead-inner">
         <a class="brand" href="/" aria-label="PickleCue — home">
             <img class="brand-mark" src="/images/email/cuemark.webp" alt="" width="42" height="42">
@@ -1284,7 +1314,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
             <h1 class="rise rise-1">Find your court.<br>Find your game.<br><span class="accent">One place.</span></h1>
             <p class="hero-sub rise rise-2">A native iPhone app for players, a control room for organizers, and a live page anyone can open — no app, no account.</p>
             <a data-track="app_store_click" data-placement="hero" data-audience="home" class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" aria-label="Download PickleCue on the App Store"><img src="/images/badges/app-store-badge.svg" alt="Download on the App Store" width="180" height="60" decoding="async"></a>
-                <p class="store-note">Free on iPhone · Available in the <strong>United States</strong><br>Not in the US? <a href="#early-access">Get notified when we launch in your country →</a></p>
+                <p class="store-note">Free on iPhone · Available in the <strong>United States</strong><br><strong>Android</strong> and a <strong>web app</strong> are coming soon &mdash; <a href="#android-notify" data-track="android_notify_open" data-placement="hero" data-audience="home">get notified &rarr;</a><br>Not in the US? <a href="#early-access">Get notified when we launch in your country →</a></p>
             <p class="qr-line"><button class="qr-trigger" type="button" data-qr-open><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 14h2M14 19h3M19 19h2"/></svg>Scan to get it on your phone</button></p>
             <div class="hero-ctas rise rise-4">
                 <a class="hero-secondary" href="/demo/" data-track="demo_open" data-placement="hero" data-audience="home">
@@ -1536,7 +1566,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
 <section class="final-cta" id="early-access">
     <div class="final-inner">
         <h2>Get PickleCue.</h2>
-        <p>Out now on the App Store — free on iPhone, in the United States.</p>
+        <p>Out now on the App Store — free on iPhone, in the United States. Android and web app coming soon.</p>
         <a data-track="app_store_click" data-placement="final" data-audience="home" class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" aria-label="Download PickleCue on the App Store"><img src="/images/badges/app-store-badge.svg" alt="Download on the App Store" width="180" height="60" decoding="async"></a>
         <p class="final-note">Free core app · No ads · Organizer tools are part of PickleCue Pro</p>
 
@@ -1550,6 +1580,18 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
                 <button type="submit" class="btn btn-primary" data-track="waitlist_submit" data-placement="final" data-audience="home">Notify me</button>
             </form>
             <p class="waitlist-msg" id="waitlistMsgIntl" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="intl-cta" id="android-notify">
+            <h3>Not an iPhone user?</h3>
+            <p>The Android app and web app are on the way. Leave your email and we will tell you the day they arrive &mdash; nothing else, ever.</p>
+            <form class="waitlist-form waitlist-dark" id="waitlistFormAndroid" novalidate aria-label="Get notified when PickleCue arrives on Android and the web">
+                <label for="waitlist-email-android" style="position:absolute;left:-9999px;">Email address</label>
+                <input type="email" id="waitlist-email-android" name="email" placeholder="Your email address" required autocomplete="email" inputmode="email" aria-describedby="waitlistMsgAndroid">
+                <input type="text" name="company" tabindex="-1" autocomplete="off" class="waitlist-hp" aria-hidden="true">
+                <button type="submit" class="btn btn-primary" data-track="waitlist_submit" data-placement="android" data-audience="home">Notify me</button>
+            </form>
+            <p class="waitlist-msg" id="waitlistMsgAndroid" role="status" aria-live="polite"></p>
         </div>
     </div>
 </section>
@@ -1800,7 +1842,8 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
     /* Waitlist */
     var SUPABASE_URL  = 'https://uejmhtdfbqbotvbqvfja.supabase.co';
     var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlam1odGRmYnFib3R2YnF2ZmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyMjYzMjAsImV4cCI6MjA4MjgwMjMyMH0.oSZlTczSfIe1Jls0DSG6br1pVLKZ1F6e_DOPgndPdOc';
-    function wireWaitlist(formId, msgId, ctaName, source){
+    function wireWaitlist(formId, msgId, ctaName, source, successText){
+        successText = successText || 'We will email you the day PickleCue reaches your country.';
         var form = document.getElementById(formId);
         var msg = document.getElementById(msgId);
         if (!form || !msg) return;
@@ -1832,9 +1875,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
             }).then(function(r){
                 if (r.ok || r.status === 409){
                     window.track('waitlist_success', { existing: r.status === 409, form: ctaName });
-                    setMsg(r.status === 409
-                        ? 'You are already on the list. We will email you the day PickleCue reaches your country.'
-                        : 'You are on the list. We will email you the day PickleCue reaches your country.', 'success');
+                    setMsg((r.status === 409 ? 'You are already on the list. ' : 'You are on the list. ') + successText, 'success');
                     form.reset();
                 } else {
                     window.track('waitlist_error', { status: r.status, form: ctaName });
@@ -1853,9 +1894,35 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
        synchronously found null and returned — the prompt's "Notify me" button
        submitted nothing and showed no message. Deferring covers both forms
        regardless of where they sit relative to this block. */
+    /* The smooth scroll to a deep anchor lands short: images below the fold
+       are lazy, so the document grows ~1200px WHILE the scroll is in flight
+       and the target moves away. Re-aim once the first scroll has finished
+       and again after images settle. Only corrects when the target is not
+       already in view, so it never fights the user. */
+    function settleAnchor(href){
+        document.querySelectorAll('a[href="' + href + '"]').forEach(function(a){
+            a.addEventListener('click', function(){
+                var el = document.querySelector(href);
+                if (!el) return;
+                [900, 1900].forEach(function(t){
+                    setTimeout(function(){
+                        var r = el.getBoundingClientRect();
+                        if (r.top < 0 || r.top > window.innerHeight * 0.8){
+                            el.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, t);
+                });
+            });
+        });
+    }
+
     function wireAll() {
+        settleAnchor('#android-notify');
+        settleAnchor('#early-access');
         wireWaitlist('waitlistFormIntl', 'waitlistMsgIntl', 'intl', 'website-intl');
         wireWaitlist('waitlistFormGeo', 'waitlistMsgGeo', 'geo', 'website-intl');
+        wireWaitlist('waitlistFormAndroid', 'waitlistMsgAndroid', 'android', 'website-android',
+            'We will email you the day PickleCue arrives on Android and the web.');
     }
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', wireAll);
