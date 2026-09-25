@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -70,6 +72,12 @@ jobs:
         # meant nothing broke and nothing complained; enforcing it would have
         # taken all five down at once. Caught statically now, on every push.
         run: node tools/gate-csp-hosts.mjs
+
+      - name: Changed assets carry a new ?v=
+        # /assets/* is served immutable for a year. A CSS/JS edit without a
+        # ?v= bump deploys green and never reaches returning visitors.
+        # Needs full history (fetch-depth: 0) to diff against the base.
+        run: node tools/gate-asset-versions.mjs --base "${{ github.event.pull_request.base.sha || github.event.before }}"
 
       - name: Sitemap must not list a redirecting URL
         run: |
