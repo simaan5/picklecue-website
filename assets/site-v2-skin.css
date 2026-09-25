@@ -269,7 +269,7 @@ footer.site-foot{ background:var(--night); color:var(--mute-on-night); border-to
     display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
     font:450 14.5px/1.4 var(--f);
 }
-.foot-social{ display:flex; gap:22px; }
+.foot-social{ display:flex; flex-wrap:wrap; gap:22px; }
 .foot-social a{ color:var(--mute-on-night); text-decoration:none; font:500 15px/1 var(--f);
     display:inline-flex; align-items:center; justify-content:center;
     min-height:24px; min-width:24px; padding:5px 0; }

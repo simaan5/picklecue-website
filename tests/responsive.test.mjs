@@ -20,6 +20,7 @@ const PAGES = [
   'organizer-templates.html', 'players.html', 'organizers.html',
   'clubs.html', '404.html', 'community.html',
   'events/pickle-for-a-purpose/index.html',
+  'live-scores.html', 'courts/index.html',
 ];
 const WIDTHS = [320, 344, 360, 375, 390, 393, 402, 414, 430, 768, 820, 1024, 1280, 1440];
 const MOBILE_MAX = 860;           // shell breakpoint: <=860 burger, >=861 desktop nav
@@ -91,7 +92,10 @@ for (const pageName of PAGES) {
       menuHidden: (e => e ? e.hidden : null)(document.getElementById('siteMenu')),
       tocOpen: (e => e ? e.open : null)(document.querySelector('details.article-toc')),
     }));
-    check(m.scrollWidth <= m.innerWidth, `${tag}: horizontal overflow (scrollWidth ${m.scrollWidth} > ${m.innerWidth})`);
+    // Compare against the DEVICE width, not innerWidth: with isMobile the
+    // browser widens the layout viewport to fit overflowing content, so
+    // innerWidth grows with scrollWidth and the check could never fail.
+    check(m.scrollWidth <= width, `${tag}: horizontal overflow (scrollWidth ${m.scrollWidth} > ${width})`);
     check(m.wordmark, `${tag}: approved wordmark missing from masthead`);
 
     if (m.burger !== null) {
