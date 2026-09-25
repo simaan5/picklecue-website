@@ -95,7 +95,9 @@ main{ padding-top:96px; }
 @media (prefers-reduced-motion: reduce){ .cnear a{ transition:none; } }
 
 @media (max-width:1000px){
-    .chero{ grid-template-columns:1fr; gap:32px; align-items:start; }
+    /* minmax(0,1fr), not 1fr: 1fr keeps an auto minimum, so the column grew to
+       its widest child's min-content (358px inside a 311px phone gutter). */
+    .chero{ grid-template-columns:minmax(0,1fr); gap:32px; align-items:start; }
     .ccards{ grid-template-columns:repeat(2,1fr); }
     .ctwo{ grid-template-columns:1fr; gap:8px; }
 }
