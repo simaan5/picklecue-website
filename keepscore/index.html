@@ -90,6 +90,15 @@
             } else {
                 el.style.display = 'none';
             }
+            // The app is iPhone-only, so the App Store button is a dead end on
+            // Android. Offer the Android waitlist on the homepage instead.
+            if (/Android/i.test(navigator.userAgent)) {
+                var cta = document.querySelector('a.cta');
+                cta.href = '/#android-notify';
+                cta.textContent = 'Get notified for Android';
+                cta.setAttribute('data-track', 'android_notify_open');
+                cta.setAttribute('data-placement', 'keepscore');
+            }
         })();
     </script>
 </body>
