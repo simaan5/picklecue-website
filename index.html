@@ -1260,7 +1260,8 @@ html.js .reveal.in{ opacity:1; transform:none; }
 .theme-toggle:active, .masthead-burger:active, .site-menu-close:active{ transform:scale(.94); }
 /* Tap targets: list links sat at 24-38px tall on touch screens (M9). */
 @media (pointer:coarse){
-    .foot-col a, .foot-social a{ display:inline-flex; align-items:center; min-height:44px; }
+    .foot-col a{ display:flex; align-items:center; min-height:44px; line-height:1.3; }
+    .foot-social a{ display:inline-flex; align-items:center; min-height:44px; }
 }
 </style>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */

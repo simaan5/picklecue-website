@@ -343,5 +343,10 @@ footer.site-foot{ background:var(--night); color:var(--mute-on-night); border-to
 .theme-toggle:active, .masthead-burger:active, .site-menu-close:active{ transform:scale(.94); }
 /* Tap targets: list links sat at 24-38px tall on touch screens (M9). */
 @media (pointer:coarse){
-    .foot-col a, .foot-social a{ display:inline-flex; align-items:center; min-height:44px; }
+    .foot-col a{ display:flex; align-items:center; min-height:44px; line-height:1.3; }
+    .foot-social a{ display:inline-flex; align-items:center; min-height:44px; }
 }
+/* One primary per header: the Discord pill is a ghost button; the skin's
+   .btn-pill electric fill used to make it a second primary (audit L5). */
+.masthead .btn-pill.btn-discord{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--rule-strong); }
+.masthead .btn-pill.btn-discord:hover{ background:#5865F2; color:#fff; box-shadow:none; }
