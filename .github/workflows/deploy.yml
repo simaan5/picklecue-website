@@ -65,9 +65,17 @@ jobs:
         # Needs full history (fetch-depth: 0) to diff against the base.
         run: node tools/gate-asset-versions.mjs --base "${{ github.event.before }}"
 
+      - name: Stage the public site into dist/ (allowlist)
+        # `pages deploy .` published the whole repo: docs/, tools/, tests/,
+        # .github/ and a delivery note with a personal email were all live.
+        # Only allowlisted paths are staged, and every local reference must
+        # resolve inside dist/ or this step fails. functions/ stays at the
+        # repo root, where wrangler reads it.
+        run: node tools/stage-dist.mjs
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=picklecue-website --branch=main
+          command: pages deploy dist --project-name=picklecue-website --branch=main
