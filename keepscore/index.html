@@ -65,7 +65,7 @@
             padding: 12px 18px; margin: 18px 0 22px; display: inline-block;
         }
         .cta {
-            display: inline-block; background: var(--court); color: var(--on-court);
+            display: inline-block; background: #D8F35A; color: #061811;
             font-weight: 600; text-decoration: none;
             border-radius: 999px; padding: 14px 26px;
         }
@@ -80,7 +80,7 @@
         <h1>You're invited to keep score.</h1>
         <p>An organizer asked you to run the live scoreboard for their pickleball match.</p>
         <div class="code" id="claim-code" aria-label="Match code"></div>
-        <p>Get PickleCue, then scan the QR again — or enter this code under <strong>Play&nbsp;→&nbsp;Keep&nbsp;Score</strong>.</p>
+        <p id="claim-how">Get PickleCue, then scan the QR again — or enter this code under <strong>Play&nbsp;→&nbsp;Keep&nbsp;Score</strong>.</p>
         <a class="cta" data-track="app_store_click" data-placement="inline" data-audience="spectators" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Get PickleCue</a>
         <p class="fine">Already have the app? Scanning the QR with your iPhone camera opens it directly.</p>
     </main>
@@ -94,6 +94,8 @@
                 el.textContent = seg.toUpperCase();
             } else {
                 el.style.display = 'none';
+                // No code in the link: don't tell the user to "enter this code" (audit F13).
+                document.getElementById('claim-how').textContent = 'Get PickleCue, then scan the organizer\u2019s QR code again to start keeping score.';
             }
             // The app is iPhone-only, so the App Store button is a dead end on
             // Android. Offer the Android waitlist on the homepage instead.

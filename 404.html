@@ -151,8 +151,8 @@
             transition: transform 0.15s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
         }
         .btn svg { width: 12px; height: 12px; }
-        .btn-primary { background: var(--ink); color: var(--paper); }
-        .btn-primary:hover { background: var(--court); transform: translateY(-1px); }
+        .btn-primary { background: #D8F35A; color: #061811; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(31,93,67,.25); }
         .btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--rule-strong); }
         .btn-secondary:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); transform: translateY(-1px); }
 
@@ -201,8 +201,7 @@
             }
             :root:not([data-theme="light"]) body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,243,236,0.045) 1px, transparent 0); }
             :root:not([data-theme="light"]) .masthead { background: rgba(7, 26, 18, 0.86); }
-            :root:not([data-theme="light"]) .btn-primary { background: var(--ink); color: var(--paper); }
-            :root:not([data-theme="light"]) .btn-primary:hover { background: var(--court); color: #061811; }
+            :root:not([data-theme="light"]) .btn-primary { background: #D8F35A; color: #061811; }
             :root:not([data-theme="light"]) .btn-secondary { color: var(--ink); border-color: var(--rule-strong); }
         }
         :root[data-theme="dark"] {
@@ -213,8 +212,7 @@
         }
         :root[data-theme="dark"] body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,243,236,0.045) 1px, transparent 0); }
         :root[data-theme="dark"] .masthead { background: rgba(7, 26, 18, 0.86); }
-        :root[data-theme="dark"] .btn-primary { background: var(--ink); color: var(--paper); }
-        :root[data-theme="dark"] .btn-primary:hover { background: var(--court); color: #061811; }
+        :root[data-theme="dark"] .btn-primary { background: #D8F35A; color: #061811; }
         :root[data-theme="dark"] .btn-secondary { color: var(--ink); border-color: var(--rule-strong); }
 
         /* Theme toggle */

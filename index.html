@@ -26,7 +26,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>PickleCue. Find your court. Find your game. One place.</title>
 
-    <meta name="description" content="PickleCue is the all-in-one pickleball app for iPhone. Find courts, fill games, run leagues and tournaments, and remember every match. Free on the App Store in the United States.">
+    <meta name="description" content="The all-in-one pickleball app for iPhone. Find courts, fill games, run leagues and tournaments, and remember every match. Free in the US App Store.">
     <meta name="author" content="PickleCue">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.picklecue.com/">
@@ -34,7 +34,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.picklecue.com/">
     <meta property="og:title" content="PickleCue. Find your court. Find your game. One place.">
-    <meta property="og:description" content="Find courts, fill games, run leagues and tournaments, and remember every match. The all-in-one pickleball app for iOS.">
+    <meta property="og:description" content="The all-in-one pickleball app for iPhone. Find courts, fill games, run leagues and tournaments, and remember every match. Free in the US App Store.">
     <meta property="og:image" content="https://www.picklecue.com/images/og-image.png?v=20260822">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -44,7 +44,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="PickleCue. Find your court. Find your game. One place.">
-    <meta name="twitter:description" content="Find courts, fill games, run leagues and tournaments, and remember every match.">
+    <meta name="twitter:description" content="The all-in-one pickleball app for iPhone. Find courts, fill games, run leagues and tournaments, and remember every match. Free in the US App Store.">
     <meta name="twitter:image" content="https://www.picklecue.com/images/og-image.png?v=20260822">
     <meta name="twitter:image:alt" content="PickleCue: find your court, find your game, one place.">
 
@@ -1246,6 +1246,21 @@ html.js .reveal.in{ opacity:1; transform:none; }
 @media (max-width:340px){
     .masthead-inner{ padding:0 16px; }
     .brand .brand-mark{ display:none; }
+}
+
+/* Control states (audit 2026-09-26, D4/S10). One focus ring for every control:
+   currentColor always contrasts with the surface the control sits on, so the
+   same rule works on paper, night sections and both themes. */
+:where(.btn, .theme-toggle, .masthead-burger, .site-menu-close, .lightbox-close, .dtab, .device, .qr-trigger):focus-visible{
+    outline:2px solid currentColor; outline-offset:3px;
+}
+.btn:disabled, .btn[aria-disabled="true"]{ opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+.masthead .btn{ min-height:44px; }
+.masthead-burger:hover, .site-menu-close:hover, .lightbox-close:hover{ opacity:.75; }
+.theme-toggle:active, .masthead-burger:active, .site-menu-close:active{ transform:scale(.94); }
+/* Tap targets: list links sat at 24-38px tall on touch screens (M9). */
+@media (pointer:coarse){
+    .foot-col a, .foot-social a{ display:inline-flex; align-items:center; min-height:44px; }
 }
 </style>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */

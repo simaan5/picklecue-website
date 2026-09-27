@@ -6,7 +6,7 @@
     "courts with reviews', and the courts directory said '3,443'. All three were",
     "hand-written in different files and none of them agreed.",
     "",
-    "tools/verify-claims.mjs is a CI gate. It fails the build if any HTML file",
+    "tools/gate-claims.mjs is a CI gate. It fails the build if any HTML file",
     "contains a court-count number that is not one of the values below, so a",
     "fourth number cannot appear silently.",
     "",

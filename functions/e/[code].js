@@ -34,7 +34,8 @@ const ORIGIN = "https://www.picklecue.com";
 
 // Codes are 6 chars from an unambiguous alphabet — no 0/1/I/O, matching the
 // e.html shim's own filter so the two agree on what "well formed" means.
-const CODE_RE = /^[A-Z2-9]{6}$/;
+// Issued alphabet: ABCDEFGHJKMNPQRSTUVWXYZ23456789 (no I, L, O, 0, 1).
+const CODE_RE = /^[A-HJKMNP-Z2-9]{6}$/;
 // Only these reach the redirect; anything else is dropped rather than
 // concatenated into a URL.
 //

@@ -155,8 +155,8 @@
             transition: background 0.2s var(--ease), color 0.2s var(--ease), transform 0.15s var(--ease), border-color 0.2s var(--ease);
         }
         .btn + .btn { margin-top: 10px; }
-        .btn-primary { background: var(--ink); color: var(--paper); }
-        .btn-primary:hover { background: var(--court); transform: translateY(-1px); }
+        .btn-primary { background: #D8F35A; color: #061811; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(31,93,67,.25); }
         .btn-secondary {
             background: transparent; color: var(--ink);
             border: 1px solid var(--rule-strong);
@@ -193,8 +193,8 @@
             }
             :root:not([data-theme="light"]) body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
             :root:not([data-theme="light"]) .card { background: var(--paper); box-shadow: 0 20px 60px -30px rgba(0,0,0,0.7); }
-            :root:not([data-theme="light"]) .btn-primary { background: var(--ink); color: var(--paper); }
-            :root:not([data-theme="light"]) .btn-primary:hover { background: var(--court); color: #0E1B14; }
+            :root:not([data-theme="light"]) .btn-primary { background: #D8F35A; color: #061811; }
+            
         }
         :root[data-theme="dark"] {
             --paper: #071A12; --paper-2: #0C2419;
@@ -204,8 +204,8 @@
         }
         :root[data-theme="dark"] body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
         :root[data-theme="dark"] .card { background: var(--paper); box-shadow: 0 20px 60px -30px rgba(0,0,0,0.7); }
-        :root[data-theme="dark"] .btn-primary { background: var(--ink); color: var(--paper); }
-        :root[data-theme="dark"] .btn-primary:hover { background: var(--court); color: #0E1B14; }
+        :root[data-theme="dark"] .btn-primary { background: #D8F35A; color: #061811; }
+        
     </style>
     <!-- Fonts: self-hosted, preload the two critical latin subsets -->
     <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>

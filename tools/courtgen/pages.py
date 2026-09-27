@@ -274,6 +274,8 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
       r.hidden=!ok; if(ok) shown++;
     }});
     count.textContent=shown+(shown===1?' court':' courts');
+    // Say why the list is empty: a search, or a filter tab with nothing in it (S11).
+    empty.textContent=term?'No courts match that search.':'No courts of this kind in this city yet.';
     empty.hidden=shown>0;
   }}
   document.querySelectorAll('.dtab').forEach(function(b){{

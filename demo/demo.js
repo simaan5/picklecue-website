@@ -36,7 +36,14 @@
         var tab = document.querySelector('.tab-item[data-tab="' + tabId + '"]');
         if (screen) { screen.classList.add('active'); screen.scrollTop = 0; }
         if (tab) { tab.classList.add('active'); }
+        syncInert();
     };
+
+    // Hidden screens stay in the DOM at opacity 0; keep them out of the Tab
+    // order so keyboard focus never lands somewhere invisible (audit F11).
+    function syncInert() {
+        document.querySelectorAll('.screen').forEach(function (s) { s.inert = !s.classList.contains('active'); });
+    }
 
     // ─── Play hub segments ───
     window.playSeg = function (el) {
@@ -94,4 +101,16 @@
     window.closeGameDetail = function () {
         document.getElementById('game-detail').classList.remove('open');
     };
+
+    // Keyboard: the demo's controls are div/span with onclick. Give them a
+    // role, a tab stop and Enter/Space activation (audit F11).
+    document.querySelectorAll('[onclick]').forEach(function (el) {
+        if (/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(el.tagName)) return;
+        el.setAttribute('role', 'button');
+        if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+        el.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+        });
+    });
+    syncInert();
 })();

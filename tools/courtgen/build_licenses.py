@@ -124,10 +124,9 @@ def main():
     out = SITE / "licenses.html"
     out.write_text(S.page(
         "Third-party notices · PickleCue",
-        "Licences for the software, typefaces and map data PickleCue's website "
-        "redistributes, including OpenStreetMap, MapLibre, Lucide and the SIL "
-        "Open Font License typefaces.",
-        "https://www.picklecue.com/licenses.html",
+        "Licences for the software, typefaces and map data this website "
+        "redistributes, including OpenStreetMap, MapLibre, Lucide and OFL typefaces.",
+        "/licenses",
         "\n".join(body), indexable=True), encoding="utf-8")
     print(f"  wrote {out.name} ({out.stat().st_size // 1024} KB, "
           f"{len(ITEMS)} licence texts embedded)")

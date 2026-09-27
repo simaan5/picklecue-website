@@ -460,3 +460,7 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 
 /* Court detail: directions under the map (audit F3). */
 .vdirs{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+.dtab:focus-visible{ outline:2px solid currentColor; outline-offset:3px; }
+@media (pointer:coarse){ .crumbs a{ display:inline-flex; align-items:center; min-height:44px; } }
+/* /licenses: the page title was 34px/700 under 32px/800 section heads (D9). */
+main .wrap > h1:first-of-type{ font:800 clamp(34px,4.6vw,52px)/1.06 var(--f); letter-spacing:-.035em; margin-bottom:18px; }
