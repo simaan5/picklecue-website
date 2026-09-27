@@ -606,8 +606,8 @@ def build_index(states, total, cities_n, out, indexable=False, us=False):
       href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></p>
   </div>
   <figure class="cbridge-shot">
-    <img src="/images/app/courts-detail.webp" width="760" height="1651" loading="lazy" decoding="async"
-         alt="A venue in PickleCue: eight courts, indoor and outdoor, paid, with the address, directions, check-in, court chat and a button to host a game here.">
+    <img src="/images/app/courts-map-sheet.webp" width="760" height="1651" loading="lazy" decoding="async"
+         alt="The Courts map in PickleCue: an OpenStreetMap view of Santa Monica with court pins, and a selected court showing 8 courts, outdoor, free, with a button to open it.">
   </figure>
 </section>
 
