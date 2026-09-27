@@ -33,6 +33,8 @@ const DIST = join(ROOT, 'dist');
 const DIRS = ['.well-known', 'assets', 'bracket', 'courts', 'demo', 'events',
   'fonts', 'images', 'keepscore', 'marketing', 'videos/hero'];
 const FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'manifest.json', 'fonts.css'];
+// Published when present (added by the P2 audit PR).
+const OPTIONAL_FILES = ['favicon.ico'];
 // Every root *.html is public EXCEPT these (ended-event print posters).
 const ROOT_HTML_EXCLUDE = new Set(['poster-p4p.html', 'poster-p4p-stories.html']);
 // Never publish source/notes, even inside a public folder.
@@ -61,6 +63,7 @@ for (const f of readdirSync(ROOT)) {
   if (f.endsWith('.html') && !ROOT_HTML_EXCLUDE.has(f)) copyFile(f);
 }
 for (const f of FILES) copyFile(f);
+for (const f of OPTIONAL_FILES) if (existsSync(join(ROOT, f))) copyFile(f);
 for (const d of DIRS) {
   if (!existsSync(join(ROOT, d))) { console.error(`STAGE: allowlisted folder missing: ${d}`); process.exit(1); }
   walk(d);
