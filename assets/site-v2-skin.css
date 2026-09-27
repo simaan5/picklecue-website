@@ -17,7 +17,7 @@
     --citron:      #D8F35A;
     --masthead-bg: rgba(247,247,242,.88);
     /* V2 is sans-only: retire the display serif everywhere */
-    --f-display:   'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --f-display:   'Instrument Sans', 'Instrument Sans Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 }
 
 @media (prefers-color-scheme: dark){
@@ -116,7 +116,7 @@ main a:not(.btn-pill):not(.cta):not(.cta-ghost):not(.masthead-nav a){ color: var
 :root{
     --cue:            #56D364;
     --electric:       #D8F35A;
-    --f:              'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --f:              'Instrument Sans', 'Instrument Sans Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     --line:           rgba(14,27,20,.12);
     --line-night:     rgba(237,243,236,.15);
     --mute-on-night:  #9BB0A2;
@@ -156,7 +156,7 @@ main a:not(.btn-pill):not(.cta):not(.cta-ghost):not(.masthead-nav a){ color: var
     --line:       rgba(14,27,20,.12);
     --line-night: rgba(237,243,236,.15);
     --r-card: 20px;
-    --f: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --f: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     --f-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
     --wrap: 1340px;
     --wrap-tight: 1240px;
@@ -317,3 +317,16 @@ footer.site-foot{ background:var(--night); color:var(--mute-on-night); border-to
    The masthead looks identical either way; only flow differs. Keep it sticky
    here rather than retro-fitting hero padding onto four pages. */
 .masthead{ position:sticky; }
+
+/* Phone header: nothing may shrink. The brand box used to be squeezed below its
+   own wordmark, so the theme toggle sat on the "e" of PickleCue at 320-390px and
+   the burger shrank to 22-39px wide (audit 2026-09-26, M1/M2). */
+@media (max-width:860px){
+    .masthead-inner{ gap:8px; }
+    .brand, .theme-toggle, .masthead-burger{ flex-shrink:0; }
+}
+@media (max-width:420px){ .brand .brand-wordmark{ height:20px; } }
+@media (max-width:340px){
+    .masthead-inner{ padding:0 16px; }
+    .brand .brand-mark{ display:none; }
+}

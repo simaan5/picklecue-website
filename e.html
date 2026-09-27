@@ -45,7 +45,9 @@
 
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png?v=20260812b">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="stylesheet" href="assets/live.css?v=rr9">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
+    <link rel="stylesheet" href="assets/live.css?v=20260927a">
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
@@ -61,17 +63,26 @@
         var view = params.get('view') || '';
         var state = document.getElementById('state');
         if (code.length !== 6) {
-            state.innerHTML = '<h2>That code doesn’t look right</h2><p>Event codes are 6 letters and numbers, like ABC123.</p>';
+            state.innerHTML = '<h2>That code doesn’t look right</h2><p>Event codes are 6 letters and numbers, like ABC123.</p>' +
+                '<p style="margin-top:20px"><a class="btn primary" href="/live-scores#code">Enter an event code</a> <a class="btn ghost" href="/">PickleCue home</a></p>';
             return;
         }
+        var links = '<p style="margin-top:20px"><a class="btn primary" href="/live-scores#code">Enter a different code</a> <a class="btn ghost" href="/">PickleCue home</a></p>';
+        var unreachable = function () {
+            // A failed request is our problem, not a wrong code (audit S3).
+            state.innerHTML = '<h2>We couldn’t reach PickleCue</h2><p>This is on our side, not your code. Check your connection and try again.</p>' +
+                '<p style="margin-top:20px"><button type="button" class="btn primary" onclick="location.reload()">Try again</button></p>';
+        };
+        if (!window.PCLive || !window.PCLive.client) { unreachable(); return; }
         window.PCLive.client.rpc('resolve_short_code', { p_code: code }).then(function (r) {
-            if (r.error || !r.data) {
-                state.innerHTML = '<h2>Event not found</h2><p>Double-check the code with the organizer.</p>';
+            if (r.error) { unreachable(); return; }
+            if (!r.data) {
+                state.innerHTML = '<h2>Event not found</h2><p>Double-check the code with the organizer.</p>' + links;
                 return;
             }
             var kind = r.data.scope === 'tournament' ? 't' : 'l';
             location.replace('live.html?' + kind + '=' + r.data.event_id + (view ? '&view=' + encodeURIComponent(view) : ''));
-        });
+        }, unreachable);
     })();
     </script>
 </body>

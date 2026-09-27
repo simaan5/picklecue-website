@@ -31,16 +31,16 @@
 
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=20260812b">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20260812b">
-    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#F7F7F2" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#071A12" media="(prefers-color-scheme: dark)">
     <style>
         :root {
-            --paper: #F4F1EA; --paper-2: #EAE5D9;
-            --ink: #0C0F12; --ink-soft: #3D4248; --ink-mute: #6E7278;
-            --rule: rgba(12,15,18,0.12); --rule-strong: rgba(12,15,18,0.28);
-            --court: #2E5E4E; --citron: #C8E04E;
-            --f-display: 'Fraunces', Georgia, serif;
-            --f-body: 'Instrument Sans', -apple-system, sans-serif;
+            --paper: #F7F7F2; --paper-2: #FFFFFF;
+            --ink: #0E1B14; --ink-soft: #43564B; --ink-mute: #5F6F64;
+            --rule: rgba(14,27,20,0.12); --rule-strong: rgba(14,27,20,0.28);
+            --court: #1F5D43; --citron: #D8F35A;
+            --f-display: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
+            --f-body: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
             --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
             --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
         }
@@ -186,31 +186,31 @@
         /* Theme — system dark auto, [data-theme="dark"] forces dark */
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
-                --paper: #0F1214; --paper-2: #1A1F23;
-                --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
-                --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
-                --court: #6FB39B;
+                --paper: #071A12; --paper-2: #0C2419;
+                --ink: #EDF3EC; --ink-soft: #B9CBBF; --ink-mute: #8FA697;
+                --rule: rgba(237,243,236,0.14); --rule-strong: rgba(237,243,236,0.28);
+                --court: #56D364;
             }
             :root:not([data-theme="light"]) body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
             :root:not([data-theme="light"]) .card { background: var(--paper); box-shadow: 0 20px 60px -30px rgba(0,0,0,0.7); }
             :root:not([data-theme="light"]) .btn-primary { background: var(--ink); color: var(--paper); }
-            :root:not([data-theme="light"]) .btn-primary:hover { background: var(--court); color: #0C0F12; }
+            :root:not([data-theme="light"]) .btn-primary:hover { background: var(--court); color: #0E1B14; }
         }
         :root[data-theme="dark"] {
-            --paper: #0F1214; --paper-2: #1A1F23;
-            --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
-            --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
-            --court: #6FB39B;
+            --paper: #071A12; --paper-2: #0C2419;
+            --ink: #EDF3EC; --ink-soft: #B9CBBF; --ink-mute: #8FA697;
+            --rule: rgba(237,243,236,0.14); --rule-strong: rgba(237,243,236,0.28);
+            --court: #56D364;
         }
         :root[data-theme="dark"] body::before { mix-blend-mode: screen; background-image: radial-gradient(circle at 1px 1px, rgba(237,233,223,0.045) 1px, transparent 0); }
         :root[data-theme="dark"] .card { background: var(--paper); box-shadow: 0 20px 60px -30px rgba(0,0,0,0.7); }
         :root[data-theme="dark"] .btn-primary { background: var(--ink); color: var(--paper); }
-        :root[data-theme="dark"] .btn-primary:hover { background: var(--court); color: #0C0F12; }
+        :root[data-theme="dark"] .btn-primary:hover { background: var(--court); color: #0E1B14; }
     </style>
     <!-- Fonts: self-hosted, preload the two critical latin subsets -->
-    <link rel="preload" href="/fonts/fraunces-6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeP2Xz5c.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/fonts.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
 </head>
 <body>
     <div class="card" role="status" aria-live="polite">
@@ -229,7 +229,7 @@
             <a href="#" class="btn btn-primary" id="openAppBtn">Open in PickleCue</a>
             <div class="divider">Don&rsquo;t have the app</div>
             <p>PickleCue is out now on iPhone, free in the United States. More countries are on the way.</p>
-            <a href="https://www.picklecue.com/#waitlist" class="btn btn-secondary">Download on iPhone</a>
+            <a href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" class="btn btn-secondary">Download on iPhone</a>
         </div>
     </div>
 

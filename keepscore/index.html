@@ -10,30 +10,35 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=20260812b">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=20260812b">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20260812b">
-    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#F7F7F2" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#071A12" media="(prefers-color-scheme: dark)">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
+    <link rel="stylesheet" href="/fonts.css">
     <style>
+        /* V2 tokens; the dark block now defines --court too — the badge was
+           #2E5E4E on near-black, 2.53:1 (audit D2/D6). */
         :root {
-            --paper: #F4F1EA; --paper-2: #EAE5D9;
-            --ink: #0C0F12; --ink-soft: #3D4248; --ink-mute: #6E7278;
-            --rule: rgba(12,15,18,0.12);
-            --court: #2E5E4E; --citron: #C8E04E; --clay: #D3511A;
-            --f-display: 'Fraunces', Georgia, serif;
-            --f-body: 'Instrument Sans', -apple-system, sans-serif;
+            --paper: #F7F7F2; --paper-2: #FFFFFF;
+            --ink: #0E1B14; --ink-soft: #43564B; --ink-mute: #5F6F64;
+            --rule: rgba(14,27,20,0.12);
+            --court: #1F5D43; --on-court: #FFFFFF; --citron: #D8F35A; --clay: #D3511A;
+            --f-display: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
+            --f-body: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
             --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
         }
-        [data-theme="dark"], html[style*="dark"]:not([data-theme="light"]) { }
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
-                --paper: #0F1214; --paper-2: #171B1E;
-                --ink: #F0EDE6; --ink-soft: #C2BFB8; --ink-mute: #8B8F94;
-                --rule: rgba(240,237,230,0.14);
+                --paper: #071A12; --paper-2: #0C2419;
+                --ink: #EDF3EC; --ink-soft: #B9CBBF; --ink-mute: #8FA697;
+                --rule: rgba(237,243,236,0.14);
+                --court: #56D364; --on-court: #0E1B14;
             }
         }
         [data-theme="dark"] {
-            --paper: #0F1214; --paper-2: #171B1E;
-            --ink: #F0EDE6; --ink-soft: #C2BFB8; --ink-mute: #8B8F94;
-            --rule: rgba(240,237,230,0.14);
+            --paper: #071A12; --paper-2: #0C2419;
+            --ink: #EDF3EC; --ink-soft: #B9CBBF; --ink-mute: #8FA697;
+            --rule: rgba(237,243,236,0.14);
+            --court: #56D364; --on-court: #0E1B14;
         }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; }
@@ -60,7 +65,7 @@
             padding: 12px 18px; margin: 18px 0 22px; display: inline-block;
         }
         .cta {
-            display: inline-block; background: var(--court); color: #F4F1EA;
+            display: inline-block; background: var(--court); color: var(--on-court);
             font-weight: 600; text-decoration: none;
             border-radius: 999px; padding: 14px 26px;
         }

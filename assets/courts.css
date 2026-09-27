@@ -413,7 +413,7 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 
 /* ─── Value bridge ───────────────────────────────────────────────────────── */
 .cbridge{
-    display:grid; gap:clamp(28px,4vw,56px); align-items:center;
+    display:grid; grid-template-columns:minmax(0,1fr); gap:clamp(28px,4vw,56px); align-items:center;
     margin:clamp(48px,6vw,84px) 0; padding:clamp(28px,4vw,44px);
     background:var(--paper-2,rgba(0,0,0,.03)); border:1px solid var(--line); border-radius:22px;
 }
@@ -457,3 +457,6 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 }
 .cmap-jump a:hover{ border-bottom-color:currentColor; }
 .cmap-jump a:focus-visible{ outline:2px solid var(--court-fg); outline-offset:3px; border-radius:6px; }
+
+/* Court detail: directions under the map (audit F3). */
+.vdirs{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }

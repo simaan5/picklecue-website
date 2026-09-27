@@ -25,7 +25,7 @@
     --line:       rgba(14,27,20,.12);
     --line-night: rgba(237,243,236,.15);
     --r-card: 20px;
-    --f: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --f: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     --f-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
     --wrap: 1340px;
     --wrap-tight: 1240px;
@@ -360,7 +360,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
    Stacked on every viewport. The homepage owns the sticky-stage pattern; a
    second one here would be decoration on a page this short. */
 .journey-players .pj{ list-style:none; margin:38px 0 0; padding:0; display:grid; gap:clamp(40px,5vw,72px); }
-.pj-step{ display:grid; gap:22px; align-items:center; }
+.pj-step{ display:grid; grid-template-columns:minmax(0,1fr); gap:22px; align-items:center; }
 @media (min-width: 900px){
     /* Explicit placement, not `order`. The step's number row spans 1/-1, so
        auto-placement after an `order:-1` put the SHOT in the wide column and
@@ -419,3 +419,19 @@ html.js .reveal.in{ opacity:1; transform:none; }
    requirement is stated where the download is offered, not discovered later. */
 .hero-fine{ margin:18px 0 0; font:450 14px/1.6 var(--f); color:var(--ink-mute); max-width:52ch; }
 .pj-after{ margin:20px 0 0; }
+
+/* Phone header: nothing may shrink. The brand box used to be squeezed below its
+   own wordmark, so the theme toggle sat on the "e" of PickleCue at 320-390px and
+   the burger shrank to 22-39px wide (audit 2026-09-26, M1/M2). */
+@media (max-width:860px){
+    .masthead-inner{ gap:8px; }
+    .brand, .theme-toggle, .masthead-burger{ flex-shrink:0; }
+}
+@media (max-width:420px){ .brand .brand-wordmark{ height:20px; } }
+@media (max-width:340px){
+    .masthead-inner{ padding:0 16px; }
+    .brand .brand-mark{ display:none; }
+}
+
+/* Galaxy Fold: a nowrap button label spilled out of its card at 280px (M7). */
+@media (max-width:340px){ .btn{ white-space:normal; text-align:center; } }

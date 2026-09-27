@@ -9,6 +9,7 @@ NOT built, deliberately:
     exactly this reason. Building them would reverse a documented control.
 """
 from pathlib import Path
+from urllib.parse import quote
 
 from gate import BANNED_STATS, display_label
 
@@ -78,9 +79,14 @@ def city_anchor_slugs(rows):
     return order
 
 
+def courts_label(n):
+    """'1 court', '4 courts'. The site said '1 courts' on 460 pages (audit L8/F3)."""
+    return f"{n} court" if n == 1 else f"{n} courts"
+
+
 def court_row(r, href=None, city="", aid=None):
     n = r.get("court_count")
-    meta = f'{n} courts' if n else ("Free" if r.get("is_free") else "Members")
+    meta = courts_label(n) if n else ("Free" if r.get("is_free") else "Members")
     inner = (f'<span class="rn">{esc(r["label"])}'
              f'<em>{esc(r.get("address") or city)}</em></span>'
              f'<span class="rm">{meta}</span>')
@@ -220,7 +226,7 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
                 f'<span class="d-art" aria-hidden="true"></span>'
                 f'<span class="d-main"><span class="d-name">{esc(r["label"])}</span>'
                 f'<span class="d-addr">{esc(r.get("address") or city)}</span></span>'
-                f'<span class="d-meta">{f"<b>{n}</b> courts" if n else "&nbsp;"}</span>'
+                f'<span class="d-meta">{("<b>%d</b> %s" % (n, "court" if n == 1 else "courts")) if n else "&nbsp;"}</span>'
                 f'<span class="d-meta">{access}</span>'
                 f'<span class="d-go" aria-hidden="true">&rarr;</span></a></li>')
 
@@ -327,6 +333,17 @@ def build_court_to(r, city, state, sf, siblings, out, indexable=False):
     derived_note = ('<p class="cnote">This venue is not individually named in our source data, '
                     'so we describe it by its street.</p>' if r["derived"] else '')
 
+    # A visitor who found their court needs a way to get there (audit F3).
+    # Coordinates only: no tracking parameters, no platform sniffing.
+    directions = ""
+    if r.get("lat") is not None and r.get("lng") is not None:
+        ll = f'{r["lat"]},{r["lng"]}'
+        directions = (
+            '<p class="vdirs">'
+            f'<a class="btn btn-ghost" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;destination={ll}">Get directions</a> '
+            f'<a class="btn btn-ghost" rel="noopener" href="https://maps.apple.com/?daddr={ll}&amp;q={quote(r["label"])}">Apple Maps</a>'
+            '</p>')
+
     body = f"""{cb}
 <section class="vhero">
   <div class="vhero-art" aria-hidden="true"></div>
@@ -335,7 +352,7 @@ def build_court_to(r, city, state, sf, siblings, out, indexable=False):
     <p class="vaddr">{esc(r.get("address") or "")}{", " if r.get("address") else ""}{esc(city)}, {esc(state)}</p>
     <div class="vbadges">{"".join(
       f'<span class="vbadge">{esc(b)}</span>' for b in
-      ([f'{n} courts'] if n else []) +
+      ([courts_label(n)] if n else []) +
       (['Free to play'] if r.get("is_free") is True else
        ['Membership'] if r.get("is_free") is False else []))}</div>
   </div>
@@ -352,6 +369,7 @@ def build_court_to(r, city, state, sf, siblings, out, indexable=False):
   <div class="cmap vmap">{svg}
   <p class="cmap-note"><span><i class="dot-s"></i>This venue</span>
   <span><i class="dot-f"></i>Other courts nearby</span></p></div>
+  {directions}
 </section>
 
 <section class="csec"><h2>Open games here</h2>
@@ -371,7 +389,7 @@ def build_court_to(r, city, state, sf, siblings, out, indexable=False):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(page(f"{r['label']} | PickleCue",
                       f"{r['label']} in {city}, {sf}." +
-                      (f" {n} dedicated pickleball courts." if n else "") +
+                      (f" {n} dedicated pickleball {'court' if n == 1 else 'courts'}." if n else "") +
                       " Location, access and nearby courts.",
                       f"{base}/{slugify(r['slug'])}", body, ld, indexable), encoding="utf-8")
     return p
