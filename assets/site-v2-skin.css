@@ -348,5 +348,6 @@ footer.site-foot{ background:var(--night); color:var(--mute-on-night); border-to
 }
 /* One primary per header: the Discord pill is a ghost button; the skin's
    .btn-pill electric fill used to make it a second primary (audit L5). */
-.masthead .btn-pill.btn-discord{ background:transparent; color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--rule-strong); }
-.masthead .btn-pill.btn-discord:hover{ background:#5865F2; color:#fff; box-shadow:none; }
+/* !important only because the .btn-pill fill above is !important. */
+.masthead .btn-pill.btn-discord{ background:transparent !important; color:var(--ink) !important; box-shadow:inset 0 0 0 1.5px var(--rule-strong); }
+.masthead .btn-pill.btn-discord:hover{ background:#5865F2 !important; color:#fff !important; box-shadow:none; }
