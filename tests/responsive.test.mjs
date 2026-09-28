@@ -22,7 +22,7 @@ const PAGES = [
   'events/pickle-for-a-purpose/index.html',
   'live-scores.html', 'courts/index.html',
 ];
-const WIDTHS = [320, 344, 360, 375, 390, 393, 402, 414, 430, 768, 820, 1024, 1280, 1440];
+const WIDTHS = [280, 320, 344, 360, 375, 390, 393, 402, 414, 430, 768, 820, 1024, 1280, 1440];
 const MOBILE_MAX = 860;           // shell breakpoint: <=860 burger, >=861 desktop nav
 const LEGAL = new Set(['privacy.html', 'terms.html']);
 
@@ -97,6 +97,29 @@ for (const pageName of PAGES) {
     // innerWidth grows with scrollWidth and the check could never fail.
     check(m.scrollWidth <= width, `${tag}: horizontal overflow (scrollWidth ${m.scrollWidth} > ${width})`);
     check(m.wordmark, `${tag}: approved wordmark missing from masthead`);
+
+    // 1b. Nothing clipped at the edge. html/body use overflow-x:clip, which
+    // keeps scrollWidth at the viewport width while content is cut off — the
+    // /support email addresses were clipped at 320px and check 1 stayed green
+    // (audit 2026-09-26, M3). Look at the elements themselves.
+    const clipped = await page.evaluate((w) => {
+      const out = [];
+      for (const el of document.querySelectorAll('body *')) {
+        if (el.closest('[aria-hidden="true"], [hidden], .sr-only, .visually-hidden, .skip-link, .waitlist-hp, script, style, svg')) continue;
+        const r = el.getBoundingClientRect();
+        if (!r.width || !r.height || r.left >= w || r.right <= 0) continue;   // off-screen on purpose
+        if (r.right <= w + 1) continue;
+        const cs = getComputedStyle(el);
+        if (cs.visibility === 'hidden' || cs.opacity === '0' || cs.position === 'fixed') continue;
+        // Only leaves that show something: own text, an image, or a control.
+        const ownText = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
+        if (!ownText && !/^(IMG|INPUT|BUTTON|SELECT|TEXTAREA|VIDEO)$/.test(el.tagName)) continue;
+        out.push(`${el.tagName.toLowerCase()}${el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/)[0] : ''} right=${Math.round(r.right)}`);
+        if (out.length >= 3) break;
+      }
+      return out;
+    }, width);
+    check(clipped.length === 0, `${tag}: content cut off at the right edge: ${clipped.join(', ')}`);
 
     if (m.burger !== null) {
       if (mobile) {

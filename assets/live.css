@@ -3,31 +3,36 @@
    would otherwise resurrect [hidden] elements (e.g. the signed-out
    organizer "Sign out" button overflowing 320px viewports). */
 [hidden] { display: none !important; }
+/* V2 brand tokens (site-v2.css). The tool pages ran the retired V1 palette —
+   cream paper, #2E5E4E green, Fraunces, a grey-black dark mode — so "Live demo"
+   looked like another site, and V1 muted grey failed AA on its own paper
+   (audit 2026-09-26, D2/D5/D6). Clay stays: it is the live/error status colour.
+   The courtside and broadcast sub-themes below are deliberate and untouched. */
 :root {
-    --paper: #F4F1EA; --paper-2: #EAE5D9;
-    --ink: #0C0F12; --ink-soft: #3D4248; --ink-mute: #6E7278;
-    --rule: rgba(12,15,18,0.12); --rule-strong: rgba(12,15,18,0.28);
-    --court: #2E5E4E; --citron: #C8E04E; --clay: #D3511A;
+    --paper: #F7F7F2; --paper-2: #FFFFFF;
+    --ink: #0E1B14; --ink-soft: #43564B; --ink-mute: #5F6F64;
+    --rule: rgba(14,27,20,0.12); --rule-strong: rgba(14,27,20,0.28);
+    --court: #1F5D43; --on-court: #FFFFFF; --citron: #D8F35A; --clay: #D3511A;
     --live: #D3511A;
-    --f-display: 'Fraunces', Georgia, serif;
-    --f-body: 'Instrument Sans', -apple-system, sans-serif;
+    --f-display: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
+    --f-body: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
     --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
     --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
     --page-max: 1080px; --gutter: clamp(16px, 4vw, 40px);
 }
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --paper: #0F1214; --paper-2: #1A1F23;
-        --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
-        --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
-        --court: #6FB39B; --clay: #F08250; --live: #F08250;
+        --paper: #071A12; --paper-2: #0C2419;
+        --ink: #EDF3EC; --ink-soft: #B9CBBF; --ink-mute: #8FA697;
+        --rule: rgba(237,243,236,0.14); --rule-strong: rgba(237,243,236,0.28);
+        --court: #56D364; --on-court: #0E1B14; --clay: #F08250; --live: #F08250;
     }
 }
 :root[data-theme="dark"] {
-    --paper: #0F1214; --paper-2: #1A1F23;
-    --ink: #EDE9DF; --ink-soft: #B8BEC5; --ink-mute: #8A9097;
-    --rule: rgba(237,233,223,0.12); --rule-strong: rgba(237,233,223,0.28);
-    --court: #6FB39B; --clay: #F08250; --live: #F08250;
+    --paper: #071A12; --paper-2: #0C2419;
+    --ink: #EDF3EC; --ink-soft: #B9CBBF; --ink-mute: #8FA697;
+    --rule: rgba(237,243,236,0.14); --rule-strong: rgba(237,243,236,0.28);
+    --court: #56D364; --on-court: #0E1B14; --clay: #F08250; --live: #F08250;
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -108,7 +113,7 @@ table.live-table { width: 100%; border-collapse: collapse; font-size: 14px; min-
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border-radius: 100px; border: 0; font-size: 14px; font-weight: 600; min-height: 44px; background: var(--ink); color: var(--paper); transition: transform 0.15s var(--ease), opacity 0.15s; }
 .btn:hover { transform: translateY(-1px); }
 .btn:disabled { opacity: 0.5; transform: none; cursor: default; }
-.btn.primary { background: var(--court); color: #fff; }
+.btn.primary { background: var(--court); color: var(--on-court); }
 .btn.ghost { background: transparent; border: 1px solid var(--rule-strong); color: var(--ink); }
 .btn.danger { background: transparent; border: 1px solid var(--clay); color: var(--clay); }
 .btn.block { width: 100%; }
@@ -121,7 +126,7 @@ table.live-table { width: 100%; border-collapse: collapse; font-size: 14px; min-
 .sk-side .team { font-size: 15px; font-weight: 650; min-height: 42px; display: flex; align-items: center; justify-content: center; }
 .sk-side .score { font-family: var(--f-mono); font-size: clamp(56px, 18vw, 96px); font-weight: 700; line-height: 1; margin: 8px 0; font-variant-numeric: tabular-nums; }
 .sk-side .sk-buttons { display: flex; gap: 8px; justify-content: center; }
-.sk-plus { font-size: 26px; font-weight: 700; width: 72px; height: 64px; border-radius: 16px; border: 0; background: var(--court); color: #fff; }
+.sk-plus { font-size: 26px; font-weight: 700; width: 72px; height: 64px; border-radius: 16px; border: 0; background: var(--court); color: var(--on-court); }
 .sk-minus { font-size: 22px; font-weight: 700; width: 52px; height: 64px; border-radius: 16px; border: 1px solid var(--rule-strong); background: transparent; color: var(--ink); }
 .sk-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 24px; }
 

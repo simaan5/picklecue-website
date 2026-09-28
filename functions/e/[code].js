@@ -60,24 +60,27 @@ async function resolve(code) {
       body: JSON.stringify({ p_code: code }),
       signal: AbortSignal.timeout(2500),
     });
-    if (!res.ok) return null;
+    if (!res.ok) return DOWN;
     const json = await res.json();
     // The RPC returns null for unknown AND malformed codes; both mean "no".
     return json && json.event_id ? json : null;
   } catch (_) {
-    // Timeout or Supabase hiccup. Fall through to the not-found page rather
-    // than redirecting somewhere wrong or leaking an error to the visitor.
-    return null;
+    // Timeout or Supabase hiccup. This used to fall through to "That code
+    // didn't match an event", blaming the visitor's code for our outage
+    // (audit S3). Report it as unavailable instead.
+    return DOWN;
   }
 }
 
-function notFound(code) {
+const DOWN = Symbol("down");
+
+function notFound(code, down = false) {
   const html = `<!DOCTYPE html>
 <html lang="en" style="color-scheme: light dark;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Event code not found · PickleCue</title>
+    <title>${down ? "Can’t reach PickleCue" : "Event code not found"} · PickleCue</title>
     <meta name="robots" content="noindex,nofollow">
     <link rel="icon" type="image/png" sizes="32x32" href="${ORIGIN}/images/favicon-32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="${ORIGIN}/images/apple-touch-icon.png">
@@ -106,20 +109,23 @@ function notFound(code) {
 <body>
     <main class="card">
         <img src="${ORIGIN}/images/app-icon-192.png" alt="PickleCue">
-        <h1>That code didn’t match an event</h1>
+        ${down ? `<h1>We couldn’t reach PickleCue</h1>
+        <p>This is on our side, not your code. Try again in a minute.</p>
+        <p><a href="${ORIGIN}/e/${esc(code)}">Try again</a> · <a href="${ORIGIN}/">Go to picklecue.com</a></p>` : `<h1>That code didn’t match an event</h1>
         <p>${code ? `We couldn’t find <code>${esc(code)}</code>.` : "Event codes are six characters, like ABC123."}
            Double-check it with the organizer — codes stop working once an event is over.</p>
-        <p><a href="${ORIGIN}/">Go to picklecue.com</a></p>
+        <p><a href="${ORIGIN}/live-scores#code">Enter a different code</a> · <a href="${ORIGIN}/">Go to picklecue.com</a></p>`}
     </main>
 </body>
 </html>`;
   return new Response(html, {
-    status: 404,
+    status: down ? 503 : 404,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       // Never cache a miss: the same code becomes valid the moment an
       // organizer creates it.
       "Cache-Control": "no-store",
+      ...(down ? { "Retry-After": "30" } : {}),
     },
   });
 }
@@ -129,6 +135,7 @@ export async function onRequestGet({ params, request }) {
   if (!CODE_RE.test(raw)) return notFound(raw.slice(0, 12));
 
   const hit = await resolve(raw);
+  if (hit === DOWN) return notFound(raw, true);
   if (!hit) return notFound(raw);
 
   const kind = hit.scope === "tournament" ? "t" : "l";

@@ -135,7 +135,7 @@
             font-variation-settings: "opsz" 96, "SOFT" 20;
             max-width: 18ch;
         }
-        .error-copy h1 em { font-style: italic; color: var(--court); font-weight: 400; font-variation-settings: "opsz" 96, "SOFT" 100; }
+        .error-copy h1 em { font-style: normal; color: var(--court); font-weight: inherit; font-variation-settings: "opsz" 96, "SOFT" 100; }
         .error-copy p {
             color: var(--ink-soft);
             max-width: 40ch;
@@ -175,12 +175,12 @@
         .colophon-mini a:hover { color: var(--ink); }
         .colophon-mini-links { display: flex; gap: 28px; flex-wrap: wrap; }
         .colophon-mini-links a { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 0; }
-        .made-by { display: inline-flex; align-items: center; gap: 10px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-family: var(--f-mono); font-size: 11px; transition: color 0.2s var(--ease), opacity 0.2s var(--ease); opacity: 0.9; }
-        .made-by:hover { color: var(--ink); opacity: 1; }
+        .made-by { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-family: var(--f-mono); font-size: 11px; transition: color 0.2s var(--ease); }
+        .made-by:hover { color: var(--ink); }
         .made-by img { height: 40px; width: 40px; object-fit: contain; border-radius: 5px; transition: transform 0.2s var(--ease); }
         .made-by:hover img { transform: scale(1.08); }
         .made-by .sep { color: var(--ink-mute); margin: 0 2px; }
-        .made-by .site { color: var(--ink-soft); }   /* .made-by has opacity:.9; --ink-mute composites to 4.03:1 at 11px */
+        .made-by .site { color: var(--ink-soft); }
         .made-by:hover .site { color: var(--ink); }
         @media (prefers-color-scheme: dark) {
             /* Logo is full-color — do not invert in dark mode */
@@ -239,7 +239,7 @@
         }
         @media (max-width: 520px) {
             .colophon-mini-row { flex-direction: column; align-items: flex-start; }
-            .made-by { flex-wrap: nowrap; white-space: nowrap; gap: 8px; }
+            .made-by { flex-wrap: wrap; white-space: nowrap; gap: 8px; }
             .made-by img { height: 28px; width: 28px; }
             .made-by .sep, .made-by .site { display: none; }
             /* Icon-only back link so the header row always fits; the big
@@ -250,6 +250,7 @@
     <!-- Fonts: self-hosted, preload the two critical latin subsets -->
     <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/fonts.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
     <script>
     // Short-link shim: picklecue.com/e/ABC123 → e.html?c=ABC123
     (function () {
@@ -265,9 +266,9 @@
     <header class="masthead" role="banner">
         <div class="page masthead-row">
             <a href="/" class="masthead-logo" aria-label="PickleCue home">
-                <img src="images/app-icon-120.png?v=20260812b" alt="" width="30" height="30" aria-hidden="true">
-                <img class="masthead-wordmark wm-light" src="images/wordmark-on-light.webp" alt="" height="21" aria-hidden="true">
-                <img class="masthead-wordmark wm-dark" src="images/wordmark-on-dark.webp" alt="" height="21" aria-hidden="true">
+                <img src="/images/app-icon-120.png?v=20260812b" alt="" width="30" height="30" aria-hidden="true">
+                <img class="masthead-wordmark wm-light" src="/images/wordmark-on-light.webp" alt="" height="21" aria-hidden="true">
+                <img class="masthead-wordmark wm-dark" src="/images/wordmark-on-dark.webp" alt="" height="21" aria-hidden="true">
             </a>
             <div style="display:flex;align-items:center;gap:10px;">
                 <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme" title="Toggle theme">
@@ -291,7 +292,7 @@
                         Back to home
                         <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square"/></svg>
                     </a>
-                    <a href="support.html" class="btn btn-secondary">Get support</a>
+                    <a href="/support" class="btn btn-secondary">Get support</a>
                 </div>
             </div>
         </div>
@@ -302,16 +303,16 @@
             <span>&copy; 2026 PickleCue</span>
             <a href="https://www.anstelias.com" class="made-by" target="_blank" rel="noopener noreferrer" aria-label="Made by Anstelias — anstelias.com">
                 <span>Made by</span>
-                <img src="images/anstelias-logo.png" alt="" aria-hidden="true" width="40" height="40">
+                <img src="/images/anstelias-logo.png" alt="" aria-hidden="true" width="40" height="40">
                 <span>Anstelias Technology</span>
                 <span class="sep" aria-hidden="true">·</span>
                 <span class="site">anstelias.com</span>
             </a>
             <div class="colophon-mini-links">
-                <a href="privacy.html">Privacy</a>
-                <a href="terms.html">Terms</a>
-                <a href="support.html">Support</a>
-                <a data-track="app_store_click" data-placement="inline" data-audience="notfound" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Waitlist</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="/support">Support</a>
+                <a data-track="app_store_click" data-placement="inline" data-audience="notfound" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a>
             </div>
         </div>
     </footer>

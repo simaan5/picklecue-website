@@ -37,23 +37,23 @@
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png?v=20260812b">
     <meta name="theme-color" content="#F7F7F2" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#071A12" media="(prefers-color-scheme: dark)">
-    <link rel="stylesheet" href="/assets/site.css?v=20260824a">
-    <link rel="stylesheet" href="/assets/site-v2-skin.css?v=20260925a">
+    <link rel="stylesheet" href="/assets/site.css?v=20260927a">
+    <link rel="stylesheet" href="/assets/site-v2-skin.css?v=20260927a">
     <script defer src="/assets/site.js?v=20260824a"></script>
     <style>
         body::before { content: ""; position: fixed; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(12,15,18,0.035) 1px, transparent 0); background-size: 3px 3px; pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
         a { color: var(--court); text-decoration: none; border-bottom: 1px solid currentColor; transition: color 0.2s var(--ease); }
         a:hover { color: var(--ink); }
 
-        h1, h2, h3 { font-family: var(--f-display); font-weight: 500; color: var(--ink); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; font-variation-settings: "opsz" 72, "SOFT" 30; }
+        h1, h2, h3 { font-family: var(--f-display); color: var(--ink); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; }
         .kicker { font-family: var(--f-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); display: inline-flex; align-items: center; gap: 10px; }
         .kicker::before { content: ""; width: 28px; height: 1px; background: var(--rule-strong); }
 
         /* Header block */
         .page-head { padding: clamp(56px, 8vw, 120px) 0 clamp(40px, 5vw, 72px); border-bottom: 1px solid var(--rule); }
         .page-head h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); margin-top: 24px; font-variation-settings: "opsz" 144, "SOFT" 20; max-width: 20ch; }
-        .page-head h1 em { font-style: italic; color: var(--court); font-weight: 400; font-variation-settings: "opsz" 144, "SOFT" 100; }
-        .page-head .lede { font-family: var(--f-display); font-style: italic; font-size: clamp(1.15rem, 1.8vw, 1.35rem); color: var(--ink-soft); margin-top: 24px; max-width: 48ch; line-height: 1.55; font-variation-settings: "opsz" 28, "SOFT" 100; font-weight: 400; }
+        .page-head h1 em { font-style: normal; color: var(--court); font-weight: inherit; font-variation-settings: "opsz" 144, "SOFT" 100; }
+        .page-head .lede { font-family: var(--f-display); font-style: normal; font-size: clamp(1.15rem, 1.8vw, 1.35rem); color: var(--ink-soft); margin-top: 24px; max-width: 48ch; line-height: 1.55; font-variation-settings: "opsz" 28, "SOFT" 100; font-weight: 400; }
 
         /* Primary contact row */
         .contact-row {
@@ -74,8 +74,11 @@
             font-family: var(--f-display); font-size: 1.5rem; font-weight: 500;
             color: var(--ink); border: 0; letter-spacing: -0.01em;
             font-variation-settings: "opsz" 36, "SOFT" 30;
+            /* An address is one unbreakable word; at 320px it was clipped (M3). */
+            overflow-wrap: anywhere;
         }
         .contact-cell a:hover { color: var(--court); }
+        a[href^="mailto:"] { overflow-wrap: anywhere; }
         .contact-cell p { font-size: 14px; color: var(--ink-mute); margin-top: 6px; line-height: 1.5; max-width: 28ch; }
 
         /* Topic catalog */
@@ -102,7 +105,7 @@
         }
         .topic:nth-child(odd) { padding-right: clamp(16px, 3vw, 40px); border-right: 1px solid var(--rule); }
         .topic:nth-child(even) { padding-left: clamp(16px, 3vw, 40px); }
-        .topic-num { font-family: var(--f-display); font-size: 2.8rem; font-weight: 400; font-style: italic; line-height: 0.9; color: var(--court); font-variation-settings: "opsz" 72, "SOFT" 100; min-width: 60px; }
+        .topic-num { font-family: var(--f-display); font-size: 2.8rem; font-weight: 400; font-style: normal; line-height: 0.9; color: var(--court); font-variation-settings: "opsz" 72, "SOFT" 100; min-width: 60px; }
         .topic h3 { font-size: 1.4rem; margin-bottom: 8px; letter-spacing: -0.015em; }
         .topic p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.6; max-width: 46ch; }
         .topic ul { margin-top: 12px; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; color: var(--ink-soft); }
@@ -145,7 +148,7 @@
         }
         @media (max-width: 720px) {
             .contact-row { grid-template-columns: 1fr; }
-            .contact-cell { border-right: 0; border-bottom: 1px solid var(--rule); }
+            .contact-cell { border-right: 0; border-bottom: 1px solid var(--rule); padding-left: 0; padding-right: 0; }
             .contact-cell:last-child { border-bottom: 0; }
             .topic-grid { grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
             .topic, .topic:nth-child(odd), .topic:nth-child(even) { padding-left: 0; padding-right: 0; border-right: 0; }
@@ -156,6 +159,7 @@
     <!-- Fonts: self-hosted, preload the two critical latin subsets -->
     <link rel="preload" href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/fonts.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
@@ -349,7 +353,6 @@
         <div class="foot-social">
             <a href="https://www.instagram.com/picklecueapp" rel="noopener" target="_blank">Instagram</a>
             <a href="https://www.tiktok.com/@picklecue" rel="noopener" target="_blank">TikTok</a>
-            <a href="https://www.youtube.com/@picklecue" rel="noopener" target="_blank">YouTube</a>
             <a href="https://x.com/PickleCueApp" rel="noopener" target="_blank">X</a>
             <a href="https://discord.gg/YvfgkFGVxd" rel="noopener" target="_blank">Discord</a>
         </div>

@@ -206,8 +206,17 @@
            debounce WAS the latency. 40ms still coalesces a fast typist without
            being felt. */
         debounce = setTimeout(function () {
+            showLoading();
             load().then(function () { render(search(q), q); }, function () {});
         }, 40);
+    }
+
+    /* While the index downloads, say so where the user is looking; the status
+       element is visually hidden (audit S8). */
+    function showLoading() {
+        if (data) return;
+        panel.innerHTML = '<p class="cs-msg">Loading court list…</p>';
+        open();
     }
 
     /* Focus is intent. Warm the index then, so the first keystroke has it. */
@@ -228,8 +237,18 @@
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        var first = panel.querySelector('li a');
-        if (first) first.click();
+        /* Search now instead of reading the panel: Enter within the 40ms
+           debounce, or after a paste/autofill, found an empty panel and did
+           nothing (audit F8). */
+        clearTimeout(debounce);
+        var q = input.value;
+        if (!q.trim()) return;
+        showLoading();
+        load().then(function () {
+            render(search(q), q);
+            var first = panel.querySelector('li a');
+            if (first) first.click();
+        }, function () {});
     });
 
     document.addEventListener('click', function (e) {

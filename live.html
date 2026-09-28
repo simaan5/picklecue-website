@@ -45,10 +45,12 @@
 
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png?v=20260812b">
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png?v=20260812b">
-    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#F7F7F2" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#071A12" media="(prefers-color-scheme: dark)">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="stylesheet" href="assets/live.css?v=rr9">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
+    <link rel="stylesheet" href="assets/live.css?v=20260927a">
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
@@ -90,7 +92,8 @@
         }
 
         if (!kind || !/^[0-9a-f-]{36}$/i.test(eventId || '')) {
-            main.innerHTML = '<div class="state"><h2>Event not found</h2><p>This link is missing its event. Ask the organizer for a fresh one.</p></div>';
+            main.innerHTML = '<div class="state"><h2>Event not found</h2><p>This link is missing its event. Ask the organizer for a fresh one, or enter the event code.</p>' +
+                '<p style="margin-top:20px"><a class="btn primary" href="/live-scores#code">Enter an event code</a> <a class="btn ghost" href="/">PickleCue home</a></p></div>';
             return;
         }
 
@@ -691,6 +694,10 @@
                 } catch (_) {}
             } catch (e) {
                 console.error('[live] snapshot failed', e);
+                // First load failed: say so and retry. Before, the page sat on
+                // "Loading…" forever with no way out (audit S1). A failed
+                // refresh after scores are on screen keeps them there.
+                if (!snap) showLoadError();
                 return;
             }
             if (!snap) {
@@ -703,12 +710,29 @@
             render();
         }
 
-        (async function init() {
+        var failCount = 0, retryTimer = null;
+        function showLoadError() {
+            failCount++;
+            var delay = Math.min(60, 5 * Math.pow(2, failCount - 1));
+            main.innerHTML = '<div class="state" role="alert"><h2>Couldn’t load scores</h2>' +
+                '<p>Check your connection. Trying again in ' + delay + ' seconds.</p>' +
+                '<p style="margin-top:20px"><button type="button" class="btn primary" id="retryLoad">Try again now</button></p></div>';
+            document.getElementById('retryLoad').addEventListener('click', function () {
+                clearTimeout(retryTimer);
+                main.innerHTML = '<div class="state"><h2>Loading…</h2><p>Fetching the latest scores.</p></div>';
+                start();
+            });
+            clearTimeout(retryTimer);
+            retryTimer = setTimeout(start, delay * 1000);
+        }
+
+        async function start() {
             await refetch();
-            if (!snap) return;
+            if (!snap || unsub) return;
             var isPublic = (kind === 't' ? snap.tournament : snap.league).is_public === true;
             unsub = PC.subscribeLive(kind, eventId, isPublic, refetch, setConn);
-        })();
+        }
+        start();
     })();
     </script>
 </body>

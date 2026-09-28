@@ -2,6 +2,9 @@
 /community/pickle-for-a-purpose /events/pickle-for-a-purpose/ 301
 
 /keepscore/* /keepscore/ 200
+# Bracket PDFs from the iOS app link /bracket/<uuid>; bracket/index.html parses
+# the path. Without this rule every such link was a 404 (audit 2026-09-26, S2).
+/bracket/* /bracket/ 200
 
 https://picklecue.com/.well-known/* /.well-known/:splat 200
 https://picklecue.com/* https://www.picklecue.com/:splat 301

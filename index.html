@@ -73,7 +73,6 @@
         "sameAs": [
             "https://www.instagram.com/picklecueapp",
             "https://www.tiktok.com/@picklecue",
-            "https://www.youtube.com/@picklecue",
             "https://x.com/PickleCueApp",
             "https://discord.gg/YvfgkFGVxd"
         ],
@@ -135,6 +134,7 @@
     <link rel="preload" as="font" type="font/woff2" crossorigin
           href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="stylesheet" href="/fonts.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
     <link rel="preload" as="image" href="/videos/hero/app-tour-poster.jpg" fetchpriority="high">
 
 <style>
@@ -166,7 +166,7 @@
     --line-night: rgba(237,243,236,.15);
     --r-card: 20px;
     --r-media: 14px;
-    --f: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --f: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     --f-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
     --wrap: 1340px;
     --wrap-tight: 1240px;
@@ -204,6 +204,7 @@ a{ color:inherit; }
     white-space:nowrap;
 }
 .btn:active{ transform: translateY(1px) scale(.985); }
+.btn:disabled{ opacity:.6; cursor:progress; transform:none; box-shadow:none; }
 .btn-primary{
     background:var(--electric); color:var(--night);
     box-shadow: 0 12px 34px rgba(31,93,67,.24);
@@ -294,7 +295,9 @@ a{ color:inherit; }
 }
 @media (max-width:600px){
     .announce-link{ font-size:13.5px; }
-    .announce strong, .announce .announce-more{ display:none; }
+    /* Keep the "Coming soon" pill: without it the bar read as if Android
+       were already out (audit 2026-09-26, L3). */
+    .announce .announce-more{ display:none; }
 }
 
 /* ---------- Masthead: transparent at top, blurred after scroll ---------- */
@@ -1231,6 +1234,19 @@ html.js .reveal.in{ opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce){ .geo-card{ animation:none; } }
 @media (max-width:520px){ .geo-card{ padding:30px 22px 22px; border-radius:18px; } }
 
+
+/* Phone header: nothing may shrink. The brand box used to be squeezed below its
+   own wordmark, so the theme toggle sat on the "e" of PickleCue at 320-390px and
+   the burger shrank to 22-39px wide (audit 2026-09-26, M1/M2). */
+@media (max-width:860px){
+    .masthead-inner{ gap:8px; }
+    .brand, .theme-toggle, .masthead-burger{ flex-shrink:0; }
+}
+@media (max-width:420px){ .brand .brand-wordmark{ height:20px; } }
+@media (max-width:340px){
+    .masthead-inner{ padding:0 16px; }
+    .brand .brand-mark{ display:none; }
+}
 </style>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
 .site-menu[hidden],.lightbox[hidden]{display:none !important}</style>
@@ -1312,7 +1328,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         <div>
             <p class="hero-proof rise">Native iOS · Free core app</p>
             <h1 class="rise rise-1">Find your court.<br>Find your game.<br><span class="accent">One place.</span></h1>
-            <p class="hero-sub rise rise-2">A native iPhone app for players, a control room for organizers, and a live page anyone can open — no app, no account.</p>
+            <p class="hero-sub rise rise-2">Pickleball on iPhone for players, a control room for organizers, and live scores anyone can follow in a browser.</p>
             <a data-track="app_store_click" data-placement="hero" data-audience="home" class="appstore-badge" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" aria-label="Download PickleCue on the App Store"><img src="/images/badges/app-store-badge.svg" alt="Download on the App Store" width="180" height="60" decoding="async"></a>
                 <p class="store-note">Free on iPhone · Available in the <strong>United States</strong><br><strong>Android</strong> and a <strong>web app</strong> are coming soon &mdash; <a href="#android-notify" data-track="android_notify_open" data-placement="hero" data-audience="home">get notified &rarr;</a><br>Not in the US? <a href="#early-access">Get notified when we launch in your country →</a></p>
             <p class="qr-line"><button class="qr-trigger" type="button" data-qr-open><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 14h2M14 19h3M19 19h2"/></svg>Scan to get it on your phone</button></p>
@@ -1635,7 +1651,6 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         <div class="foot-social">
             <a href="https://www.instagram.com/picklecueapp" rel="noopener" target="_blank">Instagram</a>
             <a href="https://www.tiktok.com/@picklecue" rel="noopener" target="_blank">TikTok</a>
-            <a href="https://www.youtube.com/@picklecue" rel="noopener" target="_blank">YouTube</a>
             <a href="https://x.com/PickleCueApp" rel="noopener" target="_blank">X</a>
             <a href="https://discord.gg/YvfgkFGVxd" rel="noopener" target="_blank">Discord</a>
         </div>
@@ -1784,6 +1799,17 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
 
     /* Mobile menu */
 
+
+    /* Keep Tab inside an open overlay (audit S5/M4/F4/F12). */
+    var trapTab = function (root, e) {
+        if (e.key !== 'Tab') return;
+        var f = [].filter.call(root.querySelectorAll('a[href], button:not([disabled]), input:not([type="hidden"]), [tabindex]:not([tabindex="-1"])'),
+            function (el) { return el.offsetParent !== null; });
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
     var burger = document.querySelector('.masthead-burger');
     var menu = document.getElementById('siteMenu');
     if (burger && menu){
@@ -1793,17 +1819,23 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
             requestAnimationFrame(function(){ requestAnimationFrame(function(){ menu.classList.add('is-open'); }); });
             burger.setAttribute('aria-expanded','true');
             document.documentElement.style.overflow = 'hidden';
+            if (closeBtn) setTimeout(function () { closeBtn.focus(); }, 60);
         };
-        var close = function(){
+        menu.setAttribute('role', 'dialog');
+        menu.setAttribute('aria-modal', 'true');
+        if (!menu.getAttribute('aria-label')) menu.setAttribute('aria-label', 'Menu');
+        var close = function (refocus) {
             burger.setAttribute('aria-expanded','false');
             document.documentElement.style.overflow = '';
             menu.classList.remove('is-open');
             setTimeout(function(){ menu.hidden = true; }, 300);
+            if (refocus !== false) burger.focus();
         };
         burger.addEventListener('click', function(){ if (menu.hidden){ open(); } else { close(); } });
-        if (closeBtn) closeBtn.addEventListener('click', close);
+        if (closeBtn) closeBtn.addEventListener('click', function () { close(); });
+        menu.addEventListener('keydown', function (e) { trapTab(menu, e); });
         menu.addEventListener('click', function(e){
-            if (e.target.closest && e.target.closest('a[href]')) close();
+            if (e.target.closest && e.target.closest('a[href]')) close(false);
         });
         document.addEventListener('keydown', function(e){
             if (!menu.hidden && e.key === 'Escape') close();
@@ -1818,6 +1850,8 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         var openLb = function(src, alt){
             lbImg.src = src; lbImg.alt = alt || 'App screenshot';
             lb.hidden = false; document.documentElement.style.overflow = 'hidden';
+            var lbClose = lb.querySelector('.lightbox-close');
+            if (lbClose) setTimeout(function () { lbClose.focus(); }, 60);
         };
         var closeLb = function(){
             lb.hidden = true; lbImg.src = ''; document.documentElement.style.overflow = '';
@@ -1831,6 +1865,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
                 window.track('screenshot_zoom', { shot: btn.getAttribute('data-full') });
             });
         });
+        lb.addEventListener('keydown', function (e) { trapTab(lb, e); });
         lb.addEventListener('click', function(e){
             if (e.target === lb || e.target.classList.contains('lightbox-close') || e.target === lbImg) closeLb();
         });
@@ -1858,10 +1893,17 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
             if (form.company.value) return;
             if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
                 setMsg('Enter a valid email address.', 'error');
+                // Mark the field and put the user back in it (audit S6).
+                form.email.setAttribute('aria-invalid', 'true');
+                form.email.focus();
                 return;
             }
+            form.email.removeAttribute('aria-invalid');
             var btn = form.querySelector('button[type="submit"]');
+            var label = btn.innerHTML;
             btn.disabled = true;
+            btn.textContent = 'Adding\u2026';
+            form.setAttribute('aria-busy', 'true');
             setMsg('Adding you...', '');
             fetch(SUPABASE_URL + '/rest/v1/waitlist_signups', {
                 method: 'POST',
@@ -1877,6 +1919,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
                     window.track('waitlist_success', { existing: r.status === 409, form: ctaName });
                     setMsg((r.status === 409 ? 'You are already on the list. ' : 'You are on the list. ') + successText, 'success');
                     form.reset();
+                    form.dispatchEvent(new CustomEvent('waitlist:success'));
                 } else {
                     window.track('waitlist_error', { status: r.status, form: ctaName });
                     setMsg('Something went wrong. Email support@picklecue.com and we will add you.', 'error');
@@ -1885,8 +1928,13 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
                 setMsg('Network error. Email support@picklecue.com and we will add you.', 'error');
             }).finally(function(){
                 btn.disabled = false;
+                btn.innerHTML = label;
+                form.removeAttribute('aria-busy');
+                // A click submit left focus on <body>; keep the user in the form (audit S4).
+                form.email.focus();
             });
         });
+        form.email.addEventListener('input', function(){ form.email.removeAttribute('aria-invalid'); });
     }
 
     /* Wire after the document is parsed. This script runs inline at ~line 1712
@@ -2071,6 +2119,10 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         .then(function (d) {
             if (!d || !d.country) return;           // unplaceable: show nothing
             var variant = d.country === 'US' ? 'us' : 'intl';
+            // The app is iPhone-only: never offer the App Store to Android
+            // (acquire.js rule 1). Android visitors have the announcement bar
+            // and the Android notify form (audit F2).
+            if (variant === 'us' && /Android/i.test(navigator.userAgent)) return;
             if (remembered(KEYS[variant])) return;  // already seen this panel
             setTimeout(function () {
                 open(variant, COUNTRY_NAMES[d.country] || 'your country');
@@ -2078,14 +2130,18 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         })
         .catch(function () { /* no country, no prompt */ });
 
+    // Only a signup that went through answers the prompt; an invalid email or
+    // a failed request must not hide it for good (audit S7).
     var f = document.getElementById('waitlistFormGeo');
-    if (f) f.addEventListener('submit', function () {
+    if (f) f.addEventListener('waitlist:success', function () {
         try { localStorage.setItem(KEYS.intl, '1'); } catch (_) {}
     });
-    // Following the badge counts as answering the prompt.
+    // Following the badge counts as answering the prompt. Close the dialog
+    // first: on desktop acquire.js turns this click into the QR panel, which
+    // otherwise opened BEHIND this modal and looked like nothing happened (F1).
     var dl = modal.querySelector('[data-geo-panel="us"] .appstore-badge');
     if (dl) dl.addEventListener('click', function () {
-        try { localStorage.setItem(KEYS.us, '1'); } catch (_) {}
+        close();
     });
 }());
 </script>
