@@ -73,6 +73,11 @@ jobs:
         # taken all five down at once. Caught statically now, on every push.
         run: node tools/gate-csp-hosts.mjs
 
+      - name: Public site stages cleanly (deploy allowlist)
+        # Same step deploy.yml runs before publishing. Fails if a page
+        # references a file outside the allowlist, so it is caught on the PR.
+        run: node tools/stage-dist.mjs
+
       - name: Changed assets carry a new ?v=
         # /assets/* is served immutable for a year. A CSS/JS edit without a
         # ?v= bump deploys green and never reaches returning visitors.

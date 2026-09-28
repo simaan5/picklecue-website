@@ -12,3 +12,6 @@ package-lock.json
 # deterministic capture runner + Maya snapshot. Provenance manifest and contact
 # sheet are tracked; the web-delivered webp derivatives live in images/app/.
 website-marketing/masters/
+
+# Deploy staging output (tools/stage-dist.mjs)
+dist/
