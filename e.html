@@ -62,7 +62,7 @@
         var code = (params.get('c') || '').toUpperCase().replace(/[^A-Z2-9]/g, '');
         var view = params.get('view') || '';
         var state = document.getElementById('state');
-        if (code.length !== 6) {
+        if (!/^[A-HJKMNP-Z2-9]{6}$/.test(code)) {
             state.innerHTML = '<h2>That code doesn’t look right</h2><p>Event codes are 6 letters and numbers, like ABC123.</p>' +
                 '<p style="margin-top:20px"><a class="btn primary" href="/live-scores#code">Enter an event code</a> <a class="btn ghost" href="/">PickleCue home</a></p>';
             return;

@@ -166,8 +166,9 @@ html, body { max-width: 100%; overflow-x: clip; }
    per-theme .btn-pill overrides). */
 .btn-pill.btn-discord,
 :root:not([data-theme="light"]) .btn-pill.btn-discord,
-:root[data-theme="dark"] .btn-pill.btn-discord { background: #5865F2; color: #fff; }
-.btn-pill.btn-discord:hover { background: #4752C4; }
+:root[data-theme="dark"] .btn-pill.btn-discord { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--rule-strong); }
+/* Ghost, not a second filled pill: "Download on iPhone" is the one primary (audit L5). */
+.btn-pill.btn-discord:hover { background: #5865F2; color: #fff; box-shadow: none; }
 .btn-pill.btn-discord svg { width: 16px; height: 16px; fill: currentColor; }
 .btn-pill.btn-discord { white-space: nowrap; }
 /* Mid widths: icon-only so the masthead row never wraps. */

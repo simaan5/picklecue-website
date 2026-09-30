@@ -86,7 +86,10 @@ def courts_label(n):
 
 def court_row(r, href=None, city="", aid=None):
     n = r.get("court_count")
-    meta = courts_label(n) if n else ("Free" if r.get("is_free") else "Members")
+    # Unknown access stays unknown: it was labelled "Members" and filed under
+    # "Clubs & centers" while the tab counted it as neither (audit follow-up).
+    meta = courts_label(n) if n else ("Free" if r.get("is_free") is True else
+                                      "Members" if r.get("is_free") is False else "")
     inner = (f'<span class="rn">{esc(r["label"])}'
              f'<em>{esc(r.get("address") or city)}</em></span>'
              f'<span class="rm">{meta}</span>')
@@ -219,7 +222,7 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
         access = "Free" if r.get("is_free") else ("Members" if r.get("is_free") is False else "")
         # Every court in the city is here, so every row is an anchor target.
         return (f'<li class="drow" id="court-{slugify(r["slug"])}" tabindex="-1" '
-                f'data-access="{"free" if r.get("is_free") else "paid"}" '
+                f'data-access="{"free" if r.get("is_free") is True else "paid" if r.get("is_free") is False else "unknown"}" '
                 f'data-name="{esc((r["label"] + " " + (r.get("address") or "")).lower())}" '
                 f'data-courts="{n or 0}">'
                 f'<a href="{base}/{esc(slugify(r["slug"]))}">'
@@ -274,6 +277,8 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
       r.hidden=!ok; if(ok) shown++;
     }});
     count.textContent=shown+(shown===1?' court':' courts');
+    // Say why the list is empty: a search, or a filter tab with nothing in it (S11).
+    empty.textContent=term?'No courts match that search.':'No courts of this kind in this city yet.';
     empty.hidden=shown>0;
   }}
   document.querySelectorAll('.dtab').forEach(function(b){{

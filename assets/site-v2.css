@@ -435,3 +435,19 @@ html.js .reveal.in{ opacity:1; transform:none; }
 
 /* Galaxy Fold: a nowrap button label spilled out of its card at 280px (M7). */
 @media (max-width:340px){ .btn{ white-space:normal; text-align:center; } }
+
+/* Control states (audit 2026-09-26, D4/S10). One focus ring for every control:
+   currentColor always contrasts with the surface the control sits on, so the
+   same rule works on paper, night sections and both themes. */
+:where(.btn, .theme-toggle, .masthead-burger, .site-menu-close, .lightbox-close, .dtab, .device, .qr-trigger):focus-visible{
+    outline:2px solid currentColor; outline-offset:3px;
+}
+.btn:disabled, .btn[aria-disabled="true"]{ opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+.masthead .btn{ min-height:44px; }
+.masthead-burger:hover, .site-menu-close:hover, .lightbox-close:hover{ opacity:.75; }
+.theme-toggle:active, .masthead-burger:active, .site-menu-close:active{ transform:scale(.94); }
+/* Tap targets: list links sat at 24-38px tall on touch screens (M9). */
+@media (pointer:coarse){
+    .foot-col a{ display:flex; align-items:center; min-height:44px; line-height:1.3; }
+    .foot-social a{ display:inline-flex; align-items:center; min-height:44px; }
+}

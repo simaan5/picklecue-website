@@ -24,21 +24,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-itunes-app" content="app-id=6757326631">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Follow pickleball live: scores, brackets and standings in a browser</title>
-    <meta name="description" content="Follow a pickleball tournament or league as it happens — live scores, the bracket, your next match and final standings. Opens in any browser. No app, no account.">
+    <title>Live pickleball scores and brackets · PickleCue</title>
+    <meta name="description" content="Follow a pickleball tournament or league as it happens: live scores, the bracket, your next match and final standings. Opens in any browser.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.picklecue.com/live-scores">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.picklecue.com/live-scores">
     <meta property="og:title" content="Follow pickleball live — scores and brackets in a browser">
-    <meta property="og:description" content="Scan the QR or type the six-character code. Live scores, the bracket and final standings, in any browser. No app, no account.">
+    <meta property="og:description" content="Follow a pickleball tournament or league as it happens: live scores, the bracket, your next match and final standings. Opens in any browser.">
     <meta property="og:image" content="https://www.picklecue.com/images/og-image.png?v=20260822">
     <meta property="og:image:alt" content="PickleCue: find your court, find your game, one place.">
     <meta property="og:site_name" content="PickleCue">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Follow pickleball live — scores and brackets in a browser">
-    <meta name="twitter:description" content="Scan the QR or type the six-character code. Live scores, the bracket and final standings, in any browser.">
+    <meta name="twitter:description" content="Follow a pickleball tournament or league as it happens: live scores, the bracket, your next match and final standings. Opens in any browser.">
     <meta name="twitter:image" content="https://www.picklecue.com/images/og-image.png?v=20260822">
     <meta name="twitter:image:alt" content="PickleCue: find your court, find your game, one place.">
 
@@ -51,7 +51,7 @@
     <link rel="stylesheet" href="/fonts.css">
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
-    <link rel="stylesheet" href="/assets/site-v2.css?v=20260927a">
+    <link rel="stylesheet" href="/assets/site-v2.css?v=20260927c">
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/site-v2.js?v=20260927a"></script>
     <style>/* critical: overlays must never intercept clicks, even if an older cached stylesheet is in use */
@@ -166,7 +166,7 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
                            aria-describedby="codeMsg">
                     <button class="btn btn-primary" type="submit" data-track="event_code_open" data-placement="form" data-audience="spectators">Open</button>
                 </form>
-                <p class="code-msg" id="codeMsg" role="status" aria-live="polite">Six characters. No zero, one, I or O — they are left out so a code cannot be misheard.</p>
+                <p class="code-msg" id="codeMsg" role="status" aria-live="polite">Six characters. No zero, one, I, L or O — they are left out so a code cannot be misheard.</p>
             </article>
             <article class="card reveal">
                 <h3>Or scan the QR</h3>
@@ -290,10 +290,15 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
     var input = document.getElementById('eventCode');
     var msg = document.getElementById('codeMsg');
     var HINT = msg.textContent;
+    // The hero button scrolls to #code; also focus the field (audit F15).
+    document.querySelectorAll('a[href="#code"]').forEach(function (a) {
+        a.addEventListener('click', function () { setTimeout(function () { input.focus({ preventScroll: true }); }, 350); });
+    });
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         var code = (input.value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
-        if (!/^[A-Z2-9]{6}$/.test(code)) {
+        // Codes are issued from ABCDEFGHJKMNPQRSTUVWXYZ23456789 (audit S12).
+        if (!/^[A-HJKMNP-Z2-9]{6}$/.test(code)) {
             msg.textContent = 'That is not a six-character event code. ' + HINT;
             msg.className = 'code-msg error';
             input.focus();

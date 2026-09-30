@@ -80,6 +80,10 @@ def court_count(**filters):
 
 
 def head(title, desc, canonical, extra_ld=None, indexable=False, search=False):
+    # Search results truncate near 60 characters; the brand suffix goes first
+    # (audit 2026-09-26, L7: 60 indexable hub titles ran over).
+    if len(title) > 60 and title.endswith(" | PickleCue"):
+        title = title[: -len(" | PickleCue")]
     EEA = "['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']"
     search_js = ('<script defer src="/assets/courtsearch.js?v=20260927a"></script>'
                  if search else "")
@@ -101,12 +105,21 @@ gtag('js',new Date());gtag('config','G-XCV417L0J8');</script>
 {robots}
 <link rel="canonical" href="https://www.picklecue.com{canonical}">
 <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=20260812b">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20260812b">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.picklecue.com{canonical}">
+<meta property="og:title" content="{esc(title)}">
+<meta property="og:description" content="{esc(desc)}">
+<meta property="og:image" content="https://www.picklecue.com/images/og-image.png?v=20260822">
+<meta property="og:image:alt" content="PickleCue: find your court, find your game, one place.">
+<meta property="og:site_name" content="PickleCue">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#F7F7F2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
 <link rel="stylesheet" href="/fonts.css">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
-<link rel="stylesheet" href="/assets/site-v2.css?v=20260927a">
-<link rel="stylesheet" href="/assets/courts.css?v=20260927a">
+<link rel="stylesheet" href="/assets/site-v2.css?v=20260927c">
+<link rel="stylesheet" href="/assets/courts.css?v=20260927b">
 <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
 <script defer src="/assets/site-v2.js?v=20260927a"></script>
 <script defer src="/assets/courtmap.js?v=1"></script>
@@ -283,19 +296,12 @@ MAP_CREDIT = (
 
 
 def map_chrome(count, noun="courts"):
-    """The control affordances from the approved design. Presentational until a
-    tile provider is chosen; they are not wired to a live map yet, so they are
-    rendered as disabled with an explicit note rather than as dead buttons."""
-    from icons import icon
+    """Fallback card shown until (or unless) the live MapLibre map loads.
+    The mock "Search this area / Filters / Near me / zoom" controls were
+    removed: they looked like buttons and did nothing (audit 2026-09-26, S9).
+    courts.css hides this layer once the live map is up (.cmap[data-live])."""
     return f"""<div class="cmap-ui" aria-hidden="true">
-  <div class="cmap-tools">
-    <span class="cmap-btn">{icon('search','i')}Search this area</span>
-    <span class="cmap-btn">{icon('sliders','i')}Filters</span>
-  </div>
-  <div class="cmap-right"><span class="cmap-btn">{icon('locate','i')}Near me</span></div>
-  <div class="cmap-zoom"><span class="cmap-zbtn">{icon('plus','i')}</span>
-    <span class="cmap-zbtn">{icon('minus','i')}</span></div>
-  <div class="cmap-card"><b>{count} {noun} in this area</b><span>Interactive map coming with the app launch</span></div>
+  <div class="cmap-card"><b>{count} {noun} in this area</b><span>The full map is in the PickleCue app</span></div>
 </div>"""
 
 
