@@ -1,14 +1,9 @@
 /go/pickle-for-a-purpose https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563?utm_source=picklecue&utm_medium=referral&utm_campaign=pickle-for-a-purpose-2026 302
 /community/pickle-for-a-purpose /events/pickle-for-a-purpose/ 301
 
-/keepscore/* /keepscore/ 200
-# Bracket PDFs from the iOS app link /bracket/<uuid>; bracket/index.html parses
-# the path. Without this rule every such link was a 404 (audit 2026-09-26, S2).
-/bracket/* /bracket/ 200
-
-https://picklecue.com/.well-known/* /.well-known/:splat 200
-https://picklecue.com/* https://www.picklecue.com/:splat 301
-
+# Static rules first: Cloudflare Pages counts every rule after the first
+# dynamic one toward the 100-dynamic limit; rules beyond it are ignored
+# silently (62 of these 160 were dead on 2026-09-29).
 # 2026-09-29: 236 duplicate court rows hidden (iOS migration 20260930004617).
 # Their pages, and 12 cities that only reached the 5-location threshold
 # through duplicates, redirect to the page that now lists the kept court.
@@ -172,3 +167,11 @@ https://picklecue.com/* https://www.picklecue.com/:splat 301
 /courts/us/wisconsin/racine/pickleball-courts-42742-87815 /courts/us/wisconsin 301
 /courts/us/wisconsin/racine/pickleball-courts-racine-42703-87820 /courts/us/wisconsin 301
 /courts/us/wisconsin/racine/pritchard-park-pickleball-courts-42699-87837 /courts/us/wisconsin 301
+
+/keepscore/* /keepscore/ 200
+# Bracket PDFs from the iOS app link /bracket/<uuid>; bracket/index.html parses
+# the path. Without this rule every such link was a 404 (audit 2026-09-26, S2).
+/bracket/* /bracket/ 200
+
+https://picklecue.com/.well-known/* /.well-known/:splat 200
+https://picklecue.com/* https://www.picklecue.com/:splat 301
