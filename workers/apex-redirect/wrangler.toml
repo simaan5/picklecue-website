@@ -1,0 +1,10 @@
+# Deploy: cd workers/apex-redirect && npx wrangler@3 deploy
+# (account 9bb70f32…; needs Workers Scripts + Workers Routes write)
+name = "picklecue-apex-redirect"
+main = "index.js"
+compatibility_date = "2026-09-29"
+account_id = "9bb70f32075d3246005eacd8658eae08"
+workers_dev = false
+routes = [
+  { pattern = "picklecue.com/*", zone_name = "picklecue.com" }
+]

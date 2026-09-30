@@ -173,8 +173,6 @@
 # the path. Without this rule every such link was a 404 (audit 2026-09-26, S2).
 /bracket/* /bracket/ 200
 
-https://picklecue.com/.well-known/* /.well-known/:splat 200
-https://picklecue.com/* https://www.picklecue.com/:splat 301
 
 # 2026-09-29: 236 duplicate court rows hidden (iOS migration 20260930004617).
 # Their pages, and 12 cities that only reached the 5-location threshold
@@ -339,3 +337,7 @@ https://picklecue.com/* https://www.picklecue.com/:splat 301
 /courts/us/wisconsin/racine/pickleball-courts-42742-87815 /courts/us/wisconsin 301
 /courts/us/wisconsin/racine/pickleball-courts-racine-42703-87820 /courts/us/wisconsin 301
 /courts/us/wisconsin/racine/pritchard-park-pickleball-courts-42699-87837 /courts/us/wisconsin 301
+
+# Apex -> www is NOT done here: Pages ignores host-based rules (the two that
+# lived here never ran). workers/apex-redirect (route picklecue.com/*) does it,
+# passing /.well-known/* through so apex universal links keep working.
