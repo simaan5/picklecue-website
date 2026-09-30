@@ -577,11 +577,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.picklecue.com/courts/us/colorado/castle-rock</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://www.picklecue.com/courts/us/colorado/colorado-springs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -832,11 +827,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.picklecue.com/courts/us/illinois/aurora</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://www.picklecue.com/courts/us/illinois/bloomington</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -848,11 +838,6 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/illinois/chicago</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.picklecue.com/courts/us/illinois/decatur</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -922,22 +907,12 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.picklecue.com/courts/us/indiana/fishers</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://www.picklecue.com/courts/us/indiana/fort-wayne</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/indiana/indianapolis</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.picklecue.com/courts/us/indiana/plainfield</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -998,11 +973,6 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/massachusetts/shrewsbury</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.picklecue.com/courts/us/massachusetts/waltham</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1083,11 +1053,6 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/minnesota/minneapolis</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.picklecue.com/courts/us/minnesota/moorhead</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1193,11 +1158,6 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/north-carolina/southern-pines</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.picklecue.com/courts/us/north-carolina/winston-salem</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1308,11 +1268,6 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/oregon/eugene</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.picklecue.com/courts/us/oregon/grants-pass</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1667,11 +1622,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.picklecue.com/courts/us/virginia/norfolk</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://www.picklecue.com/courts/us/virginia/richmond</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1762,11 +1712,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.picklecue.com/courts/us/washington/shoreline</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://www.picklecue.com/courts/us/washington/south-hill</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1808,11 +1753,6 @@
   </url>
   <url>
     <loc>https://www.picklecue.com/courts/us/wisconsin/milwaukee</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.picklecue.com/courts/us/wisconsin/racine</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

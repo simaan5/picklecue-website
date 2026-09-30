@@ -15,16 +15,20 @@
     "Never use the two words interchangeably - that ambiguity is what made",
     "'574 courts' and 'DEDICATED COURTS 1909' both true on the same page."
   ],
-  "verifiedOn": "2026-08-25",
+  "verifiedOn": "2026-09-29",
   "verifiedBy": "SQL against project uejmhtdfbqbotvbqvfja, public.courts",
   "app": {
-    "courtLocations": 10674,
-    "playingCourts": 29679,
+    "courtLocations": 10438,
+    "playingCourts": 28533,
     "query": "SELECT count(*), sum(court_count) FROM public.courts WHERE removed_at IS NULL AND review_status = 'approved'",
     "note": [
       "This is exactly what a user sees, because the courts SELECT policy is",
       "(removed_at IS NULL AND (review_status = 'approved' OR created_by = auth.uid()",
       "OR is_admin_or_mod())) - the same predicate for anon and authenticated.",
+      "",
+      "2026-09-29: 236 duplicate OSM rows (one site counted twice, same court_count)",
+      "were soft-deleted by migration 20260930004617: 10,674 -> 10,438 locations,",
+      "29,679 -> 28,533 courts. No site and no court was lost.",
       "",
       "The older 22,311 figure in the iOS repo counted rows that included 14,903",
       "PlayPickleball-scraped venues. Those are soft-deleted (removed_at set) and",
@@ -32,8 +36,8 @@
     ]
   },
   "web": {
-    "publishedLocations": 3443,
-    "publishedCities": 310,
+    "publishedLocations": 3307,
+    "publishedCities": 298,
     "publishedStates": 38,
     "note": [
       "tools/courtgen/build_site.py publishes a city only when it has",
