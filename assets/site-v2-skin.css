@@ -171,7 +171,7 @@ main a:not(.btn-pill):not(.cta):not(.cta-ghost):not(.masthead-nav a){ color: var
 }
 .btn:active{ transform:translateY(1px) scale(.985); }
 .btn-primary{ background:var(--electric); color:var(--night); box-shadow:0 12px 34px rgba(31,93,67,.24); }
-.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 44px rgba(31,93,67,.3); }
+@media (hover:hover){ .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 44px rgba(31,93,67,.3); } }
 .btn-primary svg{ transition:transform .25s var(--ease); }
 .btn-primary:hover svg{ transform:translateX(3px); }
 .btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid rgba(14,27,20,.25); }
@@ -221,7 +221,7 @@ main a:not(.btn-pill):not(.cta):not(.cta-ghost):not(.masthead-nav a){ color: var
 .masthead .btn{ padding:13px 24px; font-size:15px; }
 .masthead-burger{ display:none; }
 .theme-toggle{
-    width:42px; height:42px; border-radius:50%; display:grid; place-items:center;
+    width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
     background:none; border:1.5px solid var(--line); color:var(--ink-soft);
     cursor:pointer; margin-left:6px; flex:0 0 auto;
     transition: border-color .2s var(--ease), color .2s var(--ease);

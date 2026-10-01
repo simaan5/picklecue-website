@@ -43,8 +43,12 @@
         themeBtn.addEventListener('click', function () {
             var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
             var next = cur === 'dark' ? 'light' : 'dark';
+            // Swap every colour in the same frame (interface review F13).
+            var noT = document.createElement('style'); noT.textContent = '*,*::before,*::after{transition:none !important}'; document.head.appendChild(noT);
             document.documentElement.setAttribute('data-theme', next);
             document.documentElement.style.colorScheme = next;
+            void document.documentElement.offsetWidth;
+            requestAnimationFrame(function () { requestAnimationFrame(function () { noT.remove(); }); });
             try { localStorage.setItem('pc_theme', next); } catch (_) {}
             var meta = document.querySelector('meta[name="theme-color"]');
             if (meta) meta.setAttribute('content', next === 'dark' ? '#071A12' : '#F7F7F2');

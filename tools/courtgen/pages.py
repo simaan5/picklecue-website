@@ -45,7 +45,7 @@ def stats_for(rows):
     free = sum(1 for r in rows if r.get("is_free") is True)
     paid = sum(1 for r in rows if r.get("is_free") is False)
     counted = [r for r in rows if r.get("court_count")]
-    out = [(total, "Courts"), (free, "Free to play")]
+    out = [(total, "Locations"), (free, "Free to play")]
     if counted:
         out.append((sum(r["court_count"] for r in counted), "Dedicated courts"))
     if paid:
@@ -89,7 +89,7 @@ def court_row(r, href=None, city="", aid=None):
     # Unknown access stays unknown: it was labelled "Members" and filed under
     # "Clubs & centers" while the tab counted it as neither (audit follow-up).
     meta = courts_label(n) if n else ("Free" if r.get("is_free") is True else
-                                      "Members" if r.get("is_free") is False else "")
+                                      "Club or center" if r.get("is_free") is False else "")
     inner = (f'<span class="rn">{esc(r["label"])}'
              f'<em>{esc(r.get("address") or city)}</em></span>'
              f'<span class="rm">{meta}</span>')
@@ -155,7 +155,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
 <section class="chero">
   <div><p class="ceyebrow">Pickleball courts in</p>
   <h1>{esc(city)}, {esc(sf)}</h1>
-  <p class="clede">{total} courts across {esc(city)}. {free} of them are free to play,
+  <p class="clede">{total} court locations across {esc(city)}. {free} of them are free to play,
   with an address and a location for every one.</p></div>
   {stat_block(stats)}
 </section>
@@ -164,7 +164,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
 <section class="csec"><h2>Venues with the most courts</h2>
   <p class="cnote">These publish a court count, so you know what you are turning up to.</p>
   <div class="ccards">{"".join(court_card(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in top)}</div>
-  <p class="ccount"><a class="clink" href="{base}/all">Browse all {total} courts in {esc(city)}</a></p>
+  <p class="ccount"><a class="clink" href="{base}/all">Browse all {total} locations in {esc(city)}</a></p>
 </section>
 
 <section class="csec ctwo">
@@ -181,7 +181,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
 <p class="cmap-jump"><a href="#map">View map <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14"><path fill="currentColor" d="M12 16l-6-6 1.4-1.4L12 13.2l4.6-4.6L18 10z"/></svg></a></p>
 <section class="cmap" id="map" aria-label="Court locations" data-courtmap="{map_payload(rows, base)}">{svg}{map_chrome(total)}
   <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
-  <span><i class="dot-p"></i>Club or paid</span>
+  <span><i class="dot-p"></i>Club or center</span>
   <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
@@ -219,7 +219,7 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
 
     def drow(r):
         n = r.get("court_count")
-        access = "Free" if r.get("is_free") else ("Members" if r.get("is_free") is False else "")
+        access = "Free" if r.get("is_free") is True else ("Club or center" if r.get("is_free") is False else "")
         # Every court in the city is here, so every row is an anchor target.
         return (f'<li class="drow" id="court-{slugify(r["slug"])}" tabindex="-1" '
                 f'data-access="{"free" if r.get("is_free") is True else "paid" if r.get("is_free") is False else "unknown"}" '
@@ -257,7 +257,7 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
   </div>
 </div>
 
-<p class="dcount" id="dcount" role="status">{total} courts</p>
+<p class="dcount" id="dcount" role="status">{total} locations</p>
 <ul class="drows" id="drows">{"".join(drow(r) for r in ranked)}</ul>
 <p class="dempty" id="dempty" hidden>No courts match that search.</p>
 {attribution()}
@@ -276,7 +276,7 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
              (!term||r.dataset.name.indexOf(term)>-1);
       r.hidden=!ok; if(ok) shown++;
     }});
-    count.textContent=shown+(shown===1?' court':' courts');
+    count.textContent=shown+(shown===1?' location':' locations');
     // Say why the list is empty: a search, or a filter tab with nothing in it (S11).
     empty.textContent=term?'No courts match that search.':'No courts of this kind in this city yet.';
     empty.hidden=shown>0;
@@ -330,7 +330,7 @@ def build_court_to(r, city, state, sf, siblings, out, indexable=False):
     if r.get("is_free") is True:
         facts.append(("Free", "Always free", "No membership or booking"))
     elif r.get("is_free") is False:
-        facts.append(("Members", "Membership or day rate", "Check with the venue"))
+        facts.append(("Club or center", "Membership or day rate", "Check with the venue"))
     # indoor, lights, hours, amenities, photos and ratings are all banned in
     # gate.py: unknown is not the same as no, so they are omitted entirely.
 
@@ -359,7 +359,7 @@ def build_court_to(r, city, state, sf, siblings, out, indexable=False):
       f'<span class="vbadge">{esc(b)}</span>' for b in
       ([courts_label(n)] if n else []) +
       (['Free to play'] if r.get("is_free") is True else
-       ['Membership'] if r.get("is_free") is False else []))}</div>
+       ['Club or center'] if r.get("is_free") is False else []))}</div>
   </div>
 </section>
 
@@ -439,7 +439,7 @@ def build_state_from(state, sf, rows, out, indexable=False):
 <p class="cmap-jump"><a href="#map">View map <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14"><path fill="currentColor" d="M12 16l-6-6 1.4-1.4L12 13.2l4.6-4.6L18 10z"/></svg></a></p>
 <section class="cmap" id="map" aria-label="Courts across {esc(sf)}" data-courtmap="{map_payload(rows)}">{svg}{map_chrome(total)}
   <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
-  <span><i class="dot-p"></i>Club or paid</span>
+  <span><i class="dot-p"></i>Club or center</span>
   <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>

@@ -23,7 +23,7 @@
     var input  = document.getElementById('courtSearchInput');
     var panel  = document.getElementById('courtSearchResults');
     var status = document.getElementById('courtSearchStatus');
-    var INDEX_URL = '/assets/courts-search-index.json?v=20260825a';
+    var INDEX_URL = '/assets/courts-search-index.json?v=20261001a';
     var MAX = 10;
 
     var data = null, loading = null, cursor = -1, rows = [];
@@ -71,7 +71,8 @@
             var c = ci[k[0]], s = st[c[0]];
             var bits = [];
             if (k[3]) bits.push(k[3] + ' court' + (k[3] === 1 ? '' : 's'));
-            bits.push(k[4] ? 'Free to play' : 'Club or paid');
+            if (k[4] === 1) bits.push('Free to play');
+            else if (k[4] === 0) bits.push('Club or center');   /* null = unknown: say nothing (F04) */
             /* A named court goes to the CITY page with an anchor, or to that
                city's /all directory when the city page does not render it.
                Never to the court's own page: it exists, and stays alive for

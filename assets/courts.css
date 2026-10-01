@@ -1,3 +1,12 @@
+/* Aliases every court page needs (DESIGN.md §1). site-v2.css never defined them,
+   so 31 declarations below resolved to border:none / background:transparent on
+   ~4,100 pages — cards, rows, tabs and the /all search box had no visible box
+   (interface review F01, 2026-10-01). */
+:root{ --paper-2:var(--card); --rule:var(--line); --rule-strong:rgba(14,27,20,.26); }
+:root[data-theme="dark"]{ --rule-strong:rgba(237,243,236,.28); }
+/* Anchored arrivals (search → #court-…) must clear the 76px fixed masthead (F03). */
+[id^="court-"]{ scroll-margin-top:96px; }
+
 /* PickleCue court pages — Variation A, on the real brand token set.
    Loads after site-v2.css and reuses its tokens. One accent (--court-fg),
    one radius scale (16px cards / 999px pills), static (no scroll motion). */
@@ -85,7 +94,7 @@ main{ padding-top:96px; }
     padding:16px 18px; border:1px solid var(--rule); border-radius:16px;
     background:var(--paper-2); text-decoration:none; color:var(--ink);
     font:700 15.5px/1 var(--f); transition:border-color .18s, transform .18s; }
-.cnear a:hover{ border-color:var(--ink); transform:translateY(-2px); }
+@media (hover:hover){ .cnear a:hover{ border-color:var(--ink); transform:translateY(-2px); } }
 .cnear em{ font:500 13px/1 var(--f); font-style:normal; color:var(--ink-mute);
     font-variant-numeric:tabular-nums; }
 
@@ -115,7 +124,7 @@ main{ padding-top:96px; }
 .clink:hover{ text-decoration:underline; text-underline-offset:4px; }
 a.cc{ text-decoration:none; color:inherit; display:block;
     transition:border-color .18s, transform .18s; }
-a.cc:hover{ border-color:var(--ink); transform:translateY(-2px); }
+@media (hover:hover){ a.cc:hover{ border-color:var(--ink); transform:translateY(-2px); } }
 .cc-body{ display:block; }
 .cc-name{ display:block; margin:16px 20px 0; font:700 16.5px/1.32 var(--f); letter-spacing:-.01em; }
 .crows a{ display:flex; justify-content:space-between; align-items:baseline; gap:20px;
@@ -141,7 +150,9 @@ a.cc:hover{ border-color:var(--ink); transform:translateY(-2px); }
 .dsearch input, .dsort select{ appearance:none; border:1px solid var(--rule);
     background:var(--paper-2); color:var(--ink); border-radius:999px;
     padding:11px 16px; font:500 14.5px/1 var(--f); min-height:42px; min-width:210px; }
-.dsort select{ min-width:150px; cursor:pointer; }
+.dsort select{ min-width:150px; cursor:pointer; padding-right:36px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6F64' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 14px center; background-size:16px; }
 .dsearch input::placeholder{ color:var(--ink-mute); }
 .dsearch input:focus-visible, .dsort select:focus-visible{ outline:2px solid var(--court-fg);
     outline-offset:2px; border-color:var(--court-fg); }
@@ -195,7 +206,7 @@ a.cc:hover{ border-color:var(--ink); transform:translateY(-2px); }
 .scities a{ display:block; padding:18px 20px; border:1px solid var(--rule);
     border-radius:16px; background:var(--paper-2); text-decoration:none; color:var(--ink);
     transition:border-color .18s, transform .18s; }
-.scities a:hover{ border-color:var(--ink); transform:translateY(-2px); }
+@media (hover:hover){ .scities a:hover{ border-color:var(--ink); transform:translateY(-2px); } }
 .scities b{ display:block; font:800 25px/1 var(--f); letter-spacing:-.02em;
     font-variant-numeric:tabular-nums; }
 .scities span{ display:block; margin-top:7px; font:600 15.5px/1.25 var(--f); }
@@ -298,7 +309,7 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 .cmap-note{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
 .cmap[data-live] .cmap-note{ left:12px; right:12px; bottom:10px; padding:8px 12px;
     border-radius:10px; background:rgba(6,24,17,.80); backdrop-filter:blur(6px); }
-.cmap-credit{ margin-left:auto; color:#8FA697; font:450 11.5px/1.4 var(--f); }
+.cmap-credit{ margin-left:auto; color:#8FA697; font:450 13px/1.4 var(--f); }
 .cmap-credit a{ color:#B9CBBF; text-decoration:none; }
 .cmap-credit a:hover{ text-decoration:underline; }
 @media (max-width:620px){ .cmap-credit{ margin-left:0; width:100%; } }
@@ -339,7 +350,7 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 @media (max-width:640px){
   .lic > summary{ flex-wrap:wrap; }
   .lic > summary span{ flex-basis:100%; }
-  .lictext{ font-size:11.5px; }
+  .lictext{ font-size:12px; }
 }
 
 /* ─── Court search ─────────────────────────────────────────────────────────
@@ -388,11 +399,13 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
     display:grid; grid-template-columns:auto 1fr; gap:2px 12px; align-items:baseline;
     padding:11px 12px; border-radius:10px; text-decoration:none; color:inherit;
 }
-.cs-list a:hover, .cs-list [aria-selected="true"] a{ background:var(--paper-2,rgba(0,0,0,.04)); }
+.cs-list a:hover{ background:var(--paper-2,rgba(0,0,0,.04)); }
+/* Keyboard selection needs a real indicator: the tinted background measured 1.01:1 in dark mode (F02). */
+.cs-list [aria-selected="true"] a{ outline:2px solid var(--court-fg); outline-offset:-2px; }
 .cs-list a:focus-visible{ outline:2px solid var(--court-fg); outline-offset:-2px; }
 .cs-kind{
     grid-row:1/3; align-self:center; min-width:52px;
-    font:650 10.5px/1 var(--f-mono,var(--f)); letter-spacing:.1em; text-transform:uppercase;
+    font:650 12px/1 var(--f-mono,var(--f)); letter-spacing:.1em; text-transform:uppercase;
     color:var(--court-fg); border:1px solid var(--line); border-radius:6px;
     padding:5px 6px; text-align:center;
 }
@@ -461,6 +474,10 @@ a.cc:hover .cc-go .ai{ transform:translateX(3px); }
 /* Court detail: directions under the map (audit F3). */
 .vdirs{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 .dtab:focus-visible{ outline:2px solid currentColor; outline-offset:3px; }
-@media (pointer:coarse){ .crumbs a{ display:inline-flex; align-items:center; min-height:44px; } }
+/* The breadcrumb nav class is .crumb — the earlier .crumbs rule never matched (F08). */
+@media (pointer:coarse){ .crumb a, .saz a{ display:inline-flex; align-items:center; min-height:44px; } }
 /* /licenses: the page title was 34px/700 under 32px/800 section heads (D9). */
 main .wrap > h1:first-of-type{ font:800 clamp(34px,4.6vw,52px)/1.06 var(--f); letter-spacing:-.035em; margin-bottom:18px; }
+
+/* 16px stops iOS Safari zooming the directory's only filter controls on focus (F12). */
+@media (max-width:860px){ .dsearch input, .dsort select{ font-size:16px; } }

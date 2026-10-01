@@ -90,7 +90,9 @@ def build(eligible, states_full, out_path):
                     label,
                     slug,
                     int(r.get("court_count") or 0),
-                    1 if r.get("is_free") else 0,
+                    # 1 free / 0 paid / None unknown; unknown used to collapse to 0
+                    # and render as "Club or paid" (F04).
+                    1 if r.get("is_free") is True else (0 if r.get("is_free") is False else None),
                     1 if slug in on_city else 0,
                 ])
 
