@@ -45,8 +45,9 @@ keeps its own archived palette.
 
 ## 2. Typography
 
-- `--f`: `'Instrument Sans', 'Instrument Sans Fallback', …` — everything. One variable file
-  covers 400–800.
+- `--f`: `'Instrument Sans', 'Instrument Sans Fallback', …` — everything. One variable file,
+  declared with `font-weight: 400 700`; **the axis tops out at 700**, so a declared 800
+  renders as 700 (and before 2026-10-01 everything above 600 rendered as 600).
 - `--f-mono`: JetBrains Mono — eyebrows/kickers, codes, numerals.
 - **No italic face ships.** Never set `font-style: italic` on display text; accents are colour
   only (`--court-fg`). Body `<em>` may stay italic.
@@ -65,7 +66,7 @@ keeps its own archived palette.
 | Small / meta | 14–15px, `--ink-mute` |
 | Kicker | 600 13px/1 mono, tracking .16em, uppercase, `--court-fg` |
 
-Weights: 400, 500, 600, 700, 800 only. Tracking: -.035em, -.03em, -.02em, 0, .16em.
+Weights: 400, 500, 600, 700 only (800 in legacy CSS renders as 700). Tracking: -.035em, -.03em, -.02em, 0, .16em.
 
 ## 3. Shape, space, depth, motion
 

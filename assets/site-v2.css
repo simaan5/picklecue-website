@@ -70,12 +70,12 @@ section[id]{ scroll-margin-top:96px; }
 }
 .btn:active{ transform:translateY(1px) scale(.985); }
 .btn-primary{ background:var(--electric); color:var(--night); box-shadow:0 12px 34px rgba(31,93,67,.24); }
-.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 44px rgba(31,93,67,.3); }
+@media (hover:hover){ .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 44px rgba(31,93,67,.3); } }
 .btn-primary svg{ transition:transform .25s var(--ease); }
 .btn-primary:hover svg{ transform:translateX(3px); }
 .btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid rgba(14,27,20,.25); }
 :root[data-theme="dark"] .btn-ghost{ border-color:rgba(237,243,236,.28); }
-.btn-ghost:hover{ border-color:var(--ink); transform:translateY(-2px); }
+@media (hover:hover){ .btn-ghost:hover{ border-color:var(--ink); transform:translateY(-2px); } }
 
 /* Masthead */
 .masthead{
@@ -122,7 +122,7 @@ section[id]{ scroll-margin-top:96px; }
 .masthead-burger{ display:none; }
 
 .theme-toggle{
-    width:42px; height:42px; border-radius:50%; display:grid; place-items:center;
+    width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
     background:none; border:1.5px solid var(--line); color:var(--ink-soft);
     cursor:pointer; margin-left:6px; flex:0 0 auto;
     transition: border-color .2s var(--ease), color .2s var(--ease);
@@ -182,7 +182,7 @@ section[id]{ scroll-margin-top:96px; }
     padding:32px; transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
 .sec-alt .card{ background:var(--paper); }
-.card:hover{ transform:translateY(-4px); box-shadow:0 24px 60px rgba(6,24,17,.10); }
+@media (hover:hover){ .card:hover{ transform:translateY(-4px); box-shadow:0 24px 60px rgba(6,24,17,.10); } }
 .card h3{ font:700 21px/1.25 var(--f); letter-spacing:-.015em; }
 .card p{ margin-top:10px; font:450 16px/1.6 var(--f); color:var(--ink-soft); }
 
@@ -196,7 +196,7 @@ section[id]{ scroll-margin-top:96px; }
     display:block; border:0; cursor:zoom-in;
     transition: transform .3s var(--ease);
 }
-.device:hover{ transform:translateY(-6px); }
+@media (hover:hover){ .device:hover{ transform:translateY(-6px); } }
 .device img{ border-radius:34px; width:100%; }
 
 /* Final CTA */
@@ -210,7 +210,8 @@ section[id]{ scroll-margin-top:96px; }
     background:var(--night-card); border:1px solid var(--line-night); border-radius:999px; padding:8px;
     transition:border-color .2s var(--ease);
 }
-.waitlist-form:focus-within{ border-color:var(--electric); }
+/* The pill is the control; its 1px border change was the only focus cue (F09). */
+.waitlist-form:focus-within{ border-color:var(--electric); outline:2px solid var(--electric); outline-offset:3px; }
 .waitlist-form input[type="email"]{
     flex:1; min-width:0; background:none; border:0; outline:none;
     color:var(--paper-on-night); font:500 17px/1 var(--f); padding:0 22px;

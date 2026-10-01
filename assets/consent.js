@@ -44,14 +44,14 @@
     'box-shadow:0 12px 40px rgba(0,0,0,.45)}',
     '.pc-consent h3{margin:0 0 6px;font-size:15px}',
     '.pc-consent p{margin:0 0 12px;color:#b9c6be;font-size:13px}',
-    '.pc-consent a{color:#4cd992}',
+    '.pc-consent a{color:var(--cue,#56D364)}',
     '.pc-consent-row{display:flex;gap:8px}',
     '.pc-consent button{flex:1;padding:10px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.18);',
     'font-size:14px;font-weight:600;cursor:pointer;background:transparent;color:#f2f5f3}',
-    '.pc-consent button.pc-accept{background:#00c27a;border-color:#00c27a;color:#06120c}',
+    '.pc-consent button.pc-accept{background:var(--electric,#D8F35A);border-color:var(--electric,#D8F35A);color:#061811}',
     '@media (prefers-color-scheme: light){.pc-consent{background:#fff;color:#15211a;border-color:rgba(0,0,0,.12)}',
     '.pc-consent p{color:#4c5b52}.pc-consent button{color:#15211a;border-color:rgba(0,0,0,.2)}',
-    '.pc-consent button.pc-accept{color:#fff}}'
+    '.pc-consent a{color:var(--court-fg,#1F5D43)}}'
   ].join('');
 
   function showBanner() {
