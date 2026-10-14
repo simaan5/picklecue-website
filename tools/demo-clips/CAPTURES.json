@@ -1,0 +1,96 @@
+{
+ "capturedAt": "2026-10-14T19:59:52+00:00",
+ "captures": [
+  {
+   "raw": "s1-play-open-games.png",
+   "sha256": "bf282599cc9d2143327ad942acba2cc35dadf96bdb2b57ee7a1cbc9a90f2049c",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewPlay -previewPlayScreen main",
+   "settle": 9,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s2-live-scoring.png",
+   "sha256": "97b24f9b01d4ce9ec25fdaa23ccbaf5978a0d25ca6ee0765efdf7d8097397893",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewLogMatch live",
+   "settle": 8,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s3a-courts-pinfocus.png",
+   "sha256": "5e8f651f10cd1c2081f70bfa1b594d36aadd747633c4bfead343f191348f7e85",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewMainTab -startTab courts -CourtsPreviewState pinFocus",
+   "settle": 10,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s4-bracket-summer-smash.png",
+   "sha256": "fa2917af7b797e8724455afac611c5a847a2a46637a493c6c57698390bc9ccad",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewTournaments -previewTournamentScreen bracket -marketingTournamentID a11a0008-1a5e-4000-8a00-000000000002",
+   "settle": 9,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s5b-league-standings.png",
+   "sha256": "054fbc1130e1cdd5413f647baee01d27c7f1d5780a8203911998ddbcfa42214b",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewLeagues -previewLeagueScreen standings -marketingLeagueID a11a0006-1a5e-4000-8a00-000000000002",
+   "settle": 9,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s6-player-stats.png",
+   "sha256": "a3f66d7100566e864fcd617d80b63f7dec2b038ad45434080a3c884b115141a4",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewMarketing playerStats",
+   "settle": 8,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s7-lock-screen.png",
+   "sha256": "971e5b0156c7cafeeb62e132d1c00d046d56c3da25ea997de977d332ee63e3bd",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewMarketing liveActivity",
+   "settle": 14,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s8-chat-thread.png",
+   "sha256": "e7f3b20d2c098218006410681aeb9fd4acc62c7a7bb01118603f3e00fcccf965",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewMarketing chatThread",
+   "settle": 9,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s9-week-schedule.png",
+   "sha256": "3bc5017628379c7660d7bd3f3ef761c6bcfbf48947606972a8e74b33992bfafc",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewMarketing home -homeSheet schedule",
+   "settle": 15,
+   "appBuild": "215"
+  },
+  {
+   "raw": "s10-home-dashboard.png",
+   "sha256": "53c95855eab49c9fde1180303fc2403a669f68dc1ced3d858f3cdb46ec9b7fee",
+   "device": "PickleCue App Store \u2014 iPhone 17 Pro Max",
+   "resolution": "1320x2868",
+   "route": "-previewMarketing home",
+   "settle": 12,
+   "appBuild": "215"
+  }
+ ],
+ "note": "build 215 (origin/main f98a7d22) on iOS 26.0.1; s7 and s9 captured from the fix/marketing-lockscreen-date binary (bcfd048e), which differs from main only in the lock-screen date label"
+}

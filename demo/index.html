@@ -43,7 +43,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32.png?v=20260812b">
     <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png?v=20260812b">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="stylesheet" href="demo.css?v=20260825b">
+    <link rel="stylesheet" href="demo.css?v=20261014a">
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
@@ -124,6 +124,7 @@
       </div>
     </div>
 
+    <div class="demo-stage">
     <div class="iphone-frame">
         <div class="iphone-screen">
 
@@ -662,6 +663,88 @@
         </div>
     </div>
 
+    <!-- Ten short loops of the shipping app, under the phone. Captured from the
+         current build on the iPhone 17 Pro Max simulator against the
+         MarketingCapture fixture world (never production); composed with
+         raw-motion. Source + rebuild: tools/hero-video/clips/. Only the tiles
+         in view play (demo.js); reduced-motion visitors get the posters. -->
+    <section class="demo-clips" aria-label="PickleCue in motion">
+        <p class="clips-kicker">In motion</p>
+        <ul class="clips" id="demoClips">
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c01-home.jpg" aria-label="The Home dashboard: weather, your next game and the week at a glance." data-clip>
+                    <source src="/videos/demo/c01-home.webm" type="video/webm">
+                    <source src="/videos/demo/c01-home.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Home</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c02-courts.jpg" aria-label="The Courts map with a court selected: address, court count, surface, cost." data-clip>
+                    <source src="/videos/demo/c02-courts.webm" type="video/webm">
+                    <source src="/videos/demo/c02-courts.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Courts</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c03-play.jpg" aria-label="Open games near you with level, format, venue and spots left." data-clip>
+                    <source src="/videos/demo/c03-play.webm" type="video/webm">
+                    <source src="/videos/demo/c03-play.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Play</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c04-scoring.jpg" aria-label="Live scoring: team scores, serving indicator and undo." data-clip>
+                    <source src="/videos/demo/c04-scoring.webm" type="video/webm">
+                    <source src="/videos/demo/c04-scoring.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Live scoring</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c05-lockscreen.jpg" aria-label="A live game score on the iPhone Lock Screen as a Live Activity." data-clip>
+                    <source src="/videos/demo/c05-lockscreen.webm" type="video/webm">
+                    <source src="/videos/demo/c05-lockscreen.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Lock Screen</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c06-bracket.jpg" aria-label="A single-elimination tournament bracket with live results." data-clip>
+                    <source src="/videos/demo/c06-bracket.webm" type="video/webm">
+                    <source src="/videos/demo/c06-bracket.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Brackets</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c07-standings.jpg" aria-label="League standings with wins, losses and points." data-clip>
+                    <source src="/videos/demo/c07-standings.webm" type="video/webm">
+                    <source src="/videos/demo/c07-standings.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Standings</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c08-stats.jpg" aria-label="Match history: record, streak and win rate." data-clip>
+                    <source src="/videos/demo/c08-stats.webm" type="video/webm">
+                    <source src="/videos/demo/c08-stats.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Stats</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c09-chat.jpg" aria-label="A game chat thread between players." data-clip>
+                    <source src="/videos/demo/c09-chat.webm" type="video/webm">
+                    <source src="/videos/demo/c09-chat.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Chat</span>
+            </li>
+            <li class="clip">
+                <video class="clip-v" muted loop playsinline preload="none" poster="/videos/demo/c10-schedule.jpg" aria-label="The full week's schedule of games." data-clip>
+                    <source src="/videos/demo/c10-schedule.webm" type="video/webm">
+                    <source src="/videos/demo/c10-schedule.mp4" type="video/mp4">
+                </video>
+                <span class="clip-t">Schedule</span>
+            </li>
+        </ul>
+    </section>
+    </div><!-- /demo-stage -->
+
 
     <!-- Tour panel. Hidden until the visitor asks for the tour. -->
     <aside class="tour-panel" id="tourPanel" hidden aria-label="Guided tour">
@@ -702,7 +785,7 @@
 </div>
 </main>
 
-<script src="demo.js?v=20260927a"></script>
+<script src="demo.js?v=20261014a"></script>
 <script src="tour.js?v=20260825a"></script>
 </body>
 </html>
