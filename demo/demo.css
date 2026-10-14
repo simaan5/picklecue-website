@@ -917,14 +917,3 @@ body.tour-on .demo-tag{ display:none; }
 }
 .skip-link:focus{ left:0; outline:2px solid var(--lime); outline-offset:2px; }
 main:focus{ outline:none; }
-
-/* ─── Clip strip under the phone (2026-10-14) ─── */
-.demo-stage{ display:flex; flex-direction:column; align-items:center; width:462px; max-width:calc(100vw - 24px); }
-.demo-clips{ width:100%; margin-top:22px; }
-.clips-kicker{ font:700 11px/1 var(--font,inherit); letter-spacing:.24em; text-transform:uppercase; color:var(--t2); margin:0 0 10px 4px; }
-.clips{ display:flex; gap:10px; list-style:none; margin:0; padding:0 4px 8px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
-.clip{ flex:0 0 118px; scroll-snap-align:start; }
-.clip-v{ display:block; width:118px; aspect-ratio:1320/2868; border-radius:16px; background:#0B0F14; object-fit:cover; border:1px solid rgba(255,255,255,.08); }
-.clip-t{ display:block; margin-top:7px; font-size:12px; font-weight:600; color:var(--t2); text-align:center; }
-@media (max-height: 900px){ .demo-stage{ width:420px; } }
-@media (prefers-reduced-motion: reduce){ .clips{ scroll-behavior:auto; } }

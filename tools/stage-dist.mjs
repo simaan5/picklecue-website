@@ -31,7 +31,7 @@ const DIST = join(ROOT, 'dist');
 
 // Top-level entries that make up the public site.
 const DIRS = ['.well-known', 'assets', 'bracket', 'courts', 'demo', 'events',
-  'fonts', 'images', 'keepscore', 'marketing', 'videos/hero', 'videos/demo'];
+  'fonts', 'images', 'keepscore', 'marketing', 'videos/hero'];
 const FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'manifest.json', 'fonts.css'];
 // Published when present (added by the P2 audit PR).
 const OPTIONAL_FILES = ['favicon.ico'];

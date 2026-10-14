@@ -113,22 +113,4 @@
         });
     });
     syncInert();
-
-    // ─── Clip strip: play only the tiles in view; never autoplay under reduced motion ───
-    (function () {
-        var clips = document.querySelectorAll('[data-clip]');
-        if (!clips.length) return;
-        var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (still || !('IntersectionObserver' in window)) return;
-        var io = new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) {
-                var v = e.target;
-                if (e.isIntersecting && e.intersectionRatio >= 0.6) {
-                    if (v.preload === 'none') v.preload = 'auto';
-                    var p = v.play(); if (p && p.catch) p.catch(function () {});
-                } else if (!v.paused) { v.pause(); }
-            });
-        }, { threshold: [0, 0.6] });
-        clips.forEach(function (v) { io.observe(v); });
-    })();
 })();
