@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- PickleCue hero tour — a raw-motion scene. Nothing here animates by itself:
+     comp.js sets every property from t inside seek(t). -->
+<style>
+  @font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 700; font-display: block;
+               src: url(instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2) format('woff2'); }
+  @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 800; font-display: block;
+               src: url(jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2) format('woff2'); }
+
+  html, body { margin: 0; background: #040F0A; overflow: hidden; }
+  #stage { position: relative; overflow: hidden; background: #040F0A; color: #EDF3EC;
+           font-family: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  .layer { position: absolute; inset: 0; pointer-events: none; }
+  /* the shot cards carry z-index 1/2; isolate them so they never climb above the chip, ripple and ball layers */
+  #shots { isolation: isolate; }
+
+  /* background: night green with two drifting brand glows, seen only around the edges of a moving screen */
+  #bg { background: radial-gradient(1200px 1600px at 50% 30%, #0C2419 0%, #071A12 45%, #040F0A 100%); }
+  .glow { position: absolute; width: 1100px; height: 1100px; border-radius: 50%; left: -550px; top: -550px;
+          filter: blur(90px); will-change: transform; }
+  #glow1 { background: radial-gradient(circle, rgba(86,211,100,.55) 0%, rgba(86,211,100,0) 62%); }
+  #glow2 { background: radial-gradient(circle, rgba(216,243,90,.38) 0%, rgba(216,243,90,0) 62%); }
+
+  /* each app screen: a full-stage card, rounded so it reads as a card while it moves */
+  .shot { position: absolute; inset: 0; border-radius: 110px; overflow: hidden; background: #0B0F14;
+          transform-origin: 50% 50%; will-change: transform, filter, opacity; }
+  .shot img { position: absolute; left: 0; top: 0; width: 1080px; height: 2347px; display: block;
+              transform-origin: 50% 50%; will-change: transform; }
+  .shot .dim { position: absolute; inset: 0; background: #040F0A; opacity: 0; }
+
+  /* tap ripple at the focal point before a punch zoom */
+  #ripple { position: absolute; left: -90px; top: -90px; width: 180px; height: 180px; border-radius: 50%;
+            border: 7px solid #56D364; box-shadow: 0 0 40px rgba(86,211,100,.6); }
+
+  /* feature chips: kicker in mono, headline in Instrument Sans, on dark glass */
+  .chip { position: absolute; left: 64px; display: inline-flex; flex-direction: column; gap: 10px;
+          padding: 34px 46px 36px; border-radius: 34px; background: rgba(6,24,17,.80);
+          border: 1.5px solid rgba(237,243,236,.18); backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px);
+          box-shadow: 0 30px 80px rgba(4,15,10,.55); transform-origin: 0% 100%; white-space: nowrap; }
+  .chip .k { font-family: 'JetBrains Mono', Menlo, monospace; font-weight: 600; font-size: 30px; line-height: 1;
+             letter-spacing: .16em; text-transform: uppercase; color: #D8F35A; }
+  .chip .h { font-weight: 700; font-size: 76px; line-height: 1.04; letter-spacing: -.03em; color: #EDF3EC; }
+  .chip .h b { color: #56D364; font-weight: 700; }
+
+  /* the pickleball that whips across on the swipe transitions */
+  #ball { position: absolute; left: -70px; top: -70px; width: 140px; height: 140px; will-change: transform; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="layer" id="bg"></div>
+  <div class="layer"><div class="glow" id="glow1"></div><div class="glow" id="glow2"></div></div>
+
+  <div class="layer" id="shots"></div>
+
+  <div class="layer"><div id="ripple"></div></div>
+  <div class="layer" id="chips"></div>
+
+  <div class="layer">
+    <svg id="ball" viewBox="0 0 100 100" aria-hidden="true">
+      <defs><radialGradient id="bg1" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#F3FF8A"/><stop offset="1" stop-color="#C9E43A"/></radialGradient></defs>
+      <circle cx="50" cy="50" r="48" fill="url(#bg1)"/>
+      <g fill="#9CB42A" opacity=".85">
+        <circle cx="50" cy="22" r="6"/><circle cx="30" cy="36" r="6"/><circle cx="70" cy="36" r="6"/>
+        <circle cx="50" cy="50" r="6"/><circle cx="30" cy="64" r="6"/><circle cx="70" cy="64" r="6"/><circle cx="50" cy="78" r="6"/>
+      </g>
+    </svg>
+  </div>
+</div>
+<script src="motion.js"></script>
+<script src="comp.js"></script>
+</body>
+</html>
