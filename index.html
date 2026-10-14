@@ -135,7 +135,7 @@
           href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="stylesheet" href="/fonts.css">
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
-    <link rel="preload" as="image" href="/videos/hero/hero-tour-poster.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="/videos/hero/app-tour-poster.jpg" fetchpriority="high">
 
 <style>
 /* ============================================================
@@ -1366,20 +1366,28 @@ setTimeout(function(){ if (!window.__pcShell) document.documentElement.classList
         <div class="theater rise rise-3">
             <div class="phone">
                 <div class="phone-screen">
-                    <!-- Hero tour, rebuilt 2026-10-14 against the MarketingCapture
-                         fixture (qa/marketing-account in the iOS repo), NOT live
-                         production. The ten screens are the build 213 deck v4
-                         raw masters (qa/store-screenshots/build-213-deck-v4/raw,
-                         byte-identical), composed with raw-motion from
-                         tools/hero-video/. This replaces the 2026-08 recording
-                         that showed five PlayPickleball venues, all since
-                         soft-deleted (docs/website-cro-audit-2026-08-25.md P0-1).
-                         New filenames on purpose: /videos/* is cached 30 days
-                         with no ?v=, so a same-name swap would leave returning
-                         visitors on the old recording. -->
-                    <video autoplay muted loop playsinline preload="auto" poster="/videos/hero/hero-tour-poster.jpg" aria-label="A tour through PickleCue: home, courts, open games, live scoring, the Lock Screen score, tournament brackets, league standings, match history, chat, and your week's schedule" data-hero-video>
-                        <source src="/videos/hero/hero-tour.webm" type="video/webm">
-                        <source src="/videos/hero/hero-tour.mp4" type="video/mp4">
+                    <!-- Owner directive 2026-08-26: restore the original app-tour
+                         hero video.
+
+                         Recorded against LIVE PRODUCTION, not the marketing
+                         fixture. docs/website-cro-audit-2026-08-25.md P0-1
+                         records what frame sampling found and what SQL against
+                         public.courts confirmed on 2026-08-25: five venues in
+                         the tour (Pickletownla, Santa Monica Family YMCA,
+                         Pickle Pop, Memorial Park Pickleball, Memorial Park
+                         Gymnasium) carry source='playpickleball' and all five
+                         now have removed_at set. tools/courtgen/gate.py exists
+                         because PlayPickleball's ToU clause (xi) prohibits
+                         reproducing their content; that gate greps generated
+                         court pages and cannot see inside an MP4.
+
+                         Replacing this with a capture made against the
+                         MarketingCapture fixture removes the licence question
+                         and the five dead venues in one pass. Until then this
+                         ships by explicit owner decision. -->
+                    <video autoplay muted loop playsinline preload="auto" poster="/videos/hero/app-tour-poster.jpg" aria-label="A tour through PickleCue: home, courts, court details, tournaments, leagues, and your profile" data-hero-video>
+                        <source src="/videos/hero/app-tour.webm" type="video/webm">
+                        <source src="/videos/hero/app-tour.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
