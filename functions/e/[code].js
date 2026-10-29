@@ -84,6 +84,8 @@ function notFound(code, down = false) {
     <title>${down ? "Can’t reach PickleCue" : "Event code not found"} · PickleCue</title>
     <meta name="robots" content="noindex,nofollow">
     <link rel="icon" type="image/png" sizes="32x32" href="${ORIGIN}/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="${ORIGIN}/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="${ORIGIN}/favicon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="${ORIGIN}/images/apple-touch-icon.png">
     <meta name="theme-color" content="#F7F7F2" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#071A12" media="(prefers-color-scheme: dark)">

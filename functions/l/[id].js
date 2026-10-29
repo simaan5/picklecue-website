@@ -84,6 +84,8 @@ export async function onRequestGet({ params }) {
 
     <link rel="icon" type="image/png" sizes="32x32" href="${ORIGIN}/images/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="${ORIGIN}/images/favicon-16.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="${ORIGIN}/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="${ORIGIN}/favicon-192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="${ORIGIN}/images/app-icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="${ORIGIN}/images/apple-touch-icon.png">
 

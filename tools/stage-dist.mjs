@@ -32,7 +32,8 @@ const DIST = join(ROOT, 'dist');
 // Top-level entries that make up the public site.
 const DIRS = ['.well-known', 'assets', 'bracket', 'courts', 'demo', 'events',
   'fonts', 'images', 'keepscore', 'marketing', 'videos/hero'];
-const FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'manifest.json', 'fonts.css'];
+const FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'manifest.json', 'fonts.css',
+  'favicon-48.png', 'favicon-192.png'];
 // Published when present (added by the P2 audit PR).
 const OPTIONAL_FILES = ['favicon.ico'];
 // Every root *.html is public EXCEPT these (ended-event print posters).
