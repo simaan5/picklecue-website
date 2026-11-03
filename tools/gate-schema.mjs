@@ -24,7 +24,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const ALL = process.argv.includes('--all');
-const SKIP = new Set(['node_modules', '.git', 'videos', 'images', 'assets', 'fonts', 'tools', 'Website', 'data', 'legal']);
+const SKIP = new Set(['node_modules', '.git', 'dist', 'videos', 'images', 'assets', 'fonts', 'tools', 'Website', 'data', 'legal']);
 
 /* Google's required properties per rich-result type. Anything not listed is
    parsed and structurally checked but not required to carry a shape. */
@@ -33,13 +33,14 @@ const REQUIRED = {
   SportsEvent: ['name', 'startDate', 'location'],
   BreadcrumbList: ['itemListElement'],
   FAQPage: ['mainEntity'],
-  SoftwareApplication: ['name'],
+  SoftwareApplication: ['name', 'downloadUrl'],
+  SportsActivityLocation: ['name', 'url'],
   Organization: ['name'],
   WebSite: ['name', 'url'],
 };
 /* Properties that must be an absolute URL if present — a relative one is
    silently dropped by every consumer. */
-const URLISH = ['url', 'image', 'logo', 'sameAs', 'contentUrl', 'target'];
+const URLISH = ['url', 'image', 'logo', 'sameAs', 'contentUrl', 'target', 'downloadUrl', 'installUrl'];
 
 function pages(dir = ROOT, out = []) {
   for (const n of readdirSync(dir)) {

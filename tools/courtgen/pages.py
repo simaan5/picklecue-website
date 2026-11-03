@@ -12,6 +12,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from gate import BANNED_STATS, display_label
+from recorded import facts_section, sports_graph
 
 
 def plural(n, one, many):
@@ -125,7 +126,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
     stats, total, free, paid, counted = stats_for(rows)
     ranked = sorted(rows, key=lambda r: (-(r.get("court_count") or 0), r["label"]))
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, None)])
     svg, plotted = plot(rows)
 
@@ -178,6 +179,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
   {f'<p class="ccount">Showing {len(paid_rows)} of {paid}.</p>' if paid_rows else ''}</div>
 </section>
 
+{facts_section(slugify(sf), slugify(city))}
 <p class="cmap-jump"><a href="#map">View map <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14"><path fill="currentColor" d="M12 16l-6-6 1.4-1.4L12 13.2l4.6-4.6L18 10z"/></svg></a></p>
 <section class="cmap" id="map" aria-label="Court locations" data-courtmap="{map_payload(rows, base)}">{svg}{map_chrome(total)}
   <p class="cmap-note"><span><i class="dot-f"></i>Free to play</span>
@@ -195,9 +197,29 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
 
     p = Path(out)
     p.parent.mkdir(parents=True, exist_ok=True)
+    region = rows[0].get("state") or ""
+    places = []
+    for r in rows:
+        if r.get("lat") is None or r.get("lng") is None or not r.get("slug"):
+            continue
+        places.append({
+            "name": r["label"],
+            "url": f"https://www.picklecue.com{base}/{slugify(r['slug'])}",
+            "lat": r["lat"],
+            "lng": r["lng"],
+            "street": r.get("address") or "",
+            "locality": city,
+            "region": region,
+            "count": r.get("court_count") or None,
+            "slug": slugify(r["slug"]),
+        })
+    graph = sports_graph(
+        places, slugify(sf), slugify(city),
+        f"https://www.picklecue.com{base}", city, region)
     p.write_text(page(f"Pickleball courts in {city}, {sf} | PickleCue",
                       f"{total} pickleball courts in {city}, {sf}. {free} are free to play. "
-                      f"Addresses and locations for every one.", base, body, ld,
+                      f"Addresses and locations for every one.", base, body,
+                      [ld, graph] if graph else ld,
                       indexable), encoding="utf-8")
     return p, rows, sf
 
@@ -213,7 +235,7 @@ def build_directory_from(city, state, sf, rows, out, indexable=False):
     free = sum(1 for r in rows if r.get("is_free") is True)
     paid = sum(1 for r in rows if r.get("is_free") is False)
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, base), ("All courts", None)])
     ranked = sorted(rows, key=lambda r: (-(r.get("court_count") or 0), r["label"]))
 
@@ -319,7 +341,7 @@ def build_court(r, city, state, sf, siblings):
 
 def build_court_to(r, city, state, sf, siblings, out, indexable=False):
     base = city_path(sf, city)
-    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"),
+    cb, ld = crumbs([("Courts", "/courts/"),
                      (sf, f"/courts/us/{slugify(sf)}"), (city, base), (r["label"], None)])
     svg, _ = plot([r] + [s for s in siblings if s["id"] != r["id"]][:40], maxh=300, focus=r["id"])
     n = r.get("court_count")
@@ -416,7 +438,7 @@ def build_state_from(state, sf, rows, out, indexable=False):
             by_city.setdefault(c, []).append(r)
     ranked = sorted(by_city.items(), key=lambda kv: -len(kv[1]))
     stats, total, free, paid, counted = stats_for(rows)
-    cb, ld = crumbs([("Courts", "/courts/"), ("United States", "/courts/us"), (sf, None)])
+    cb, ld = crumbs([("Courts", "/courts/"), (sf, None)])
     svg, plotted = plot(rows, maxh=430, r=4)
 
     body = f"""{cb}
@@ -543,17 +565,17 @@ def build_methodology_to(pool_total, published_total, cities_pub, out, indexable
 
 # ------------------------------------------------------- /courts and /courts/us
 def build_index(states, total, cities_n, out, indexable=False, us=False):
-    """Country hub (/courts/us) and site root (/courts). Breadcrumbs on every
-    city and state page point here, so these must exist or 448 pages link to a
-    404."""
+    """The courts directory. /courts/ is the only copy.
+
+    /courts/us used to render the same state list. It now 301s to /courts/
+    (see _redirects). Passing us=True is a mistake, not a second page.
+    """
     if us:
-        cb, ld = crumbs([("Courts", "/courts/"), ("United States", None)])
-        title, h1 = "Pickleball courts in the United States | PickleCue", "United States"
-        canon = "/courts/us"
-    else:
-        cb, ld = crumbs([("Courts", None)])
-        title, h1 = "Pickleball courts | PickleCue", "Pickleball courts"
-        canon = "/courts/"
+        raise SystemExit(
+            "/courts/us is not a page. It 301s to /courts/, the canonical directory.")
+    cb, ld = crumbs([("Courts", None)])
+    title, h1 = "Pickleball courts | PickleCue", "Pickleball courts"
+    canon = "/courts/"
 
     cards = "".join(
         f'<li><a href="/courts/us/{slugify(sf)}"><b>{n}</b><span>{esc(sf)}</span>'

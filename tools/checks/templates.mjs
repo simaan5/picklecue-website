@@ -16,7 +16,6 @@ export const TEMPLATES = [
   ['/community',                                            'community'],
   ['/events/pickle-for-a-purpose/',                         'event'],
   ['/courts/',                                              'courts hub'],
-  ['/courts/us',                                            'courts country'],
   ['/courts/us/texas',                                      'courts state'],
   ['/courts/us/texas/austin',                               'courts city'],
   ['/courts/us/texas/austin/all',                           'courts city all'],

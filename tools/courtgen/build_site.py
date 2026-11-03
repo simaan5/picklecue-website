@@ -137,9 +137,7 @@ def main():
         ncities = len({k[1] for k in eligible if k[0] == st})
         state_cards.append((STATES[st], len(srows), ncities))
 
-    written.append(P.build_index(state_cards, sum(c[1] for c in state_cards),
-                                 len(eligible), ROOT / "us.html",
-                                 indexable=a.index, us=True))
+    # /courts/us is the same directory. _redirects 301s it to /courts/.
     written.append(P.build_index(state_cards, sum(c[1] for c in state_cards),
                                  len(eligible), ROOT / "index.html",
                                  indexable=a.index, us=False))
@@ -161,7 +159,7 @@ def main():
     # Only what is indexable goes in. Court detail pages are noindex, so listing
     # them would ask Google to crawl 2,149 pages it is told to ignore.
     if a.index:
-        urls = ["/courts/", "/courts/us", "/courts/methodology"]
+        urls = ["/courts/", "/courts/methodology"]
         urls += [f"/courts/us/{S.slugify(STATES[st])}" for st in sorted(by_state)]
         urls += [f"/courts/us/{S.slugify(STATES[st])}/{S.slugify(ct)}"
                  for (st, ct) in sorted(eligible)]

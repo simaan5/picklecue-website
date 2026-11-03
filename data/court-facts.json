@@ -1,0 +1,328 @@
+{
+  "_readme": "Sourced court facts for city pages. The renderer ignores keys that start with _. A fact is included only when the cited page or OpenStreetMap element was retrieved and actually said it. Null dataset fields, OSM surface=other with no surface tag, and deleted OSM ways are listed under _omitted and are not rendered.",
+  "_omitted": [
+    {
+      "pages": ["courts/us/california/garden-grove", "courts/us/california/santa-ana"],
+      "why": "No surface, lights, indoor/outdoor, or open-play value on these cities' publishable court rows was confirmed on a live OpenStreetMap element or a city/park page retrieved for this change. Garden Grove had surface=concrete on a row with no source_ref, and on OpenStreetMap way 1354311033, which now returns HTTP 410. Those surfaces were left out. Court counts already printed on the pages were not given a new writeup."
+    },
+    {
+      "venues": ["Lake Forest Beach & Tennis Club", "Pickleball Haven"],
+      "why": "The courts dataset has indoor=false and lights=false. Live OpenStreetMap way 346937133 (the Beach & Tennis Club pitch) has no lit or indoor tag. Way 333435460 is building=commercial named Pickleball Haven and also has no lit or indoor tag. False was not published."
+    },
+    {
+      "venues": ["Downtown Recreation Center indoor flag"],
+      "why": "The courts dataset has indoor=true. OpenStreetMap way 83201240 does not. The City of Costa Mesa page lists pickleball on the open-gym schedule and, separately, rental of the Indoor Gym. It does not say the pickleball session is indoors or how many courts it uses, so indoor and a court count were not stated as city facts. The schedule was."
+    },
+    {
+      "venues": ["Rows whose dataset surface is other"],
+      "why": "Portola Park (way 1466666973), College Park (way 1472140216), North Lake Tennis Club (way 1306678787), and Galaxy View Park (way 1471513198) have no surface tag on the live OpenStreetMap way. surface=other was not published."
+    }
+  ],
+  "california/lake-forest": {
+    "lead": "The location count at the top is the directory on this page. A place in this list with no court-page link is published by the city and is not part of that count.",
+    "items": [
+      {
+        "id": "fact-portola-park",
+        "title": "Portola Park",
+        "slug": "osm-way-1466666973",
+        "href": "/courts/us/california/lake-forest/osm-way-1466666973",
+        "lines": [
+          {
+            "text": "Portola Park, 28040 Glenn Ranch Road, has three dedicated, lighted pickleball courts.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php",
+            "lit": true
+          },
+          {
+            "text": "This page lists 3 courts. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry, for OpenStreetMap way 1466666973. The way itself has no courts tag and no lit tag.",
+            "source": "OpenStreetMap way 1466666973",
+            "url": "https://www.openstreetmap.org/way/1466666973"
+          }
+        ]
+      },
+      {
+        "id": "fact-meadows-walworth",
+        "title": "Meadows, Walworth",
+        "slug": "pickleball-courts-33669-117665-3059",
+        "href": "/courts/us/california/lake-forest/pickleball-courts-33669-117665-3059",
+        "lines": [
+          {
+            "text": "The 100 block of Walworth has two dedicated pickleball courts. The city says they are privately maintained and available to the public.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php"
+          },
+          {
+            "text": "This page lists 2 courts at Walworth. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry, for OpenStreetMap way 1436792664.",
+            "source": "OpenStreetMap way 1436792664",
+            "url": "https://www.openstreetmap.org/way/1436792664"
+          }
+        ]
+      },
+      {
+        "id": "fact-catalonia-park",
+        "title": "Catalonia Park",
+        "slug": "pickleball-courts-lake-forest-ca-e985bffd",
+        "href": "/courts/us/california/lake-forest/pickleball-courts-lake-forest-ca-e985bffd",
+        "lines": [
+          {
+            "text": "This page lists 2 courts. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry.",
+            "source": "OpenStreetMap way 962996845",
+            "url": "https://www.openstreetmap.org/way/962996845"
+          },
+          {
+            "text": "OpenStreetMap tags this pitch surface=sand.",
+            "source": "OpenStreetMap way 962996845",
+            "url": "https://www.openstreetmap.org/way/962996845",
+            "surface": "sand"
+          }
+        ]
+      },
+      {
+        "id": "fact-lake-forest-recreation-center",
+        "title": "Lake Forest Recreation Center",
+        "streetAddress": "28000 Vista Terrace",
+        "lines": [
+          {
+            "text": "Four indoor wooden courts, available from 8:30 a.m. to 10:30 a.m. on Tuesdays and Thursdays.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php",
+            "count": 4,
+            "indoor": true,
+            "surface": "wood",
+            "hours": {"schema": true, "days": ["Tuesday", "Thursday"], "opens": "08:30", "closes": "10:30"}
+          },
+          {
+            "text": "Fees on that page: residents $5 per visit or a $120 year pass; non-residents $10 per visit or a $240 year pass.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php"
+          }
+        ]
+      },
+      {
+        "id": "fact-baker-ranch-park",
+        "title": "Baker Ranch Park",
+        "streetAddress": "26380 Rancho Pkwy S",
+        "lines": [
+          {
+            "text": "Two multi-use courts. Pickleball players must bring their own net and posts.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "id": "fact-borrego-park",
+        "title": "Borrego Park",
+        "streetAddress": "26982 Cabriole",
+        "lines": [
+          {
+            "text": "Two multi-purpose courts. Pickleball players should bring their own nets and posts.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "id": "fact-pittsford-park",
+        "title": "Pittsford Park",
+        "streetAddress": "21701 Pittsford Dr.",
+        "lines": [
+          {
+            "text": "Two multi-purpose courts. Pickleball players should bring their own nets and posts.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "id": "fact-foothill-ranch-community-park",
+        "title": "Foothill Ranch Community Park",
+        "streetAddress": "19422 Rue De Valore",
+        "lines": [
+          {
+            "text": "Two multi-purpose courts. Pickleball players should bring their own nets and posts.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "id": "fact-rimgate-park",
+        "title": "Rimgate Park",
+        "streetAddress": "29772 Rimgate Dr.",
+        "lines": [
+          {
+            "text": "One multi-use court. Pickleball players should bring their own net and posts.",
+            "source": "City of Lake Forest, Pickleball",
+            "url": "https://www.lakeforestca.gov/departments/community_services/parks_fields/pickleball.php",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "california/costa-mesa": {
+    "items": [
+      {
+        "id": "fact-downtown-recreation-center",
+        "title": "Downtown Recreation Center",
+        "slug": "downtown-recreation-center-9241226e",
+        "href": "/courts/us/california/costa-mesa/downtown-recreation-center-9241226e",
+        "lines": [
+          {
+            "text": "Address and phone on the city page: 1860 Anaheim Avenue, Costa Mesa, CA 92627, (714) 327-7560. The open-gym table labeled Updated Hours (March - May) lists pickleball for ages 18+ (free for 50+) Tuesday through Friday 8:15 a.m. to 11:30 a.m. and Saturday 8:00 a.m. to 11:00 a.m. Monday is N/A. The page says hours and days are subject to change and tells readers to call.",
+            "source": "City of Costa Mesa, Downtown Recreation Center",
+            "url": "https://www.costamesaca.gov/government/departments-and-divisions/parks-and-community-services/facilities/community-centers-golf-course-senior-center-tennis-center/downtown-recreation-center"
+          },
+          {
+            "text": "This page lists 1 court. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry, for OpenStreetMap way 83201240. The way is the recreation center (leisure=sports_centre) and has no courts tag. The city page does not state a pickleball court count.",
+            "source": "OpenStreetMap way 83201240",
+            "url": "https://www.openstreetmap.org/way/83201240"
+          }
+        ]
+      },
+      {
+        "id": "fact-back-bay",
+        "title": "Back Bay High School",
+        "slug": "osm-way-1471281635",
+        "href": "/courts/us/california/costa-mesa/osm-way-1471281635",
+        "lines": [
+          {
+            "text": "This page lists 3 courts. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry. OpenStreetMap tags this pitch surface=asphalt.",
+            "source": "OpenStreetMap way 1471281635",
+            "url": "https://www.openstreetmap.org/way/1471281635",
+            "surface": "asphalt"
+          }
+        ]
+      },
+      {
+        "id": "fact-tewinkle",
+        "title": "Charles W. TeWinkle Middle School",
+        "slug": "pickleball-courts-on-iowa-street-costa-mesa-4f2d1df6",
+        "href": "/courts/us/california/costa-mesa/pickleball-courts-on-iowa-street-costa-mesa-4f2d1df6",
+        "lines": [
+          {
+            "text": "This page lists 2 courts. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry. OpenStreetMap tags this pitch surface=asphalt and access=private.",
+            "source": "OpenStreetMap way 1541093856",
+            "url": "https://www.openstreetmap.org/way/1541093856",
+            "surface": "asphalt"
+          }
+        ]
+      },
+      {
+        "id": "fact-early-college",
+        "title": "Early College High School",
+        "slug": "osm-way-1470146081",
+        "href": "/courts/us/california/costa-mesa/osm-way-1470146081",
+        "lines": [
+          {
+            "text": "This page lists 3 courts. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry. OpenStreetMap tags this pitch surface=asphalt.",
+            "source": "OpenStreetMap way 1470146081",
+            "url": "https://www.openstreetmap.org/way/1470146081",
+            "surface": "asphalt"
+          }
+        ]
+      }
+    ]
+  },
+  "california/irvine": {
+    "items": [
+      {
+        "id": "fact-dave-robins",
+        "title": "Dave Robins Park",
+        "slug": "pickleball-courts-on-willowbend-irvine-cc1cc98b",
+        "href": "/courts/us/california/irvine/pickleball-courts-on-willowbend-irvine-cc1cc98b",
+        "lines": [
+          {
+            "text": "This page lists 2 courts. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry. OpenStreetMap tags this pitch lit=yes.",
+            "source": "OpenStreetMap way 1548498050",
+            "url": "https://www.openstreetmap.org/way/1548498050",
+            "lit": true
+          }
+        ]
+      },
+      {
+        "id": "fact-odyssey",
+        "title": "Odyssey Ropes Course",
+        "slug": "pickleball-courts-33644-117826",
+        "href": "/courts/us/california/irvine/pickleball-courts-33644-117826",
+        "lines": [
+          {
+            "text": "This page lists 4 courts. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry. OpenStreetMap tags this pitch lit=yes and access=private.",
+            "source": "OpenStreetMap way 1222455443",
+            "url": "https://www.openstreetmap.org/way/1222455443",
+            "lit": true
+          }
+        ]
+      },
+      {
+        "id": "fact-south-lake",
+        "title": "South Lake Park",
+        "slug": "pickleball-courts-33669-117803",
+        "href": "/courts/us/california/irvine/pickleball-courts-33669-117803",
+        "lines": [
+          {
+            "text": "OpenStreetMap tags this pitch lit=yes and sport=tennis;pickleball. The courts dataset has no court count for it (court_count_source default_cleared), so no count is stated.",
+            "source": "OpenStreetMap way 766603501",
+            "url": "https://www.openstreetmap.org/way/766603501",
+            "lit": true
+          }
+        ]
+      }
+    ]
+  },
+  "california/newport-beach": {
+    "lead": "The location count at the top is the directory on this page. Newport Coast Community Center is published by the city and is not part of that count.",
+    "items": [
+      {
+        "id": "fact-bonita-canyon",
+        "title": "Bonita Canyon Sports Park",
+        "slug": "pickleball-courts-33627-117861-2568",
+        "href": "/courts/us/california/newport-beach/pickleball-courts-33627-117861-2568",
+        "lines": [
+          {
+            "text": "The city facility sheet lists a pickleball court among the amenities at Bonita Canyon Sports Park, 1990 Ford Road. It does not give a number of courts.",
+            "source": "City of Newport Beach, Bonita Canyon Sports Park",
+            "url": "https://nbgis.newportbeachca.gov/RecFacilityImages/default.aspx?TAG=FACIL_004"
+          },
+          {
+            "text": "This page lists 4 courts for Bonita Canyon Sports Park West. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry, for OpenStreetMap way 1412297450.",
+            "source": "OpenStreetMap way 1412297450",
+            "url": "https://www.openstreetmap.org/way/1412297450"
+          }
+        ]
+      },
+      {
+        "id": "fact-mariners",
+        "title": "Mariners Park",
+        "slug": "pickleball-courts-on-2100-mariners-drive-newport-beach-fd74d67e",
+        "href": "/courts/us/california/newport-beach/pickleball-courts-on-2100-mariners-drive-newport-beach-fd74d67e",
+        "lines": [
+          {
+            "text": "This page lists 8 courts. That figure is court_count in the PickleCue courts dataset, court_count_source osm_geometry. OpenStreetMap tags this pitch surface=asphalt and access=private.",
+            "source": "OpenStreetMap way 1520719297",
+            "url": "https://www.openstreetmap.org/way/1520719297",
+            "surface": "asphalt"
+          }
+        ]
+      },
+      {
+        "id": "fact-newport-coast-community-center",
+        "title": "Newport Coast Community Center",
+        "streetAddress": "6401 San Joaquin Hills Road",
+        "lines": [
+          {
+            "text": "The gymnasium floor is lined for basketball, volleyball, and pickleball. The city gives the address as 6401 San Joaquin Hills Road. It does not state how many pickleball courts the lines mark.",
+            "source": "City of Newport Beach, Newport Coast Community Center",
+            "url": "https://www.newportbeachca.gov/government/departments/recreation-senior-services/facility-rentals/newport-coast-community-center",
+            "indoor": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -88,9 +88,12 @@ def head(title, desc, canonical, extra_ld=None, indexable=False, search=False):
     search_js = ('<script defer src="/assets/courtsearch.js?v=20261001a"></script>'
                  if search else "")
     robots = "" if indexable else '<meta name="robots" content="noindex">'
-    ld = ""
+    blocks = []
     if extra_ld:
-        ld = f'<script type="application/ld+json">{json.dumps(extra_ld)}</script>'
+        blocks = extra_ld if isinstance(extra_ld, list) else [extra_ld]
+    ld = "\n".join(
+        f'<script type="application/ld+json">{json.dumps(b).replace("<", "\\u003c")}</script>'
+        for b in blocks)
     return f"""<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-itunes-app" content="app-id=6757326631">

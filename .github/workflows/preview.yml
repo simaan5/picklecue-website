@@ -1,0 +1,37 @@
+name: Preview (not production)
+
+# A pull request gets a Cloudflare Pages preview branch. Production stays on
+# deploy.yml, which publishes only main with --branch=main. This job never
+# passes main.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Claim gate
+        run: node tools/gate-claims.mjs
+
+      - name: Structured data
+        run: node tools/gate-schema.mjs --all
+
+      - name: Stage the public site into dist/
+        run: node tools/stage-dist.mjs
+
+      - name: Publish a preview branch
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=picklecue-website --branch=preview-pr-${{ github.event.pull_request.number }}
