@@ -8,6 +8,7 @@ NOT built, deliberately:
     records that anon EXECUTE on nearby_games was revoked on 2026-08-03 for
     exactly this reason. Building them would reverse a documented control.
 """
+import math
 from pathlib import Path
 from urllib.parse import quote
 
@@ -19,6 +20,105 @@ def plural(n, one, many):
     """Five state cards shipped "1 cities". Counts come from live data, so
     every rendered count needs this, not just the ones that looked plural."""
     return one if n == 1 else many
+
+
+def free_play_phrase(n, style):
+    """'1 are free' and '0 are free' both shipped. Zero is 'none', one is singular."""
+    if style == "are":
+        if n == 0:
+            return "None are free to play"
+        if n == 1:
+            return "1 is free to play"
+        return f"{n} are free to play"
+    if style == "of-them-are":
+        if n == 0:
+            return "None of them are free to play"
+        if n == 1:
+            return "1 of them is free to play"
+        return f"{n} of them are free to play"
+    if style == "of-them-bare":
+        if n == 0:
+            return "none of them free to play"
+        return f"{n} of them free to play"
+    raise ValueError(f"unknown free-play style {style}")
+
+
+def free_count_label(n):
+    """State-page chip. '0 free' reads like a broken sentence; '1 free' does not."""
+    return "none free" if n == 0 else f"{n} free"
+
+
+def showing_free(shown, total):
+    """Directory line. 'Showing 0 of 0 free courts' and '1 free courts' both read wrong."""
+    if total == 0:
+        return "No free courts recorded."
+    noun = "free court" if total == 1 else "free courts"
+    if shown == total:
+        return f"Showing {total} {noun}."
+    return f"Showing {shown} of {total} {noun}."
+
+
+def haversine_miles(a, b):
+    """Great-circle miles between two (lat, lng) points. Mean Earth radius."""
+    lat1, lon1 = a
+    lat2, lon2 = b
+    radius = 3958.7613
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlmb = math.radians(lon2 - lon1)
+    h = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlmb / 2) ** 2
+    return 2 * radius * math.asin(min(1.0, math.sqrt(h)))
+
+
+def format_miles(miles):
+    if miles < 0.5:
+        return "<1 mi"
+    return f"{int(round(miles))} mi"
+
+
+def row_centroid(rows):
+    pts = [(r.get("lat"), r.get("lng")) for r in rows
+           if r.get("lat") is not None and r.get("lng") is not None]
+    if not pts:
+        return None
+    return (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
+
+
+def nearest_cities(state, city, rows, pool, limit=6):
+    """Other cities ranked by distance between court centroids, not by court count."""
+    here = row_centroid(rows)
+    if not here:
+        return []
+    groups = {}
+    for r in pool:
+        st, c = r.get("state"), r.get("city")
+        if not st or not c or (st == state and c == city):
+            continue
+        groups.setdefault((st, c), []).append(r)
+    scored = []
+    for (st, c), grows in groups.items():
+        cen = row_centroid(grows)
+        sf = STATE_FULL.get(st)
+        if not cen or not sf:
+            continue
+        scored.append((haversine_miles(here, cen), sf, c))
+    scored.sort(key=lambda t: (t[0], t[2]))
+    return scored[:limit]
+
+
+def near_section(city, near):
+    if not near:
+        return ""
+    items = []
+    for miles, sf, c in near:
+        items.append(
+            f'<li><a href="{city_path(sf, c)}"><span>{esc(c)}</span>'
+            f'<em><span class="vh">Distance </span>{esc(format_miles(miles))}</em></a></li>')
+    return (
+        f'<section class="cnear"><h2>Pickleball near {esc(city)}</h2>'
+        '<p class="cnote">Nearest city pages, measured between the average coordinates '
+        'of the courts mapped on each page.</p>'
+        f'<ul>{"".join(items)}</ul></section>')
 from icons import STAT_ICON, icon
 from shell import (MAP_CREDIT, attribution, courts, crumbs, esc, map_chrome,
                    map_payload, page, plot, slugify)
@@ -130,12 +230,9 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
                      (sf, f"/courts/us/{slugify(sf)}"), (city, None)])
     svg, plotted = plot(rows)
 
-    near = {}
-    for r in (near_rows if near_rows is not None else courts(state=f"eq.{state}")):
-        c = r.get("city")
-        if c and c != city:
-            near[c] = near.get(c, 0) + 1
-    near = sorted(near.items(), key=lambda kv: -kv[1])[:6]
+    pool = near_rows if near_rows is not None else courts(state=f"eq.{state}")
+    near = nearest_cities(state, city, rows, pool)
+    near_html = near_section(city, near)
 
     free_rows = [r for r in ranked if r.get("is_free") is True][:8]
     paid_rows = [r for r in ranked if r.get("is_free") is False][:8]
@@ -156,7 +253,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
 <section class="chero">
   <div><p class="ceyebrow">Pickleball courts in</p>
   <h1>{esc(city)}, {esc(sf)}</h1>
-  <p class="clede">{total} court locations across {esc(city)}. {free} of them are free to play,
+  <p class="clede">{total} court locations across {esc(city)}. {free_play_phrase(free, "of-them-are")},
   with an address and a location for every one.</p></div>
   {stat_block(stats)}
 </section>
@@ -171,7 +268,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
 <section class="csec ctwo">
   <div><h2>Free and open</h2><p class="cnote">Public parks and school courts.</p>
   <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in free_rows)}</ul>
-  <p class="ccount">Showing {len(free_rows)} of {free} free courts.</p></div>
+  <p class="ccount">{showing_free(len(free_rows), free)}</p></div>
   <div><h2>Clubs &amp; centers</h2>
   <p class="cnote">{'Membership or a day rate applies.' if paid_rows else 'None recorded here yet.'}</p>
   <ul class="crows">{"".join(court_row(r, f'{base}/{esc(slugify(r["slug"]))}', city, aid=_aid(r)) for r in paid_rows)
@@ -187,12 +284,11 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
   <span class="cmap-count">{plotted} of {total} mapped</span>{MAP_CREDIT}</p></section>
 <section class="ccta"><div>
   <h2>Courts tell you where. PickleCue tells you who is playing.</h2>
-  <p>Open games around {esc(city)}, skill levels and spots left, inside the app.</p></div>
+  <p>Open games around {esc(city)}, skill levels and spots left, inside the app.</p>
+  <p class="cnote">Running a round robin here? The <a href="/organizer-templates">organizer template</a> builds the spreadsheet in your browser.</p></div>
   <a class="btn btn-primary" data-track="app_store_click" data-placement="final" data-audience="courts" href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631">Download on iPhone</a></section>
 
-<section class="cnear"><h2>Pickleball near {esc(city)}</h2><ul>{"".join(
-  f'<li><a href="{city_path(sf, c)}"><span>{esc(c)}</span><em>{n}</em></a></li>'
-  for c, n in near)}</ul></section>
+{near_html}
 {attribution()}"""
 
     p = Path(out)
@@ -217,7 +313,7 @@ def build_city_from(city, state, sf, rows, out, indexable=False, near_rows=None)
         places, slugify(sf), slugify(city),
         f"https://www.picklecue.com{base}", city, region)
     p.write_text(page(f"Pickleball courts in {city}, {sf} | PickleCue",
-                      f"{total} pickleball courts in {city}, {sf}. {free} are free to play. "
+                      f"{total} pickleball courts in {city}, {sf}. {free_play_phrase(free, 'are')}. "
                       f"Addresses and locations for every one.", base, body,
                       [ld, graph] if graph else ld,
                       indexable), encoding="utf-8")
@@ -445,7 +541,7 @@ def build_state_from(state, sf, rows, out, indexable=False):
 <section class="chero">
   <div><p class="ceyebrow">Pickleball in</p><h1>{esc(sf)}</h1>
   <p class="clede">{total} court locations across {len(by_city)} {plural(len(by_city), "city or town", "cities and towns")} in {esc(sf)},
-  {free} of them free to play.</p></div>
+  {free_play_phrase(free, "of-them-bare")}.</p></div>
   {stat_block(stats)}
 </section>
 
@@ -454,7 +550,7 @@ def build_state_from(state, sf, rows, out, indexable=False):
   <p class="cnote">Every city we have court records for in {esc(sf)}.</p>
   <ul class="scities">{"".join(
     f'<li><a href="{city_path(sf, c)}"><b>{len(v)}</b><span>{esc(c)}</span>'
-    f'<em>{sum(1 for x in v if x.get("is_free"))} free</em></a></li>'
+    f'<em>{free_count_label(sum(1 for x in v if x.get("is_free")))}</em></a></li>'
     for c, v in ranked[:24])}</ul>
 </section>
 
@@ -473,7 +569,7 @@ def build_state_from(state, sf, rows, out, indexable=False):
     p.write_text(page(f"Pickleball courts in {sf} | PickleCue",
                       f"{total} pickleball court locations across {len(by_city)} "
                       f"{plural(len(by_city), 'city', 'cities')} in {sf}. "
-                      f"{free} are free to play.", f"/courts/us/{slugify(sf)}", body, ld,
+                      f"{free_play_phrase(free, 'are')}.", f"/courts/us/{slugify(sf)}", body, ld,
                       indexable), encoding="utf-8")
     return p
 

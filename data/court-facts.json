@@ -16,6 +16,22 @@
     {
       "venues": ["Rows whose dataset surface is other"],
       "why": "Portola Park (way 1466666973), College Park (way 1472140216), North Lake Tennis Club (way 1306678787), and Galaxy View Park (way 1471513198) have no surface tag on the live OpenStreetMap way. surface=other was not published."
+    },
+    {
+      "venues": ["Mike Ward Community Park reservation split from the February 4, 2026 news article"],
+      "why": "That article says two courts would be reservable from 8 a.m. to noon and 4 p.m. to 10 p.m., two courts would be held for programming, and four courts would be drop-in from dawn to 10 p.m. The current City of Irvine pickleball page says courts 3 and 4 are reservable from 7 a.m. to noon and 4 p.m. to 10 p.m., and does not repeat the programming split or the dawn hours. The February schedule was not republished."
+    },
+    {
+      "venues": ["Portola Springs ZIP 92618", "Irvine Team Pickleball"],
+      "why": "The pickleball page's Irvine Team Pickleball block lists 900 Tomato Springs, Irvine, CA 92618. The park page and OpenStreetMap way 1081065636 both list 92620. The ZIP from the league block was omitted. The league's format, fee, director, and self-rating describe a contract league, not the public courts, so they were omitted."
+    },
+    {
+      "venues": ["Citywide Irvine pickleball totals"],
+      "why": "The pickleball page lists eight lit courts at Mike Ward, six at Portola Springs, four at Heritage, and two at Los Olivos, plus 10 hybrid courts across seven parks. Court Regulations and Map says 12 public pickleball courts and eight or nine hybrid courts, and it does not list Heritage's four dedicated courts. Those citywide totals disagree, so none of them were published."
+    },
+    {
+      "venues": ["Mike Ward Community Park on OpenStreetMap", "Portola Springs directory count of 8"],
+      "why": "No OpenStreetMap element named Mike Ward Community Park was found. Way 214487693 is Lakeview Senior Center at 20 Lake Road and has no pickleball tag, so it was not used as a court fact. The directory files Pickleball Courts at Portola Springs Community Center under Garden Grove with a count of 8. The City of Irvine park page says 6 lighted courts, and way 1081065636 has no courts tag, so the directory 8 was not copied onto the Irvine fact."
     }
   ],
   "california/lake-forest": {
@@ -230,6 +246,7 @@
     ]
   },
   "california/irvine": {
+    "lead": "The location count at the top is the directory on this page. Mike Ward Community Park and Portola Springs Community Park are published by the city and are not part of that count.",
     "items": [
       {
         "id": "fact-dave-robins",
@@ -270,6 +287,59 @@
             "source": "OpenStreetMap way 766603501",
             "url": "https://www.openstreetmap.org/way/766603501",
             "lit": true
+          }
+        ]
+      },
+      {
+        "id": "fact-mike-ward",
+        "title": "Mike Ward Community Park",
+        "streetAddress": "20 Lake Road",
+        "lines": [
+          {
+            "text": "The park page lists 8 lighted pickleball courts at Mike Ward Community Park, 20 Lake Road, Irvine, CA 92604. It lists the park at about 22.0 acres, phone 949-724-6900, and hours 6 a.m. to 10 p.m. daily.",
+            "source": "City of Irvine, Mike Ward Community Park",
+            "url": "https://cityofirvine.gov/parks-facilities/mike-ward-community-park",
+            "lit": true,
+            "count": 8
+          },
+          {
+            "text": "A city news article dated February 4, 2026 says the city celebrated the opening of eight new lighted pickleball courts at Mike Ward Community Park — Woodbridge with a ribbon-cutting on Tuesday, February 3. It says four shade structures, picnic tables, benches, and hydration stations were installed, and that lighting improvements, restroom upgrades, and landscape and irrigation work were completed. It also says the courts are enclosed with a sound-dampening barrier.",
+            "source": "City of Irvine, February 4, 2026",
+            "url": "https://cityofirvine.gov/news-media/news-article/eight-new-pickleball-courts-now-open-mike-ward-community-park-woodbridge"
+          },
+          {
+            "text": "The city's pickleball page says reservations are available for courts 3 and 4. Residents may book up to five days ahead and non-residents up to three days ahead, online at yourirvine.org. The page lists a resident rate of $17 per hour and a non-resident rate of $19 per hour, in one- or two-hour increments, one reservation per person per day, Monday through Sunday from 7 a.m. to noon and from 4 p.m. to 10 p.m. Those two courts can be used for drop-in play when they are not reserved or when a reservation does not show. Reservations are nonrefundable except for inclement weather, and they are for non-commercial use. For general pickleball questions the page lists 949-724-6417 and pickleball@cityofirvine.org.",
+            "source": "City of Irvine, Pickleball",
+            "url": "https://cityofirvine.gov/racket-sports/pickleball"
+          }
+        ]
+      },
+      {
+        "id": "fact-portola-springs",
+        "title": "Portola Springs Community Park",
+        "streetAddress": "900 Tomato Springs",
+        "lines": [
+          {
+            "text": "The park page lists 6 lighted pickleball courts at Portola Springs Community Park, 900 Tomato Springs, Irvine, CA 92620. It lists the park at about 32 acres, phone 949-724-6192, and hours 6 a.m. to 10 p.m. daily.",
+            "source": "City of Irvine, Portola Springs Community Park",
+            "url": "https://cityofirvine.gov/parks-facilities/portola-springs-community-park",
+            "lit": true,
+            "count": 6
+          },
+          {
+            "text": "OpenStreetMap way 1081065636 is named Portola Springs Community Park, with operator City of Irvine and the address 900 Tomato Springs, Irvine, CA 92620. The way has no sport, courts, or lit tag, so the court count and the lights are taken from the city park page, not from this way.",
+            "source": "OpenStreetMap way 1081065636",
+            "url": "https://www.openstreetmap.org/way/1081065636"
+          },
+          {
+            "text": "The city's pickleball page also says Portola Springs Community Park has six lit pickleball courts, and that reservations are available for courts 5 and 6 on the same terms as Mike Ward courts 3 and 4: five days ahead for residents, three days ahead for non-residents, $17 per hour for residents and $19 per hour for non-residents, one or two hours, one reservation per person per day, Monday through Sunday from 7 a.m. to noon and from 4 p.m. to 10 p.m., and drop-in play when the court is not reserved or a reservation does not show.",
+            "source": "City of Irvine, Pickleball",
+            "url": "https://cityofirvine.gov/racket-sports/pickleball"
+          },
+          {
+            "text": "The same page says there are 10 hybrid tennis and pickleball courts at Heritage, Knollcrest, Los Olivos, Portola Springs, San Carlo, Turtle Rock, and University. It does not say how many of those 10 are at Portola Springs.",
+            "source": "City of Irvine, Pickleball",
+            "url": "https://cityofirvine.gov/racket-sports/pickleball"
           }
         ]
       }
