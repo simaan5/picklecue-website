@@ -94,6 +94,12 @@ def main():
     items = sorted(eligible.items(), key=lambda kv: -len(kv[1]))
     if a.limit:
         items = items[:a.limit]
+    # Nearby links are geographic, so a city needs the other cities this build
+    # actually publishes. Passing only its own state ranked San Francisco next
+    # to Lake Forest, because that list was sorted by court count.
+    near_pool = []
+    for _, crows in items:
+        near_pool.extend(crows)
 
     for (st, ct), crows in items:
         sf = STATES[st]
@@ -105,7 +111,7 @@ def main():
         p_city, _, _ = P.build_city_from(ct, st, sf, crows,
                                          out=d / f"{S.slugify(ct)}.html",
                                          indexable=a.index,
-                                         near_rows=by_state[st])
+                                         near_rows=near_pool)
         p_dir = P.build_directory_from(ct, st, sf, crows,
                                        out=d / S.slugify(ct) / "all.html",
                                        indexable=a.index)

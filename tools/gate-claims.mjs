@@ -41,7 +41,7 @@ const GENERATED_COURT_PAGES = /^courts\/us\//;
    event_registration_settings.require_dupr and event_registrations.dupr_id are
    live columns. A "3.48 DUPR" stat tile in marketing is not: the rating
    integration is switched off behind FeatureFlags.duprIntegration. */
-const MARKETING = /^(index|players|organizers|community|clubs|support|privacy|terms|licenses|404|live-scores)\.html$|^(courts|demo|events)\//;
+const MARKETING = /^(index|players|organizers|community|clubs|support|privacy|terms|licenses|404|live-scores)\.html$|^(courts|demo|events|blog)\//;
 const SELLING = /^(index|players|organizers|community|clubs|live-scores)\.html$|^(demo|events)\/|^courts\/(index|us)\.html$/;
 const MARKETING_ONLY_PHRASES = {
   DUPR: 'FeatureFlags.duprIntegration is false — the app does not show DUPR ratings',
