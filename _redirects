@@ -1,5 +1,11 @@
 /go/pickle-for-a-purpose https://give-sc.salvationarmy.org/event/the-salvation-army-or-echelon-pickleball-tournament-2026/e797563?utm_source=picklecue&utm_medium=referral&utm_campaign=pickle-for-a-purpose-2026 302
 /community/pickle-for-a-purpose /events/pickle-for-a-purpose/ 301
+# /courts/ and /courts/us render the same state directory. /courts/ is canonical:
+# primary nav and the footer point there. Exact paths only, so /courts/us/texas
+# still resolves. Static rules stay above the first splat (Pages dynamic limit).
+/courts/us /courts/ 301
+/courts/us/ /courts/ 301
+/courts/us.html /courts/ 301
 
 # Static rules first: Cloudflare Pages counts every rule after the first
 # dynamic one toward the 100-dynamic limit; rules beyond it are ignored

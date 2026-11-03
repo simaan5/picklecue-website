@@ -179,9 +179,26 @@ function scanPhrases(rel, text) {
    scorekeeper and live. */
 function scanCanonical(rel, text) {
   const m = text.match(/<link rel="canonical" href="([^"]+)"/);
-  if (!m) return;
-  if (/\.html(\?|#|$)/.test(m[1])) fail(rel, `canonical points at "${m[1]}", which the host 308-redirects`);
-  if (!m[1].startsWith('https://www.picklecue.com')) fail(rel, `canonical is not on the www apex: ${m[1]}`);
+  if (m) {
+    if (/\.html(\?|#|$)/.test(m[1])) fail(rel, `canonical points at "${m[1]}", which the host 308-redirects`);
+    if (!m[1].startsWith('https://www.picklecue.com')) fail(rel, `canonical is not on the www apex: ${m[1]}`);
+    if (m[1].replace(/\/$/, '') === 'https://www.picklecue.com/courts/us')
+      fail(rel, 'canonical points at /courts/us, which 301s to /courts/');
+  }
+  const og = text.match(/property="og:url" content="([^"]+)"/);
+  if (og) {
+    if (!og[1].startsWith('https://www.picklecue.com')) fail(rel, `og:url is not on the www apex: ${og[1]}`);
+    if (og[1].replace(/\/$/, '') === 'https://www.picklecue.com/courts/us')
+      fail(rel, 'og:url points at /courts/us, which 301s to /courts/');
+  }
+  for (const hit of text.matchAll(/https?:\/\/(?:www\.)?picklecue\.com[^"'\\\s<]*/g)) {
+    if (!hit[0].startsWith('https://www.picklecue.com'))
+      fail(rel, `PickleCue URL is not https://www.picklecue.com: ${hit[0]}`);
+  }
+  if (/href="\/courts\/us\/?"/.test(text))
+    fail(rel, 'internal link points at /courts/us, which 301s to /courts/');
+  if (text.includes('https://www.picklecue.com/courts/us"') || text.includes("https://www.picklecue.com/courts/us'"))
+    fail(rel, 'schema or meta URL is exactly /courts/us, which 301s to /courts/');
 }
 
 /* ------------------------------------------------------------------- run */
@@ -197,7 +214,7 @@ for (const f of htmlFiles()) {
    what claims.json says, so a regeneration that shifts the number forces the
    claims file (and any prose quoting it) to be updated in the same commit. */
 const { publishedLocations, publishedCities, publishedStates } = claims.web;
-for (const page of ['courts/index.html', 'courts/us.html']) {
+for (const page of ['courts/index.html']) {
   const text = readFileSync(join(ROOT, page), 'utf8');
   /* Parses the state cards. Phase D added a comma-formatted count and an
      explicit "court locations" label, and this assertion correctly failed until
@@ -242,6 +259,24 @@ for (const f of htmlFiles()) {
   const idle = Object.entries(assetManifest).filter(([n, r]) => !referenced.has(n) && !r.audit);
   if (idle.length) warns.push(`${idle.length} asset(s) in the manifest are unreferenced and uninspected: ` +
                               idle.slice(0, 6).map(([n]) => n).join(', ') + (idle.length > 6 ? ', …' : ''));
+}
+
+/* One sitemap, on the www host, and it must not list the /courts/us duplicate. */
+{
+  const robots = readFileSync(join(ROOT, 'robots.txt'), 'utf8');
+  const sitemaps = [...robots.matchAll(/^Sitemap:\s*(\S+)/gm)].map(m => m[1]);
+  if (sitemaps.length !== 1 || sitemaps[0] !== 'https://www.picklecue.com/sitemap.xml')
+    fail('robots.txt', `expected exactly one Sitemap line for https://www.picklecue.com/sitemap.xml, found ${JSON.stringify(sitemaps)}`);
+  const sm = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
+  const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+  for (const loc of locs) {
+    if (!loc.startsWith('https://www.picklecue.com/'))
+      fail('sitemap.xml', `loc is not on https://www.picklecue.com: ${loc}`);
+    if (loc.replace(/\/$/, '') === 'https://www.picklecue.com/courts/us')
+      fail('sitemap.xml', 'lists /courts/us, which 301s to /courts/');
+  }
+  const dupes = locs.filter((loc, i) => locs.indexOf(loc) !== i);
+  if (dupes.length) fail('sitemap.xml', `duplicate loc ${dupes[0]}`);
 }
 
 if (warns.length) {
