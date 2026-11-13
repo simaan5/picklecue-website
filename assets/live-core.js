@@ -67,9 +67,28 @@
     var channel = null;
     var stopped = false;
 
+    // Leading-edge + trailing coalesce. An idle→first ping fires onPing
+    // immediately so a score change the user is watching doesn't eat a
+    // 250 ms floor before the refetch starts. Pings arriving inside the
+    // 250 ms window coalesce to a single trailing call, so a burst of
+    // rapid changes still produces at most 2 refetches per window.
+    var COALESCE_MS = 250;
+    var lastRun = 0;
     function ping() {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(onPing, 250);
+      var now = Date.now();
+      var since = now - lastRun;
+      if (since >= COALESCE_MS) {
+        clearTimeout(debounceTimer);
+        debounceTimer = null;
+        lastRun = now;
+        onPing();
+      } else if (!debounceTimer) {
+        debounceTimer = setTimeout(function () {
+          debounceTimer = null;
+          lastRun = Date.now();
+          onPing();
+        }, COALESCE_MS - since);
+      }
     }
 
     function connect() {
