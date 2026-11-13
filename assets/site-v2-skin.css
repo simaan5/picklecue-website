@@ -220,6 +220,30 @@ main a:not(.btn-pill):not(.cta):not(.cta-ghost):not(.masthead-nav a){ color: var
 .masthead nav a[aria-current="page"]::after{ right:0; }
 .masthead .btn{ padding:13px 24px; font-size:15px; }
 .masthead-burger{ display:none; }
+/* Tablet / small-laptop header (861-1300px). Eight nav links plus the App
+   Store button need ~1,060px even when tightened, so between 861 and 1100px
+   the header used to squeeze the wordmark to a 12px sliver, wrap "Live demo"
+   onto two lines and push "Download on iPhone" past the right edge (iPad
+   landscape, 1024px). Nothing in the header may shrink; 861-1100px uses the
+   phone burger menu, 1101-1300px uses tighter spacing. */
+.masthead nav a{ white-space:nowrap; }
+.brand, .masthead .btn{ flex-shrink:0; }
+@media (min-width:861px) and (max-width:1100px){
+    .masthead nav, .masthead .btn{ display:none; }
+    .masthead-burger{
+        display:grid; place-items:center; margin-left:auto;
+        width:46px; height:46px; background:none; border:1.5px solid rgba(14,27,20,.25);
+        border-radius:12px; cursor:pointer; color:var(--ink);
+    }
+    :root[data-theme="dark"] .masthead-burger{ border-color:rgba(237,243,236,.28); }
+    .theme-toggle{ margin-left:auto; margin-right:10px; }
+}
+@media (min-width:1101px) and (max-width:1300px){
+    .masthead-inner{ gap:20px; padding:0 24px; }
+    .masthead nav{ gap:16px; }
+    .masthead nav a{ font-size:14.5px; }
+    .masthead .btn{ padding:12px 18px; font-size:14px; }
+}
 .theme-toggle{
     width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
     background:none; border:1.5px solid var(--line); color:var(--ink-soft);
