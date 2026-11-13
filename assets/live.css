@@ -12,8 +12,10 @@
     --paper: #F7F7F2; --paper-2: #FFFFFF;
     --ink: #0E1B14; --ink-soft: #43564B; --ink-mute: #5F6F64;
     --rule: rgba(14,27,20,0.12); --rule-strong: rgba(14,27,20,0.28);
-    --court: #1F5D43; --on-court: #FFFFFF; --citron: #D8F35A; --clay: #D3511A;
-    --live: #D3511A;
+    /* clay/live darkened from #D3511A (3.9:1 on --paper, fails WCAG AA for the
+       11-13px "Live" / "Live now" / NO-SHOW labels) to #AD3F12 (5.6:1). */
+    --court: #1F5D43; --on-court: #FFFFFF; --citron: #D8F35A; --clay: #AD3F12;
+    --live: #AD3F12;
     --f-display: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
     --f-body: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
     --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
