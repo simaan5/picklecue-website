@@ -217,14 +217,14 @@
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
 </head>
 <body>
-    <div class="card" role="status" aria-live="polite">
+    <main class="card">
         <div class="brand">
             <img src="/images/app-icon-120.png?v=20260812b" alt="" width="28" height="28" aria-hidden="true">
             PickleCue
         </div>
         <span class="kicker" id="kicker"><span class="dot"></span> <span id="kickerText">Opening bracket</span></span>
         <h1 id="headline">Taking you to the <em>app</em>&hellip;</h1>
-        <p class="status" id="status">Launching PickleCue on this device</p>
+        <p class="status" id="status" role="status" aria-live="polite">Launching PickleCue on this device</p>
 
         <div class="loader" id="spinner" aria-hidden="true"></div>
 
@@ -235,7 +235,7 @@
             <p>PickleCue is out now on iPhone, free in the United States. More countries are on the way.</p>
             <a href="https://apps.apple.com/us/app/picklecue-pickleball/id6757326631" class="btn btn-secondary">Download on iPhone</a>
         </div>
-    </div>
+    </main>
 
     <script>
         function getBracketId() {
