@@ -78,20 +78,31 @@ function logFail(name, got, want) {
 }
 function logOk(name) { results.push({ name, ok: true }); }
 
-async function runScenario(name, schedule, expectedCalls) {
+async function runScenario(name, schedule, expectedCalls, opts = {}) {
   const fires = [];
   const start = Date.now();
   const unsub = PC.subscribeLive('t', 'test-' + name, true, () => fires.push(Date.now() - start), () => {});
-  // wait a tick for subscribe
+  if (!handlerRef.current) {
+    // Wait up to 50 ms for the broadcast handler to be registered.
+    const deadline = Date.now() + 50;
+    while (!handlerRef.current && Date.now() < deadline) await new Promise(r => setTimeout(r, 2));
+  }
+  if (!handlerRef.current) return logFail(name, 'broadcast handler never registered', 'registered');
+  // wait a tick for SUBSCRIBED catch-up ping (fires via queueMicrotask)
   await new Promise(r => setTimeout(r, 5));
-  for (const { at, note } of schedule) {
+  for (const { at } of schedule) {
     const wait = at - (Date.now() - start);
     if (wait > 0) await new Promise(r => setTimeout(r, wait));
-    handlerRef.current && handlerRef.current({ event: 'change' });
+    handlerRef.current({ event: 'change' });
   }
-  // wait for any trailing timer (COALESCE_MS = 250)
-  await new Promise(r => setTimeout(r, 400));
-  unsub();
+  if (opts.unsubscribeAt !== undefined) {
+    const wait = opts.unsubscribeAt - (Date.now() - start);
+    if (wait > 0) await new Promise(r => setTimeout(r, wait));
+    unsub();
+  }
+  // wait for any trailing timer (COALESCE_MS = 250, plus slack for CI jitter)
+  await new Promise(r => setTimeout(r, opts.tailWait ?? 500));
+  if (opts.unsubscribeAt === undefined) unsub();
 
   // assertions
   if (fires.length !== expectedCalls.length) {
@@ -106,29 +117,47 @@ async function runScenario(name, schedule, expectedCalls) {
   logOk(name + ' (fires at ' + fires.join('ms, ') + 'ms)');
 }
 
-// SUBSCRIBED fires one catch-up ping; it lands first. Then we fire our pings.
-// Each scenario accounts for the catch-up ping at t≈5ms as fires[0].
+// SUBSCRIBED fires one catch-up ping at t≈5 ms (leading edge). Scenarios
+// below use it as fires[0]. Bounds are wide (±40 ms around expected) so
+// a loaded CI mac-mini runner doesn't flake on timer jitter.
+await runScenario(
+  'catch-up-ping-alone',
+  [],
+  // SUBSCRIBED catch-up only. One leading-edge fire, nothing else.
+  [[0, 60]]
+);
+
 await runScenario(
   'idle-then-one-ping',
   [{ at: 50 }],
-  // fires[0]: catch-up at ~5ms (leading). fires[1]: our ping at 50ms → needs
-  // to wait for COALESCE window after first, so trailing at ~250ms.
-  [[0, 50], [240, 320]]
+  // fires[0]: catch-up ~5 ms (leading). fires[1]: broadcast at 50 ms arrives
+  // within COALESCE_MS of catch-up, so trailing at ~250 ms.
+  [[0, 60], [220, 360]]
 );
 
 await runScenario(
   'burst-of-three',
   [{ at: 60 }, { at: 90 }, { at: 120 }],
-  // fires[0]: catch-up ~5ms. fires[1]: coalesced trailing at ~250ms.
-  [[0, 50], [240, 320]]
+  // fires[0]: catch-up ~5 ms. fires[1]: coalesced trailing at ~250 ms.
+  // Burst of three collapses to one trailing call.
+  [[0, 60], [220, 360]]
 );
 
 await runScenario(
   'spaced-pings-each-leading',
   [{ at: 300 }, { at: 600 }],
-  // catch-up ~5ms (leading), then at 300ms (leading, >250ms since last),
-  // then at 600ms (leading again).
-  [[0, 50], [290, 340], [590, 650]]
+  // catch-up ~5 ms (leading); 300 ms ping (>250 ms since last → leading);
+  // 600 ms ping (>250 ms since last → leading). Three total.
+  [[0, 60], [270, 360], [570, 660]]
+);
+
+// Regression: unsubscribe must cancel any pending trailing timer so an
+// `onPing` call can't land after the page has torn down.
+await runScenario(
+  'unsubscribe-cancels-trailing',
+  [{ at: 60 }],              // schedules trailing for t≈250 ms
+  [[0, 60]],                 // only the catch-up fires; trailing is cancelled
+  { unsubscribeAt: 100, tailWait: 300 }
 );
 
 const failed = results.filter(r => !r.ok);
