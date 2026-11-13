@@ -21,6 +21,7 @@ import { chromium } from 'playwright-core';
 
 const ROOT = resolve(process.env.SITE_ROOT || fileURLToPath(new URL('..', import.meta.url)));
 const SHOTS = process.env.SHOTS || '';
+const PFX = process.env.SHOT_PREFIX || '';
 const MIME = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png', '.woff2': 'font/woff2', '.svg': 'image/svg+xml', '.json': 'application/json' };
 
 const T_ID = '11111111-1111-4111-8111-111111111111';
@@ -100,6 +101,7 @@ async function newContext(browser, be, projectRef) {
       const step = be.plan.shift() || {};
       be.calls.push({ ...body, at: Date.now() });
       if (!be.online || step.fail === 'network') { await sleep(step.delayIn || 5); return route.abort('internetdisconnected'); }
+      if (step.fail === 'refuse') { await sleep(5); return json({ code: 'P0001', message: 'Match is already completed', details: null, hint: null }, 400); }
       await sleep(step.delayIn ?? be.defaultDelay);
       let reply;
       const key = body.p_client_event_id;
@@ -222,7 +224,7 @@ try {
     };
     check(`rtt${rtt}: tap updates local score synchronously`, local.every(x => x.changedSync));
     check(`rtt${rtt}: other tab received all 6 taps`, remote.every(x => x != null), JSON.stringify(remote));
-    if (SHOTS && rtt === 0) { await a.screenshot({ path: `${SHOTS}/web-tabA-scorer.png` }); await b.screenshot({ path: `${SHOTS}/web-tabB-viewer.png` }); }
+    if (SHOTS && rtt === 0) { await a.screenshot({ path: `${SHOTS}/${PFX}web-tabA-scorer.png` }); await b.screenshot({ path: `${SHOTS}/${PFX}web-tabB-viewer.png` }); }
     await ctxA.close(); await ctxB.close();
   }
 
@@ -236,12 +238,12 @@ try {
     for (let i = 0; i < 3; i++) { await timedTap(p, 1); await sleep(150); }
     await sleep(600);
     const uiWhileOffline = await scoreOf(p, 1);
-    if (SHOTS) await p.screenshot({ path: `${SHOTS}/web-offline-3-taps.png` });
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/${PFX}web-offline-3-taps.png` });
     be.online = true;
     await p.evaluate(() => window.dispatchEvent(new Event('online')));
     await sleep(3000);
     const uiAfter = await scoreOf(p, 1);
-    if (SHOTS) await p.screenshot({ path: `${SHOTS}/web-offline-recovered.png` });
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/${PFX}web-offline-recovered.png` });
     results.scenarios.offline = { uiWhileOffline, uiAfterReconnect: uiAfter, serverScore1: be.live.score1, calls: be.calls.length };
     check('offline: UI keeps the 3 taps while offline', uiWhileOffline === 3, `ui=${uiWhileOffline}`);
     check('offline: all 3 points reach the server after reconnect', be.live.score1 === 3, `server=${be.live.score1}`);
@@ -263,6 +265,7 @@ try {
     results.scenarios.lostReply = { serverApplied: be.applied, serverScore1: be.live.score1, ui, calls: be.calls.length, sameKeyRetried: keys.length > 1 && keys.every(k => k && k === keys[0]) };
     check('lost reply: point counted exactly once', be.applied === 1 && be.live.score1 === 1, `applied=${be.applied}`);
     check('lost reply: UI shows 1', ui === 1, `ui=${ui}`);
+    check('lost reply: retried with the same client_event_id', results.scenarios.lostReply.sameKeyRetried, JSON.stringify(keys));
     await ctx.close();
   }
 
@@ -277,9 +280,49 @@ try {
     await sleep(2500);
     const ui = await scoreOf(p, 1);
     results.scenarios.outOfOrder = { serverScore1: be.live.score1, ui, arrivalOrder: be.calls.map(c => c.p_score1) };
-    if (SHOTS) await p.screenshot({ path: `${SHOTS}/web-out-of-order.png` });
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/${PFX}web-out-of-order.png` });
     check('out of order: server ends at 2', be.live.score1 === 2, `server=${be.live.score1}`);
     check('out of order: UI ends at 2', ui === 2, `ui=${ui}`);
+    await ctx.close();
+  }
+
+  // 5. Reload while offline: queued taps survive the reload and are sent after.
+  {
+    const be = makeBackend();
+    const ctx = await newContext(browser, be, projectRef);
+    const p = await openScorer(ctx, base);
+    await sleep(500);
+    be.online = false;
+    await timedTap(p, 1); await sleep(100); await timedTap(p, 2);
+    await sleep(300);
+    await p.reload();
+    await sleep(800);
+    const stored = await p.evaluate(() => { try { return JSON.parse(localStorage.getItem('pc_sk_outbox_v1') || '[]').length; } catch (_) { return -1; } });
+    be.online = true;
+    await p.evaluate(() => window.dispatchEvent(new Event('online')));
+    await sleep(4500);
+    results.scenarios.reloadOffline = { queuedAfterReload: stored, serverLive: { ...be.live }, applied: be.applied };
+    check('reload: queued taps persisted across reload', stored === 2, `stored=${stored}`);
+    check('reload: both taps reach the server after reconnect', be.live.score1 === 1 && be.live.score2 === 1, JSON.stringify(be.live));
+    await ctx.close();
+  }
+
+  // 6. Permanent refusal: dropped (not retried forever) and the UI resyncs.
+  {
+    const be = makeBackend();
+    be.plan.push({ fail: 'refuse' });
+    const ctx = await newContext(browser, be, projectRef);
+    const p = await openScorer(ctx, base);
+    await sleep(500);
+    await timedTap(p, 1);
+    await sleep(2500);
+    const ui = await scoreOf(p, 1);
+    const errText = (await p.textContent('#skErr').catch(() => '')) || '';
+    results.scenarios.refusal = { calls: be.calls.length, ui, server: be.live.score1, errText };
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/${PFX}web-refused.png` });
+    check('refusal: not retried', be.calls.length === 1, `calls=${be.calls.length}`);
+    check('refusal: UI rolls back to server', ui === be.live.score1, `ui=${ui} server=${be.live.score1}`);
+    check('refusal: error shown', errText.length > 0, errText);
     await ctx.close();
   }
 } finally {

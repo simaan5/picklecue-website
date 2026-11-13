@@ -311,6 +311,7 @@
     tournamentSnapshot: tournamentSnapshot,
     leagueSnapshot: leagueSnapshot,
     recordScoreEvent: recordScoreEvent,
+    isTransientError: isTransientError,
     undoLastScoreEvent: undoLastScoreEvent,
     subscribeLive: subscribeLive,
     currentUser: currentUser,
