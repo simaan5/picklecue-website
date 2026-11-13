@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="/fonts.css">
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
-    <link rel="stylesheet" href="assets/live.css?v=20260927a">
+    <link rel="stylesheet" href="assets/live.css?v=20261113a">
 </head>
 <body>
     <header class="live-head">
@@ -144,12 +144,12 @@
                     : st === 'no_show'
                         ? '<span class="ci-chip ci-noshow">NO-SHOW</span> <button class="btn ghost" data-ci="' + m.id + ':not_checked_in">Undo</button>'
                         : '<button class="btn primary" data-ci="' + m.id + ':checked_in" style="min-height:48px;padding:12px 22px">Check in</button>' +
-                          '<button class="btn danger" data-ci="' + m.id + ':no_show" style="margin-left:6px">No-show</button>';
-                return '<div class="event-row"><div class="grow">' +
+                          '<button class="btn danger" data-ci="' + m.id + ':no_show">No-show</button>';
+                return '<div class="event-row ci-row"><div class="grow">' +
                     '<div class="title">' + window.PCLive.avatarStack(m.members, 24) + ' ' + esc(m.name || 'Player') +
                     (needsWaiver ? ' <span class="ci-chip ci-noshow">WAIVER</span>' : '') + '</div>' +
                     (m.seed ? '<div class="sub">Seed ' + m.seed + '</div>' : '') +
-                    '</div><div>' + action + waiverBtn + '</div></div>';
+                    '</div><div class="ci-actions">' + action + waiverBtn + '</div></div>';
             }).join('');
 
             main.innerHTML =
