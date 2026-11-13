@@ -249,29 +249,36 @@
     return parts.slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase();
   }
 
-  function avatarBubble(member, size) {
+  // In a stack, each later bubble overlaps the one before it. A fixed -8px
+  // overlap (live.css) covered the second initial on small bubbles ("MR" read
+  // as "M" at 18-24px). The overlap and the initials' font now scale with the
+  // bubble, so two mono initials always clear the next bubble's edge.
+  function stackOverlap(size) { return Math.max(3, Math.round(size * 0.2)); }
+
+  function avatarBubble(member, size, overlap) {
     size = size || 24;
-    var style = 'width:' + size + 'px;height:' + size + 'px;';
+    var ml = overlap ? 'margin-left:-' + overlap + 'px;' : '';
+    var style = 'width:' + size + 'px;height:' + size + 'px;' + ml;
     var name = esc(member && member.name || '');
+    var fallback = 'onerror="this.outerHTML=window.PCLive.initialsBubble(\'' + esc(initialsFor(member && member.name)) + '\',' + size + ',' + (overlap || 0) + ')">';
     if (member && member.avatar_id) {
       return '<img class="pc-avatar" style="' + style + '" src="assets/avatars/' +
-        encodeURIComponent(member.avatar_id) + '.png" alt="' + name + '" loading="lazy" ' +
-        'onerror="this.outerHTML=window.PCLive.initialsBubble(\'' + esc(initialsFor(member.name)) + '\',' + size + ')">';
+        encodeURIComponent(member.avatar_id) + '.png" alt="' + name + '" loading="lazy" ' + fallback;
     }
     if (member && member.avatar_url) {
-      return '<img class="pc-avatar" style="' + style + '" src="' + esc(member.avatar_url) + '" alt="' + name + '" loading="lazy" ' +
-        'onerror="this.outerHTML=window.PCLive.initialsBubble(\'' + esc(initialsFor(member.name)) + '\',' + size + ')">';
+      return '<img class="pc-avatar" style="' + style + '" src="' + esc(member.avatar_url) + '" alt="' + name + '" loading="lazy" ' + fallback;
     }
     if (member && member.avatar_emoji) {
       return '<span class="pc-avatar pc-avatar-emoji" style="' + style + 'font-size:' + Math.round(size * 0.55) + 'px" aria-hidden="true">' +
         esc(member.avatar_emoji) + '</span>';
     }
-    return initialsBubble(initialsFor(member && member.name), size);
+    return initialsBubble(initialsFor(member && member.name), size, overlap);
   }
 
-  function initialsBubble(initials, size) {
+  function initialsBubble(initials, size, overlap) {
     return '<span class="pc-avatar pc-avatar-initials" style="width:' + size + 'px;height:' + size +
-      'px;font-size:' + Math.max(9, Math.round(size * 0.38)) + 'px" aria-hidden="true">' + esc(initials || '?') + '</span>';
+      'px;font-size:' + Math.max(8, Math.round(size * 0.34)) + 'px;letter-spacing:0;' +
+      (overlap ? 'margin-left:-' + overlap + 'px;' : '') + '" aria-hidden="true">' + esc(initials || '?') + '</span>';
   }
 
   /** Stacked avatars for a participant/team (members array from snapshot). */
@@ -279,7 +286,7 @@
     size = size || 24;
     var list = (members && members.length) ? members.slice(0, 2) : [null];
     return '<span class="pc-avatar-stack">' +
-      list.map(function (m) { return avatarBubble(m, size); }).join('') + '</span>';
+      list.map(function (m, i) { return avatarBubble(m, size, i ? stackOverlap(size) : 0); }).join('') + '</span>';
   }
 
   window.PCLive = {
