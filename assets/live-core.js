@@ -56,12 +56,11 @@
       }
       return q;
     };
+    // Invariant: record_score_event accepts p_client_event_id (migration
+    // 20260901120000). Never strip it on a retry — a PGRST202 on the first
+    // attempt could still mean the write landed, and a retry without the
+    // idempotency key would double-count.
     var r = await call();
-    if (r.error && r.error.code === 'PGRST202' && args.p_client_event_id) {
-      // Backend without the idempotency parameter: send without it.
-      delete args.p_client_event_id;
-      r = await call();
-    }
     if (r.error) { r.error.status = r.status; throw r.error; }
     return r.data;
   }
