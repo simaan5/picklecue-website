@@ -94,6 +94,8 @@
             box-shadow: 0 0 0 3px rgba(200, 224, 78, 0.3);
             animation: pulse 1.6s var(--ease) infinite;
         }
+        /* Once the page has stopped trying to open the app, the dot stops pulsing. */
+        .kicker.settled .dot { animation: none; background: var(--ink-mute); box-shadow: none; }
         @keyframes pulse {
             0%, 100% { box-shadow: 0 0 0 3px rgba(200,224,78,0.3); }
             50%      { box-shadow: 0 0 0 7px rgba(200,224,78,0.05); }
@@ -220,7 +222,7 @@
             <img src="/images/app-icon-120.png?v=20260812b" alt="" width="28" height="28" aria-hidden="true">
             PickleCue
         </div>
-        <span class="kicker"><span class="dot"></span> Opening bracket</span>
+        <span class="kicker" id="kicker"><span class="dot"></span> <span id="kickerText">Opening bracket</span></span>
         <h1 id="headline">Taking you to the <em>app</em>&hellip;</h1>
         <p class="status" id="status">Launching PickleCue on this device</p>
 
@@ -245,6 +247,13 @@
             return null;
         }
 
+        // Change the kicker once the page stops trying to launch the app, so a
+        // missing-ID or fallback state never sits under a pulsing "Opening bracket".
+        function settle(label) {
+            document.getElementById('kickerText').textContent = label;
+            document.getElementById('kicker').classList.add('settled');
+        }
+
         var bracketId = getBracketId();
         var appUrl    = bracketId ? 'picklecue://bracket/' + bracketId : 'picklecue://';
         document.getElementById('openAppBtn').href = appUrl;
@@ -258,11 +267,14 @@
 
             setTimeout(function () {
                 document.getElementById('spinner').style.display = 'none';
+                settle('Bracket link');
+                document.getElementById('headline').innerHTML = 'Open the bracket in <em>PickleCue</em>.';
                 document.getElementById('status').textContent = 'Tap below to open the bracket';
                 document.getElementById('fallback').classList.add('show');
             }, 2500);
         } else {
             document.getElementById('spinner').style.display = 'none';
+            settle('Link problem');
             document.getElementById('headline').innerHTML = 'No bracket <em>found</em>.';
             document.getElementById('status').textContent = 'The link is missing a bracket ID';
             document.getElementById('fallback').classList.add('show');
