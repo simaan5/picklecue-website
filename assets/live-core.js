@@ -32,7 +32,7 @@
   }
 
   async function recordScoreEvent(opts) {
-    var r = await client.rpc('record_score_event', {
+    var args = {
       p_scope: opts.scope,               // 'tournament' | 'league'
       p_match_id: opts.matchId,
       p_event_type: opts.eventType,      // point_added | point_removed | game_completed | match_started | match_completed | score_corrected
@@ -41,9 +41,29 @@
       p_game: opts.game ?? null,
       p_note: opts.note ?? null,
       p_source: 'web',
-    });
-    if (r.error) throw r.error;
+    };
+    // Idempotency key (score_events unique (match_id, client_event_id),
+    // migration 20260901120000). A retry with the same key is a server replay,
+    // never a second point.
+    if (opts.clientEventId) args.p_client_event_id = opts.clientEventId;
+    var r = await client.rpc('record_score_event', args);
+    if (r.error && r.error.code === 'PGRST202' && args.p_client_event_id) {
+      // Backend without the idempotency parameter: send without it.
+      delete args.p_client_event_id;
+      r = await client.rpc('record_score_event', args);
+    }
+    if (r.error) { r.error.status = r.status; throw r.error; }
     return r.data;
+  }
+
+  /** True when a failed write is worth retrying (network down, timeout, 5xx,
+   *  rate limit) rather than a server refusal (auth, validation, completed). */
+  function isTransientError(e) {
+    if (!e) return false;
+    var st = e.status;
+    if (st === 408 || st === 429 || (st >= 500 && st < 600)) return true;
+    if (e.code) return false;            // Postgres / PostgREST refusal
+    return st === 0 || st === undefined || /fetch|network|timeout|offline|load failed/i.test(String(e.message || ''));
   }
 
   async function undoLastScoreEvent(scope, matchId) {
