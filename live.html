@@ -342,7 +342,7 @@
                 return { id: id, w: wins[id], name: nameFor(nameMap, id) };
             }).sort(function (a, b) { return b.w - a.w; }).slice(0, 10);
             if (board.length) {
-                html += '<h2>Most wins</h2><div class="table-wrap"><table class="live-table">' +
+                html += '<h2>Most wins</h2><div class="table-wrap" tabindex="0" role="region" aria-label="Most wins"><table class="live-table">' +
                     '<thead><tr><th class="num">#</th><th>Team</th><th class="num">Wins</th></tr></thead><tbody>' +
                     board.map(function (r, i) {
                         return '<tr class="' + (i < 3 ? 'top' : '') + '"><td class="num">' + (i + 1) + '</td>' +
@@ -657,7 +657,7 @@
                     '<td class="num">' + (s.win_percentage != null ? Number(s.win_percentage).toFixed(1) + '%' : '–') + '</td></tr>';
             }).join('');
             if (!rows) return '<div class="state"><h2>No standings yet</h2><p>Standings appear after the first completed match.</p></div>';
-            return '<section class="section"><h2>Standings</h2><div class="table-wrap"><table class="live-table">' +
+            return '<section class="section"><h2>Standings</h2><div class="table-wrap" tabindex="0" role="region" aria-label="Standings"><table class="live-table">' +
                 '<thead><tr><th class="num">#</th><th>Team</th><th class="num">W</th><th class="num">L</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th><th class="num">Win %</th></tr></thead>' +
                 '<tbody>' + rows + '</tbody></table></div></section>';
         }
@@ -671,7 +671,7 @@
             }).join('');
             if (!rows) return '<div class="state"><h2>No one has joined yet</h2></div>';
             return '<section class="section"><h2>' + (isT ? 'Teams' : 'Members') + ' <span class="count">' + members.length + '</span></h2>' +
-                '<div class="table-wrap"><table class="live-table"><thead><tr><th class="num">Seed</th><th>Name</th><th>Status</th>' +
+                '<div class="table-wrap" tabindex="0" role="region" aria-label="' + (isT ? 'Teams' : 'Members') + '"><table class="live-table"><thead><tr><th class="num">Seed</th><th>Name</th><th>Status</th>' +
                 (isT ? '<th class="num">Place</th>' : '') + '</tr></thead><tbody>' + rows + '</tbody></table></div></section>';
         }
 
