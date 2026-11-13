@@ -222,11 +222,22 @@
       .replace(/"/g, '&quot;');
   }
 
-  function fmtDate(iso) {
+  // A date-only string ("2026-11-14", e.g. start_date) is a calendar day, not an
+  // instant. new Date('2026-11-14') parses it as UTC midnight, which is the
+  // evening of Nov 13 in every US time zone, so the chip showed a day early.
+  // Build date-only values as a local date; full timestamps parse as before.
+  function parseDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso == null ? '' : iso).trim());
+    return m ? new Date(+m[1], +m[2] - 1, +m[3]) : new Date(iso);
+  }
+
+  function fmtDate(iso, opts) {
     if (!iso) return '';
     try {
-      return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-    } catch (_) { return iso; }
+      var d = parseDate(iso);
+      if (isNaN(d.getTime())) return String(iso);
+      return d.toLocaleDateString(undefined, opts || { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (_) { return String(iso); }
   }
 
   function statusLabel(s) {
@@ -302,6 +313,7 @@
     isPro: isPro,
     esc: esc,
     fmtDate: fmtDate,
+    parseDate: parseDate,
     statusLabel: statusLabel,
   };
 })();
