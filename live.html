@@ -69,7 +69,7 @@
     </main>
 
     <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
-    <script src="assets/live-core.js?v=rr8"></script>
+    <script src="assets/live-core.js?v=rr9d"></script>
     <script src="assets/bracket.js?v=rr8"></script>
     <script>
     (function () {
@@ -417,7 +417,7 @@
             x.fillText(head.name, 540, 880);
             if (head.start_date) {
                 x.fillStyle = '#8A9097'; x.font = '400 32px -apple-system, sans-serif';
-                x.fillText(new Date(head.start_date).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }), 540, 940);
+                x.fillText(PC.fmtDate(head.start_date, { month: 'long', day: 'numeric', year: 'numeric' }), 540, 940);
             }
             // Footer brand
             x.fillStyle = '#EDE9DF'; x.font = '700 40px Georgia, serif';
