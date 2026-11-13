@@ -46,11 +46,21 @@
     // migration 20260901120000). A retry with the same key is a server replay,
     // never a second point.
     if (opts.clientEventId) args.p_client_event_id = opts.clientEventId;
-    var r = await client.rpc('record_score_event', args);
+    // A half-open mobile connection can hang a request for minutes; give up
+    // after timeoutMs so the caller's retry (same key) can take over. The
+    // abort surfaces as status 0, which isTransientError treats as retryable.
+    var call = function () {
+      var q = client.rpc('record_score_event', args);
+      if (opts.timeoutMs && typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
+        q = q.abortSignal(AbortSignal.timeout(opts.timeoutMs));
+      }
+      return q;
+    };
+    var r = await call();
     if (r.error && r.error.code === 'PGRST202' && args.p_client_event_id) {
       // Backend without the idempotency parameter: send without it.
       delete args.p_client_event_id;
-      r = await client.rpc('record_score_event', args);
+      r = await call();
     }
     if (r.error) { r.error.status = r.status; throw r.error; }
     return r.data;
@@ -64,6 +74,15 @@
     if (st === 408 || st === 429 || (st >= 500 && st < 600)) return true;
     if (e.code) return false;            // Postgres / PostgREST refusal
     return st === 0 || st === undefined || /fetch|network|timeout|offline|load failed/i.test(String(e.message || ''));
+  }
+
+  /** True when a write failed because the session is missing or expired
+   *  (keep the change and resend after sign-in instead of dropping it). */
+  function isAuthError(e) {
+    if (!e) return false;
+    // 401 = no/expired JWT (PostgREST also answers an anon 42501 with 401).
+    // 403 is NOT here: that is a signed-in user the server refused.
+    return e.status === 401 || /^PGRST30/.test(String(e.code || '')) || e.code === '28000';
   }
 
   async function undoLastScoreEvent(scope, matchId) {
@@ -312,6 +331,7 @@
     leagueSnapshot: leagueSnapshot,
     recordScoreEvent: recordScoreEvent,
     isTransientError: isTransientError,
+    isAuthError: isAuthError,
     undoLastScoreEvent: undoLastScoreEvent,
     subscribeLive: subscribeLive,
     currentUser: currentUser,

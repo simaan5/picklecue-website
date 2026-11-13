@@ -58,7 +58,7 @@
         var eventId = params.get('t') || params.get('l');
         var scope = kind === 't' ? 'tournament' : 'league';
         var main = document.getElementById('main');
-        var snap = null, matchId = null, local = { s1: 0, s2: 0 }, unsub = null;
+        var snap = null, matchId = null, local = { s1: 0, s2: 0 }, unsub = null, me = null;
 
         if (!kind || !/^[0-9a-f-]{36}$/i.test(eventId || '')) {
             main.innerHTML = '<div class="state"><h2>Missing event link</h2><p>Open this page from the organizer dashboard or the link your organizer sent you.</p></div>';
@@ -71,25 +71,46 @@
         // its own client_event_id. A retry reuses the same id, so the server
         // replays it instead of counting a second point. Network failures back
         // off and retry (and retry at once when the browser comes back online);
-        // server refusals are dropped and the board resyncs to the server.
+        // an expired sign-in keeps the change until the session is back; server
+        // refusals are dropped and the board resyncs to the server.
         var OUTBOX_KEY = 'pc_sk_outbox_v1';
-        var outbox = loadOutbox();
+        var SEND_TIMEOUT_MS = 10000;
+        var MAX_SERVER_ERROR_TRIES = 5;   // a 5xx that carries a SQLSTATE is a server bug, not the network
+        var outbox = [];
+        var doneIds = {};           // ids this tab sent or removed (so a merge never resurrects them)
         var inFlight = null;        // entry currently being sent
-        var retryTimer = null, retryDelay = 0, sendFailing = false;
+        var retryTimer = null, retryDelay = 0, sendFailing = false, authParked = false;
         var epoch = 0;              // bumps on every tap and every write reply
         var waiters = {};           // client_event_id -> resolve({status})
+        var acked = {};             // matchId -> last live score the server confirmed
+        var undoing = false;
 
-        function loadOutbox() {
+        function readStored() {
             try {
                 var a = JSON.parse(localStorage.getItem(OUTBOX_KEY) || '[]');
                 return Array.isArray(a) ? a.filter(function (e) { return e && e.id && e.matchId; }) : [];
             } catch (_) { return []; }
         }
+        /** Merge with what other tabs saved, so one tab never erases another's queue. */
         function saveOutbox() {
             try {
-                if (outbox.length) localStorage.setItem(OUTBOX_KEY, JSON.stringify(outbox));
+                var byId = {};
+                readStored().forEach(function (e) { if (!doneIds[e.id]) byId[e.id] = e; });
+                outbox.forEach(function (e) { byId[e.id] = e; });
+                var all = Object.keys(byId).map(function (k) { return byId[k]; })
+                    .sort(function (a, b) { return a.at - b.at; });
+                if (all.length) localStorage.setItem(OUTBOX_KEY, JSON.stringify(all));
                 else localStorage.removeItem(OUTBOX_KEY);
             } catch (_) { /* private mode / quota: keep the in-memory queue */ }
+        }
+        /** Pick up this user's saved changes (from a reload, crash or closed tab). */
+        function adoptStored() {
+            var have = {};
+            outbox.forEach(function (e) { have[e.id] = true; });
+            readStored().forEach(function (e) {
+                if (!have[e.id] && !doneIds[e.id] && (!e.userId || e.userId === me)) outbox.push(e);
+            });
+            outbox.sort(function (a, b) { return a.at - b.at; });
         }
         function newId() {
             if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -98,10 +119,16 @@
             });
         }
         function pendingFor(id) { return outbox.filter(function (e) { return e.matchId === id; }); }
+        function finalQueued(id) { return pendingFor(id).some(function (e) { return e.eventType === 'match_completed'; }); }
+        function removeEntry(entry) {
+            outbox = outbox.filter(function (e) { return e.id !== entry.id; });
+            doneIds[entry.id] = true;
+            saveOutbox();
+        }
 
         function enqueue(eventType, note) {
-            var entry = { id: newId(), scope: scope, matchId: matchId, eventType: eventType,
-                          score1: local.s1, score2: local.s2, note: note || null, at: Date.now() };
+            var entry = { id: newId(), userId: me, scope: scope, matchId: matchId, eventType: eventType,
+                          score1: local.s1, score2: local.s2, note: note || null, at: Date.now(), tries: 0 };
             outbox.push(entry);
             epoch++;
             saveOutbox();
@@ -109,53 +136,78 @@
             drain();
             return entry;
         }
-        /** Resolves after this entry's first send attempt: 'ok' | 'refused' | 'queued'. */
+        /** Resolves after this entry's first send attempt: 'ok' | 'refused' | 'queued' | 'removed'.
+         *  Resolves 'queued' at once when the queue is already stuck. */
         function whenTried(entry) {
-            return new Promise(function (res) { waiters[entry.id] = res; });
+            return new Promise(function (res) {
+                if (sendFailing || authParked) { res({ status: 'queued' }); return; }
+                waiters[entry.id] = res;
+            });
         }
         function settle(id, status, error) {
             var w = waiters[id];
             if (w) { delete waiters[id]; w({ status: status, error: error }); }
+        }
+        function settleAllQueued() {
+            Object.keys(waiters).forEach(function (id) { settle(id, 'queued'); });
+        }
+
+        function scheduleRetry() {
+            retryDelay = Math.min(retryDelay ? retryDelay * 2 : 500, 15000);
+            clearTimeout(retryTimer);
+            retryTimer = setTimeout(drain, retryDelay);
         }
 
         async function drain() {
             if (inFlight || !outbox.length) return;
             clearTimeout(retryTimer); retryTimer = null;
             var entry = inFlight = outbox[0];
+            entry.tries = (entry.tries || 0) + 1;
+            entry.attempted = true;
+            saveOutbox();
             try {
                 var r = await PC.recordScoreEvent({
                     scope: entry.scope, matchId: entry.matchId, eventType: entry.eventType,
                     score1: entry.score1, score2: entry.score2, note: entry.note, clientEventId: entry.id,
+                    timeoutMs: SEND_TIMEOUT_MS,
                 });
-                outbox = outbox.filter(function (e) { return e.id !== entry.id; });
-                saveOutbox();
+                removeEntry(entry);
                 epoch++;
-                retryDelay = 0;
-                sendFailing = false;
+                retryDelay = 0; sendFailing = false; authParked = false;
+                if (r && r.live) acked[entry.matchId] = { s1: r.live.score1, s2: r.live.score2 };
                 // Adopt the server's score only when nothing newer is still queued
                 // for this match: a reply must never undo a later tap.
-                if (entry.matchId === matchId && !pendingFor(matchId).length && r && r.live) {
+                if (entry.matchId === matchId && !pendingFor(matchId).length && r && r.live && !undoing) {
                     local = { s1: r.live.score1 ?? local.s1, s2: r.live.score2 ?? local.s2 };
                     paintScores();
                 }
                 err('');
                 settle(entry.id, 'ok');
             } catch (e) {
-                if (PC.isTransientError(e)) {
-                    retryDelay = Math.min(retryDelay ? retryDelay * 2 : 500, 15000);
-                    sendFailing = true;
-                    settle(entry.id, 'queued', e);
+                var serverBug = e.status >= 500 && e.code && entry.tries >= MAX_SERVER_ERROR_TRIES;
+                if (PC.isAuthError(e)) {
+                    // Signed out / token expired: keep every change, resend after sign-in.
+                    authParked = true;
                     inFlight = null;
+                    settle(entry.id, 'queued', e); settleAllQueued();
                     showSync();
-                    retryTimer = setTimeout(drain, retryDelay);
+                    scheduleRetry();  // the client refreshes tokens on its own; onAuthStateChange also retries
                     return;
                 }
-                // Server refusal (not allowed, match completed, bad score…):
-                // retrying won't help. Drop it and resync to server truth.
-                outbox = outbox.filter(function (x) { return x.id !== entry.id; });
-                saveOutbox();
+                if (PC.isTransientError(e) && !serverBug) {
+                    sendFailing = true;
+                    inFlight = null;
+                    settle(entry.id, 'queued', e); settleAllQueued();
+                    showSync();
+                    scheduleRetry();
+                    return;
+                }
+                // Server refusal (not allowed, match completed, bad score…) or a
+                // server error that keeps repeating: retrying won't help. Drop it
+                // and resync to server truth.
+                removeEntry(entry);
                 epoch++;
-                retryDelay = 0;
+                retryDelay = 0; sendFailing = false; authParked = false;
                 if (entry.matchId === matchId) err(e.message || 'That score change was refused.');
                 settle(entry.id, 'refused', e);
                 if (!pendingFor(entry.matchId).length) safeRefetch();
@@ -168,14 +220,19 @@
         function retryNow() { if (outbox.length && !inFlight) { retryDelay = 0; drain(); } }
         window.addEventListener('online', retryNow);
         document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') retryNow(); });
+        db.auth.onAuthStateChange(function (event, session) {
+            if (session && session.user) me = session.user.id;
+            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') setTimeout(retryNow, 0);
+        });
 
         function showSync() {
             var el = document.getElementById('skSync');
             if (!el) return;
             var n = matchId ? pendingFor(matchId).length : 0;
             if (!n) { el.textContent = ''; return; }
-            el.textContent = sendFailing
-                ? 'Offline — ' + n + ' change' + (n === 1 ? '' : 's') + ' saved on this device, retrying…'
+            var what = n + ' change' + (n === 1 ? '' : 's');
+            el.textContent = authParked ? 'Sign-in expired — ' + what + ' saved on this device. Sign in again to send them.'
+                : sendFailing ? 'Offline — ' + what + ' saved on this device, retrying…'
                 : 'Saving…';
         }
 
@@ -190,16 +247,26 @@
             PC.renderAuthCard(main, { title: 'Scorekeeper sign in', blurb: 'Score matches for events you organize or are assigned to.', onSignedIn: async function () { await boot(); } });
         }
 
+        var bootDelay = 0, bootTimer = null;
+        function bootLater() {
+            bootDelay = Math.min(bootDelay ? bootDelay * 2 : 2000, 30000);
+            clearTimeout(bootTimer);
+            bootTimer = setTimeout(boot, bootDelay);
+        }
+
         async function boot() {
-            main.innerHTML = '<div class="state"><h2>Checking your assignment…</h2></div>';
+            var user = await sessionUser();
+            if (user) me = user.id;
+            adoptStored();
+            if (!snap) main.innerHTML = '<div class="state"><h2>Checking your assignment…</h2></div>';
             var check = await db.rpc(kind === 't' ? 'is_tournament_scorer' : 'is_league_scorer',
                 kind === 't' ? { p_tournament_id: eventId } : { p_league_id: eventId });
-            if (check.error && PC.isTransientError(Object.assign(check.error, { status: check.status })) && !snap) {
-                // Offline at load: keep sending anything saved on this device, retry the check shortly.
+            if (check.error && PC.isTransientError(Object.assign(check.error, { status: check.status }))) {
+                // Offline at load: keep sending anything saved on this device, retry the check.
                 drain();
-                main.innerHTML = '<div class="state"><h2>You’re offline</h2><p>We’ll reconnect automatically.' +
+                if (!snap) main.innerHTML = '<div class="state"><h2>You’re offline</h2><p>We’ll reconnect automatically.' +
                     (outbox.length ? ' Scores saved on this device will be sent then.' : '') + '</p></div>';
-                setTimeout(boot, 3000);
+                bootLater();
                 return;
             }
             if (check.error || check.data !== true) {
@@ -220,36 +287,43 @@
                 return;
             }
             drain(); // anything left over from before a reload / crash
-            await safeRefetch();
-            if (!snap) { setTimeout(boot, 3000); return; }
+            var res = await safeRefetch();
+            if (!snap) { if (res === 'transient') bootLater(); return; }
+            bootDelay = 0;
             if (unsub) return;
             var head = kind === 't' ? snap.tournament : snap.league;
             unsub = PC.subscribeLive(kind, eventId, head.is_public === true, safeRefetch, setConn);
         }
 
-        /** Refetch the snapshot without ever throwing. A snapshot that was
-         *  requested before a later tap or write reply is still used for the
-         *  match list, but never overwrites the score being kept. */
+        /** Refetch the snapshot without ever throwing. Resolves 'ok' | 'transient' | 'missing'.
+         *  A snapshot requested before a later tap or write reply is still used
+         *  for the match list, but never overwrites the score being kept. */
         var refetching = null, refetchAgain = false;
-        async function safeRefetch() {
+        function safeRefetch() {
             if (refetching) { refetchAgain = true; return refetching; }
             refetching = (async function () {
-                do {
-                    refetchAgain = false;
-                    var startEpoch = epoch, next;
-                    try {
-                        next = kind === 't' ? await PC.tournamentSnapshot(eventId) : await PC.leagueSnapshot(eventId);
-                    } catch (e) {
-                        if (snap) { setConn('connecting'); return; }   // keep what's on screen
-                        main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2><p>Check your connection — we’ll keep trying.</p></div>';
-                        return;
-                    }
-                    if (!next) { if (!snap) main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
-                    snap = next;
-                    render(startEpoch === epoch);
-                } while (refetchAgain);
+                try {
+                    var outcome = 'ok';
+                    do {
+                        refetchAgain = false;
+                        var startEpoch = epoch, next;
+                        try {
+                            next = kind === 't' ? await PC.tournamentSnapshot(eventId) : await PC.leagueSnapshot(eventId);
+                        } catch (e) {
+                            if (snap) { setConn('connecting'); return 'transient'; }   // keep what's on screen
+                            main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2><p>Check your connection — we’ll keep trying.</p></div>';
+                            return 'transient';
+                        }
+                        if (!next) { if (!snap) main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return 'missing'; }
+                        snap = next;
+                        render(startEpoch === epoch);
+                    } while (refetchAgain);
+                    return outcome;
+                } finally {
+                    refetching = null;
+                }
             })();
-            try { await refetching; } finally { refetching = null; }
+            return refetching;
         }
 
         var objMap = {};
@@ -305,16 +379,18 @@
             }
 
             var s = sides(current);
-            if (fresh && current.live && !pendingFor(matchId).length) local = { s1: current.live.score1, s2: current.live.score2 };
+            if (fresh && current.live && !pendingFor(matchId).length && !undoing) local = { s1: current.live.score1, s2: current.live.score2 };
+            var locked = undoing || finalQueued(matchId);
+            var dis = locked ? ' disabled' : '';
             main.innerHTML =
                 '<div class="event-head"><span class="kicker">' + (current.week ? 'Week ' + esc(current.week) : 'Round ' + esc(current.round || '?')) +
                 (current.court ? ' · ' + esc(current.court) : '') + '</span>' +
                 '<h1 style="font-size:1.3rem">' + esc(head.name) + '</h1></div>' +
-                '<div class="sk-board">' + skSide(1, names[s[0]], local.s1, objMap[s[0]]) + skSide(2, names[s[1]], local.s2, objMap[s[1]]) + '</div>' +
+                '<div class="sk-board">' + skSide(1, names[s[0]], local.s1, objMap[s[0]], dis) + skSide(2, names[s[1]], local.s2, objMap[s[1]], dis) + '</div>' +
                 '<div class="sk-actions">' +
-                (current.status !== 'in_progress' ? '<button class="btn" id="startBtn">Start match</button>' : '') +
-                '<button class="btn ghost" id="undoBtn">Undo last</button>' +
-                '<button class="btn primary" id="finalBtn">Submit final score</button>' +
+                (current.status !== 'in_progress' ? '<button class="btn" id="startBtn"' + dis + '>Start match</button>' : '') +
+                '<button class="btn ghost" id="undoBtn"' + dis + '>Undo last</button>' +
+                '<button class="btn primary" id="finalBtn"' + dis + '>Submit final score</button>' +
                 '<button class="btn ghost" id="backBtn">All matches</button>' +
                 '</div><p class="ok" id="skSync" role="status" aria-live="polite" style="text-align:center"></p>' +
                 '<p class="err" id="skErr" style="text-align:center"></p>';
@@ -324,11 +400,11 @@
             err(errMsg);
         }
 
-        function skSide(n, name, score, obj) {
+        function skSide(n, name, score, obj, dis) {
             return '<div class="sk-side"><div class="team">' + window.PCLive.avatarStack((obj || {}).members, 26) + ' ' + esc(name || 'Player') + '</div>' +
                 '<div class="score" id="score' + n + '">' + esc(score) + '</div>' +
-                '<div class="sk-buttons"><button class="sk-minus" data-minus="' + n + '" aria-label="Remove point">−1</button>' +
-                '<button class="sk-plus" data-plus="' + n + '" aria-label="Add point">+1</button></div></div>';
+                '<div class="sk-buttons"><button class="sk-minus" data-minus="' + n + '" aria-label="Remove point"' + (dis || '') + '>−1</button>' +
+                '<button class="sk-plus" data-plus="' + n + '" aria-label="Add point"' + (dis || '') + '>+1</button></div></div>';
         }
 
         function paintScores() {
@@ -341,6 +417,7 @@
         function err(msg) { errMsg = msg || ''; var el = document.getElementById('skErr'); if (el) el.textContent = errMsg; }
 
         function bump(side, delta) {
+            if (undoing || finalQueued(matchId)) return;
             var key = 's' + side;
             var next = Math.max(0, local[key] + delta);
             if (next === local[key]) return;
@@ -371,47 +448,64 @@
                 await safeRefetch();
             });
             document.getElementById('undoBtn').addEventListener('click', async function () {
-                var btn = this;
                 var id = matchId;
-                // A change still waiting on this device: just take it back.
+                // A change that has never been sent: just take it back locally.
+                // (One that was attempted may already be on the server — a lost
+                // reply — so it goes through the server undo below.)
                 var queued = pendingFor(id);
                 var tail = queued[queued.length - 1];
-                if (tail && tail !== inFlight) {
-                    outbox = outbox.filter(function (e) { return e.id !== tail.id; });
-                    saveOutbox();
+                if (tail && !tail.attempted && tail !== inFlight) {
+                    removeEntry(tail);
+                    settle(tail.id, 'removed');
                     epoch++;
                     var prev = queued[queued.length - 2];
                     var m = snap && (snap.matches || []).find(function (x) { return x.id === id; });
                     local = prev ? { s1: prev.score1, s2: prev.score2 }
-                        : (m && m.live ? { s1: m.live.score1, s2: m.live.score2 } : { s1: 0, s2: 0 });
+                        : (acked[id] || (m && m.live ? { s1: m.live.score1, s2: m.live.score2 } : { s1: 0, s2: 0 }));
                     paintScores(); showSync();
                     return;
                 }
-                btn.disabled = true;
-                await flushed(id); // the server undoes its last event, so let ours land first
+                undoing = true;
+                render(false);              // locks +1/−1/Final while the server undo runs
                 try {
+                    await flushed(id);      // the server undoes its last event, so let ours land first
                     var r = await PC.undoLastScoreEvent(scope, id);
                     epoch++;
-                    if (r && r.live) local = { s1: r.live.score1 ?? 0, s2: r.live.score2 ?? 0 };
-                    else local = { s1: 0, s2: 0 };
-                    render(false);
-                } catch (e) { err(e.message || 'Nothing to undo.'); btn.disabled = false; }
+                    local = r && r.live ? { s1: r.live.score1 ?? 0, s2: r.live.score2 ?? 0 } : { s1: 0, s2: 0 };
+                    acked[id] = { s1: local.s1, s2: local.s2 };
+                    err('');
+                } catch (e) { err(e.message || 'Nothing to undo.'); }
+                finally {
+                    undoing = false;
+                    if (matchId === id) render(false);
+                }
             });
             document.getElementById('finalBtn').addEventListener('click', async function () {
                 if (local.s1 === local.s2) { err('A final score can’t be tied.'); return; }
+                if (finalQueued(matchId)) return;
                 if (!confirm('Submit final: ' + local.s1 + '–' + local.s2 + '? This locks the match.')) return;
-                this.disabled = true;
-                var res = await whenTried(enqueue('match_completed', 'scorekeeper final'));
+                var entry = enqueue('match_completed', 'scorekeeper final');
+                render(false);              // Final stays disabled while it is queued
+                var res = await whenTried(entry);
                 if (res.status === 'queued') { err('Offline — the final score is saved on this device and will be submitted when you reconnect.'); return; }
-                if (res.status === 'refused') { this.disabled = false; return; }
+                if (res.status !== 'ok') { if (matchId) render(false); return; }
                 matchId = null;
                 await safeRefetch();
             });
             document.getElementById('backBtn').addEventListener('click', function () { matchId = null; errMsg = ''; render(false); });
         }
 
+        /** The signed-in user from the locally stored session — no network,
+         *  so a scorer who reloads while offline still gets their board. */
+        async function sessionUser() {
+            try {
+                var r = await db.auth.getSession();
+                return r.data && r.data.session ? r.data.session.user : null;
+            } catch (_) { return null; }
+        }
+
         (async function init() {
-            var user = await PC.currentUser();
+            var user = await sessionUser();
             if (!user) renderLogin();
             else await boot();
         })();

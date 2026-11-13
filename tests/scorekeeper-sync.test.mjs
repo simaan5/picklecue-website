@@ -59,6 +59,8 @@ function makeBackend() {
     defaultDelay: 0,
     sockets: new Set(),
     online: true,
+    inFlight: 0,              // concurrent record_score_event requests right now
+    maxInFlight: 0,
   };
   be.snapshot = () => ({
     tournament: { id: T_ID, name: 'QA Mock Cup', is_public: true },
@@ -91,7 +93,10 @@ async function newContext(browser, be, projectRef) {
     if (url.pathname === '/auth/v1/user') return json(USER);
     if (url.pathname.startsWith('/auth/')) return json({}, 200);
     const rpc = url.pathname.replace('/rest/v1/rpc/', '');
-    if (rpc === 'is_tournament_scorer') return json(true);
+    if (rpc === 'is_tournament_scorer') {
+      if (!be.online) return route.abort('internetdisconnected');
+      return json(true);
+    }
     if (rpc === 'live_tournament_snapshot') {
       if (!be.online) return route.abort('internetdisconnected');
       return json(be.snapshot());
@@ -100,8 +105,12 @@ async function newContext(browser, be, projectRef) {
       const body = JSON.parse(route.request().postData() || '{}');
       const step = be.plan.shift() || {};
       be.calls.push({ ...body, at: Date.now() });
+      be.inFlight++; be.maxInFlight = Math.max(be.maxInFlight, be.inFlight);
+      try {
       if (!be.online || step.fail === 'network') { await sleep(step.delayIn || 5); return route.abort('internetdisconnected'); }
       if (step.fail === 'refuse') { await sleep(5); return json({ code: 'P0001', message: 'Match is already completed', details: null, hint: null }, 400); }
+      if (step.fail === 'auth') { await sleep(5); return json({ code: 'PGRST301', message: 'JWT expired', details: null, hint: null }, 401); }
+      if (step.fail === 'server-bug') { await sleep(5); return json({ code: 'XX000', message: 'internal error', details: null, hint: null }, 500); }
       await sleep(step.delayIn ?? be.defaultDelay);
       let reply;
       const key = body.p_client_event_id;
@@ -117,6 +126,7 @@ async function newContext(browser, be, projectRef) {
       await sleep(step.delayOut ?? 0);
       if (step.fail === 'lost-reply') return route.abort('connectionreset');
       return json(reply);
+      } finally { be.inFlight--; }
     }
     if (rpc === 'undo_last_score_event') return json({ live: { ...be.live } });
     return json(null);
@@ -279,7 +289,9 @@ try {
     await timedTap(p, 1); await sleep(30); await timedTap(p, 1);
     await sleep(2500);
     const ui = await scoreOf(p, 1);
-    results.scenarios.outOfOrder = { serverScore1: be.live.score1, ui, arrivalOrder: be.calls.map(c => c.p_score1) };
+    results.scenarios.outOfOrder = { serverScore1: be.live.score1, ui, arrivalOrder: be.calls.map(c => c.p_score1), maxConcurrentWrites: be.maxInFlight };
+    check('out of order: never more than one write in flight', be.maxInFlight === 1, `max=${be.maxInFlight}`);
+    check('out of order: writes arrive in tap order', JSON.stringify(be.calls.map(c => c.p_score1)) === '[1,2]', JSON.stringify(be.calls.map(c => c.p_score1)));
     if (SHOTS) await p.screenshot({ path: `${SHOTS}/${PFX}web-out-of-order.png` });
     check('out of order: server ends at 2', be.live.score1 === 2, `server=${be.live.score1}`);
     check('out of order: UI ends at 2', ui === 2, `ui=${ui}`);
@@ -298,12 +310,12 @@ try {
     await p.reload();
     await sleep(800);
     const stored = await p.evaluate(() => { try { return JSON.parse(localStorage.getItem('pc_sk_outbox_v1') || '[]').length; } catch (_) { return -1; } });
-    be.online = true;
-    await p.evaluate(() => window.dispatchEvent(new Event('online')));
-    await sleep(4500);
+    be.online = true;                 // no 'online' event: recovery must come from the backoff timers alone
+    await sleep(9000);
     results.scenarios.reloadOffline = { queuedAfterReload: stored, serverLive: { ...be.live }, applied: be.applied };
     check('reload: queued taps persisted across reload', stored === 2, `stored=${stored}`);
-    check('reload: both taps reach the server after reconnect', be.live.score1 === 1 && be.live.score2 === 1, JSON.stringify(be.live));
+    check('reload: both taps reach the server after reconnect (backoff only)', be.live.score1 === 1 && be.live.score2 === 1, JSON.stringify(be.live));
+    check('reload: board shows the match again', (await scoreOf(p, 1).catch(() => null)) !== null || (await p.$('[data-pick]')) !== null);
     await ctx.close();
   }
 
@@ -323,6 +335,60 @@ try {
     check('refusal: not retried', be.calls.length === 1, `calls=${be.calls.length}`);
     check('refusal: UI rolls back to server', ui === be.live.score1, `ui=${ui} server=${be.live.score1}`);
     check('refusal: error shown', errText.length > 0, errText);
+    await ctx.close();
+  }
+
+  // 7. Expired sign-in: the change is kept (not dropped) and sent once auth works.
+  {
+    const be = makeBackend();
+    be.plan.push({ fail: 'auth' });
+    const ctx = await newContext(browser, be, projectRef);
+    const p = await openScorer(ctx, base);
+    await sleep(500);
+    await timedTap(p, 1);
+    await sleep(200);
+    const syncText = (await p.textContent('#skSync').catch(() => '')) || '';
+    await sleep(2500);
+    results.scenarios.authExpired = { calls: be.calls.length, server: be.live.score1, syncText };
+    check('auth expired: change kept and sent after auth recovers', be.live.score1 === 1, `server=${be.live.score1} calls=${be.calls.length}`);
+    check('auth expired: scorer told to sign in', /sign/i.test(syncText), syncText);
+    await ctx.close();
+  }
+
+  // 8. Undo of a change that never left the device is local only.
+  {
+    const be = makeBackend();
+    const ctx = await newContext(browser, be, projectRef);
+    const p = await openScorer(ctx, base);
+    await sleep(500);
+    be.online = false;
+    await timedTap(p, 1);             // attempted (fails) -> stays queued
+    await sleep(100);
+    await timedTap(p, 1);             // queued behind it, never attempted
+    await p.click('#undoBtn');
+    const uiAfterUndo = await scoreOf(p, 1);
+    be.online = true;
+    await p.evaluate(() => window.dispatchEvent(new Event('online')));
+    await sleep(2500);
+    results.scenarios.localUndo = { uiAfterUndo, server: be.live.score1, calls: be.calls.map(c => c.p_score1) };
+    check('local undo: UI goes back one point at once', uiAfterUndo === 1, `ui=${uiAfterUndo}`);
+    check('local undo: the undone point never reaches the server', be.live.score1 === 1 && !be.calls.some(c => c.p_score1 === 2), JSON.stringify(results.scenarios.localUndo));
+    await ctx.close();
+  }
+
+  // 9. A repeating server error (5xx with a SQLSTATE) gives up instead of blocking the queue forever.
+  {
+    const be = makeBackend();
+    for (let i = 0; i < 5; i++) be.plan.push({ fail: 'server-bug' });
+    const ctx = await newContext(browser, be, projectRef);
+    const p = await openScorer(ctx, base);
+    await sleep(500);
+    await timedTap(p, 1);             // will fail 5 times, then be dropped
+    await sleep(50);
+    await timedTap(p, 2);             // must still get through afterwards
+    await sleep(500 + 1000 + 2000 + 4000 + 2500);
+    results.scenarios.serverBug = { calls: be.calls.length, live: { ...be.live } };
+    check('server bug: queue unblocks after 5 tries', be.live.score2 === 1, JSON.stringify(results.scenarios.serverBug));
     await ctx.close();
   }
 } finally {
