@@ -69,7 +69,7 @@
     </main>
 
     <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
-    <script src="assets/live-core.js?v=rr8"></script>
+    <script src="assets/live-core.js?v=rr9"></script>
     <script src="assets/bracket.js?v=rr8"></script>
     <script>
     (function () {
@@ -728,11 +728,23 @@
             retryTimer = setTimeout(start, delay * 1000);
         }
 
+        // Instant scores (Option 1): paint the score carried by the broadcast
+        // straight into the snapshot, no refetch. Returns false when the match
+        // isn't on this page so live-core falls back to a refetch.
+        function applyScore(p) {
+            if (!snap) return false;
+            var m = (snap.matches || []).find(function (x) { return x.id === p.match_id; });
+            if (!m) return false;
+            m.live = p.live || null;
+            render();
+            return true;
+        }
+
         async function start() {
             await refetch();
             if (!snap || unsub) return;
             var isPublic = (kind === 't' ? snap.tournament : snap.league).is_public === true;
-            unsub = PC.subscribeLive(kind, eventId, isPublic, refetch, setConn);
+            unsub = PC.subscribeLive(kind, eventId, isPublic, refetch, setConn, applyScore);
         }
         start();
     })();

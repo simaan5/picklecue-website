@@ -58,9 +58,22 @@
    * Subscribe to the live ping channel for an event.
    * kind: 't' | 'l'; isPublic decides public vs private broadcast channel.
    * onPing fires debounced; onState receives 'live' | 'connecting' | 'offline'.
+   *
+   * onScore (optional, instant-sync Option 1): the database now broadcasts each
+   * saved score as event 'score' = { match_id, seq, event_type, game_number,
+   * live: {score1, score2, game, event_type, at} | null, at } (migration
+   * 20261113210000_live_score_broadcast.sql). `live` is the match's full current
+   * score (undo-aware), so a page can paint it with NO refetch. Versions are
+   * applied per match: an older or repeated seq is dropped (the newer score
+   * always wins); a skipped seq is painted and then healed with one snapshot
+   * refetch (onPing). Lifecycle events (start/complete/discard/game end) also
+   * refetch, since they change more than the score. When onScore is given,
+   * the legacy 'change' ping for score_events is ignored (the 'score' message
+   * replaces it); pings for match/standings rows still refetch.
+   * Reconnect (SUBSCRIBED), tab wake and the 60 s poll still refetch.
    * Returns an unsubscribe function.
    */
-  function subscribeLive(kind, id, isPublic, onPing, onState) {
+  function subscribeLive(kind, id, isPublic, onPing, onState, onScore) {
     var topic = 'live:' + kind + ':' + id;
     var debounceTimer = null;
     var pollTimer = null;
@@ -99,12 +112,37 @@
       }
     }
 
+    // ---- instant scores (Option 1) ----
+    var lastSeq = {}; // match_id -> highest seq applied
+    var REFETCH_TYPES = { match_started: 1, match_resumed: 1, match_completed: 1, match_discarded: 1, game_completed: 1 };
+
+    function onChange(msg) {
+      var p = msg && msg.payload;
+      if (onScore && p && p.table === 'score_events') return; // covered by 'score'
+      ping();
+    }
+
+    function onScoreMessage(msg) {
+      if (stopped) return;
+      var p = msg && msg.payload;
+      if (!onScore || !p || !p.match_id) { ping(); return; }
+      var seq = typeof p.seq === 'number' ? p.seq : null;
+      var prev = lastSeq[p.match_id];
+      if (seq != null && prev != null && seq <= prev) return; // stale or duplicate
+      var gap = seq != null && prev != null && seq > prev + 1;
+      if (seq != null) lastSeq[p.match_id] = seq;
+      var painted = false;
+      try { painted = onScore(p) !== false; } catch (e) { painted = false; }
+      if (!painted || gap || seq == null || REFETCH_TYPES[p.event_type]) ping();
+    }
+
     function connect() {
       if (stopped) return;
       if (channel) client.removeChannel(channel);
       channel = client
         .channel(topic, { config: { broadcast: { self: true }, private: !isPublic } })
-        .on('broadcast', { event: 'change' }, ping)
+        .on('broadcast', { event: 'change' }, onChange)
+        .on('broadcast', { event: 'score' }, onScoreMessage)
         .subscribe(function (status) {
           if (stopped) return;
           if (status === 'SUBSCRIBED') {
