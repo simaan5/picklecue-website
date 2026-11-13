@@ -100,18 +100,26 @@ async function scenario(name, { withOnScore = true, onScoreResult = true, steps 
   check('lifecycle event paints and refetches', r.painted.join() === '11-9' && r.refetches === 1, JSON.stringify(r));
 }
 {
-  const r = await scenario('legacy-ping-ignored', {
+  const r = await scenario('pre-migration-pings-still-refetch', {
     steps: [{ event: 'change', payload: { table: 'score_events', op: 'INSERT' } },
+            { event: 'change', payload: { table: 'score_events', op: 'INSERT' } }],
+  });
+  check('before any score message (migration not applied) score_events pings still refetch', r.refetches === 2, JSON.stringify(r));
+}
+{
+  const r = await scenario('legacy-ping-ignored', {
+    steps: [score('m1', 1, 1, 0),
+            { event: 'change', payload: { table: 'score_events', op: 'INSERT' } },
             { event: 'change', payload: { table: 'tournament_matches', op: 'UPDATE' } }],
   });
-  check('score_events ping ignored, match-row ping refetches', r.refetches === 1, JSON.stringify(r));
+  check('after a score message: score_events ping ignored, match-row ping refetches', r.refetches === 1 && r.painted.join() === '1-0', JSON.stringify(r));
 }
 {
   const r = await scenario('no-onScore', {
     withOnScore: false,
     steps: [{ event: 'change', payload: { table: 'score_events', op: 'INSERT' } }, score('m1', 1, 1, 0)],
   });
-  check('pages without onScore keep refetching on every ping', r.refetches === 2, JSON.stringify(r));
+  check('pages without onScore refetch on the ping and ignore the score message (no double refetch)', r.refetches === 1, JSON.stringify(r));
 }
 {
   const r = await scenario('not-on-page', { onScoreResult: false, steps: [score('m9', 1, 1, 0)] });

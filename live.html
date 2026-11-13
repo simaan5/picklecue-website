@@ -678,6 +678,7 @@
         // ---- data + realtime --------------------------------------------------
 
         async function refetch() {
+            var startedAtTick = scoreTick;
             try {
                 var results = await Promise.all([
                     kind === 't' ? PC.tournamentSnapshot(eventId) : PC.leagueSnapshot(eventId),
@@ -685,6 +686,7 @@
                     PC.client.rpc('get_event_waiver', { p_scope: kind === 't' ? 'tournament' : 'league', p_event_id: eventId }),
                 ]);
                 snap = results[0];
+                reapplyNewerScores(startedAtTick);
                 regInfo = results[1].data || null;
                 waiver = results[2].data || null;
                 try {
@@ -731,13 +733,25 @@
         // Instant scores (Option 1): paint the score carried by the broadcast
         // straight into the snapshot, no refetch. Returns false when the match
         // isn't on this page so live-core falls back to a refetch.
+        // A snapshot has no seq, so a refetch that started BEFORE a broadcast
+        // was painted would roll that match back. Remember each painted
+        // broadcast with a tick and re-apply the ones newer than the refetch.
+        var scoreTick = 0, overlays = {};
         function applyScore(p) {
             if (!snap) return false;
             var m = (snap.matches || []).find(function (x) { return x.id === p.match_id; });
             if (!m) return false;
             m.live = p.live || null;
+            overlays[p.match_id] = { live: m.live, tick: ++scoreTick };
             render();
             return true;
+        }
+        function reapplyNewerScores(sinceTick) {
+            if (!snap) return;
+            (snap.matches || []).forEach(function (m) {
+                var o = overlays[m.id];
+                if (o && o.tick > sinceTick) m.live = o.live;
+            });
         }
 
         async function start() {

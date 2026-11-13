@@ -67,9 +67,11 @@
    * applied per match: an older or repeated seq is dropped (the newer score
    * always wins); a skipped seq is painted and then healed with one snapshot
    * refetch (onPing). Lifecycle events (start/complete/discard/game end) also
-   * refetch, since they change more than the score. When onScore is given,
-   * the legacy 'change' ping for score_events is ignored (the 'score' message
-   * replaces it); pings for match/standings rows still refetch.
+   * refetch, since they change more than the score. When onScore is given and
+   * a 'score' message has arrived, the legacy 'change' ping for score_events is
+   * ignored (the 'score' message replaces it); before that (migration not yet
+   * applied) pings keep refetching. Pings for match/standings rows always
+   * refetch. Without onScore, 'score' messages are ignored (pings cover them).
    * Reconnect (SUBSCRIBED), tab wake and the 60 s poll still refetch.
    * Returns an unsubscribe function.
    */
@@ -116,16 +118,25 @@
     var lastSeq = {}; // match_id -> highest seq applied
     var REFETCH_TYPES = { match_started: 1, match_resumed: 1, match_completed: 1, match_discarded: 1, game_completed: 1 };
 
+    // Only trust 'score' to replace the score_events ping once one has
+    // actually arrived: until the migration is applied (or after a rollback)
+    // the server sends pings only, and they must keep refetching.
+    var sawScore = false;
+
     function onChange(msg) {
       var p = msg && msg.payload;
-      if (onScore && p && p.table === 'score_events') return; // covered by 'score'
+      if (onScore && sawScore && p && p.table === 'score_events') return; // covered by 'score'
       ping();
     }
 
     function onScoreMessage(msg) {
       if (stopped) return;
+      // Pages without onScore already refetch on the matching 'change' ping;
+      // reacting here too would double their snapshot load.
+      if (!onScore) return;
+      sawScore = true;
       var p = msg && msg.payload;
-      if (!onScore || !p || !p.match_id) { ping(); return; }
+      if (!p || !p.match_id) { ping(); return; }
       var seq = typeof p.seq === 'number' ? p.seq : null;
       var prev = lastSeq[p.match_id];
       if (seq != null && prev != null && seq <= prev) return; // stale or duplicate
