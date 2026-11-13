@@ -120,6 +120,28 @@ section[id]{ scroll-margin-top:96px; }
 .masthead nav a[aria-current="page"]::after{ right:0; }
 .masthead .btn{ padding:13px 24px; font-size:15px; }
 .masthead-burger{ display:none; }
+/* Tablet / small-laptop header (861-1300px). The desktop nav (8 links + the
+   App Store button) needs ~1,060px at full size, so between 861 and ~1280px
+   the header squeezed the wordmark to a 12px sliver, wrapped "Live demo" onto
+   two lines and pushed "Download on iPhone" past the right edge (iPad
+   landscape, 1024px; tests/responsive.test.mjs). Nothing in the header may
+   shrink now. 861-1300px tightens type and spacing; 861-1060px also shows the
+   cue mark without the wordmark. The <=860px burger contract is unchanged. */
+.masthead nav a{ white-space:nowrap; }
+.brand, .masthead .btn{ flex-shrink:0; }
+@media (min-width:861px) and (max-width:1300px){
+    .masthead-inner{ gap:16px; padding:0 20px; }
+    .masthead nav{ gap:12px; }
+    .masthead nav a{ font-size:13.5px; }
+    .masthead .btn{ padding:10px 14px; font-size:13.5px; }
+}
+@media (min-width:861px) and (max-width:1060px){
+    .masthead-inner{ gap:12px; padding:0 16px; }
+    .masthead nav{ gap:10px; }
+    .masthead nav a{ font-size:13px; }
+    .brand .brand-wordmark,
+    :root[data-theme="dark"] .brand .brand-wordmark.wm-dark{ display:none; }
+}
 
 .theme-toggle{
     width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
