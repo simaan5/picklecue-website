@@ -103,18 +103,64 @@
             unsub = PC.subscribeLive(kind, eventId, head.is_public === true, refetch, setConn);
         }
 
+        // Check-in taps paint at once (optimistic) and save in the background.
+        // pending[id] = { status, untilSeq }: the tapped status is laid over
+        // every snapshot until a refetch that STARTED after the save landed has
+        // been applied, so an older in-flight refetch can't flip the row back.
+        // Saves for one row go out one at a time, in tap order.
+        var pending = {}, saveChain = {}, fetchSeq = 0, appliedSeq = 0;
+
+        function overlayPending() {
+            Object.keys(pending).forEach(function (id) {
+                var p = pending[id];
+                if (appliedSeq >= p.untilSeq) { delete pending[id]; return; }
+                readiness[id] = Object.assign({}, readiness[id] || { id: id }, { check_in_status: p.status });
+            });
+        }
+
         async function refetch() {
+            var seq = ++fetchSeq;
             var results = await Promise.all([
                 kind === 't' ? PC.tournamentSnapshot(eventId) : PC.leagueSnapshot(eventId),
                 db.rpc('event_readiness', { p_scope: scope, p_event_id: eventId }),
                 db.rpc('get_event_waiver', { p_scope: scope, p_event_id: eventId }),
             ]);
+            if (seq < appliedSeq) return; // a newer refetch already painted
+            appliedSeq = seq;
             snap = results[0];
             waiver = results[2].data || null;
             readiness = {};
             (results[1].data || []).forEach(function (x) { readiness[x.id] = x; });
+            overlayPending();
             if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
             render();
+        }
+
+        function setCheckIn(id, status) {
+            var before = (readiness[id] || {}).check_in_status || 'not_checked_in';
+            var mine = { status: status, untilSeq: Infinity };
+            pending[id] = mine;
+            readiness[id] = Object.assign({}, readiness[id] || { id: id }, { check_in_status: status });
+            render();
+            var prev = saveChain[id] || Promise.resolve();
+            var job = prev.then(function () {
+                return db.rpc('set_check_in_status', {
+                    p_scope: scope, p_participant_id: id, p_status: status, p_note: null, p_source: 'staff' });
+            }).then(function (r) {
+                if (r.error) throw r.error;
+                if (pending[id] === mine) mine.untilSeq = fetchSeq + 1;
+                refetch().catch(function () {}); // saved; a failed refresh keeps the tap on screen
+            }).catch(function (e) {
+                if (pending[id] === mine) {
+                    delete pending[id];
+                    readiness[id] = Object.assign({}, readiness[id] || { id: id }, { check_in_status: before });
+                    if (snap) render();
+                }
+                alert((e && e.message) || 'Couldn’t save that check-in. Try again.');
+                refetch().catch(function () {});
+            });
+            saveChain[id] = job;
+            job.then(function () { if (saveChain[id] === job) delete saveChain[id]; });
         }
 
         function render() {
@@ -182,13 +228,9 @@
                 });
             });
             Array.prototype.forEach.call(main.querySelectorAll('[data-ci]'), function (b) {
-                b.addEventListener('click', async function () {
+                b.addEventListener('click', function () {
                     var parts = b.dataset.ci.split(':');
-                    b.disabled = true;
-                    var r = await db.rpc('set_check_in_status', {
-                        p_scope: scope, p_participant_id: parts[0], p_status: parts[1], p_note: null, p_source: 'staff' });
-                    if (r.error) { alert(r.error.message); b.disabled = false; return; }
-                    await refetch();
+                    setCheckIn(parts[0], parts[1]);
                 });
             });
         }
