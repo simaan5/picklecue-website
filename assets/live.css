@@ -12,8 +12,10 @@
     --paper: #F7F7F2; --paper-2: #FFFFFF;
     --ink: #0E1B14; --ink-soft: #43564B; --ink-mute: #5F6F64;
     --rule: rgba(14,27,20,0.12); --rule-strong: rgba(14,27,20,0.28);
-    --court: #1F5D43; --on-court: #FFFFFF; --citron: #D8F35A; --clay: #D3511A;
-    --live: #D3511A;
+    /* clay/live darkened from #D3511A (3.9:1 on --paper, fails WCAG AA for the
+       11-13px "Live" / "Live now" / NO-SHOW labels) to #AD3F12 (5.6:1). */
+    --court: #1F5D43; --on-court: #FFFFFF; --citron: #D8F35A; --clay: #AD3F12;
+    --live: #AD3F12;
     --f-display: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
     --f-body: 'Instrument Sans', 'Instrument Sans Fallback', -apple-system, sans-serif;
     --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
@@ -276,7 +278,7 @@ body.bv-tv .cb-score { font-size: 44px; }
 .ci-chip { display: inline-block; font-family: var(--f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 100px; vertical-align: middle; margin-left: 6px; }
 .ci-chip.ci-ready { background: color-mix(in srgb, var(--court) 18%, transparent); color: var(--court); }
 .ci-chip.ci-waiting { background: var(--paper); color: var(--ink-mute); border: 1px solid var(--rule-strong); }
-.ci-chip.ci-noshow { background: color-mix(in srgb, var(--clay) 16%, transparent); color: var(--clay); }
+.ci-chip.ci-noshow { background: color-mix(in srgb, var(--clay) 12%, transparent); color: var(--clay); }
 
 /* ── Auth card providers ────────────────────────────────────────────────── */
 .auth-providers { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
@@ -367,6 +369,10 @@ body.bv-tv .cb-score { font-size: 44px; }
     --court: #00C27A; --live: #A7FF5C; --citron: #A7FF5C;
     --bc-card: #0A1613; --bc-card-active: #0E2119; --bc-gold: #F5C64B;
     --bc-spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+    /* Redefining --ink is not enough: inherited text keeps the body's computed
+       light-theme ink (#0E1B14), so in light mode the standings under the
+       bracket were near-black on #050707 (1.1:1). */
+    color: var(--ink);
     position: relative;
     background:
         radial-gradient(circle at 50% 110%, rgba(0,0,0,0.30), transparent 55%),
@@ -383,7 +389,7 @@ body.bv-tv .cb-score { font-size: 44px; }
 .bc-rail { position: relative; z-index: 3; margin-bottom: 14px; }
 .bc-rail-caps { position: relative; display: flex; padding: 3px; min-height: 36px; border-radius: 999px; background: rgba(10,26,21,0.72); backdrop-filter: blur(10px); border: 0.5px solid rgba(255,255,255,0.10); overflow: hidden; }
 .bc-chip { flex: 1 1 0; position: relative; z-index: 1; min-height: 30px; padding: 0 4px; border: 0; background: transparent; color: #889590; font-family: var(--f-body); font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 999px; white-space: nowrap; transition: color 0.25s var(--ease); }
-.bc-chip.on { color: #fff; }
+.bc-chip.on { color: #050707; } /* on the #00C27A pill: white was 2.3:1, deep black is 8.7:1 */
 .bc-rail-pill { position: absolute; top: 3px; bottom: 3px; left: 0; border-radius: 999px; background: #00C27A; box-shadow: 0 0 8px rgba(0,194,122,0.55); transition: transform 0.35s var(--bc-spring), width 0.35s var(--bc-spring); }
 .bc-track { position: relative; height: 20px; margin: 6px 10px 0; }
 .bc-track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; transform: translateY(-50%); border-radius: 999px; background: rgba(255,255,255,0.14); }
