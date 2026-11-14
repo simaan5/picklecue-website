@@ -905,23 +905,42 @@
             return [parseInt(document.getElementById('s1-' + mid).value, 10) || 0,
                     parseInt(document.getElementById('s2-' + mid).value, 10) || 0];
         }
+        // Requests in flight, keyed 'save:<match id>' etc. A live re-render
+        // while one is pending rebuilds its button; wire() renders it
+        // disabled so a second Update/Complete can't be sent. Cleared when
+        // the request settles (success re-renders, failure re-enables).
+        var inflight = {};
+        function actionButtons(attr, mid) {
+            return main.querySelectorAll('[data-' + attr + '="' + (window.CSS && CSS.escape ? CSS.escape(mid) : mid) + '"]');
+        }
         function wire(selector, label, fn) {
+            var attr = selector.slice(6, -1); // '[data-save]' -> 'save'
             Array.prototype.forEach.call(main.querySelectorAll(selector), function (b) {
+                // The bracket panel is reopened inside renderEvent, which then
+                // wires the Matches-tab selectors too; bind each button once
+                // so one click can't send the request twice.
+                if (b.__pcWired) return;
+                b.__pcWired = true;
+                var mid = b.dataset[attr];
+                var key = attr + ':' + mid;
+                if (inflight[key]) b.disabled = true;
                 b.addEventListener('click', async function () {
-                    // data-court was missing here, so "Set court" always failed
-                    // with an error (mid undefined -> #court-undefined).
-                    var mid = b.dataset.start || b.dataset.save || b.dataset.complete || b.dataset.correct || b.dataset.court;
+                    if (inflight[key]) return;
+                    inflight[key] = true;
                     b.disabled = true;
                     try {
                         var done = await fn(mid);
+                        delete inflight[key];
                         // Only Update / Complete save the typed score; Start and
                         // Correct don't, so a typed score survives them.
                         if (done !== null && (label === 'save' || label === 'complete')) forgetEdits(['s1-' + mid, 's2-' + mid]);
                         if (done !== null && label === 'set court') forgetEdits(['court-' + mid]);
                         await refetchEvent();
                     } catch (e) {
+                        delete inflight[key];
                         alert(e.message || ('Couldn’t ' + label + ' — try again.'));
                         b.disabled = false;
+                        Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = false; });
                     }
                 });
             });
