@@ -121,9 +121,9 @@ table.live-table { width: 100%; border-collapse: collapse; font-size: 14px; min-
 .ok { color: var(--court); font-size: 13px; margin-top: 8px; }
 
 /* Scorekeeper big buttons */
-.sk-board { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+.sk-board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin: 18px 0; }
 .sk-side { border: 1px solid var(--rule-strong); border-radius: 18px; background: var(--paper-2); padding: 18px; text-align: center; }
-.sk-side .team { font-size: 15px; font-weight: 650; min-height: 42px; display: flex; align-items: center; justify-content: center; }
+.sk-side .team { font-size: 15px; font-weight: 650; min-height: 42px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 6px; overflow-wrap: anywhere; }
 .sk-side .score { font-family: var(--f-mono); font-size: clamp(56px, 18vw, 96px); font-weight: 700; line-height: 1; margin: 8px 0; font-variant-numeric: tabular-nums; }
 .sk-side .sk-buttons { display: flex; gap: 8px; justify-content: center; }
 .sk-plus { font-size: 26px; font-weight: 700; width: 72px; height: 64px; border-radius: 16px; border: 0; background: var(--court); color: var(--on-court); }
@@ -139,8 +139,32 @@ table.live-table { width: 100%; border-collapse: collapse; font-size: 14px; min-
 .scorebox input { width: 54px; text-align: center; font-family: var(--f-mono); font-size: 15px; padding: 8px 4px; border: 1px solid var(--rule-strong); border-radius: 8px; background: var(--paper); color: var(--ink); }
 .bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
 
+/* Check-in desk row actions (checkin.html) */
+.ci-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+
 @media (max-width: 560px) {
     .match-list { grid-template-columns: 1fr; }
+    /* Phones: two sides of the scorekeeper board must fit inside the page
+       gutter (375 px leaves ~343 px). Buttons share the card width instead
+       of fixed 52 + 72 px. */
+    .sk-board { gap: 10px; }
+    .sk-side { padding: 14px 10px; }
+    .sk-side .sk-buttons { gap: 6px; }
+    .sk-side .sk-minus { width: auto; flex: 2 1 0; min-width: 44px; }
+    .sk-side .sk-plus { width: auto; flex: 3 1 0; min-width: 56px; }
+    /* Team names wrap instead of ellipsizing to "O…" next to a button. */
+    .event-row .title { white-space: normal; overflow-wrap: anywhere; }
+}
+
+/* Check-in rows: name on its own line, buttons below it, full width.
+   700 px, not 560: with three actions (Check in + No-show + Sign waiver,
+   ~330 px, not shrinkable) a waiver row's name was still ellipsized
+   between 561 and ~650 px. */
+@media (max-width: 700px) {
+    .ci-row { flex-wrap: wrap; }
+    .ci-row .grow { flex-basis: 100%; }
+    .ci-row .ci-actions { width: 100%; justify-content: flex-start; }
+    .ci-row .ci-actions .btn { flex: 1 1 auto; }
 }
 
 /* ── BracketView ─────────────────────────────────────────────────────────── */
