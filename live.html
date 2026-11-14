@@ -682,6 +682,16 @@
         // carrying the older score overwrote the newer one, so the score went
         // backwards (4 -> 6 -> 5) and stayed wrong until the next ping.
         var fetchSeq = 0, appliedSeq = 0;
+        // registration_status only feeds the "you're registered" chip. A
+        // reply that never comes (stalled mobile connection) must not hold
+        // back the score paint: before, the page sat on "Loading…" (first
+        // load) or on the old score (later pings) until the request died.
+        var REG_TIMEOUT_MS = 5000;
+        function withTimeout(p, ms) {
+            var t;
+            return Promise.race([p, new Promise(function (_, rej) { t = setTimeout(function () { rej(new Error('timeout')); }, ms); })])
+                .finally(function () { clearTimeout(t); });
+        }
         async function refetch() {
             var seq = ++fetchSeq;
             try {
@@ -698,13 +708,17 @@
                 try {
                     var regId = localStorage.getItem('pc_reg_' + eventId);
                     if (regId) {
-                        var rs = await PC.client.rpc('registration_status', { p_registration_id: regId });
+                        var rs = await withTimeout(PC.client.rpc('registration_status', { p_registration_id: regId }), REG_TIMEOUT_MS);
                         // A newer refetch applied while this reply was in
                         // flight: its own reply (and paint) wins.
                         if (seq !== appliedSeq) return;
                         myReg = rs.data || null;
                     }
-                } catch (_) {}
+                } catch (_) {
+                    // Timed out or failed: keep the last known chip and paint
+                    // the scores, unless a newer refetch has taken over.
+                    if (seq !== appliedSeq) return;
+                }
             } catch (e) {
                 console.error('[live] snapshot failed', e);
                 // First load failed: say so and retry. Before, the page sat on
