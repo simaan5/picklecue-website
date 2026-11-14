@@ -141,6 +141,7 @@
                         (m.court ? ' · ' + esc(m.court) : '') + ' · ' + esc(PC.statusLabel(m.status)) + live + '</div></div>' +
                         '<button class="btn primary" data-pick="' + m.id + '">Score</button></div>';
                 }).join('');
+                errMsg = ''; // back on the match list: a message belongs to the match it was about
                 main.innerHTML = '<div class="event-head"><span class="kicker">Scorekeeper</span><h1>' + esc(head.name) + '</h1></div>' +
                     '<section class="section"><h2>Open matches <span class="count">' + open.length + '</span></h2>' +
                     (rows || '<div class="state"><h2>Nothing to score right now</h2><p>New matches appear here the moment they’re ready.</p></div>') + '</section>';
@@ -169,6 +170,7 @@
                 '<button class="btn ghost" id="backBtn">All matches</button>' +
                 '</div><p class="err" id="skErr" style="text-align:center"></p>';
 
+            err(errMsg);
             wireSk();
         }
 
@@ -179,7 +181,14 @@
                 '<button class="sk-plus" data-plus="' + n + '" aria-label="Add point">+1</button></div></div>';
         }
 
-        function err(msg) { document.getElementById('skErr').textContent = msg || ''; }
+        // The message is kept in state, not only in the DOM: a live update redraws
+        // the board (refetch -> render) and must not wipe a refused final's reason (s39).
+        var errMsg = '';
+        function err(msg) {
+            errMsg = msg || '';
+            var el = document.getElementById('skErr');
+            if (el) el.textContent = errMsg;
+        }
 
         async function send(eventType, note) {
             busy = true;
