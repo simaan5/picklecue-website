@@ -314,6 +314,7 @@
         }
         var tabRowShown = null;
         function wireTabRow(scrollLeft) {
+            if (tabRowObserver) { tabRowObserver.disconnect(); tabRowObserver = null; }
             var row = main.querySelector('.tabs');
             if (!row) return;
             row.scrollLeft = scrollLeft || 0;
@@ -328,7 +329,6 @@
             updateTabHint(row);
             row.addEventListener('scroll', function () { updateTabHint(row); }, { passive: true });
             // Width changes without a scroll or render (web font swap, page scrollbar, resize).
-            if (tabRowObserver) tabRowObserver.disconnect();
             if (window.ResizeObserver) {
                 tabRowObserver = new ResizeObserver(function () { updateTabHint(row); });
                 tabRowObserver.observe(row);
