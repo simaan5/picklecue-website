@@ -58,6 +58,8 @@
         var PC = window.PCLive, esc = PC.esc, db = PC.client;
         var main = document.getElementById('main');
         var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches', qrOpen = false;
+        var bvOpenMid = null; // match whose bracket-view panel is open
+        var barNote = '';     // message under the tabs; see setBarNote
         var readiness = {}, ciFilter = 'all', ciSearch = '';
         var regSettings = null, regList = [], pairFirst = null;
         var waiver = null;
@@ -206,6 +208,8 @@
 
         async function openEvent(kind, id) {
             view = { mode: 'event', kind: kind, id: id };
+            bvOpenMid = null;
+            barNote = '';
             if (unsub) { unsub(); unsub = null; }
             await refetchEvent();
             if (!snap) return;
@@ -213,13 +217,27 @@
             unsub = PC.subscribeLive(kind, id, head.is_public === true, refetchEvent, setConn);
         }
 
-        async function refetchEvent() {
+        // An older, slower reply must not paint over a newer one that already
+        // painted (it would put an older score back on screen). A newer call
+        // that fails or hangs does not block older successful ones.
+        // A superseded call resolves when the newest one has painted, so
+        // callers that await it (first load) still see the fresh snapshot.
+        var eventFetchSeq = 0, eventAppliedSeq = 0, latestEventFetch = null;
+        function refetchEvent() {
+            latestEventFetch = loadEvent(++eventFetchSeq);
+            return latestEventFetch;
+        }
+        async function loadEvent(seq) {
             if (view.mode !== 'event') return;
-            snap = view.kind === 't' ? await PC.tournamentSnapshot(view.id) : await PC.leagueSnapshot(view.id);
+            var fresh = view.kind === 't' ? await PC.tournamentSnapshot(view.id) : await PC.leagueSnapshot(view.id);
+            if (seq < eventAppliedSeq) return latestEventFetch; // a newer one already painted
+            eventAppliedSeq = seq;
+            snap = fresh;
             if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
             if (eventTab === 'checkin') {
                 var r = await db.rpc('event_readiness', {
                     p_scope: view.kind === 't' ? 'tournament' : 'league', p_event_id: view.id });
+                if (seq < eventAppliedSeq) return latestEventFetch;
                 readiness = {};
                 (r.data || []).forEach(function (x) { readiness[x.id] = x; });
             }
@@ -230,11 +248,56 @@
                     db.from('event_registrations').select('*').eq('event_id', view.id).order('created_at'),
                     db.rpc('get_event_waiver', { p_scope: scope, p_event_id: view.id }),
                 ]);
+                if (seq < eventAppliedSeq) return latestEventFetch;
                 regSettings = results[0].data;
                 regList = results[1].data || [];
                 waiver = results[2].data || null;
             }
             renderEvent();
+        }
+
+        // Live pings re-render the whole control room. Fields the organizer
+        // has typed into (a score before Update/Complete, registration
+        // settings, the waiver text) keep their text, focus and caret across
+        // those re-renders; before, any score change anywhere in the event
+        // wiped them. A field's edit is dropped once its save succeeds.
+        var edits = {};
+        function markEdit(e) {
+            var t = e.target;
+            if (t && t.id && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) edits[t.id] = true;
+        }
+        main.addEventListener('input', markEdit);
+        main.addEventListener('change', markEdit);
+        function forgetEdits(prefixOrIds) {
+            Object.keys(edits).forEach(function (id) {
+                if (Array.isArray(prefixOrIds) ? prefixOrIds.indexOf(id) !== -1 : id.indexOf(prefixOrIds) === 0) delete edits[id];
+            });
+        }
+        function keepEdits() {
+            var kept = { fields: {}, focusId: null, sel: null };
+            Object.keys(edits).forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el) { delete edits[id]; return; }
+                kept.fields[id] = el.type === 'checkbox' || el.type === 'radio' ? { checked: el.checked } : { value: el.value };
+            });
+            var a = document.activeElement;
+            if (a && a.id && a !== main && main.contains(a)) {
+                kept.focusId = a.id;
+                try { if (typeof a.selectionStart === 'number') kept.sel = [a.selectionStart, a.selectionEnd]; } catch (_) {}
+            }
+            return kept;
+        }
+        function restoreEdits(kept) {
+            Object.keys(kept.fields).forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el) return;
+                if ('checked' in kept.fields[id]) el.checked = kept.fields[id].checked; else el.value = kept.fields[id].value;
+            });
+            var f = kept.focusId && document.getElementById(kept.focusId);
+            if (f) {
+                f.focus();
+                try { if (kept.sel) f.setSelectionRange(kept.sel[0], kept.sel[1]); } catch (_) {}
+            }
         }
 
         function renderEvent() {
@@ -262,7 +325,7 @@
                     ? '<button class="tab" data-etab="bracket" aria-selected="' + (eventTab === 'bracket') + '">Bracket</button>' : '') +
                 '<button class="tab" data-etab="checkin" aria-selected="' + (eventTab === 'checkin') + '">Check-In</button>' +
                 '<button class="tab" data-etab="register" aria-selected="' + (eventTab === 'register') + '">Registration</button></div>' +
-                '<p class="ok" id="barMsg"></p></div>';
+                '<p class="ok" id="barMsg">' + esc(barNote) + '</p></div>';
 
             var rows = (snap.matches || []).map(function (m) {
                 var id1 = isT ? m.participant1_id : m.team1_member_id;
@@ -310,11 +373,14 @@
                 '</section>';
             html += '<p class="foot-note">Every score change is written to a tamper-proof audit log and appears instantly on the live page, in the app, and here.</p>';
 
+            var kept = keepEdits();
             main.innerHTML = html;
+            restoreEdits(kept);
 
             Array.prototype.forEach.call(main.querySelectorAll('[data-etab]'), function (b) {
                 b.addEventListener('click', function () {
                     eventTab = b.dataset.etab;
+                    bvOpenMid = null;
                     if (eventTab === 'checkin' || eventTab === 'register') refetchEvent(); else renderEvent();
                 });
             });
@@ -323,6 +389,14 @@
                     interactive: true,
                     onMatch: function (mid) { showBracketPanel(mid, nameMap); },
                 });
+                // A live re-render rebuilt #bvPanel empty, so the match panel
+                // closed and took the score being typed with it. Reopen it on
+                // the fresh snapshot, then put the typed text and focus back
+                // (its inputs did not exist when restoreEdits ran above).
+                if (bvOpenMid) {
+                    showBracketPanel(bvOpenMid, nameMap);
+                    restoreEdits(kept);
+                }
             }
             if (eventTab === 'checkin') wireCheckin();
             if (eventTab === 'register') wireRegistration();
@@ -336,12 +410,14 @@
                 if (unsub) { unsub(); unsub = null; }
                 view = { mode: 'list' };
                 qrOpen = false;
+                bvOpenMid = null;
+                barNote = '';
                 document.getElementById('conn').hidden = true;
                 loadList();
             });
             document.getElementById('copyBtn').addEventListener('click', function () {
                 navigator.clipboard.writeText(liveUrl).then(function () {
-                    document.getElementById('barMsg').textContent = 'Live link copied — share it or print it as a QR code.';
+                    setBarNote('Live link copied — share it or print it as a QR code.');
                 });
             });
             wire('[data-start]', 'start', function (mid) {
@@ -466,6 +542,7 @@
                 save.disabled = false;
                 if (r.error) { alert(r.error.message); return; }
                 document.getElementById('rsMsg').textContent = 'Saved \u2014 the Register button is now ' + (payload.registration_open ? 'live on the public page.' : 'hidden.');
+                forgetEdits('rs');
                 refetchEvent();
             });
             Array.prototype.forEach.call(main.querySelectorAll('[data-reg]'), function (b) {
@@ -491,6 +568,7 @@
                     p_blocks_checkin: document.getElementById('wvBlock').checked });
                 wvBtn.disabled = false;
                 if (r.error) { alert(r.error.message); return; }
+                forgetEdits('wv');
                 refetchEvent();
             });
             Array.prototype.forEach.call(main.querySelectorAll('[data-pair]'), function (b) {
@@ -761,7 +839,8 @@
         // Control panel for a match tapped on the organizer bracket.
         function showBracketPanel(mid, nameMap) {
             var m = (snap.matches || []).find(function (x) { return x.id === mid; });
-            if (!m) return;
+            if (!m) { bvOpenMid = null; return; }
+            bvOpenMid = mid;
             var isT = view.kind === 't';
             var id1 = isT ? m.participant1_id : m.team1_member_id;
             var id2 = isT ? m.participant2_id : m.team2_member_id;
@@ -829,17 +908,134 @@
             return [parseInt(document.getElementById('s1-' + mid).value, 10) || 0,
                     parseInt(document.getElementById('s2-' + mid).value, 10) || 0];
         }
+        // Requests in flight, keyed 'save:<match id>' etc. A live re-render
+        // while one is pending rebuilds its button; wire() renders it
+        // disabled so a second Update/Complete can't be sent. Cleared when
+        // the request settles (success re-renders, failure re-enables).
+        var inflight = {};
+        var actionSeq = {}; // key -> sequence of the latest click (late replies check it)
+        // Start / Update / Complete / Correct all write the same match's
+        // score, so they share one in-flight key per match: before, Update
+        // and Complete could both be on the wire at once and land in either
+        // order (s28 review P3). Set court has its own key.
+        var SCORE_ACTS = ['start', 'save', 'complete', 'correct'];
+        function actGroup(attr) { return SCORE_ACTS.indexOf(attr) >= 0 ? SCORE_ACTS : [attr]; }
+        function actionButtons(attr, mid) {
+            var v = (window.CSS && CSS.escape ? CSS.escape(mid) : mid);
+            return main.querySelectorAll(actGroup(attr).map(function (a) { return '[data-' + a + '="' + v + '"]'; }).join(','));
+        }
+        // A request with no reply after this long is treated as "unknown":
+        // the buttons come back and the page re-reads what the server has,
+        // instead of staying disabled until a reload (s28 review P3).
+        var ACTION_TIMEOUT_MS = 15000;
+        // The bar message is part of the re-rendered HTML, so a note set
+        // straight on #barMsg was wiped by the very next refetch/live ping
+        // (the "No reply" note lasted ~30 ms). Keep it here; renderEvent
+        // paints it. Cleared when the organizer starts another action.
+        function setBarNote(text) {
+            barNote = text || '';
+            var el = document.getElementById('barMsg');
+            if (el) el.textContent = barNote;
+        }
+        function ActionTimeout() { this.message = 'timeout'; }
+        // Refresh retry after a saved action whose follow-up refetch failed:
+        // 3 s, 6 s, 9 s … up to 5 tries (a live ping also refreshes).
+        function retryRefresh(n) {
+            setTimeout(function () {
+                if (view.mode !== 'event') return;
+                refetchEvent().then(function () {
+                    if (/retrying/.test(barNote)) setBarNote('');
+                }, function () { if (n < 5) retryRefresh(n + 1); });
+            }, 3000 * n);
+        }
         function wire(selector, label, fn) {
+            var attr = selector.slice(6, -1); // '[data-save]' -> 'save'
             Array.prototype.forEach.call(main.querySelectorAll(selector), function (b) {
+                // The bracket panel is reopened inside renderEvent, which then
+                // wires the Matches-tab selectors too; bind each button once
+                // so one click can't send the request twice.
+                if (b.__pcWired) return;
+                b.__pcWired = true;
+                var mid = b.dataset[attr];
+                var key = (actGroup(attr) === SCORE_ACTS ? 'score' : attr) + ':' + mid;
+                if (inflight[key]) b.disabled = true;
                 b.addEventListener('click', async function () {
-                    var mid = b.dataset.start || b.dataset.save || b.dataset.complete || b.dataset.correct;
+                    if (inflight[key]) return;
+                    inflight[key] = true;
+                    var mySeq = actionSeq[key] = (actionSeq[key] || 0) + 1;
+                    var myEvent = view.kind + ':' + view.id;
+                    setBarNote('');
                     b.disabled = true;
+                    Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = true; });
+                    var timer;
+                    // What this click sends from the typed fields, so a reply
+                    // that lands after the timeout can drop exactly those
+                    // edits (and not a score typed again since).
+                    var sentIds = label === 'save' || label === 'complete' ? ['s1-' + mid, 's2-' + mid]
+                        : label === 'set court' ? ['court-' + mid] : [];
+                    var sentVals = sentIds.map(function (id) { var el = document.getElementById(id); return el ? el.value : null; });
                     try {
-                        await fn(mid);
-                        await refetchEvent();
+                        // fn() runs first and synchronously: Complete/Correct
+                        // ask confirm()/prompt() there, and the reply clock
+                        // must not include the time spent in that dialog
+                        // (review P2). Only the request itself is timed.
+                        var req = fn(mid);
+                        var done = await Promise.race([
+                            Promise.resolve(req),
+                            new Promise(function (_, rej) { timer = setTimeout(function () { rej(new ActionTimeout()); }, ACTION_TIMEOUT_MS); }),
+                        ]);
+                        clearTimeout(timer);
+                        delete inflight[key];
+                        // Only Update / Complete save the typed score; Start and
+                        // Correct don't, so a typed score survives them.
+                        if (done !== null && (label === 'save' || label === 'complete')) forgetEdits(['s1-' + mid, 's2-' + mid]);
+                        if (done !== null && label === 'set court') forgetEdits(['court-' + mid]);
                     } catch (e) {
+                        clearTimeout(timer);
+                        delete inflight[key];
+                        if (e instanceof ActionTimeout) {
+                            // Unknown outcome: it may still land. Don't call it
+                            // failed; re-read the server and let the organizer
+                            // decide with the real state on screen.
+                            setBarNote('No reply after ' + (ACTION_TIMEOUT_MS / 1000) + ' s — check your connection. Showing the latest saved scores.');
+                            Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = false; });
+                            refetchEvent().catch(function () { retryRefresh(1); });
+                            // If it does land later, it saved: the typed text
+                            // must stop overriding the server's score on live
+                            // pings (s31 review P3). Fields retyped since the
+                            // timeout keep the newer text.
+                            Promise.resolve(req).then(function (late) {
+                                if (late === null) return;
+                                var same = sentIds.filter(function (id, i) {
+                                    var el = document.getElementById(id);
+                                    return !el || el.value === sentVals[i];
+                                });
+                                forgetEdits(same);
+                                // Only speak up on the same event, and only if
+                                // no newer action on this match has started.
+                                if (view.mode !== 'event' || view.kind + ':' + view.id !== myEvent) return;
+                                if (actionSeq[key] !== mySeq) return;
+                                setBarNote('Saved — the reply came late.');
+                                refetchEvent().catch(function () { retryRefresh(1); });
+                            }, function (lateErr) {
+                                console.error('[organizer] ' + label + ' failed after the timeout', lateErr);
+                            });
+                            return;
+                        }
                         alert(e.message || ('Couldn’t ' + label + ' — try again.'));
                         b.disabled = false;
+                        Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = false; });
+                        return;
+                    }
+                    // The write is done. If the refresh after it fails, don't
+                    // report it as unsaved or re-enable the button (that invites
+                    // a duplicate send); say so softly and retry the refresh.
+                    try {
+                        await refetchEvent();
+                    } catch (e2) {
+                        console.error('[organizer] refresh after ' + label + ' failed', e2);
+                        setBarNote('Saved — couldn’t refresh the page, retrying…');
+                        retryRefresh(1);
                     }
                 });
             });
