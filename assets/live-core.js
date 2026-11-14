@@ -67,9 +67,36 @@
     var channel = null;
     var stopped = false;
 
+    // Leading-edge + trailing coalesce. An idle→first ping fires onPing
+    // immediately so a score change the user is watching doesn't eat a
+    // 250 ms floor before the refetch starts. Pings arriving inside a
+    // 250 ms window coalesce: one idle→burst sequence produces at most
+    // 1 leading + 1 trailing refetch (2 total), so the backend stays
+    // safe even if the app sends point-added, game-completed, match-
+    // started in quick succession.
+    //
+    // nowMs(): prefer monotonic performance.now() so an NTP step or a
+    // system-clock change can never make `since` negative and defer the
+    // trailing timer by minutes. Date.now() as fallback for old envs.
+    var COALESCE_MS = 250;
+    var nowMs = (typeof performance !== 'undefined' && performance.now)
+      ? function () { return performance.now(); }
+      : function () { return Date.now(); };
+    var lastRun = -Infinity;
     function ping() {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(onPing, 250);
+      var now = nowMs();
+      var since = now - lastRun;
+      if (since >= COALESCE_MS) {
+        lastRun = now;
+        onPing();
+      } else if (!debounceTimer) {
+        debounceTimer = setTimeout(function () {
+          debounceTimer = null;
+          if (stopped) return;
+          lastRun = nowMs();
+          onPing();
+        }, COALESCE_MS - since);
+      }
     }
 
     function connect() {
