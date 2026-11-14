@@ -147,6 +147,9 @@ table.live-table { width: 100%; border-collapse: collapse; font-size: 14px; min-
 .bv-scroll { overflow-x: auto; padding: 8px 0 24px; -webkit-overflow-scrolling: touch; }
 .bv-tree { display: flex; align-items: stretch; gap: 0; min-width: min-content; }
 .bv-side-title { font-family: var(--f-display); font-size: 1.1rem; margin: 18px 0 6px; }
+/* s38: the side headings sit on the always-dark .bvx panel; use its ink, not the page's
+   (dark page ink on the panel was 1.14:1 in the light theme). */
+.bvx .bv-side-title { color: var(--ink); }
 .bv-col { display: flex; flex-direction: column; min-width: 220px; }
 .bv-round-title { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); padding: 0 26px 10px 8px; position: sticky; top: 0; }
 .bv-grid { display: grid; flex: 1; }

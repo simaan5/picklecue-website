@@ -473,9 +473,10 @@
           var key = m.bracket_side || 'winners';
           (sides[key] = sides[key] || []).push(m);
         });
-        var order = ['winners', 'losers', 'finals'].filter(function (k) { return sides[k]; });
+        var order = ['winners', 'losers', 'grand_final', 'reset_final', 'finals'].filter(function (k) { return sides[k]; });
         Object.keys(sides).forEach(function (k) { if (order.indexOf(k) === -1) order.push(k); });
-        var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', finals: 'Finals' };
+        // grand_final / reset_final are the schema's bracket_side values (s38); same names as the iPhone app.
+        var titles = { winners: 'Winners Bracket', losers: 'Losers Bracket', grand_final: 'Grand Final', reset_final: 'Grand Final \u2014 Reset', finals: 'Finals' };
         container.innerHTML = order.map(function (k) {
           return '<h3 class="bv-side-title">' + (titles[k] || k) + '</h3><div class="bc-stack" data-side="' + k + '"></div>';
         }).join('');
