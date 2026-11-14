@@ -63,6 +63,25 @@
     return 'Round ' + (index + 1);
   }
 
+  // Human round name for one match of a single-elimination snapshot (live
+  // page match cards). The API numbers rounds either way round (the app's
+  // brackets use round=1 for the Final), so "Round 1" on a card could mean
+  // the Final. Named only when the bracket is complete (counts halve down to
+  // one match); otherwise null and the caller keeps its own label.
+  function roundTitleFor(snap, m) {
+    if (!isElimination(snap) || !m || m.round == null || (m.bracket_side && m.bracket_side !== 'winners')) return null;
+    var main = (snap.matches || []).filter(function (x) { return !x.bracket_side || x.bracket_side === 'winners'; });
+    var rounds = orderRounds(main);
+    if (!rounds.length || rounds[rounds.length - 1].length !== 1) return null;
+    for (var i = 1; i < rounds.length; i++) {
+      if (rounds[i - 1].length !== 2 * rounds[i].length) return null;
+    }
+    for (var j = 0; j < rounds.length; j++) {
+      if (rounds[j].length && rounds[j][0].round === m.round) return roundTitle(j, rounds.length, rounds[j].length);
+    }
+    return null;
+  }
+
   // BracketTheme.condensedRoundLabel
   function condense(name) {
     var lower = name.toLowerCase();
@@ -614,5 +633,5 @@
     });
   }
 
-  window.PCBracket = { render: render, isElimination: isElimination, isRoundRobin: isRoundRobin, supports: supports };
+  window.PCBracket = { render: render, isElimination: isElimination, isRoundRobin: isRoundRobin, supports: supports, roundTitleFor: roundTitleFor };
 })();
