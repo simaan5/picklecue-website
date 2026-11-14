@@ -4,7 +4,7 @@
 // with LAT ms per request; nothing else leaves the machine.
 //  1. tap "Check in" -> row shows READY in < 100 ms while the save takes 300 ms
 //  2. a refused save rolls the row back and shows the server's message
-//  3. rapid check-in / undo / check-in taps with jittery latency: the server
+//  3. quick check-in / undo / check-in taps (500 ms apart) with jittery latency: the server
 //     and the screen both end on the last tap
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
@@ -107,6 +107,15 @@ await sleep(1500);
 check(await rowState(teams[3].id) === 'not_checked_in', 'refused save rolled the row back');
 check(dialogs.includes('Check-in is closed for this event.'), 'server message shown');
 
+// 2b. a fast double tap on "Check in" checks in ONE player, not the next row too
+be.latency = () => 300;
+const doubleTarget = teams.find(t => be.st[t.id] === 'not_checked_in' && t.id !== teams[3].id);
+const others = teams.filter(t => t.id !== doubleTarget.id && be.st[t.id] === 'not_checked_in').map(t => t.id);
+await page.dblclick(`[data-ci="${doubleTarget.id}:checked_in"]`, { delay: 120 });
+await sleep(1500);
+check(be.st[doubleTarget.id] === 'checked_in', 'double tap: the tapped player is checked in');
+check(others.every(id => be.st[id] === 'not_checked_in'), 'double tap: no other player was checked in');
+
 // 3. rapid toggles, jittery latency
 be.latency = () => 30 + Math.random() * 500;
 let bad = 0;
@@ -116,7 +125,7 @@ for (let k = 0; k < 6; k++) {
   for (const st of [first, first === 'checked_in' ? 'not_checked_in' : 'checked_in', first]) {
     await page.waitForSelector(`[data-ci="${pid}:${st}"]`, { timeout: 3000 }).catch(() => {});
     await page.evaluate(sel => { const b = document.querySelector(sel); if (b) b.click(); }, `[data-ci="${pid}:${st}"]`);
-    await sleep(80);
+    await sleep(500);
   }
   await sleep(2200);
   if (be.st[pid] !== first || await rowState(pid) !== first) bad++;

@@ -108,7 +108,14 @@
         // every snapshot until a refetch that STARTED after the save landed has
         // been applied, so an older in-flight refetch can't flip the row back.
         // Saves for one row go out one at a time, in tap order.
+        // While a row has a tap pending it keeps its place in the list (sorted
+        // by its status before the tap), so a fast double tap can't land on the
+        // next player's row that slid into the same spot. A row also ignores
+        // taps for TAP_GUARD_MS after it changed under the finger.
         var pending = {}, saveChain = {}, fetchSeq = 0, appliedSeq = 0;
+        var serverStatus = {}, tapGuardUntil = {}, TAP_GUARD_MS = 450;
+        function statusOf(id) { return (readiness[id] || {}).check_in_status || 'not_checked_in'; }
+        function sortStatusOf(id) { return pending[id] ? pending[id].sortAs : statusOf(id); }
 
         function overlayPending() {
             Object.keys(pending).forEach(function (id) {
@@ -130,15 +137,17 @@
             snap = results[0];
             waiver = results[2].data || null;
             readiness = {};
-            (results[1].data || []).forEach(function (x) { readiness[x.id] = x; });
+            serverStatus = {};
+            (results[1].data || []).forEach(function (x) { readiness[x.id] = x; serverStatus[x.id] = x.check_in_status || 'not_checked_in'; });
             overlayPending();
             if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
             render();
         }
 
         function setCheckIn(id, status) {
-            var before = (readiness[id] || {}).check_in_status || 'not_checked_in';
-            var mine = { status: status, untilSeq: Infinity };
+            if (Date.now() < (tapGuardUntil[id] || 0)) return; // double tap
+            tapGuardUntil[id] = Date.now() + TAP_GUARD_MS;
+            var mine = { status: status, untilSeq: Infinity, sortAs: pending[id] ? pending[id].sortAs : statusOf(id) };
             pending[id] = mine;
             readiness[id] = Object.assign({}, readiness[id] || { id: id }, { check_in_status: status });
             render();
@@ -153,7 +162,8 @@
             }).catch(function (e) {
                 if (pending[id] === mine) {
                     delete pending[id];
-                    readiness[id] = Object.assign({}, readiness[id] || { id: id }, { check_in_status: before });
+                    // back to what the server last said (not an earlier unsaved tap)
+                    readiness[id] = Object.assign({}, readiness[id] || { id: id }, { check_in_status: serverStatus[id] || 'not_checked_in' });
                     if (snap) render();
                 }
                 alert((e && e.message) || 'Couldn’t save that check-in. Try again.');
@@ -176,8 +186,8 @@
                 return !search || (m.name || '').toLowerCase().indexOf(search.toLowerCase()) !== -1;
             }).sort(function (a, b) {
                 // Not-checked-in first — that's who the desk is looking for.
-                var sa = (readiness[a.id] || {}).check_in_status || 'not_checked_in';
-                var sb = (readiness[b.id] || {}).check_in_status || 'not_checked_in';
+                var sa = sortStatusOf(a.id);
+                var sb = sortStatusOf(b.id);
                 if (sa !== sb) return sa === 'not_checked_in' ? -1 : 1;
                 return (a.name || '').localeCompare(b.name || '');
             }).map(function (m) {
