@@ -63,6 +63,30 @@
     return 'Round ' + (index + 1);
   }
 
+  // TournamentBracket.doubleEliminationRoundName (iPhone app). Each DE side
+  // names its own rounds; the SE names above would call the losers' last round
+  // and the grand final both "Final". index is the column (0-based), as in the app.
+  function deRoundTitle(side, index, total) {
+    var round = index + 1;
+    if (side === 'grand_final') return 'Grand Final';
+    if (side === 'reset_final') return 'Grand Final \u2014 Reset';
+    if (side === 'winners') {
+      if (round === total) return 'Winners Final';
+      if (round === total - 1) return 'Winners Semifinals';
+      return 'Winners Round ' + round;
+    }
+    if (side === 'losers') return round === total ? 'Losers Final' : 'Losers Round ' + round;
+    return 'Round ' + round;
+  }
+
+  // Rail chip / card prefix, as in the app: W1, L1, ... (DoubleEliminationCanvasView)
+  // and GF / GF2 (DoubleEliminationBracketScreen.condensedLabel).
+  function deRoundShort(side, index) {
+    if (side === 'grand_final') return 'GF';
+    if (side === 'reset_final') return 'GF2';
+    return (side === 'losers' ? 'L' : side === 'winners' ? 'W' : 'R') + (index + 1);
+  }
+
   // BracketTheme.condensedRoundLabel
   function condense(name) {
     var lower = name.toLowerCase();
@@ -481,7 +505,12 @@
           return '<h3 class="bv-side-title">' + (titles[k] || k) + '</h3><div class="bc-stack" data-side="' + k + '"></div>';
         }).join('');
         order.forEach(function (k) {
-          renderCanvas(container.querySelector('.bc-stack[data-side="' + k + '"]'), snap, ctx, sides[k]);
+          var rounds = orderRounds(sides[k]);
+          renderCanvas(container.querySelector('.bc-stack[data-side="' + k + '"]'), snap, ctx, sides[k], {
+            rounds: rounds,
+            titles: rounds.map(function (_, i) { return deRoundTitle(k, i, rounds.length); }),
+            condensed: rounds.map(function (_, i) { return deRoundShort(k, i); }),
+          });
         });
       } else {
         renderCanvas(container, snap, ctx, snap.matches);
