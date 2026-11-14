@@ -910,9 +910,21 @@
         // disabled so a second Update/Complete can't be sent. Cleared when
         // the request settles (success re-renders, failure re-enables).
         var inflight = {};
+        // Start / Update / Complete / Correct all write the same match's
+        // score, so they share one in-flight key per match: before, Update
+        // and Complete could both be on the wire at once and land in either
+        // order (s28 review P3). Set court has its own key.
+        var SCORE_ACTS = ['start', 'save', 'complete', 'correct'];
+        function actGroup(attr) { return SCORE_ACTS.indexOf(attr) >= 0 ? SCORE_ACTS : [attr]; }
         function actionButtons(attr, mid) {
-            return main.querySelectorAll('[data-' + attr + '="' + (window.CSS && CSS.escape ? CSS.escape(mid) : mid) + '"]');
+            var v = (window.CSS && CSS.escape ? CSS.escape(mid) : mid);
+            return main.querySelectorAll(actGroup(attr).map(function (a) { return '[data-' + a + '="' + v + '"]'; }).join(','));
         }
+        // A request with no reply after this long is treated as "unknown":
+        // the buttons come back and the page re-reads what the server has,
+        // instead of staying disabled until a reload (s28 review P3).
+        var ACTION_TIMEOUT_MS = 15000;
+        function ActionTimeout() { this.message = 'timeout'; }
         // Refresh retry after a saved action whose follow-up refetch failed:
         // 3 s, 6 s, 9 s … up to 5 tries (a live ping also refreshes).
         function retryRefresh(n) {
@@ -930,21 +942,38 @@
                 if (b.__pcWired) return;
                 b.__pcWired = true;
                 var mid = b.dataset[attr];
-                var key = attr + ':' + mid;
+                var key = (actGroup(attr) === SCORE_ACTS ? 'score' : attr) + ':' + mid;
                 if (inflight[key]) b.disabled = true;
                 b.addEventListener('click', async function () {
                     if (inflight[key]) return;
                     inflight[key] = true;
                     b.disabled = true;
+                    Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = true; });
+                    var timer;
                     try {
-                        var done = await fn(mid);
+                        var done = await Promise.race([
+                            Promise.resolve().then(function () { return fn(mid); }),
+                            new Promise(function (_, rej) { timer = setTimeout(function () { rej(new ActionTimeout()); }, ACTION_TIMEOUT_MS); }),
+                        ]);
+                        clearTimeout(timer);
                         delete inflight[key];
                         // Only Update / Complete save the typed score; Start and
                         // Correct don't, so a typed score survives them.
                         if (done !== null && (label === 'save' || label === 'complete')) forgetEdits(['s1-' + mid, 's2-' + mid]);
                         if (done !== null && label === 'set court') forgetEdits(['court-' + mid]);
                     } catch (e) {
+                        clearTimeout(timer);
                         delete inflight[key];
+                        if (e instanceof ActionTimeout) {
+                            // Unknown outcome: it may still land. Don't call it
+                            // failed; re-read the server and let the organizer
+                            // decide with the real state on screen.
+                            var tmsg = document.getElementById('barMsg');
+                            if (tmsg) tmsg.textContent = 'No reply after ' + (ACTION_TIMEOUT_MS / 1000) + ' s — check your connection. Showing the latest saved scores.';
+                            Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = false; });
+                            refetchEvent().catch(function () { retryRefresh(1); });
+                            return;
+                        }
                         alert(e.message || ('Couldn’t ' + label + ' — try again.'));
                         b.disabled = false;
                         Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = false; });
