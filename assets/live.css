@@ -154,7 +154,13 @@ table.live-table { width: 100%; border-collapse: collapse; font-size: 14px; min-
     .sk-side .sk-plus { width: auto; flex: 3 1 0; min-width: 56px; }
     /* Team names wrap instead of ellipsizing to "O…" next to a button. */
     .event-row .title { white-space: normal; overflow-wrap: anywhere; }
-    /* Check-in rows: name on its own line, buttons below it, full width. */
+}
+
+/* Check-in rows: name on its own line, buttons below it, full width.
+   700 px, not 560: with three actions (Check in + No-show + Sign waiver,
+   ~330 px, not shrinkable) a waiver row's name was still ellipsized
+   between 561 and ~650 px. */
+@media (max-width: 700px) {
     .ci-row { flex-wrap: wrap; }
     .ci-row .grow { flex-basis: 100%; }
     .ci-row .ci-actions { width: 100%; justify-content: flex-start; }
