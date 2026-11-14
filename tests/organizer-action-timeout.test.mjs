@@ -6,6 +6,10 @@
 //  2. A request that never replies left its button disabled until a page
 //     reload. Now after 15 s the buttons come back, the bar says so, and the
 //     page re-reads the server.
+//  4. (s31 review P3) A write that replies only after the 15 s timeout did
+//     land, so the typed score must stop overriding the server's score
+//     (before: the next live ping still showed the stale typed text). A
+//     score typed again after the timeout is kept.
 //  3. (review P2) Time spent in the Complete confirm() dialog doesn't count:
 //     a 16 s think before OK must not show 'No reply' while the write is fine.
 // Local only: *.supabase.co and the realtime socket are mocked.
@@ -73,7 +77,9 @@ await ctx.route('**/*', async route => {
   if (url.pathname.endsWith('/is_pro_subscriber')) return json(true);
   if (url.pathname.endsWith('/record_score_event')) {
     let body = {}; try { body = JSON.parse(route.request().postData() || '{}'); } catch {}
-    be.rpcs.push({ ...body, t: Date.now() }); if (be.hang) await new Promise(() => {}); await sleep(be.rpcDelay); return json({ ok: true });
+    be.rpcs.push({ ...body, t: Date.now() }); if (be.hang) await new Promise(() => {});
+    if (be.lateMs) { await sleep(be.lateMs); if (body.p_match_id === 'm2' && body.p_score1 != null) be.b = body.p_score1; return json({ ok: true }); }
+    await sleep(be.rpcDelay); return json({ ok: true });
   }
   return json(null);
 });
@@ -155,6 +161,33 @@ const msg3 = await page.evaluate(() => (document.getElementById('barMsg') || {})
 await banner(!/No reply/.test(msg3) && be.rpcs.length === 1, `16 s in the Complete confirm dialog, write replied in 30 ms. Bar: "${msg3}"; writes sent: ${be.rpcs.length}`, '3-slow-confirm');
 check(!/No reply/.test(msg3), `16 s in the confirm dialog is not counted as a missing reply (bar: ${JSON.stringify(msg3)})`);
 check(be.rpcs.length === 1, `one write sent (${be.rpcs.length})`);
+
+// 4. Update that replies after 17 s (past the 15 s timeout) — it did land.
+await sleep(1000);
+await page.waitForSelector('[data-save="m2"]');
+await page.evaluate(() => { const m = document.getElementById('barMsg'); if (m) m.textContent = ''; });
+be.b = 2; ping(); await sleep(600);
+await page.fill('#s1-m2', '9'); await page.fill('#s2-m2', '4');
+be.lateMs = 17000; be.rpcs.length = 0;
+await page.click('[data-save="m2"]');
+await sleep(18500); be.lateMs = 0;        // the late reply has arrived
+be.b = 10; ping(); await sleep(800);      // another scorer moves it on; live ping
+const v4 = await page.evaluate(() => document.getElementById('s1-m2').value);
+const msg4 = await page.evaluate(() => (document.getElementById('barMsg') || {}).textContent || '');
+await banner(v4 === '10', `Update replied after 17 s (timeout at 15 s), then the live score moved to 10. Field shows "${v4}" (server: 10). Bar: "${msg4}"`, '4-late-success');
+check(v4 === '10', `a success after the timeout drops the typed score so live pings show the server (field ${JSON.stringify(v4)}, want "10")`);
+
+// 4b. Same, but the organizer types a new score after the timeout: keep it.
+await page.waitForSelector('[data-save="m2"]');
+await page.fill('#s1-m2', '11'); await page.fill('#s2-m2', '4');
+be.lateMs = 17000;
+await page.click('[data-save="m2"]');
+await sleep(16000);                       // timed out; buttons are back
+await page.fill('#s1-m2', '12');          // organizer retypes before the late reply
+await sleep(2500); be.lateMs = 0;
+ping(); await sleep(800);
+const v4b = await page.evaluate(() => document.getElementById('s1-m2').value);
+check(v4b === '12', `a score typed after the timeout survives the late success (field ${JSON.stringify(v4b)}, want "12")`);
 
 await browser.close(); srv.close();
 process.exit(failures ? 1 : 0);

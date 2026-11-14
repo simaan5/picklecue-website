@@ -59,6 +59,7 @@
         var main = document.getElementById('main');
         var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches', qrOpen = false;
         var bvOpenMid = null; // match whose bracket-view panel is open
+        var barNote = '';     // message under the tabs; see setBarNote
         var readiness = {}, ciFilter = 'all', ciSearch = '';
         var regSettings = null, regList = [], pairFirst = null;
         var waiver = null;
@@ -323,7 +324,7 @@
                     ? '<button class="tab" data-etab="bracket" aria-selected="' + (eventTab === 'bracket') + '">Bracket</button>' : '') +
                 '<button class="tab" data-etab="checkin" aria-selected="' + (eventTab === 'checkin') + '">Check-In</button>' +
                 '<button class="tab" data-etab="register" aria-selected="' + (eventTab === 'register') + '">Registration</button></div>' +
-                '<p class="ok" id="barMsg"></p></div>';
+                '<p class="ok" id="barMsg">' + esc(barNote) + '</p></div>';
 
             var rows = (snap.matches || []).map(function (m) {
                 var id1 = isT ? m.participant1_id : m.team1_member_id;
@@ -924,6 +925,15 @@
         // the buttons come back and the page re-reads what the server has,
         // instead of staying disabled until a reload (s28 review P3).
         var ACTION_TIMEOUT_MS = 15000;
+        // The bar message is part of the re-rendered HTML, so a note set
+        // straight on #barMsg was wiped by the very next refetch/live ping
+        // (the "No reply" note lasted ~30 ms). Keep it here; renderEvent
+        // paints it. Cleared when the organizer starts another action.
+        function setBarNote(text) {
+            barNote = text || '';
+            var el = document.getElementById('barMsg');
+            if (el) el.textContent = barNote;
+        }
         function ActionTimeout() { this.message = 'timeout'; }
         // Refresh retry after a saved action whose follow-up refetch failed:
         // 3 s, 6 s, 9 s … up to 5 tries (a live ping also refreshes).
@@ -947,9 +957,16 @@
                 b.addEventListener('click', async function () {
                     if (inflight[key]) return;
                     inflight[key] = true;
+                    setBarNote('');
                     b.disabled = true;
                     Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = true; });
                     var timer;
+                    // What this click sends from the typed fields, so a reply
+                    // that lands after the timeout can drop exactly those
+                    // edits (and not a score typed again since).
+                    var sentIds = label === 'save' || label === 'complete' ? ['s1-' + mid, 's2-' + mid]
+                        : label === 'set court' ? ['court-' + mid] : [];
+                    var sentVals = sentIds.map(function (id) { var el = document.getElementById(id); return el ? el.value : null; });
                     try {
                         // fn() runs first and synchronously: Complete/Correct
                         // ask confirm()/prompt() there, and the reply clock
@@ -973,10 +990,26 @@
                             // Unknown outcome: it may still land. Don't call it
                             // failed; re-read the server and let the organizer
                             // decide with the real state on screen.
-                            var tmsg = document.getElementById('barMsg');
-                            if (tmsg) tmsg.textContent = 'No reply after ' + (ACTION_TIMEOUT_MS / 1000) + ' s — check your connection. Showing the latest saved scores.';
+                            setBarNote('No reply after ' + (ACTION_TIMEOUT_MS / 1000) + ' s — check your connection. Showing the latest saved scores.');
                             Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = false; });
                             refetchEvent().catch(function () { retryRefresh(1); });
+                            // If it does land later, it saved: the typed text
+                            // must stop overriding the server's score on live
+                            // pings (s31 review P3). Fields retyped since the
+                            // timeout keep the newer text.
+                            Promise.resolve(req).then(function (late) {
+                                if (late === null) return;
+                                var same = sentIds.filter(function (id, i) {
+                                    var el = document.getElementById(id);
+                                    return !el || el.value === sentVals[i];
+                                });
+                                forgetEdits(same);
+                                if (view.mode !== 'event') return;
+                                setBarNote('Saved — the reply came late.');
+                                refetchEvent().catch(function () { retryRefresh(1); });
+                            }, function (lateErr) {
+                                console.error('[organizer] ' + label + ' failed after the timeout', lateErr);
+                            });
                             return;
                         }
                         alert(e.message || ('Couldn’t ' + label + ' — try again.'));
@@ -991,8 +1024,7 @@
                         await refetchEvent();
                     } catch (e2) {
                         console.error('[organizer] refresh after ' + label + ' failed', e2);
-                        var msg = document.getElementById('barMsg');
-                        if (msg) msg.textContent = 'Saved — couldn’t refresh the page, retrying…';
+                        setBarNote('Saved — couldn’t refresh the page, retrying…');
                         retryRefresh(1);
                     }
                 });
