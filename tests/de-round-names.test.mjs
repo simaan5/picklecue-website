@@ -41,14 +41,24 @@ const snapshot = {
             ...mk('losers', 1, 2), ...mk('losers', 2, 2), ...mk('losers', 3, 1), ...mk('losers', 4, 1),
             ...mk('grand_final', 1, 1), ...mk('reset_final', 1, 1)],
 };
-const EXPECT = {
-  winners: ['Winners Round 1', 'Winners Semifinals', 'Winners Final'],
-  losers: ['Losers Round 1', 'Losers Round 2', 'Losers Round 3', 'Losers Final'],
-  grand_final: ['Grand Final'],
-  reset_final: ['Grand Final — Reset'],
+// Three shapes: 8 teams; 4 teams; and 8 teams with rounds numbered from the final down
+// (some app-built brackets store round=1 for the last round; orderRounds flips them).
+const shapes = {
+  eight: { m: () => snapshot.matches, x: {
+    winners: ['Winners Round 1', 'Winners Semifinals', 'Winners Final'],
+    losers: ['Losers Round 1', 'Losers Round 2', 'Losers Round 3', 'Losers Final'],
+    grand_final: ['Grand Final'], reset_final: ['Grand Final — Reset'] }, chips: { winners: 'W1 W2 W3', losers: 'L1 L2 L3 L4', grand_final: 'GF', reset_final: 'GF2' } },
+  four: { m: () => [...mk('winners', 1, 2), ...mk('winners', 2, 1), ...mk('losers', 1, 1), ...mk('losers', 2, 1), ...mk('grand_final', 1, 1), ...mk('reset_final', 1, 1)], x: {
+    winners: ['Winners Semifinals', 'Winners Final'], losers: ['Losers Round 1', 'Losers Final'],
+    grand_final: ['Grand Final'], reset_final: ['Grand Final — Reset'] } },
+  reversed: { m: () => [...mk('winners', 3, 4), ...mk('winners', 2, 2), ...mk('winners', 1, 1), ...mk('losers', 4, 2), ...mk('losers', 3, 2), ...mk('losers', 2, 1), ...mk('losers', 1, 1), ...mk('grand_final', 1, 1)], x: {
+    winners: ['Winners Round 1', 'Winners Semifinals', 'Winners Final'],
+    losers: ['Losers Round 1', 'Losers Round 2', 'Losers Round 3', 'Losers Final'], grand_final: ['Grand Final'] } },
 };
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
-for (const width of [390, 1280]) {
+for (const [shape, def] of Object.entries(shapes)) for (const width of (shape === 'eight' ? [390, 1280] : [390])) {
+  snapshot.matches = def.m();
+  const EXPECT = def.x;
   const ctx = await browser.newContext({ viewport: { width, height: 900 } });
   await ctx.addInitScript(() => localStorage.setItem('pc_consent', 'denied'));
 await ctx.route('**/*', async route => {
@@ -72,14 +82,19 @@ await ctx.route('**/*', async route => {
   const page = await ctx.newPage();
   await page.goto(`${BASE}/live.html?t=${DE}`);
   await page.click('text=Bracket');
-  await page.waitForSelector('.bc-stack[data-side="reset_final"] .bc-roundhead');
+  await page.waitForSelector('.bc-stack[data-side="grand_final"] .bc-roundhead');
   const got = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.bc-stack[data-side]')].map(s =>
     [s.dataset.side, [...s.querySelectorAll('.bc-roundhead > span')].map(x => x.textContent)])));
   for (const side of Object.keys(EXPECT)) {
-    check(JSON.stringify(got[side]) === JSON.stringify(EXPECT[side]), `${width}px ${side}: ${JSON.stringify(got[side])}`);
+    check(JSON.stringify(got[side]) === JSON.stringify(EXPECT[side]), `${shape} ${width}px ${side}: ${JSON.stringify(got[side])}`);
+  }
+  if (def.chips) {
+    const chips = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.bc-stack[data-side]')].map(s =>
+      [s.dataset.side, [...s.querySelectorAll('.bc-chip')].map(x => x.textContent).join(' ')])));
+    check(JSON.stringify(chips) === JSON.stringify(def.chips), `${shape} ${width}px rail chips: ${JSON.stringify(chips)}`);
   }
   const anyBareFinal = Object.values(got).flat().filter(t => t === 'Final');
-  check(anyBareFinal.length === 0, `${width}px no round header reads a bare "Final" (${anyBareFinal.length})`);
+  check(anyBareFinal.length === 0, `${shape} ${width}px no round header reads a bare "Final" (${anyBareFinal.length})`);
   await ctx.close();
 }
 await browser.close(); srv.close();

@@ -79,10 +79,11 @@
     return 'Round ' + round;
   }
 
-  // Rail chip / card prefix (the app's DoubleEliminationSideCanvas.condensedLabel: W1, L1, ...).
+  // Rail chip / card prefix, as in the app: W1, L1, ... (DoubleEliminationCanvasView)
+  // and GF / GF2 (DoubleEliminationBracketScreen.condensedLabel).
   function deRoundShort(side, index) {
     if (side === 'grand_final') return 'GF';
-    if (side === 'reset_final') return 'Reset';
+    if (side === 'reset_final') return 'GF2';
     return (side === 'losers' ? 'L' : side === 'winners' ? 'W' : 'R') + (index + 1);
   }
 

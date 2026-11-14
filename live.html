@@ -320,14 +320,22 @@
             var sel = row.querySelector('[aria-selected="true"]');
             // Only when the selection changed: a live-update re-render must not undo the user's own scroll.
             if (sel && tabRowShown !== activeTab) {
-                var pad = 40;
+                var pad = 56; // clear of the 48px fade (live.css .tabs.more-end)
                 if (sel.offsetLeft - pad < row.scrollLeft) row.scrollLeft = sel.offsetLeft - pad;
                 else if (sel.offsetLeft + sel.offsetWidth + pad > row.scrollLeft + row.clientWidth) row.scrollLeft = sel.offsetLeft + sel.offsetWidth + pad - row.clientWidth;
             }
             tabRowShown = activeTab;
             updateTabHint(row);
             row.addEventListener('scroll', function () { updateTabHint(row); }, { passive: true });
+            // Width changes without a scroll or render (web font swap, page scrollbar, resize).
+            if (tabRowObserver) tabRowObserver.disconnect();
+            if (window.ResizeObserver) {
+                tabRowObserver = new ResizeObserver(function () { updateTabHint(row); });
+                tabRowObserver.observe(row);
+                Array.prototype.forEach.call(row.children, function (t) { tabRowObserver.observe(t); });
+            }
         }
+        var tabRowObserver = null;
         window.addEventListener('resize', function () {
             var row = main.querySelector('.tabs');
             if (row) updateTabHint(row);

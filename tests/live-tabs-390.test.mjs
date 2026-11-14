@@ -94,7 +94,10 @@ await ctx.route('**/*', async route => {
   check(!s.end && s.tabs[s.tabs.length - 1].full, `2b. re-render with the same tab keeps the row scrolled to the end (more-end=${s.end})`);
   await page.evaluate(() => { document.querySelector('.tabs').scrollLeft = 0; });
   await page.waitForTimeout(150);
-  await page.click('.tab[data-tab="players"]');
+  s = await state(page);
+  check(!s.tabs.find(t => t.text === 'Teams').full, '3a. before the tap, Teams is cut off (so 3 tests the scroll-into-view)');
+  // DOM click: Playwright's page.click would scroll Teams into view itself.
+  await page.evaluate(() => document.querySelector('.tab[data-tab="players"]').click());
   await page.waitForTimeout(150);
   s = await state(page);
   const sel = s.tabs.find(t => t.sel);
