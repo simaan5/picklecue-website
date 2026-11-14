@@ -3,8 +3,10 @@
 // "you're registered" chip) before it paints. A reply that never comes
 // (stalled mobile connection) used to hold the paint back forever:
 // case 1 the first load sat on "Loading…"; case 2 a later score ping
-// never showed the new score. After: the chip RPC gets 5 s, then the
-// scores paint without it. Local only: *.supabase.co and realtime mocked.
+// never showed the new score. Case 3 (review P2): with the chip hung and
+// pings every 2 s, every new score must still paint. After: scores paint
+// first; the chip (5 s timeout) is fetched afterwards and only the newest
+// refetch's reply may apply. Local only: *.supabase.co and realtime mocked.
 // Optional: PC_SHOT / PC_SHOT2=/path.png screenshots of each state.
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
@@ -37,7 +39,7 @@ const snap = s1 => ({ tournament: { id: T_ID, name: 'Harbor Fall Classic', is_pu
   participants: [{ id: 'p1', name: 'Rivera / Chen', members: [] }, { id: 'p2', name: 'Okafor / Lindqvist', members: [] }],
   matches: [{ id: 'm1', round: 1, match_number: 1, court: 'Court 1', status: 'in_progress', participant1_id: 'p1', participant2_id: 'p2', live: { score1: s1, score2: 3, game: 1 } }] });
 
-let browser, first = null, firstMs = null, later = null, laterMs = null, err = null;
+let browser, first = null, firstMs = null, later = null, laterMs = null, steady = [], err = null;
 const HANG = new Promise(() => {});
 // PC_CASE2_ONLY=1: first load answers normally, only the later ping's chip RPC hangs.
 const CASE2_ONLY = process.env.PC_CASE2_ONLY === '1';
@@ -92,13 +94,22 @@ try {
     wsSend(joinRef, null, 'realtime:live:t:' + T_ID, 'broadcast', { type: 'broadcast', event: 'change', payload: { table: 'score_events' } });
     while (Date.now() - t1 < 8000 && (later = await pts()) !== '7') await sleep(50);
     laterMs = later === '7' ? Date.now() - t1 : null;
+    // Case 3: steady pings 2 s apart, chip still hung.
+    for (const v of [8, 9, 10]) {
+      await sleep(2000); score1 = v; const t2 = Date.now(); let got = null;
+      wsSend(joinRef, null, 'realtime:live:t:' + T_ID, 'broadcast', { type: 'broadcast', event: 'change', payload: { table: 'score_events' } });
+      while (Date.now() - t2 < 1900 && (got = await pts()) !== String(v)) await sleep(50);
+      steady.push(got === String(v) ? Date.now() - t2 : null);
+    }
     await banner(page, later === '7', later === '7' ? `server score 7 painted ${laterMs} ms after the ping (chip RPC hung)` : `server score 7; page still shows ${later} 8 s after the ping (chip RPC hung)`, process.env.PC_SHOT2);
   }
 } catch (e) { err = e; }
 await browser?.close(); srv.close();
 if (err) { console.error('FAIL ', err); process.exit(1); }
-const ok1 = first === '4' && (CASE2_ONLY || firstMs < 7000);
-const ok2 = later === '7' && laterMs < 7000;
+const ok1 = first === '4' && (CASE2_ONLY || firstMs < 2000);
+const ok2 = later === '7' && laterMs < 2000;
+const ok3 = steady.length === 3 && steady.every(x => x !== null);
 console.log((ok1 ? 'ok   ' : 'FAIL ') + `first load with a hung registration_status paints scores: ${first === null ? 'never (8 s)' : firstMs + ' ms'}`);
 console.log((ok2 ? 'ok   ' : 'FAIL ') + `score ping with a hung registration_status paints the new score: ${laterMs == null ? 'never (8 s)' : laterMs + ' ms'}`);
-process.exit(ok1 && ok2 ? 0 : 1);
+console.log((ok3 ? 'ok   ' : 'FAIL ') + `steady pings every 2 s with a hung chip RPC: each new score painted in ${steady.map(x => x == null ? 'never' : x + ' ms').join(', ')}`);
+process.exit(ok1 && ok2 && ok3 ? 0 : 1);

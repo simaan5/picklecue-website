@@ -705,20 +705,8 @@
                 snap = results[0];
                 regInfo = results[1].data || null;
                 waiver = results[2].data || null;
-                try {
-                    var regId = localStorage.getItem('pc_reg_' + eventId);
-                    if (regId) {
-                        var rs = await withTimeout(PC.client.rpc('registration_status', { p_registration_id: regId }), REG_TIMEOUT_MS);
-                        // A newer refetch applied while this reply was in
-                        // flight: its own reply (and paint) wins.
-                        if (seq !== appliedSeq) return;
-                        myReg = rs.data || null;
-                    }
-                } catch (_) {
-                    // Timed out or failed: keep the last known chip and paint
-                    // the scores, unless a newer refetch has taken over.
-                    if (seq !== appliedSeq) return;
-                }
+                var regId = null;
+                try { regId = localStorage.getItem('pc_reg_' + eventId); } catch (_) {}
             } catch (e) {
                 console.error('[live] snapshot failed', e);
                 // First load failed: say so and retry. Before, the page sat on
@@ -735,6 +723,20 @@
             }
             document.title = ((kind === 't' ? snap.tournament : snap.league).name || 'Live') + ' · PickleCue';
             render();
+            // The chip is fetched after the scores are on screen, so a slow or
+            // hung reply can never hold back (or, with steady pings, starve)
+            // the score paint. Only the newest refetch's reply may apply.
+            if (regId) loadMyReg(seq, regId);
+        }
+        async function loadMyReg(seq, regId) {
+            try {
+                var rs = await withTimeout(PC.client.rpc('registration_status', { p_registration_id: regId }), REG_TIMEOUT_MS);
+                if (seq !== appliedSeq) return;
+                var next = rs.data || null;
+                if (JSON.stringify(next) === JSON.stringify(myReg)) return;
+                myReg = next;
+                render();
+            } catch (_) { /* keep the last known chip */ }
         }
 
         var failCount = 0, retryTimer = null;
