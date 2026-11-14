@@ -32,7 +32,7 @@
   }
 
   async function recordScoreEvent(opts) {
-    var r = await client.rpc('record_score_event', {
+    var args = {
       p_scope: opts.scope,               // 'tournament' | 'league'
       p_match_id: opts.matchId,
       p_event_type: opts.eventType,      // point_added | point_removed | game_completed | match_started | match_completed | score_corrected
@@ -41,9 +41,47 @@
       p_game: opts.game ?? null,
       p_note: opts.note ?? null,
       p_source: 'web',
-    });
-    if (r.error) throw r.error;
+    };
+    // Idempotency key (score_events unique (match_id, client_event_id),
+    // migration 20260901120000). A retry with the same key is a server replay,
+    // never a second point.
+    if (opts.clientEventId) args.p_client_event_id = opts.clientEventId;
+    // A half-open mobile connection can hang a request for minutes; give up
+    // after timeoutMs so the caller's retry (same key) can take over. The
+    // abort surfaces as status 0, which isTransientError treats as retryable.
+    var call = function () {
+      var q = client.rpc('record_score_event', args);
+      if (opts.timeoutMs && typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
+        q = q.abortSignal(AbortSignal.timeout(opts.timeoutMs));
+      }
+      return q;
+    };
+    // Invariant: record_score_event accepts p_client_event_id (migration
+    // 20260901120000). Never strip it on a retry — a PGRST202 on the first
+    // attempt could still mean the write landed, and a retry without the
+    // idempotency key would double-count.
+    var r = await call();
+    if (r.error) { r.error.status = r.status; throw r.error; }
     return r.data;
+  }
+
+  /** True when a failed write is worth retrying (network down, timeout, 5xx,
+   *  rate limit) rather than a server refusal (auth, validation, completed). */
+  function isTransientError(e) {
+    if (!e) return false;
+    var st = e.status;
+    if (st === 408 || st === 429 || (st >= 500 && st < 600)) return true;
+    if (e.code) return false;            // Postgres / PostgREST refusal
+    return st === 0 || st === undefined || /fetch|network|timeout|offline|load failed/i.test(String(e.message || ''));
+  }
+
+  /** True when a write failed because the session is missing or expired
+   *  (keep the change and resend after sign-in instead of dropping it). */
+  function isAuthError(e) {
+    if (!e) return false;
+    // 401 = no/expired JWT (PostgREST also answers an anon 42501 with 401).
+    // 403 is NOT here: that is a signed-in user the server refused.
+    return e.status === 401 || /^PGRST30/.test(String(e.code || '')) || e.code === '28000';
   }
 
   async function undoLastScoreEvent(scope, matchId) {
@@ -291,6 +329,8 @@
     tournamentSnapshot: tournamentSnapshot,
     leagueSnapshot: leagueSnapshot,
     recordScoreEvent: recordScoreEvent,
+    isTransientError: isTransientError,
+    isAuthError: isAuthError,
     undoLastScoreEvent: undoLastScoreEvent,
     subscribeLive: subscribeLive,
     currentUser: currentUser,
