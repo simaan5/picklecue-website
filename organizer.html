@@ -951,8 +951,13 @@
                     Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = true; });
                     var timer;
                     try {
+                        // fn() runs first and synchronously: Complete/Correct
+                        // ask confirm()/prompt() there, and the reply clock
+                        // must not include the time spent in that dialog
+                        // (review P2). Only the request itself is timed.
+                        var req = fn(mid);
                         var done = await Promise.race([
-                            Promise.resolve().then(function () { return fn(mid); }),
+                            Promise.resolve(req),
                             new Promise(function (_, rej) { timer = setTimeout(function () { rej(new ActionTimeout()); }, ACTION_TIMEOUT_MS); }),
                         ]);
                         clearTimeout(timer);

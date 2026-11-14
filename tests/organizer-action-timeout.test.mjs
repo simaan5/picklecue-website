@@ -6,6 +6,8 @@
 //  2. A request that never replies left its button disabled until a page
 //     reload. Now after 15 s the buttons come back, the bar says so, and the
 //     page re-reads the server.
+//  3. (review P2) Time spent in the Complete confirm() dialog doesn't count:
+//     a 16 s think before OK must not show 'No reply' while the write is fine.
 // Local only: *.supabase.co and the realtime socket are mocked.
 // Optional SHOTS=<dir> TAG=<before|after> for screenshots.
 import { createServer } from 'node:http';
@@ -106,7 +108,8 @@ const banner = async (ok, text, name) => {
   await page.screenshot({ path: `${SHOTS}/${TAG}-${name}.png` });
   await page.evaluate(() => document.getElementById('pcBanner')?.remove());
 };
-page.on('dialog', d => d.accept());
+let dialogWait = 0;
+page.on('dialog', async d => { if (dialogWait) await sleep(dialogWait); d.accept(); });
 
 // 1. Update (slow reply) then Complete right away on the same match.
 await page.fill('#s1-m1', '11'); await page.fill('#s2-m1', '7');
@@ -139,6 +142,19 @@ const msg = await page.evaluate(() => (document.getElementById('barMsg') || {}).
 await banner(back !== null, back !== null ? `Update got no reply; buttons came back after ${back} ms. Bar: "${msg}"` : 'Update got no reply; 18 s later the Update/Complete buttons are still disabled (reload needed)', '2-no-reply');
 check(back !== null && back >= 14500, `a write with no reply re-enables its buttons after ~15 s (${back === null ? 'still disabled at 18 s' : back + ' ms'})`);
 check(/No reply/.test(msg), `the bar explains it (${JSON.stringify(msg)})`);
+
+// 3. organizer waits 16 s in the Complete confirm, then the write replies in 30 ms
+await sleep(1000);
+await page.waitForSelector('[data-complete="m2"]');
+await page.evaluate(() => { const m = document.getElementById('barMsg'); if (m) m.textContent = ''; });
+await page.fill('#s1-m2', '11'); await page.fill('#s2-m2', '6');
+be.rpcDelay = 30; dialogWait = 16000; be.rpcs.length = 0;
+await page.click('[data-complete="m2"]');
+await sleep(1500); dialogWait = 0;
+const msg3 = await page.evaluate(() => (document.getElementById('barMsg') || {}).textContent || '');
+await banner(!/No reply/.test(msg3) && be.rpcs.length === 1, `16 s in the Complete confirm dialog, write replied in 30 ms. Bar: "${msg3}"; writes sent: ${be.rpcs.length}`, '3-slow-confirm');
+check(!/No reply/.test(msg3), `16 s in the confirm dialog is not counted as a missing reply (bar: ${JSON.stringify(msg3)})`);
+check(be.rpcs.length === 1, `one write sent (${be.rpcs.length})`);
 
 await browser.close(); srv.close();
 process.exit(failures ? 1 : 0);
