@@ -39,7 +39,7 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url');
 const jwt = b64({ alg: 'HS256', typ: 'JWT' }) + '.' + b64({ sub: USER.id, role: 'authenticated', exp: 4102444800 }) + '.sig';
 const P = (id, name) => ({ id, name, members: [] });
 const parts = [P('p1', 'Rivera / Chen'), P('p2', 'Okafor / Lindqvist'), P('p3', 'Patel / Moreno'), P('p4', 'Nguyen / Brooks')];
-const be = { a: 4, b: 2, delays: [], rpcs: [], rpcDelay: 30 };
+const be = { a: 4, b: 2, delays: [], rpcs: [], rpcDelay: 30, snapFail: 0 };
 const snapshot = (a, b) => ({
   tournament: { id: T_ID, name: 'Harbor Fall Classic', is_public: true, status: 'in_progress', format: 'round_robin' },
   participants: parts,
@@ -62,6 +62,9 @@ await ctx.route('**/*', async route => {
   if (url.pathname.startsWith('/auth/')) return json({});
   if (url.pathname === '/rest/v1/tournaments') return json([{ id: T_ID, name: 'Harbor Fall Classic', status: 'in_progress', start_date: '2026-11-14', is_public: true }]);
   if (url.pathname.startsWith('/rest/v1/') && !url.pathname.includes('/rpc/')) return json(url.searchParams.get('select') && route.request().headers()['accept']?.includes('vnd.pgrst.object') ? null : []);
+  if (url.pathname.endsWith('/live_tournament_snapshot') && be.snapFail > 0) {
+    be.snapFail--; return route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ message: 'mock outage', code: 'XX000' }) });
+  }
   if (url.pathname.endsWith('/live_tournament_snapshot')) { const a = be.a, b = be.b; await sleep(be.delays.shift() ?? 30); return json(snapshot(a, b)); }
   if (url.pathname.endsWith('/is_pro_subscriber')) return json(true);
   if (url.pathname.endsWith('/record_score_event')) {
@@ -148,7 +151,8 @@ check(bv.v === '9\u20134', `typed score in the bracket panel survives (shows ${b
 check(bv.focus === 's2-m2', `focus stays in the bracket panel field (${bv.focus})`);
 
 // 4. actions in the reopened bracket panel (s28 review)
-page.on('dialog', d => d.accept());   // accept every confirm(), so a double click would really send twice
+const dialogs = [];
+page.on('dialog', d => { dialogs.push(d.type() + ': ' + d.message()); d.accept(); });   // accept every confirm(), so a double click would really send twice
 const sent = type => be.rpcs.filter(r => r.p_event_type === type && r.p_match_id === 'm2');
 // 4a. Update in the panel after a live re-render sends exactly one RPC with the typed score
 await page.click('#bvPanel [data-save="m2"]');
@@ -163,7 +167,9 @@ await page.click('#bvPanel [data-complete="m2"]');
 await sleep(200);
 be.a = 8; ping();                    // live re-render mid-request
 await sleep(700);
-const midFlight = await page.evaluate(() => { const b = document.querySelector('#bvPanel [data-complete="m2"]'); if (!b) return 'gone'; const d = b.disabled; b.click(); return d; });
+// b.click() on a disabled button never dispatches; lift `disabled` for the click so the
+// wired handler itself runs and must refuse (inflight guard), then put it back.
+const midFlight = await page.evaluate(() => { const b = document.querySelector('#bvPanel [data-complete="m2"]'); if (!b) return 'gone'; const d = b.disabled; b.disabled = false; b.click(); b.disabled = d; return d; });
 if (SHOTS) {
   await page.evaluate(d => {
     const b = document.createElement('div');
@@ -191,11 +197,30 @@ await page.click('[data-complete="m1"]');
 await sleep(200);
 be.b = 4; ping();
 await sleep(700);
-const mt = await page.evaluate(() => { const b = document.querySelector('[data-complete="m1"]'); if (!b) return 'gone'; const d = b.disabled; b.click(); return d; });
+const mt = await page.evaluate(() => { const b = document.querySelector('[data-complete="m1"]'); if (!b) return 'gone'; const d = b.disabled; b.disabled = false; b.click(); b.disabled = d; return d; });
 await sleep(3000);
 be.rpcDelay = 30;
 check(mt === true, `Matches tab Complete stays disabled while in flight across a live re-render (${mt})`);
+check(midFlight === true && mt === true, 'a forced click on the in-flight button (disabled lifted) is refused by the handler (counts below)');
 check(sent1() === 1, `one Complete RPC sent from the Matches tab (sent ${sent1()})`);
+
+// 6. the save succeeds but the refetch after it fails: never report it unsaved
+// or re-enable the button for a duplicate send (s28 review 2)
+await page.fill('#s1-m1', '10'); await page.fill('#s2-m1', '9');
+const upd1 = () => be.rpcs.filter(r => r.p_event_type === 'point_added' && r.p_match_id === 'm1').length;
+const upd0 = upd1(), dlg0 = dialogs.length;
+be.snapFail = 1;
+await page.click('[data-save="m1"]');
+await sleep(600);
+const r6 = await page.evaluate(() => { const b = document.querySelector('[data-save="m1"]'); return { disabled: b ? b.disabled : 'gone', msg: (document.getElementById('barMsg') || {}).textContent || '' }; });
+const newDialogs = dialogs.slice(dlg0);
+check(upd1() - upd0 === 1, `one Update RPC sent (sent ${upd1() - upd0})`);
+check(!newDialogs.some(m => /^alert:/.test(m)), `no error alert ("Couldn't save" / error text) after a successful save whose refresh failed (${newDialogs.join(' | ') || 'no dialog'})`);
+check(r6.disabled === true, `Update not re-enabled for a duplicate send while the refresh is failing (${r6.disabled === true ? 'disabled' : 'enabled'})`);
+check(/^Saved/.test(r6.msg), `soft notice shown ("${r6.msg}")`);
+await sleep(3800);                   // retry refresh succeeds
+const r6b = await page.evaluate(() => { const b = document.querySelector('[data-save="m1"]'); return b ? b.disabled : 'gone'; });
+check(r6b === false && upd1() - upd0 === 1, `page recovers on the retry; Update usable again, still one RPC (${r6b === false ? 'enabled' : r6b}, sent ${upd1() - upd0})`);
 
 await browser.close(); srv.close();
 console.log(failures ? failures + ' failure(s)' : 'all passed');
