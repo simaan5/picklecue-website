@@ -70,7 +70,7 @@
 
     <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
     <script src="assets/live-core.js?v=rr8"></script>
-    <script src="assets/bracket.js?v=rr8"></script>
+    <script src="assets/bracket.js?v=rr9"></script>
     <script>
     (function () {
         'use strict';
@@ -142,6 +142,8 @@
 
         function roundLabel(m) {
             if (m.week) return 'Week ' + m.week;
+            var named = window.PCBracket && window.PCBracket.roundTitleFor ? window.PCBracket.roundTitleFor(snap, m) : null;
+            if (named) return named;
             return m.round ? 'Round ' + m.round : 'Match ' + (m.match_number || '');
         }
 
