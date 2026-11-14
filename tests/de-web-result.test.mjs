@@ -175,6 +175,13 @@ await sk.waitForTimeout(800);
 const skState = await sk.evaluate(() => ({ board: !!document.getElementById('finalBtn'), err: (document.getElementById('skErr') || {}).textContent || '' }));
 check(skState.board && /network down/.test(skState.err), `9. refused final stays on the match with its message [${JSON.stringify(skState)}]`);
 be.failDE = false;
+// 10. the message belongs to that attempt: back to the list and into the match again, it is gone
+await sk.click('#backBtn');
+await sk.click(`[data-pick="${M_DE}"]`);
+await sk.waitForSelector('#finalBtn');
+await sk.waitForTimeout(400);
+const sk2 = await sk.evaluate(() => (document.getElementById('skErr') || {}).textContent || '');
+check(sk2 === '', `10. a refused final's message does not come back after leaving the match [${JSON.stringify(sk2)}]`);
 
 await browser.close(); srv.close();
 if (failures) { console.error(`\n${failures} check(s) failed`); process.exit(1); }

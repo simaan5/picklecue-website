@@ -170,7 +170,7 @@
                 '<button class="btn ghost" id="backBtn">All matches</button>' +
                 '</div><p class="err" id="skErr" style="text-align:center"></p>';
 
-            err(errMsg);
+            err(errFor === matchId ? errMsg : '');
             wireSk();
         }
 
@@ -183,14 +183,17 @@
 
         // The message is kept in state, not only in the DOM: a live update redraws
         // the board (refetch -> render) and must not wipe a refused final's reason (s39).
-        var errMsg = '';
-        function err(msg) {
+        // Tied to the match it is about, so it never shows on another match's board.
+        var errMsg = '', errFor = null;
+        function err(msg, forMatch) {
             errMsg = msg || '';
+            errFor = forMatch !== undefined ? forMatch : matchId;
             var el = document.getElementById('skErr');
-            if (el) el.textContent = errMsg;
+            if (el) el.textContent = errFor === matchId ? errMsg : '';
         }
 
         async function send(eventType, note) {
+            var forMatch = matchId; // the user may move on to another match while this is in flight
             busy = true;
             try {
                 var r = await PC.recordScoreEvent({
@@ -203,7 +206,7 @@
             } catch (e) {
                 var msg = e.message || 'That didn’t save — check your connection and try again.';
                 await refetch(); // roll back optimistic UI to server truth
-                err(msg);        // after the refetch, which redraws the board
+                err(msg, forMatch); // after the refetch, which redraws the board
                 return false;
             } finally {
                 busy = false;
@@ -238,6 +241,7 @@
                     var r = await PC.undoLastScoreEvent(scope, matchId);
                     if (r && r.live) local = { s1: r.live.score1 ?? 0, s2: r.live.score2 ?? 0 };
                     else local = { s1: 0, s2: 0 };
+                    err('');
                     render();
                 } catch (e) { err(e.message || 'Nothing to undo.'); this.disabled = false; }
             });
