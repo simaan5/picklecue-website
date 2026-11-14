@@ -42,10 +42,10 @@ const participants = [{ id: P1, name: 'Rivera', seed: 1, members: [] }, { id: P2
 const snapshot = (tid, mid, format) => ({
   tournament: { id: tid, name: format === 'double_elimination' ? 'Harbor DE' : 'Harbor SE', format, is_public: true, status: 'in_progress' },
   participants,
-  matches: [{ id: mid, round: 1, match_number: 1, status: 'in_progress', participant1_id: P1, participant2_id: P2, live: { score1: 11, score2: 7 } }],
+  matches: [{ id: mid, round: 1, match_number: 1, status: be.completed ? 'completed' : 'in_progress', score_summary: be.completed ? '11-7' : null, participant1_id: P1, participant2_id: P2, live: { score1: 11, score2: 7 } }],
 });
 // be.migrated: the server has 20261114150000 (v2 accepts 'web'; record_score_event refuses DE match_completed)
-const be = { migrated: true, conflict: false, calls: [] };
+const be = { migrated: true, conflict: false, completed: false, calls: [] };
 const USER = { id: '55555555-5555-4555-8555-555555555555', aud: 'authenticated', role: 'authenticated', email: 'org@example.test' };
 const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url');
 const jwt = b64({ alg: 'HS256', typ: 'JWT' }) + '.' + b64({ sub: USER.id, role: 'authenticated', exp: 4102444800 }) + '.sig';
@@ -74,11 +74,14 @@ await ctx.route('**/*', async route => {
   if (rpc === 'record_score_event') {
     if (be.migrated && body.p_event_type === 'match_completed' && body.p_match_id === M_DE)
       return json({ code: '22023', message: 'double-elimination results must be recorded with record_tournament_match_result_v2', hint: 'DE_RESULT_RPC', details: null }, 400);
+    if (be.failDE && body.p_match_id === M_DE) return json({ code: 'P0001', message: 'network down', hint: null, details: null }, 400);
     return json({ seq: 1, live: { score1: body.p_score1, score2: body.p_score2 } });
   }
   if (rpc === 'record_tournament_match_result_v2') {
+    if (be.failDE) return json({ code: 'P0001', message: 'network down', hint: null, details: null }, 400);
     if (!be.migrated) return json({ code: '22023', message: 'INVALID_SOURCE: unsupported source web', hint: 'INVALID_SOURCE', details: null }, 400);
     if (be.conflict) return json({ code: 'P0001', message: 'RESULT_CONFLICT: match already completed with a different winner', hint: null, details: null }, 400);
+    if (be.completed) return json({ status: 'already_recorded', match_id: body.p_match_id });
     return json({ status: 'recorded' });
   }
   return json(null);
@@ -144,6 +147,34 @@ be.calls = [];
 r = await call({ scope: 'tournament', matchId: M_DE, eventType: 'point_added', score1: 5, score2: 3 });
 w = writes();
 check(r.ok && w.length === 1 && w[0].rpc === 'record_score_event' && w[0].body.p_event_type === 'point_added', '6. DE live point still uses record_score_event');
+
+// 7-8. completed DE match (organizer correction / retry)
+be.completed = true;
+await page.evaluate(id => window.PCLive.tournamentSnapshot(id), DE);
+be.calls = [];
+r = await call({ scope: 'tournament', matchId: M_DE, eventType: 'match_completed', score1: 11, score2: 9, note: 'organizer web correction' });
+w = writes();
+check(r.ok && w.map(c => c.rpc + ':' + (c.body.p_event_type || c.body.p_source)).join(',') === 'record_tournament_match_result_v2:web,record_score_event:score_corrected'
+  && w[1].body.p_score1 === 11 && w[1].body.p_score2 === 9,
+  `7. same-winner correction 11-7 -> 11-9 on a completed DE match is saved as score_corrected [${w.map(c => c.rpc + ':' + (c.body.p_event_type || c.body.p_source)).join(', ')}]`);
+be.calls = [];
+r = await call({ scope: 'tournament', matchId: M_DE, eventType: 'match_completed', score1: 11, score2: 7 });
+w = writes();
+check(r.ok && w.length === 1 && w[0].rpc === 'record_tournament_match_result_v2', `8. retry with the stored score writes nothing else [${w.map(c => c.rpc).join(', ')}]`);
+be.completed = false;
+
+// 9. scorekeeper: a refused DE final keeps the match open and shows why
+be.failDE = true;
+const sk = await ctx.newPage();
+sk.on('dialog', d => d.accept());
+await sk.goto(`${BASE}/scorekeeper.html?t=${DE}`);
+await sk.click(`[data-pick="${M_DE}"]`);
+await sk.waitForSelector('#finalBtn');
+await sk.click('#finalBtn');
+await sk.waitForTimeout(800);
+const skState = await sk.evaluate(() => ({ board: !!document.getElementById('finalBtn'), err: (document.getElementById('skErr') || {}).textContent || '' }));
+check(skState.board && /network down/.test(skState.err), `9. refused final stays on the match with its message [${JSON.stringify(skState)}]`);
+be.failDE = false;
 
 await browser.close(); srv.close();
 if (failures) { console.error(`\n${failures} check(s) failed`); process.exit(1); }

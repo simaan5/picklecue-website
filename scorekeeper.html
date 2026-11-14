@@ -190,9 +190,12 @@
                 });
                 if (r && r.live) { local = { s1: r.live.score1, s2: r.live.score2 }; }
                 err('');
+                return true;
             } catch (e) {
-                err(e.message || 'That didn’t save — check your connection and try again.');
+                var msg = e.message || 'That didn’t save — check your connection and try again.';
                 await refetch(); // roll back optimistic UI to server truth
+                err(msg);        // after the refetch, which redraws the board
+                return false;
             } finally {
                 busy = false;
             }
@@ -233,7 +236,10 @@
                 if (local.s1 === local.s2) { err('A final score can’t be tied.'); return; }
                 if (!confirm('Submit final: ' + local.s1 + '–' + local.s2 + '? This locks the match.')) return;
                 this.disabled = true;
-                await send('match_completed', 'scorekeeper final');
+                // s38: leave the match only when the final saved; otherwise
+                // keep the board and its message (e.g. a double-elimination
+                // result the server refused).
+                if (!(await send('match_completed', 'scorekeeper final'))) { this.disabled = false; return; }
                 matchId = null;
                 await refetch();
             });

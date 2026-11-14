@@ -29,7 +29,7 @@
     var snap = r.data;
     if (snap && snap.tournament && snap.matches) {
       snap.matches.forEach(function (m) {
-        matchInfo[m.id] = { format: snap.tournament.format, p1: m.participant1_id, p2: m.participant2_id };
+        matchInfo[m.id] = { format: snap.tournament.format, p1: m.participant1_id, p2: m.participant2_id, summary: m.score_summary || null };
       });
     }
     return snap; // null = not found / no access
@@ -64,7 +64,23 @@
       }
       throw r.error;
     }
-    return { status: r.data && r.data.status, live: { score1: opts.score1, score2: opts.score2, event_type: 'match_completed' } };
+    var status = r.data && r.data.status;
+    if (status === 'already_recorded') {
+      // v2 leaves an already-completed match alone when the winner is the
+      // same. A different score with the same winner is an organizer's
+      // correction: save it the way the organizer page always has.
+      var known = matchInfo[opts.matchId];
+      if (!known || known.summary !== opts.score1 + '-' + opts.score2) {
+        var c = await client.rpc('record_score_event', {
+          p_scope: 'tournament', p_match_id: opts.matchId, p_event_type: 'score_corrected',
+          p_score1: opts.score1, p_score2: opts.score2, p_game: opts.game ?? null,
+          p_note: opts.note ?? null, p_source: 'web',
+        });
+        if (c.error) throw c.error;
+        return c.data;
+      }
+    }
+    return { status: status, live: { score1: opts.score1, score2: opts.score2, event_type: 'match_completed' } };
   }
 
   async function recordScoreEvent(opts) {
