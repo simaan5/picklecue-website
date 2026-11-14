@@ -144,10 +144,10 @@
                 waiters[entry.id] = res;
             });
         }
-        /** Final outcome of entries an undo is waiting on: id -> 'ok' | 'refused'. */
+        /** Final outcome of the entries an undo is waiting on (only those): id -> 'ok' | 'refused'. */
         var outcomes = {};
         function settle(id, status, error) {
-            if (status === 'ok' || status === 'refused') outcomes[id] = status;
+            if (id in outcomes && (status === 'ok' || status === 'refused')) outcomes[id] = status;
             var w = waiters[id];
             if (w) { delete waiters[id]; w({ status: status, error: error }); }
         }
@@ -441,7 +441,10 @@
                 })();
             });
         }
-        var UNDO_OFFLINE = 'Offline — undo will be available when you reconnect.';
+        function undoUnavailable() {
+            return authParked ? 'Sign-in expired — undo will be available after you sign in again.'
+                : 'Offline — undo will be available when you reconnect.';
+        }
 
         function wireSk() {
             Array.prototype.forEach.call(main.querySelectorAll('[data-plus]'), function (b) {
@@ -477,13 +480,14 @@
                 }
                 // The server undo has to wait for our queued changes to land.
                 // Offline that could take forever, so don't lock the board.
-                if (tail && (sendFailing || authParked)) { err(UNDO_OFFLINE); return; }
+                if (tail && (sendFailing || authParked)) { err(undoUnavailable()); return; }
                 var tailId = tail ? tail.id : null, resync = false;
+                if (tailId) outcomes[tailId] = 'pending';
                 undoing = true;
                 render(false);              // locks +1/−1/Final while the server undo runs
                 try {
                     // The server undoes its last event, so let ours land first.
-                    if (await flushed(id) === 'stuck') { err(UNDO_OFFLINE); return; }
+                    if (await flushed(id) === 'stuck') { err(undoUnavailable()); return; }
                     // The tap being undone was refused: it never happened on the
                     // server, and undoing there would delete the point before it.
                     // drain() already showed the refusal; resync once unlocked.
