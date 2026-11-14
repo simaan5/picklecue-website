@@ -69,7 +69,7 @@
     </main>
 
     <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
-    <script src="assets/live-core.js?v=rr9b"></script>
+    <script src="assets/live-core.js?v=rr9c"></script>
     <script src="assets/bracket.js?v=rr8"></script>
     <script>
     (function () {
@@ -693,6 +693,7 @@
                 .finally(function () { clearTimeout(t); });
         }
         async function refetch() {
+            var startedAtTick = scoreTick;
             var seq = ++fetchSeq;
             try {
                 var results = await Promise.all([
@@ -703,6 +704,7 @@
                 if (seq < appliedSeq) return; // a newer refetch already painted
                 appliedSeq = seq;
                 snap = results[0];
+                reapplyNewerScores(startedAtTick);
                 regInfo = results[1].data || null;
                 waiver = results[2].data || null;
                 var regId = null;
@@ -755,11 +757,35 @@
             retryTimer = setTimeout(start, delay * 1000);
         }
 
+        // Instant scores (Option 1): paint the score carried by the broadcast
+        // straight into the snapshot, no refetch. Returns false when the match
+        // isn't on this page so live-core falls back to a refetch.
+        // A snapshot has no seq, so a refetch that started BEFORE a broadcast
+        // was painted would roll that match back. Remember each painted
+        // broadcast with a tick and re-apply the ones newer than the refetch.
+        var scoreTick = 0, overlays = {};
+        function applyScore(p) {
+            if (!snap) return false;
+            var m = (snap.matches || []).find(function (x) { return x.id === p.match_id; });
+            if (!m) return false;
+            m.live = p.live || null;
+            overlays[p.match_id] = { live: m.live, tick: ++scoreTick };
+            render();
+            return true;
+        }
+        function reapplyNewerScores(sinceTick) {
+            if (!snap) return;
+            (snap.matches || []).forEach(function (m) {
+                var o = overlays[m.id];
+                if (o && o.tick > sinceTick) m.live = o.live;
+            });
+        }
+
         async function start() {
             await refetch();
             if (!snap || unsub) return;
             var isPublic = (kind === 't' ? snap.tournament : snap.league).is_public === true;
-            unsub = PC.subscribeLive(kind, eventId, isPublic, refetch, setConn);
+            unsub = PC.subscribeLive(kind, eventId, isPublic, refetch, setConn, applyScore);
         }
         start();
     })();
