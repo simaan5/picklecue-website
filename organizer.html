@@ -58,6 +58,7 @@
         var PC = window.PCLive, esc = PC.esc, db = PC.client;
         var main = document.getElementById('main');
         var me = null, view = { mode: 'list' }, snap = null, unsub = null, eventTab = 'matches', qrOpen = false;
+        var bvOpenMid = null; // match whose bracket-view panel is open
         var readiness = {}, ciFilter = 'all', ciSearch = '';
         var regSettings = null, regList = [], pairFirst = null;
         var waiver = null;
@@ -206,6 +207,7 @@
 
         async function openEvent(kind, id) {
             view = { mode: 'event', kind: kind, id: id };
+            bvOpenMid = null;
             if (unsub) { unsub(); unsub = null; }
             await refetchEvent();
             if (!snap) return;
@@ -376,6 +378,7 @@
             Array.prototype.forEach.call(main.querySelectorAll('[data-etab]'), function (b) {
                 b.addEventListener('click', function () {
                     eventTab = b.dataset.etab;
+                    bvOpenMid = null;
                     if (eventTab === 'checkin' || eventTab === 'register') refetchEvent(); else renderEvent();
                 });
             });
@@ -384,6 +387,14 @@
                     interactive: true,
                     onMatch: function (mid) { showBracketPanel(mid, nameMap); },
                 });
+                // A live re-render rebuilt #bvPanel empty, so the match panel
+                // closed and took the score being typed with it. Reopen it on
+                // the fresh snapshot, then put the typed text and focus back
+                // (its inputs did not exist when restoreEdits ran above).
+                if (bvOpenMid) {
+                    showBracketPanel(bvOpenMid, nameMap);
+                    restoreEdits(kept);
+                }
             }
             if (eventTab === 'checkin') wireCheckin();
             if (eventTab === 'register') wireRegistration();
@@ -397,6 +408,7 @@
                 if (unsub) { unsub(); unsub = null; }
                 view = { mode: 'list' };
                 qrOpen = false;
+                bvOpenMid = null;
                 document.getElementById('conn').hidden = true;
                 loadList();
             });
@@ -824,7 +836,8 @@
         // Control panel for a match tapped on the organizer bracket.
         function showBracketPanel(mid, nameMap) {
             var m = (snap.matches || []).find(function (x) { return x.id === mid; });
-            if (!m) return;
+            if (!m) { bvOpenMid = null; return; }
+            bvOpenMid = mid;
             var isT = view.kind === 't';
             var id1 = isT ? m.participant1_id : m.team1_member_id;
             var id2 = isT ? m.participant2_id : m.team2_member_id;

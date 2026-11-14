@@ -2,6 +2,7 @@
 // Organizer control room (s27): a live re-render (another match scores) must
 // not wipe a score the organizer is typing, nor their waiver text, nor their
 // focus; and an older, slower snapshot reply must not paint over a newer one.
+// s28: the same holds for the match panel opened from the bracket view.
 // Local only: *.supabase.co and the realtime socket are mocked.
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
@@ -106,6 +107,39 @@ be.a = 6; be.delays.push(50); ping();
 await sleep(1500);
 const shown = await page.evaluate(() => (document.body.textContent.match(/live (\d+)–3/) || [])[1]);
 check(shown === '6', `older snapshot doesn't paint over newer (Court 1 shows ${shown}, server 6)`);
+
+// 3. bracket view (s28): the match panel opened from the bracket must stay
+// open across a live re-render and keep the score being typed + focus.
+await page.click('[data-etab="bracket"]');
+await page.waitForSelector('[data-bv-match="m2"]');
+await page.click('[data-bv-match="m2"]');
+await page.waitForSelector('#bvPanel #s1-m2');
+await page.fill('#s1-m2', '9');
+await page.click('#s2-m2');
+await page.keyboard.press('ControlOrMeta+a');
+await page.keyboard.type('4');
+be.a = 7; ping();                    // Court 1 scores: live re-render of the bracket tab
+await sleep(900);
+if (SHOTS) {
+  await page.evaluate(() => {
+    const p = document.getElementById('bvPanel');
+    const s1 = document.getElementById('s1-m2'), s2 = document.getElementById('s2-m2');
+    const ok = !!(s1 && s2 && s1.value === '9' && s2.value === '4');
+    const b = document.createElement('div');
+    b.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99999;padding:10px 14px;font:600 14px/1.35 system-ui;color:#fff;background:' + (ok ? '#167a3e' : '#b3261e');
+    b.textContent = (ok ? 'OK: ' : 'BUG: ') + 'typed 9\u20134 in the bracket match panel (Court 2), then Court 1 scored (live re-render). Panel ' +
+      (p && p.innerHTML ? 'open, shows ' + (s1 ? s1.value : '?') + '\u2013' + (s2 ? s2.value : '?') : 'gone (typed score lost)') + '.';
+    document.body.appendChild(b);
+  });
+  await page.screenshot({ path: `${SHOTS}/${TAG}-2-bracket-panel-typing-9-4-after-court1-scores.png`, clip: { x: 0, y: 0, width: 1100, height: 900 } });
+}
+const bv = await page.evaluate(() => {
+  const s1 = document.getElementById('s1-m2'), s2 = document.getElementById('s2-m2');
+  return { open: !!(s1 && s2), v: s1 && s2 ? s1.value + '\u2013' + s2.value : null, focus: document.activeElement && document.activeElement.id };
+});
+check(bv.open, `bracket match panel stays open across a live re-render (${bv.open ? 'open' : 'gone'})`);
+check(bv.v === '9\u20134', `typed score in the bracket panel survives (shows ${bv.v})`);
+check(bv.focus === 's2-m2', `focus stays in the bracket panel field (${bv.focus})`);
 
 await browser.close(); srv.close();
 console.log(failures ? failures + ' failure(s)' : 'all passed');
