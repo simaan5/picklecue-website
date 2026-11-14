@@ -19,10 +19,20 @@
 
   // ---- data -----------------------------------------------------------------
 
+  // matchId -> { format, p1, p2 } from the last snapshot, so a final score can
+  // be routed to the right RPC without another read (s38).
+  var matchInfo = {};
+
   async function tournamentSnapshot(id) {
     var r = await client.rpc('live_tournament_snapshot', { p_tournament_id: id });
     if (r.error) throw r.error;
-    return r.data; // null = not found / no access
+    var snap = r.data;
+    if (snap && snap.tournament && snap.matches) {
+      snap.matches.forEach(function (m) {
+        matchInfo[m.id] = { format: snap.tournament.format, p1: m.participant1_id, p2: m.participant2_id, summary: m.score_summary || null };
+      });
+    }
+    return snap; // null = not found / no access
   }
 
   async function leagueSnapshot(id) {
@@ -31,7 +41,54 @@
     return r.data;
   }
 
+  // Double elimination (s38): a result must move the loser into the losers'
+  // bracket too. Only record_tournament_match_result_v2 does that (the apps
+  // use it as well); record_score_event only advances the winner.
+  async function recordDoubleElimResult(opts, p1, p2) {
+    if (opts.score1 === opts.score2) throw new Error('A final score can’t be tied.');
+    var r = await client.rpc('record_tournament_match_result_v2', {
+      p_match_id: opts.matchId,
+      p_winner_id: opts.score1 > opts.score2 ? p1 : p2,
+      p_score_summary: opts.score1 + '-' + opts.score2,
+      p_score1: opts.score1,
+      p_score2: opts.score2,
+      p_source: 'web',
+    });
+    if (r.error) {
+      var msg = r.error.message || '';
+      if (/INVALID_SOURCE/.test(msg)) {
+        throw new Error('Double-elimination results can’t be saved from the web yet. Record this result in the PickleCue app.');
+      }
+      if (/RESULT_CONFLICT/.test(msg)) {
+        throw new Error('This match already has a different winner. To change it, open the bracket in the PickleCue app and reopen it from this match.');
+      }
+      throw r.error;
+    }
+    var status = r.data && r.data.status;
+    if (status === 'already_recorded') {
+      // v2 leaves an already-completed match alone when the winner is the
+      // same. A different score with the same winner is an organizer's
+      // correction: save it the way the organizer page always has.
+      var known = matchInfo[opts.matchId];
+      if (!known || known.summary !== opts.score1 + '-' + opts.score2) {
+        var c = await client.rpc('record_score_event', {
+          p_scope: 'tournament', p_match_id: opts.matchId, p_event_type: 'score_corrected',
+          p_score1: opts.score1, p_score2: opts.score2, p_game: opts.game ?? null,
+          p_note: opts.note ?? null, p_source: 'web',
+        });
+        if (c.error) throw c.error;
+        return c.data;
+      }
+    }
+    return { status: status, live: { score1: opts.score1, score2: opts.score2, event_type: 'match_completed' } };
+  }
+
   async function recordScoreEvent(opts) {
+    var de = opts.scope === 'tournament' && opts.eventType === 'match_completed';
+    var info = de ? matchInfo[opts.matchId] : null;
+    if (info && info.format === 'double_elimination') {
+      return recordDoubleElimResult(opts, info.p1, info.p2);
+    }
     var r = await client.rpc('record_score_event', {
       p_scope: opts.scope,               // 'tournament' | 'league'
       p_match_id: opts.matchId,
@@ -42,7 +99,16 @@
       p_note: opts.note ?? null,
       p_source: 'web',
     });
-    if (r.error) throw r.error;
+    if (r.error) {
+      // No snapshot for this match on this page: the server says it is double
+      // elimination, so read its seats and record it the DE way.
+      if (de && (r.error.hint === 'DE_RESULT_RPC' || /record_tournament_match_result_v2/.test(r.error.message || ''))) {
+        var m = await client.from('tournament_matches').select('participant1_id,participant2_id').eq('id', opts.matchId).maybeSingle();
+        if (m.error || !m.data) throw (m.error || r.error);
+        return recordDoubleElimResult(opts, m.data.participant1_id, m.data.participant2_id);
+      }
+      throw r.error;
+    }
     return r.data;
   }
 

@@ -48,7 +48,7 @@
     <main class="page" id="main"><div class="state"><h2>Loading…</h2></div></main>
 
     <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
-    <script src="assets/live-core.js?v=rr8"></script>
+    <script src="assets/live-core.js?v=rr9s"></script>
     <script>
     (function () {
         'use strict';
@@ -141,6 +141,7 @@
                         (m.court ? ' · ' + esc(m.court) : '') + ' · ' + esc(PC.statusLabel(m.status)) + live + '</div></div>' +
                         '<button class="btn primary" data-pick="' + m.id + '">Score</button></div>';
                 }).join('');
+                errMsg = ''; // back on the match list: a message belongs to the match it was about
                 main.innerHTML = '<div class="event-head"><span class="kicker">Scorekeeper</span><h1>' + esc(head.name) + '</h1></div>' +
                     '<section class="section"><h2>Open matches <span class="count">' + open.length + '</span></h2>' +
                     (rows || '<div class="state"><h2>Nothing to score right now</h2><p>New matches appear here the moment they’re ready.</p></div>') + '</section>';
@@ -169,6 +170,7 @@
                 '<button class="btn ghost" id="backBtn">All matches</button>' +
                 '</div><p class="err" id="skErr" style="text-align:center"></p>';
 
+            err(errFor === matchId ? errMsg : '');
             wireSk();
         }
 
@@ -179,9 +181,19 @@
                 '<button class="sk-plus" data-plus="' + n + '" aria-label="Add point">+1</button></div></div>';
         }
 
-        function err(msg) { document.getElementById('skErr').textContent = msg || ''; }
+        // The message is kept in state, not only in the DOM: a live update redraws
+        // the board (refetch -> render) and must not wipe a refused final's reason (s39).
+        // Tied to the match it is about, so it never shows on another match's board.
+        var errMsg = '', errFor = null;
+        function err(msg, forMatch) {
+            errMsg = msg || '';
+            errFor = forMatch !== undefined ? forMatch : matchId;
+            var el = document.getElementById('skErr');
+            if (el) el.textContent = errFor === matchId ? errMsg : '';
+        }
 
         async function send(eventType, note) {
+            var forMatch = matchId; // the user may move on to another match while this is in flight
             busy = true;
             try {
                 var r = await PC.recordScoreEvent({
@@ -190,9 +202,12 @@
                 });
                 if (r && r.live) { local = { s1: r.live.score1, s2: r.live.score2 }; }
                 err('');
+                return true;
             } catch (e) {
-                err(e.message || 'That didn’t save — check your connection and try again.');
+                var msg = e.message || 'That didn’t save — check your connection and try again.';
                 await refetch(); // roll back optimistic UI to server truth
+                err(msg, forMatch); // after the refetch, which redraws the board
+                return false;
             } finally {
                 busy = false;
             }
@@ -226,6 +241,7 @@
                     var r = await PC.undoLastScoreEvent(scope, matchId);
                     if (r && r.live) local = { s1: r.live.score1 ?? 0, s2: r.live.score2 ?? 0 };
                     else local = { s1: 0, s2: 0 };
+                    err('');
                     render();
                 } catch (e) { err(e.message || 'Nothing to undo.'); this.disabled = false; }
             });
@@ -233,7 +249,10 @@
                 if (local.s1 === local.s2) { err('A final score can’t be tied.'); return; }
                 if (!confirm('Submit final: ' + local.s1 + '–' + local.s2 + '? This locks the match.')) return;
                 this.disabled = true;
-                await send('match_completed', 'scorekeeper final');
+                // s38: leave the match only when the final saved; otherwise
+                // keep the board and its message (e.g. a double-elimination
+                // result the server refused).
+                if (!(await send('match_completed', 'scorekeeper final'))) { this.disabled = false; return; }
                 matchId = null;
                 await refetch();
             });
