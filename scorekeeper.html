@@ -144,7 +144,10 @@
                 waiters[entry.id] = res;
             });
         }
+        /** Final outcome of entries an undo is waiting on: id -> 'ok' | 'refused'. */
+        var outcomes = {};
         function settle(id, status, error) {
+            if (status === 'ok' || status === 'refused') outcomes[id] = status;
             var w = waiters[id];
             if (w) { delete waiters[id]; w({ status: status, error: error }); }
         }
@@ -426,12 +429,19 @@
             enqueue(delta > 0 ? 'point_added' : 'point_removed');
         }
 
-        /** Wait until nothing for this match is queued or in flight. */
+        /** Wait until nothing for this match is queued or in flight.
+         *  Resolves 'done', or 'stuck' as soon as the queue is parked
+         *  (offline / signed out) so an undo never locks the board. */
         function flushed(id) {
             return new Promise(function (res) {
-                (function poll() { if (!pendingFor(id).length) res(); else setTimeout(poll, 50); })();
+                (function poll() {
+                    if (!pendingFor(id).length) res('done');
+                    else if (sendFailing || authParked) res('stuck');
+                    else setTimeout(poll, 50);
+                })();
             });
         }
+        var UNDO_OFFLINE = 'Offline — undo will be available when you reconnect.';
 
         function wireSk() {
             Array.prototype.forEach.call(main.querySelectorAll('[data-plus]'), function (b) {
@@ -465,10 +475,19 @@
                     paintScores(); showSync();
                     return;
                 }
+                // The server undo has to wait for our queued changes to land.
+                // Offline that could take forever, so don't lock the board.
+                if (tail && (sendFailing || authParked)) { err(UNDO_OFFLINE); return; }
+                var tailId = tail ? tail.id : null, resync = false;
                 undoing = true;
                 render(false);              // locks +1/−1/Final while the server undo runs
                 try {
-                    await flushed(id);      // the server undoes its last event, so let ours land first
+                    // The server undoes its last event, so let ours land first.
+                    if (await flushed(id) === 'stuck') { err(UNDO_OFFLINE); return; }
+                    // The tap being undone was refused: it never happened on the
+                    // server, and undoing there would delete the point before it.
+                    // drain() already showed the refusal; resync once unlocked.
+                    if (tailId && outcomes[tailId] === 'refused') { resync = true; return; }
                     var r = await PC.undoLastScoreEvent(scope, id);
                     epoch++;
                     local = r && r.live ? { s1: r.live.score1 ?? 0, s2: r.live.score2 ?? 0 } : { s1: 0, s2: 0 };
@@ -476,8 +495,10 @@
                     err('');
                 } catch (e) { err(e.message || 'Nothing to undo.'); }
                 finally {
+                    if (tailId) delete outcomes[tailId];
                     undoing = false;
                     if (matchId === id) render(false);
+                    if (resync) safeRefetch();
                 }
             });
             document.getElementById('finalBtn').addEventListener('click', async function () {

@@ -61,6 +61,7 @@ function makeBackend() {
     online: true,
     inFlight: 0,              // concurrent record_score_event requests right now
     maxInFlight: 0,
+    undos: 0,                 // undo_last_score_event calls received
   };
   be.snapshot = () => ({
     tournament: { id: T_ID, name: 'QA Mock Cup', is_public: true },
@@ -108,7 +109,7 @@ async function newContext(browser, be, projectRef) {
       be.inFlight++; be.maxInFlight = Math.max(be.maxInFlight, be.inFlight);
       try {
       if (!be.online || step.fail === 'network') { await sleep(step.delayIn || 5); return route.abort('internetdisconnected'); }
-      if (step.fail === 'refuse') { await sleep(5); return json({ code: 'P0001', message: 'Match is already completed', details: null, hint: null }, 400); }
+      if (step.fail === 'refuse') { await sleep(step.delayIn || 5); return json({ code: 'P0001', message: 'Match is already completed', details: null, hint: null }, 400); }
       if (step.fail === 'auth') { await sleep(5); return json({ code: 'PGRST301', message: 'JWT expired', details: null, hint: null }, 401); }
       if (step.fail === 'server-bug') { await sleep(5); return json({ code: 'XX000', message: 'internal error', details: null, hint: null }, 500); }
       await sleep(step.delayIn ?? be.defaultDelay);
@@ -128,7 +129,7 @@ async function newContext(browser, be, projectRef) {
       return json(reply);
       } finally { be.inFlight--; }
     }
-    if (rpc === 'undo_last_score_event') return json({ live: { ...be.live } });
+    if (rpc === 'undo_last_score_event') { be.undos++; return json({ live: { ...be.live } }); }
     return json(null);
   });
 
@@ -389,6 +390,54 @@ try {
     await sleep(500 + 1000 + 2000 + 4000 + 2500);
     results.scenarios.serverBug = { calls: be.calls.length, live: { ...be.live } };
     check('server bug: queue unblocks after 5 tries', be.live.score2 === 1, JSON.stringify(results.scenarios.serverBug));
+    await ctx.close();
+  }
+
+  // 10. Undo while offline (the newest tap was attempted and failed) must not
+  //     lock the board until the network returns (s26 review finding).
+  {
+    const be = makeBackend();
+    const ctx = await newContext(browser, be, projectRef);
+    const p = await openScorer(ctx, base);
+    await sleep(500);
+    be.online = false;
+    await timedTap(p, 1);             // attempted, fails -> queued, sendFailing
+    await sleep(300);
+    await p.click('#undoBtn');
+    await sleep(300);
+    const plusDisabled = await p.$eval('[data-plus="1"]', b => b.disabled);
+    const errText = (await p.textContent('#skErr').catch(() => '')) || '';
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/${PFX}web-offline-undo.png` });
+    await timedTap(p, 1);             // scoring keeps working offline
+    const uiAfterTap = await scoreOf(p, 1);
+    be.online = true;
+    await p.evaluate(() => window.dispatchEvent(new Event('online')));
+    await sleep(2500);
+    results.scenarios.offlineUndo = { plusDisabled, errText, uiAfterTap, server: be.live.score1, undos: be.undos };
+    check('offline undo: board stays usable (not locked until reconnect)', plusDisabled === false && uiAfterTap === 2, JSON.stringify(results.scenarios.offlineUndo));
+    check('offline undo: scorer told undo needs a connection', /reconnect/i.test(errText), errText);
+    check('offline undo: no server undo sent, both taps land', be.undos === 0 && be.live.score1 === 2, JSON.stringify(results.scenarios.offlineUndo));
+    await ctx.close();
+  }
+
+  // 11. Undo of an in-flight tap that the server then REFUSES must not undo
+  //     the previous, valid point on the server (s26 review finding).
+  {
+    const be = makeBackend();
+    be.plan.push({}, { fail: 'refuse', delayIn: 1500 });
+    const ctx = await newContext(browser, be, projectRef);
+    const p = await openScorer(ctx, base);
+    await sleep(500);
+    await timedTap(p, 1);             // 1-0 accepted
+    await waitScore(p, 1, 1);
+    await sleep(300);
+    await timedTap(p, 1);             // 2-0 on the wire for 1.5 s, then refused
+    const clickedWhileInFlight = await p.evaluate(() => { document.getElementById('undoBtn').click(); return true; });
+    await sleep(3000);
+    const ui = await scoreOf(p, 1);
+    results.scenarios.refusedUndo = { clickedWhileInFlight, undos: be.undos, server: be.live.score1, ui, calls: be.calls.map(c => c.p_event_type + ':' + c.p_score1), err: (await p.textContent('#skErr').catch(() => '')) };
+    check('refused-tap undo: no server undo (it would delete the valid 1-0)', be.undos === 0, JSON.stringify(results.scenarios.refusedUndo));
+    check('refused-tap undo: UI matches server', ui === be.live.score1 && ui === 1, JSON.stringify(results.scenarios.refusedUndo));
     await ctx.close();
   }
 } finally {
