@@ -213,11 +213,12 @@
             unsub = PC.subscribeLive(kind, id, head.is_public === true, refetchEvent, setConn);
         }
 
-        // Only the newest-started refetch may paint: an older, slower reply
-        // landing last would otherwise put an older score back on screen.
+        // An older, slower reply must not paint over a newer one that already
+        // painted (it would put an older score back on screen). A newer call
+        // that fails or hangs does not block older successful ones.
         // A superseded call resolves when the newest one has painted, so
         // callers that await it (first load) still see the fresh snapshot.
-        var eventFetchSeq = 0, latestEventFetch = null;
+        var eventFetchSeq = 0, eventAppliedSeq = 0, latestEventFetch = null;
         function refetchEvent() {
             latestEventFetch = loadEvent(++eventFetchSeq);
             return latestEventFetch;
@@ -225,13 +226,14 @@
         async function loadEvent(seq) {
             if (view.mode !== 'event') return;
             var fresh = view.kind === 't' ? await PC.tournamentSnapshot(view.id) : await PC.leagueSnapshot(view.id);
-            if (seq !== eventFetchSeq) return latestEventFetch;
+            if (seq < eventAppliedSeq) return latestEventFetch; // a newer one already painted
+            eventAppliedSeq = seq;
             snap = fresh;
             if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
             if (eventTab === 'checkin') {
                 var r = await db.rpc('event_readiness', {
                     p_scope: view.kind === 't' ? 'tournament' : 'league', p_event_id: view.id });
-                if (seq !== eventFetchSeq) return latestEventFetch;
+                if (seq < eventAppliedSeq) return latestEventFetch;
                 readiness = {};
                 (r.data || []).forEach(function (x) { readiness[x.id] = x; });
             }
@@ -242,7 +244,7 @@
                     db.from('event_registrations').select('*').eq('event_id', view.id).order('created_at'),
                     db.rpc('get_event_waiver', { p_scope: scope, p_event_id: view.id }),
                 ]);
-                if (seq !== eventFetchSeq) return latestEventFetch;
+                if (seq < eventAppliedSeq) return latestEventFetch;
                 regSettings = results[0].data;
                 regList = results[1].data || [];
                 waiver = results[2].data || null;
@@ -893,11 +895,16 @@
         function wire(selector, label, fn) {
             Array.prototype.forEach.call(main.querySelectorAll(selector), function (b) {
                 b.addEventListener('click', async function () {
-                    var mid = b.dataset.start || b.dataset.save || b.dataset.complete || b.dataset.correct;
+                    // data-court was missing here, so "Set court" always failed
+                    // with an error (mid undefined -> #court-undefined).
+                    var mid = b.dataset.start || b.dataset.save || b.dataset.complete || b.dataset.correct || b.dataset.court;
                     b.disabled = true;
                     try {
                         var done = await fn(mid);
-                        if (done !== null) forgetEdits(['s1-' + mid, 's2-' + mid]);
+                        // Only Update / Complete save the typed score; Start and
+                        // Correct don't, so a typed score survives them.
+                        if (done !== null && (label === 'save' || label === 'complete')) forgetEdits(['s1-' + mid, 's2-' + mid]);
+                        if (done !== null && label === 'set court') forgetEdits(['court-' + mid]);
                         await refetchEvent();
                     } catch (e) {
                         alert(e.message || ('Couldn’t ' + label + ' — try again.'));
