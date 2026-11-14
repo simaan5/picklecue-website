@@ -69,7 +69,7 @@
     </main>
 
     <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
-    <script src="assets/live-core.js?v=rr9"></script>
+    <script src="assets/live-core.js?v=rr9c"></script>
     <script src="assets/bracket.js?v=rr8"></script>
     <script>
     (function () {
@@ -677,25 +677,38 @@
 
         // ---- data + realtime --------------------------------------------------
 
+        // Refetches can overlap (a slow one, then a fast one for the next
+        // point). Only the newest-started one may paint: before, a late reply
+        // carrying the older score overwrote the newer one, so the score went
+        // backwards (4 -> 6 -> 5) and stayed wrong until the next ping.
+        var fetchSeq = 0, appliedSeq = 0;
+        // registration_status only feeds the "you're registered" chip. A
+        // reply that never comes (stalled mobile connection) must not hold
+        // back the score paint: before, the page sat on "Loading…" (first
+        // load) or on the old score (later pings) until the request died.
+        var REG_TIMEOUT_MS = 5000;
+        function withTimeout(p, ms) {
+            var t;
+            return Promise.race([p, new Promise(function (_, rej) { t = setTimeout(function () { rej(new Error('timeout')); }, ms); })])
+                .finally(function () { clearTimeout(t); });
+        }
         async function refetch() {
             var startedAtTick = scoreTick;
+            var seq = ++fetchSeq;
             try {
                 var results = await Promise.all([
                     kind === 't' ? PC.tournamentSnapshot(eventId) : PC.leagueSnapshot(eventId),
                     PC.client.rpc('event_registration_info', { p_scope: kind === 't' ? 'tournament' : 'league', p_event_id: eventId }),
                     PC.client.rpc('get_event_waiver', { p_scope: kind === 't' ? 'tournament' : 'league', p_event_id: eventId }),
                 ]);
+                if (seq < appliedSeq) return; // a newer refetch already painted
+                appliedSeq = seq;
                 snap = results[0];
                 reapplyNewerScores(startedAtTick);
                 regInfo = results[1].data || null;
                 waiver = results[2].data || null;
-                try {
-                    var regId = localStorage.getItem('pc_reg_' + eventId);
-                    if (regId) {
-                        var rs = await PC.client.rpc('registration_status', { p_registration_id: regId });
-                        myReg = rs.data || null;
-                    }
-                } catch (_) {}
+                var regId = null;
+                try { regId = localStorage.getItem('pc_reg_' + eventId); } catch (_) {}
             } catch (e) {
                 console.error('[live] snapshot failed', e);
                 // First load failed: say so and retry. Before, the page sat on
@@ -712,6 +725,20 @@
             }
             document.title = ((kind === 't' ? snap.tournament : snap.league).name || 'Live') + ' · PickleCue';
             render();
+            // The chip is fetched after the scores are on screen, so a slow or
+            // hung reply can never hold back (or, with steady pings, starve)
+            // the score paint. Only the newest refetch's reply may apply.
+            if (regId) loadMyReg(seq, regId);
+        }
+        async function loadMyReg(seq, regId) {
+            try {
+                var rs = await withTimeout(PC.client.rpc('registration_status', { p_registration_id: regId }), REG_TIMEOUT_MS);
+                if (seq !== appliedSeq) return;
+                var next = rs.data || null;
+                if (JSON.stringify(next) === JSON.stringify(myReg)) return;
+                myReg = next;
+                render();
+            } catch (_) { /* keep the last known chip */ }
         }
 
         var failCount = 0, retryTimer = null;
