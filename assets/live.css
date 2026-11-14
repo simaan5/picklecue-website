@@ -278,7 +278,7 @@ body.bv-tv .cb-score { font-size: 44px; }
 .ci-chip { display: inline-block; font-family: var(--f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 100px; vertical-align: middle; margin-left: 6px; }
 .ci-chip.ci-ready { background: color-mix(in srgb, var(--court) 18%, transparent); color: var(--court); }
 .ci-chip.ci-waiting { background: var(--paper); color: var(--ink-mute); border: 1px solid var(--rule-strong); }
-.ci-chip.ci-noshow { background: color-mix(in srgb, var(--clay) 16%, transparent); color: var(--clay); }
+.ci-chip.ci-noshow { background: color-mix(in srgb, var(--clay) 12%, transparent); color: var(--clay); }
 
 /* ── Auth card providers ────────────────────────────────────────────────── */
 .auth-providers { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
