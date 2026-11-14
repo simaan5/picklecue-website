@@ -699,6 +699,9 @@
                     var regId = localStorage.getItem('pc_reg_' + eventId);
                     if (regId) {
                         var rs = await PC.client.rpc('registration_status', { p_registration_id: regId });
+                        // A newer refetch applied while this reply was in
+                        // flight: its own reply (and paint) wins.
+                        if (seq !== appliedSeq) return;
                         myReg = rs.data || null;
                     }
                 } catch (_) {}
