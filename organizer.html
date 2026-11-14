@@ -213,13 +213,25 @@
             unsub = PC.subscribeLive(kind, id, head.is_public === true, refetchEvent, setConn);
         }
 
-        async function refetchEvent() {
+        // Only the newest-started refetch may paint: an older, slower reply
+        // landing last would otherwise put an older score back on screen.
+        // A superseded call resolves when the newest one has painted, so
+        // callers that await it (first load) still see the fresh snapshot.
+        var eventFetchSeq = 0, latestEventFetch = null;
+        function refetchEvent() {
+            latestEventFetch = loadEvent(++eventFetchSeq);
+            return latestEventFetch;
+        }
+        async function loadEvent(seq) {
             if (view.mode !== 'event') return;
-            snap = view.kind === 't' ? await PC.tournamentSnapshot(view.id) : await PC.leagueSnapshot(view.id);
+            var fresh = view.kind === 't' ? await PC.tournamentSnapshot(view.id) : await PC.leagueSnapshot(view.id);
+            if (seq !== eventFetchSeq) return latestEventFetch;
+            snap = fresh;
             if (!snap) { main.innerHTML = '<div class="state"><h2>Couldn’t load this event</h2></div>'; return; }
             if (eventTab === 'checkin') {
                 var r = await db.rpc('event_readiness', {
                     p_scope: view.kind === 't' ? 'tournament' : 'league', p_event_id: view.id });
+                if (seq !== eventFetchSeq) return latestEventFetch;
                 readiness = {};
                 (r.data || []).forEach(function (x) { readiness[x.id] = x; });
             }
@@ -230,11 +242,56 @@
                     db.from('event_registrations').select('*').eq('event_id', view.id).order('created_at'),
                     db.rpc('get_event_waiver', { p_scope: scope, p_event_id: view.id }),
                 ]);
+                if (seq !== eventFetchSeq) return latestEventFetch;
                 regSettings = results[0].data;
                 regList = results[1].data || [];
                 waiver = results[2].data || null;
             }
             renderEvent();
+        }
+
+        // Live pings re-render the whole control room. Fields the organizer
+        // has typed into (a score before Update/Complete, registration
+        // settings, the waiver text) keep their text, focus and caret across
+        // those re-renders; before, any score change anywhere in the event
+        // wiped them. A field's edit is dropped once its save succeeds.
+        var edits = {};
+        function markEdit(e) {
+            var t = e.target;
+            if (t && t.id && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) edits[t.id] = true;
+        }
+        main.addEventListener('input', markEdit);
+        main.addEventListener('change', markEdit);
+        function forgetEdits(prefixOrIds) {
+            Object.keys(edits).forEach(function (id) {
+                if (Array.isArray(prefixOrIds) ? prefixOrIds.indexOf(id) !== -1 : id.indexOf(prefixOrIds) === 0) delete edits[id];
+            });
+        }
+        function keepEdits() {
+            var kept = { fields: {}, focusId: null, sel: null };
+            Object.keys(edits).forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el) { delete edits[id]; return; }
+                kept.fields[id] = el.type === 'checkbox' || el.type === 'radio' ? { checked: el.checked } : { value: el.value };
+            });
+            var a = document.activeElement;
+            if (a && a.id && a !== main && main.contains(a)) {
+                kept.focusId = a.id;
+                try { if (typeof a.selectionStart === 'number') kept.sel = [a.selectionStart, a.selectionEnd]; } catch (_) {}
+            }
+            return kept;
+        }
+        function restoreEdits(kept) {
+            Object.keys(kept.fields).forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el) return;
+                if ('checked' in kept.fields[id]) el.checked = kept.fields[id].checked; else el.value = kept.fields[id].value;
+            });
+            var f = kept.focusId && document.getElementById(kept.focusId);
+            if (f) {
+                f.focus();
+                try { if (kept.sel) f.setSelectionRange(kept.sel[0], kept.sel[1]); } catch (_) {}
+            }
         }
 
         function renderEvent() {
@@ -310,7 +367,9 @@
                 '</section>';
             html += '<p class="foot-note">Every score change is written to a tamper-proof audit log and appears instantly on the live page, in the app, and here.</p>';
 
+            var kept = keepEdits();
             main.innerHTML = html;
+            restoreEdits(kept);
 
             Array.prototype.forEach.call(main.querySelectorAll('[data-etab]'), function (b) {
                 b.addEventListener('click', function () {
@@ -466,6 +525,7 @@
                 save.disabled = false;
                 if (r.error) { alert(r.error.message); return; }
                 document.getElementById('rsMsg').textContent = 'Saved \u2014 the Register button is now ' + (payload.registration_open ? 'live on the public page.' : 'hidden.');
+                forgetEdits('rs');
                 refetchEvent();
             });
             Array.prototype.forEach.call(main.querySelectorAll('[data-reg]'), function (b) {
@@ -491,6 +551,7 @@
                     p_blocks_checkin: document.getElementById('wvBlock').checked });
                 wvBtn.disabled = false;
                 if (r.error) { alert(r.error.message); return; }
+                forgetEdits('wv');
                 refetchEvent();
             });
             Array.prototype.forEach.call(main.querySelectorAll('[data-pair]'), function (b) {
@@ -835,7 +896,8 @@
                     var mid = b.dataset.start || b.dataset.save || b.dataset.complete || b.dataset.correct;
                     b.disabled = true;
                     try {
-                        await fn(mid);
+                        var done = await fn(mid);
+                        if (done !== null) forgetEdits(['s1-' + mid, 's2-' + mid]);
                         await refetchEvent();
                     } catch (e) {
                         alert(e.message || ('Couldn’t ' + label + ' — try again.'));
