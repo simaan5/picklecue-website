@@ -72,22 +72,47 @@
       debounceTimer = setTimeout(onPing, 250);
     }
 
+    // Reconnect fallback. Only the CURRENT channel may schedule it, and only
+    // one retry is pending at a time. Before this guard, removing the old
+    // channel fired CLOSED on it, that CLOSED scheduled another connect(), and
+    // so on: one channel error became a leave/join + snapshot refetch +
+    // "Reconnecting\u2026" flash every 4 s, forever. realtime-js also rejoins
+    // by itself after an error; when that works first (SUBSCRIBED), the pending
+    // fallback is cancelled. The old channel is fully torn down before the new
+    // one is made, because client.channel(topic) hands back any channel that
+    // is still registered under the same topic.
+    var retryTimer = null;
+    function scheduleRetry() {
+      if (!retryTimer && !stopped) retryTimer = setTimeout(connect, 4000);
+    }
     function connect() {
+      retryTimer = null;
       if (stopped) return;
-      if (channel) client.removeChannel(channel);
-      channel = client
-        .channel(topic, { config: { broadcast: { self: true }, private: !isPublic } })
-        .on('broadcast', { event: 'change' }, ping)
-        .subscribe(function (status) {
-          if (stopped) return;
+      var old = channel;
+      channel = null;
+      var removed = old
+        ? client.removeChannel(old).catch(function () {}).then(function () {
+            try { if (client.getChannels().indexOf(old) !== -1) old.teardown(); } catch (_) {}
+          })
+        : Promise.resolve();
+      removed.then(function () {
+        if (stopped || channel) return;
+        var ch = client
+          .channel(topic, { config: { broadcast: { self: true }, private: !isPublic } })
+          .on('broadcast', { event: 'change' }, ping);
+        channel = ch;
+        ch.subscribe(function (status) {
+          if (stopped || ch !== channel) return; // a replaced channel: ignore
           if (status === 'SUBSCRIBED') {
+            clearTimeout(retryTimer); retryTimer = null;
             onState && onState('live');
             ping(); // catch anything missed while connecting
           } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
             onState && onState('connecting');
-            setTimeout(connect, 4000);
+            scheduleRetry();
           }
         });
+      });
     }
     connect();
 
@@ -99,6 +124,7 @@
     return function unsubscribe() {
       stopped = true;
       clearTimeout(debounceTimer);
+      clearTimeout(retryTimer);
       clearInterval(pollTimer);
       document.removeEventListener('visibilitychange', onVisible);
       if (channel) client.removeChannel(channel);
