@@ -209,6 +209,7 @@
         async function openEvent(kind, id) {
             view = { mode: 'event', kind: kind, id: id };
             bvOpenMid = null;
+            barNote = '';
             if (unsub) { unsub(); unsub = null; }
             await refetchEvent();
             if (!snap) return;
@@ -410,12 +411,13 @@
                 view = { mode: 'list' };
                 qrOpen = false;
                 bvOpenMid = null;
+                barNote = '';
                 document.getElementById('conn').hidden = true;
                 loadList();
             });
             document.getElementById('copyBtn').addEventListener('click', function () {
                 navigator.clipboard.writeText(liveUrl).then(function () {
-                    document.getElementById('barMsg').textContent = 'Live link copied — share it or print it as a QR code.';
+                    setBarNote('Live link copied — share it or print it as a QR code.');
                 });
             });
             wire('[data-start]', 'start', function (mid) {
@@ -911,6 +913,7 @@
         // disabled so a second Update/Complete can't be sent. Cleared when
         // the request settles (success re-renders, failure re-enables).
         var inflight = {};
+        var actionSeq = {}; // key -> sequence of the latest click (late replies check it)
         // Start / Update / Complete / Correct all write the same match's
         // score, so they share one in-flight key per match: before, Update
         // and Complete could both be on the wire at once and land in either
@@ -940,7 +943,9 @@
         function retryRefresh(n) {
             setTimeout(function () {
                 if (view.mode !== 'event') return;
-                refetchEvent().catch(function () { if (n < 5) retryRefresh(n + 1); });
+                refetchEvent().then(function () {
+                    if (/retrying/.test(barNote)) setBarNote('');
+                }, function () { if (n < 5) retryRefresh(n + 1); });
             }, 3000 * n);
         }
         function wire(selector, label, fn) {
@@ -957,6 +962,8 @@
                 b.addEventListener('click', async function () {
                     if (inflight[key]) return;
                     inflight[key] = true;
+                    var mySeq = actionSeq[key] = (actionSeq[key] || 0) + 1;
+                    var myEvent = view.kind + ':' + view.id;
                     setBarNote('');
                     b.disabled = true;
                     Array.prototype.forEach.call(actionButtons(attr, mid), function (x) { x.disabled = true; });
@@ -1004,7 +1011,10 @@
                                     return !el || el.value === sentVals[i];
                                 });
                                 forgetEdits(same);
-                                if (view.mode !== 'event') return;
+                                // Only speak up on the same event, and only if
+                                // no newer action on this match has started.
+                                if (view.mode !== 'event' || view.kind + ':' + view.id !== myEvent) return;
+                                if (actionSeq[key] !== mySeq) return;
                                 setBarNote('Saved — the reply came late.');
                                 refetchEvent().catch(function () { retryRefresh(1); });
                             }, function (lateErr) {

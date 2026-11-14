@@ -189,5 +189,18 @@ ping(); await sleep(800);
 const v4b = await page.evaluate(() => document.getElementById('s1-m2').value);
 check(v4b === '12', `a score typed after the timeout survives the late success (field ${JSON.stringify(v4b)}, want "12")`);
 
+// 5. (s33 review P3) A note from one visit doesn't follow the organizer to
+//    the next: set a note, go back to the list and open the event again.
+await page.evaluate(() => { const b = document.getElementById('copyBtn'); b && b.click(); });
+await sleep(300);
+const msg5a = await page.evaluate(() => (document.getElementById('barMsg') || {}).textContent || '');
+check(msg5a !== '', `a note is showing before leaving (${JSON.stringify(msg5a)})`);
+await page.click('#backBtn');
+await page.waitForSelector('[data-open]');
+await page.click('[data-open]');
+await page.waitForSelector('#s1-m1'); await sleep(500);
+const msg5 = await page.evaluate(() => (document.getElementById('barMsg') || {}).textContent || '');
+check(msg5 === '', `re-opening the event starts with an empty bar (${JSON.stringify(msg5)})`);
+
 await browser.close(); srv.close();
 process.exit(failures ? 1 : 0);
