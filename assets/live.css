@@ -64,8 +64,14 @@ button { font-family: var(--f-body); cursor: pointer; }
 /* Tabs */
 .tabs { display: flex; gap: 4px; margin: 18px 0 0; overflow-x: auto; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
+/* Scroll hint: fade the edge that has more tabs past it (class set by live.html). */
+.tabs { position: relative; }
+.tabs.more-end { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); }
+.tabs.more-start { -webkit-mask-image: linear-gradient(to right, transparent, #000 48px); mask-image: linear-gradient(to right, transparent, #000 48px); }
+.tabs.more-start.more-end { -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent); }
 .tab { padding: 9px 16px; border: 0; background: transparent; border-radius: 100px; font-size: 14px; font-weight: 600; color: var(--ink-mute); white-space: nowrap; }
 .tab[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+@media (max-width: 480px) { .tab { padding: 9px 12px; } }
 
 /* Sections */
 .section { padding: 20px 0 8px; }

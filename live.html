@@ -52,7 +52,7 @@
     <link rel="stylesheet" href="/fonts.css">
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrumentsans-pxiTypc9vsFDm051Uf6KVwgkfoSxQ0GsQv8ToedPibnr0SZe1ZuWi3g.woff2">
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/jetbrainsmono-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2">
-    <link rel="stylesheet" href="assets/live.css?v=20261114s">
+    <link rel="stylesheet" href="assets/live.css?v=20261114s39">
     <link rel="stylesheet" href="/assets/acquire.css?v=20260825a">
     <script defer src="/assets/acquire.js?v=20260825a"></script>
 </head>
@@ -70,7 +70,7 @@
 
     <script src="/assets/vendor/supabase-js-2.112.4.umd.min.js"></script>
     <script src="assets/live-core.js?v=rr8"></script>
-    <script src="assets/bracket.js?v=rr9t"></script>
+    <script src="assets/bracket.js?v=rr10s39"></script>
     <script>
     (function () {
         'use strict';
@@ -250,7 +250,10 @@
             html += '<p class="foot-note">Scores update automatically — no refresh needed. Powered by <a href="/">PickleCue</a>.' +
                 (/iPhone|iPad|Android/i.test(navigator.userAgent)
                     ? ' <a href="picklecue://' + kind + '/' + eventId + '">Open in the PickleCue app \u2192</a>' : '') + '</p>';
+            var oldTabs = main.querySelector('.tabs');
+            var tabScroll = oldTabs ? oldTabs.scrollLeft : 0;
             main.innerHTML = html;
+            wireTabRow(tabScroll);
             if (activeTab === 'bracket') {
                 window.PCBracket.render(document.getElementById('bvHost'), snap, {});
             }
@@ -300,6 +303,35 @@
                 b.addEventListener('click', function () { activeTab = b.dataset.tab; render(); });
             });
         }
+
+        // The tab row scrolls sideways on phones (scrollbar hidden). A fade on the
+        // side that has more tabs says so; re-renders keep the scroll position and
+        // the selected tab in view (s39: "My next match" was cut with no hint).
+        function updateTabHint(row) {
+            var max = row.scrollWidth - row.clientWidth;
+            row.classList.toggle('more-start', row.scrollLeft > 1);
+            row.classList.toggle('more-end', max > 1 && row.scrollLeft < max - 1);
+        }
+        var tabRowShown = null;
+        function wireTabRow(scrollLeft) {
+            var row = main.querySelector('.tabs');
+            if (!row) return;
+            row.scrollLeft = scrollLeft || 0;
+            var sel = row.querySelector('[aria-selected="true"]');
+            // Only when the selection changed: a live-update re-render must not undo the user's own scroll.
+            if (sel && tabRowShown !== activeTab) {
+                var pad = 40;
+                if (sel.offsetLeft - pad < row.scrollLeft) row.scrollLeft = sel.offsetLeft - pad;
+                else if (sel.offsetLeft + sel.offsetWidth + pad > row.scrollLeft + row.clientWidth) row.scrollLeft = sel.offsetLeft + sel.offsetWidth + pad - row.clientWidth;
+            }
+            tabRowShown = activeTab;
+            updateTabHint(row);
+            row.addEventListener('scroll', function () { updateTabHint(row); }, { passive: true });
+        }
+        window.addEventListener('resize', function () {
+            var row = main.querySelector('.tabs');
+            if (row) updateTabHint(row);
+        });
 
         function tabBtn(id, label) {
             return '<button class="tab" role="tab" data-tab="' + id + '" aria-selected="' + (activeTab === id) + '">' + label + '</button>';
